@@ -18,6 +18,7 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -288,12 +289,8 @@ const OrderRefundReportList = (props) => {
                   </TableBody>
                 </StyledTable>
               </TableContainer>
-              {!isAllOrderDataValid && (
-                <div className="box">
-                  <div className="q-category-bottom-categories-single-category">
-                    <p>No data found</p>
-                  </div>
-                </div>
+              {!allOrderData.length && (
+                <NoDataFound />
               )}
             </>
           )}

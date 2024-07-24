@@ -83,6 +83,7 @@ export default function Pagination(props) {
       </TableContainer>
     );
   };
+  console.log("props.endOfDataList",props.endOfDataList)
   return (
     <>
       {props.loader ? (
@@ -137,14 +138,12 @@ export default function Pagination(props) {
                   </StyledTableRow>
                 ))
               ) : (
-                <StyledTableRow>
-                  <StyledTableCell>
-                    <p>{props.message}</p>
-                  </StyledTableCell>
-                </StyledTableRow>
+                ""
               )}
             </TableBody>
-            {props.searchProduct.length ? (
+          
+          </StyledTable>
+          {props.searchProduct.length ? (
             props.laodMoreData ? (
               renderLoader()
             ) : !props.endOfDataList ? (
@@ -164,7 +163,6 @@ export default function Pagination(props) {
           ) : (
            <NoDataFound  />
           )}
-          </StyledTable>
         </TableContainer>
       )}
     </>

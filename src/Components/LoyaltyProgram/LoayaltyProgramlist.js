@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from "react-redux";
 
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 
-
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -26,6 +25,7 @@ import PasswordShow from "../../Common/passwordShow";
 import sortIcon from "../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
 import CustomHeader from "../../reuseableComponents/CustomHeader";
+import NoDataFound from "../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -269,7 +269,7 @@ const LoyaltyProgramList = () => {
                     </StyledTable>
                   </TableContainer>
                 ) : (
-                  <p className="px-5 py-4">No Data Found</p>
+                  <NoDataFound table={true} />
                 )}
               </>
             )}

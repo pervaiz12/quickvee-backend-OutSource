@@ -30,6 +30,7 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import PasswordShow from "./../../Common/passwordShow";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../reuseableComponents/NoDataFound";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -287,6 +288,7 @@ const PermissionList = () => {
                         : ""}
                     </TableBody>
                   </StyledTable>
+                  {!allpermission?.length && <NoDataFound />}
                 </TableContainer>
               )}
             </Grid>

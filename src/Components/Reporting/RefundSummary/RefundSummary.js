@@ -154,12 +154,12 @@ const RefundSummary = () => {
         <Grid item xs={12}>
           <CustomHeader>Item Refund Report</CustomHeader>
 
-          <Grid container sx={{px:2.5,pt:1}}>
+          <Grid container sx={{ px: 2.5, pt: 1 }}>
             <Grid item xs={12}>
               <h1 className="heading">Filter By</h1>
             </Grid>
           </Grid>
-          <Grid container sx={{px:2.5}} spacing={2}>
+          <Grid container sx={{ px: 2.5 }} spacing={2}>
             <Grid item xs={12} sm={6} md={4}>
               <label className="q-details-page-label" htmlFor="orderTypeFilter">
                 Category

@@ -24,6 +24,7 @@ import useDebounce from "../../../hooks/useDebouncs";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import PasswordShow from "../../../Common/passwordShow";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 export default function AdminView({ setVisible, setEditAdminId }) {
   const { userTypeData } = useAuthDetails();
@@ -294,7 +295,7 @@ export default function AdminView({ setVisible, setEditAdminId }) {
                     </StyledTable>
                   </TableContainer>
                 ) : (
-                  <p className="px-5 py-4">No Data Found</p>
+                  <NoDataFound table={true} />
                 )}
               </>
             )}

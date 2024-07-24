@@ -26,7 +26,7 @@ export default function ProfitMarginReportLogic() {
   const [limit, setLimit] = useState(10);
   const [listingType, setListingType] = useState(1);
   const [message, setMessage] = useState(""); // message display
-
+  const [endOfDataList, setEndOfDataList] = useState(false); 
   const [laodMoreData, setLoadMoreData] = useState(false); //load button hide and show
 
   const [loader, setLoader] = useState(false);
@@ -137,10 +137,11 @@ export default function ProfitMarginReportLogic() {
       if (response?.data.length) {
         setLoader(false);
         setsearchProduct(response?.data);
-        if (id == "all" && response?.data.length >= 10) {
-          setLoadMoreData(true);
+        if (id == "all" ) {
+          setEndOfDataList(false);
           setOffset(10);
         } else {
+          setEndOfDataList(true);
           setOffset(0);
           setLoadMoreData(false);
         }
@@ -162,6 +163,7 @@ export default function ProfitMarginReportLogic() {
   // button click when loadmore display
   const handleLoadMore = async () => {
     try {
+      setLoadMoreData(true);
       const packet = {
         cat_id: selectCategoryId,
         offset,
@@ -173,7 +175,7 @@ export default function ProfitMarginReportLogic() {
         ...userTypeData,
       };
       const { token, ...newData } = packet;
-      setLoader(true);
+   
       let response = await axios.post(BASE_URL + INVENTORY_LIST, newData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -185,16 +187,16 @@ export default function ProfitMarginReportLogic() {
         setLoader(false);
         console.log(response?.data);
         setsearchProduct([...searchProduct, ...response?.data]);
-        if (selectCategoryId == "all" && response?.data.length >= 10) {
-          setLoadMoreData(true);
+        if (selectCategoryId == "all" && response?.data.length !== 10) {
+          setEndOfDataList(true);
           setOffset(offset + 10);
         } else {
           setOffset(0);
-          setLoadMoreData(false);
+         
         }
       } else {
         setLoader(false);
-        setLoadMoreData(false);
+        setEndOfDataList(true);
         setMessage("No record found");
         // setsearchProduct([]);
       }
@@ -206,6 +208,7 @@ export default function ProfitMarginReportLogic() {
         getNetworkError();
       }
     }
+    setLoadMoreData(false);
   };
   // button click when loadmore display
   return {
@@ -221,5 +224,6 @@ export default function ProfitMarginReportLogic() {
     laodMoreData,
     loader,
     setsearchProduct,
+    endOfDataList,
   };
 }

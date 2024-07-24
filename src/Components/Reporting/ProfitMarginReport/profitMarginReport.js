@@ -19,6 +19,7 @@ export default function ProfitMarginReport() {
     handleLoadMore,
     laodMoreData,
     loader,
+    endOfDataList,
     setsearchProduct,
   } = ProfitMarginReportLogic();
 
@@ -86,6 +87,7 @@ export default function ProfitMarginReport() {
             laodMoreData={laodMoreData}
             loader={loader}
             sortByItemName={sortByItemName}
+            endOfDataList={endOfDataList}
           />
         </Grid>
       </Grid>

@@ -16,6 +16,7 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "../../../Common/passwordShow";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -40,9 +41,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-    
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
@@ -168,11 +167,6 @@ const CouponReportList = (props) => {
                           </p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          
-                            
-                              
-                              
-                          
                           <p>{couponData.couponName}</p>
                         </StyledTableCell>
                         <StyledTableCell>
@@ -182,48 +176,13 @@ const CouponReportList = (props) => {
                         </StyledTableCell>
                       </StyledTableRow>
                     ))}
-                  {!CouponReportData.length > 0 && (
-                    <div className="box">
-                      <div className="q-category-bottom-categories-single-category">
-                        <p>No data found</p>
-                      </div>
-                    </div>
-                  )}
                 </TableBody>
               </StyledTable>
+              {!CouponReportData.length  && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>
       </Grid>
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </>
   );
 };

@@ -32,10 +32,7 @@ const TipReportMain = () => {
         </Grid>
       </Grid>
 
-      <TipReportList
-        selectedDateRange={selectedDateRange}
-       
-      />
+      <TipReportList selectedDateRange={selectedDateRange} />
     </>
   );
 };

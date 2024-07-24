@@ -14,8 +14,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
-import sortIcon from "../../../Assests/Category/SortingW.svg"
+import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -39,9 +40,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-   
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
@@ -105,7 +104,7 @@ const TipReportList = (props) => {
     );
     setTipReportData(sortedItems);
     setSortOrder(newOrder);
-  }
+  };
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -115,37 +114,33 @@ const TipReportList = (props) => {
           ) : (
             <TableContainer>
               <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-                
                 <TableHead>
-                  {tableRow.map((item)=><StyledTableCell>
-                    <button
-                    className="flex items-center"
-                    onClick={()=>sortByItemName(item.type,item.name)}
-                    >
-                      <p>{item.label}</p>
-                      <img src={sortIcon} alt="" className="pl-1" />
-                    </button>
-                  </StyledTableCell>)}
+                  {tableRow.map((item) => (
+                    <StyledTableCell>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName(item.type, item.name)}
+                      >
+                        <p>{item.label}</p>
+                        <img src={sortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
+                  ))}
                 </TableHead>
                 <TableBody>
                   {tipReportData.length > 0 &&
                     tipReportData.map((tipData, index) => (
                       <>
                         <StyledTableRow key={index}>
-                          
-                          
-
-
-
-
-
-
-
-                           <StyledTableCell>
-                        {tipData?.f_name || tipData?.l_name ? (
-                          <p>{tipData?.f_name || ""} {tipData?.l_name || ""}</p>
-                        ) :""}
-                        </StyledTableCell>
+                          <StyledTableCell>
+                            {tipData?.f_name || tipData?.l_name ? (
+                              <p>
+                                {tipData?.f_name || ""} {tipData?.l_name || ""}
+                              </p>
+                            ) : (
+                              ""
+                            )}
+                          </StyledTableCell>
                           <StyledTableCell>
                             <p>
                               $
@@ -159,8 +154,6 @@ const TipReportList = (props) => {
                     ))}
                   {tipReportData.length > 0 && (
                     <StyledTableRow>
-                      
-                      
                       <StyledTableCell>
                         <p style={{ color: "#0A64F9" }}>Grand Total</p>
                       </StyledTableCell>
@@ -174,59 +167,13 @@ const TipReportList = (props) => {
                       </StyledTableCell>
                     </StyledTableRow>
                   )}
-                  {!tipReportData.length > 0 && (
-                    <div className="box">
-                      <div className="q-category-bottom-categories-single-category">
-                        <p>No data found</p>
-                      </div>
-                    </div>
-                  )}
                 </TableBody>
               </StyledTable>
+              {!tipReportData.length > 0 && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>
       </Grid>
-     
-     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-     
     </>
   );
 };

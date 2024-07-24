@@ -118,6 +118,17 @@ const DetailsSaleReport = ({ data }) => {
         );
       }, 0)
     : 0;
+  const grandTotalProductQty = detailCategorySale
+    ? Object.values(detailCategorySale).reduce((acc, category) => {
+        return (
+          acc +
+          category.reduce((accCat, item) => {
+            const productTotal = parseFloat(item.pro_qty) || 0;
+            return accCat + productTotal;
+          }, 0)
+        );
+      }, 0)
+    : 0;
 
   const handleCategoryClick = () => {
     // Toggle between ASC and DESC orders
@@ -204,7 +215,7 @@ const DetailsSaleReport = ({ data }) => {
                           <img src={SortIconW} alt="" className="pl-1" />
                         </button>
                       </StyledTableCell>
-                      <StyledTableCell align="center">
+                      <StyledTableCell>
                         <button
                           className="flex items-center"
                           onClick={() => sortByItemName("num", "pro_qty")}
@@ -213,7 +224,7 @@ const DetailsSaleReport = ({ data }) => {
                           <img src={SortIconW} alt="" className="pl-1" />
                         </button>
                       </StyledTableCell>
-                      <StyledTableCell align="center">
+                      <StyledTableCell>
                         <button
                           className="flex items-center"
                           onClick={() => sortByItemName("num", "product_total")}
@@ -229,10 +240,11 @@ const DetailsSaleReport = ({ data }) => {
                           <StyledTableCell>
                             <p className="q-catereport-item">{item.name}</p>
                           </StyledTableCell>
-                          <StyledTableCell align="left">
+                          <StyledTableCell>
                             <p className="">{item.pro_qty}</p>
                           </StyledTableCell>
-                          <StyledTableCell align="left">
+
+                          <StyledTableCell>
                             $
                             {item.product_total
                               ? priceFormate(
@@ -246,8 +258,13 @@ const DetailsSaleReport = ({ data }) => {
                         <StyledTableCell>
                           <p>Total</p>
                         </StyledTableCell>
-                        <StyledTableCell></StyledTableCell>
-                        <StyledTableCell align="left">
+                        <StyledTableCell>
+                          {items.reduce(
+                            (acc, item) => acc + parseInt(item.pro_qty) || 0,
+                            0
+                          )}
+                        </StyledTableCell>
+                        <StyledTableCell>
                           $
                           {priceFormate(
                             items
@@ -268,10 +285,9 @@ const DetailsSaleReport = ({ data }) => {
           </>
         ))
       ) : (
-        <Grid sx={{pt:2.5}}>
-           <NoDataFound />
+        <Grid sx={{ pt: 2.5 }}>
+          <NoDataFound />
         </Grid>
-       
       )}
       {Object.entries(detailCategorySale).length > 0 && (
         <Grid container sx={{ marginY: 2.5 }} className="box_shadow_div">
@@ -280,16 +296,17 @@ const DetailsSaleReport = ({ data }) => {
               <StyledTable>
                 <TableBody>
                   <StyledTableRow>
-                    <StyledTableCell sx={{ width: "50%" }}>
+                    <StyledTableCell sx={{ width: "55%" }}>
                       <div className="q-category-bottom-report-listing">
                         <div>
                           <p className="">Grand Total</p>
                         </div>
                       </div>
                     </StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
 
-                    <StyledTableCell align="center">
+                    <StyledTableCell sx={{ width: "23%" }}>{grandTotalProductQty}</StyledTableCell>
+
+                    <StyledTableCell>
                       <div className="q-category-bottom-report-listing">
                         <div>${priceFormate(grandTotal.toFixed(2))}</div>
                       </div>
