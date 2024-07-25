@@ -32,7 +32,7 @@ export default function DashboardFunctionality() {
   console.log(data);
   let countRecord = 0;
   let countCardData = 0;
-  const getDashboardCountRecord = async () => {
+  const getDashboardCountRecord = async (source) => {
    
     try {
       if (countCardData === 0) {
@@ -47,6 +47,7 @@ export default function DashboardFunctionality() {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
+          cancelToken: source.token,
         }
       );
       if (response?.data?.status == true) {
@@ -63,7 +64,7 @@ export default function DashboardFunctionality() {
     setLoadingCount(false)
   };
 
-  const getDashboardTableRecord = async () => {
+  const getDashboardTableRecord = async (source) => {
     try {
       if (countRecord === 0) {
         setLoading(true);
@@ -74,6 +75,7 @@ export default function DashboardFunctionality() {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
+        cancelToken: source.token,
       });
       if (response?.data?.status == true) {
         console.log(response?.data?.data);
@@ -114,16 +116,21 @@ export default function DashboardFunctionality() {
     //   await getDashboardTableRecord();
     //   await getDashboardCountRecord();
     // };
+    const source = axios.CancelToken.source();
     const fetchData = async () => {
       try {
-        await Promise.all([getDashboardTableRecord(), getDashboardCountRecord()]);
+        await Promise.all([getDashboardTableRecord(source), getDashboardCountRecord(source)]);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
     const interval = setInterval(fetchData, 5000);
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      source.cancel("Operation canceled due to merchant_id change.");
+    };
+    // return () => clearInterval(interval);
   }, [merchant_id]);
   return { dashboardCount, dashboardRecord, sortByItemName, loading,loadingCount };
 }
