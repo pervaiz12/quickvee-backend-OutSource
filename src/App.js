@@ -759,6 +759,11 @@ function App() {
             />
             <Route
               exact
+              path="/unapprove/order-retrieve"
+              element={<Main visible={"order-retrieve"} />}
+            />
+            <Route
+              exact
               path="/unapprove/support-details"
               element={<Main visible={"support-details"} />}
             />

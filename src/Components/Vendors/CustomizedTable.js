@@ -15,6 +15,7 @@ import { useState } from "react";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import sortIcon from "../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
+import NoDataFound from "../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -166,9 +167,7 @@ export default function CustomizedTable({
                     );
                   })
                 ) : (
-                  <div className="p-3">
-                    <p>No record found.</p>
-                  </div>
+                 ""
                 )}
                 {vendorDetails.length > 0 ? (
                   <StyledTableRow>
@@ -190,6 +189,7 @@ export default function CustomizedTable({
                 )}
               </TableBody>
             </StyledTable>
+            {!vendorDetails.length && <NoDataFound />}
           </TableContainer>
         </>
       )}

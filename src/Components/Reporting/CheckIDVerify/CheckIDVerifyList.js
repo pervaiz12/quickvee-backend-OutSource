@@ -5,8 +5,6 @@ import { fetchCheckIDVerifyData } from "../../../Redux/features/Reports/CheckIDV
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 
-
-
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -19,6 +17,7 @@ import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import { Link } from "react-router-dom";
 import PasswordShow from "../../../Common/passwordShow";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const orderEnv = (type) => {
   if (type === "Online Order") {
     return "Online";
@@ -110,7 +109,6 @@ const CheckIDVerifyList = (props) => {
       !AllCheckIDVerifyDataState.loading &&
       AllCheckIDVerifyDataState.CheckIDVerifyData
     ) {
-      
       setallCheckIDVerifyData(AllCheckIDVerifyDataState.CheckIDVerifyData);
     } else {
       setallCheckIDVerifyData("");
@@ -199,14 +197,12 @@ const CheckIDVerifyList = (props) => {
                         <StyledTableCell>
                           <Link
                             to={`/order/store-reporting/order-summary/${merchant_id}/${CheckData.order_id}`}
-                            
                             target="_blank"
                           >
                             <p className="text-[#0A64F9]">
                               {CheckData?.order_id}
                             </p>
                           </Link>
-                          
                         </StyledTableCell>
                         <StyledTableCell>
                           <p className="">{CheckData.name}</p>
@@ -217,51 +213,8 @@ const CheckIDVerifyList = (props) => {
               </StyledTable>
             </TableContainer>
             {!allCheckIDVerifyData.length >= 1 && (
-              <div className="box_shadow_div" style={{ margin: 0 }}>
-                <div className="q-category-bottom-categories-single-category">
-                  <p>No data found</p>
-                </div>
-              </div>
+              <NoDataFound />
             )}
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
           </>
         )}
       </div>

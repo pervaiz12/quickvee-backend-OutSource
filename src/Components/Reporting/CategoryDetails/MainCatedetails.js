@@ -68,7 +68,7 @@ const MainCatedetails = () => {
         order_env: orderEnvValue,
         order_typ: orderTypValue,
       };
-      
+
       setFilteredData(updatedData);
     } else {
       // Handle other cases or log an error

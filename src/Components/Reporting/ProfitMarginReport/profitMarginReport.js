@@ -10,7 +10,7 @@ export default function ProfitMarginReport() {
   const {
     handleChangeInventory,
     inventory,
-    
+
     category,
     handleOptionClick,
     selectedCategory,
@@ -19,6 +19,7 @@ export default function ProfitMarginReport() {
     handleLoadMore,
     laodMoreData,
     loader,
+    endOfDataList,
     setsearchProduct,
   } = ProfitMarginReportLogic();
 
@@ -40,7 +41,6 @@ export default function ProfitMarginReport() {
       <Grid container className="box_shadow_div">
         <CustomHeader>Profit Margin Report</CustomHeader>
         <Grid item xs={12}>
-          
           <Grid container spacing={2} sx={{ px: 2.5, py: 2.5 }}>
             <Grid item xs={12} sm={6} md={4}>
               <label
@@ -50,9 +50,6 @@ export default function ProfitMarginReport() {
                 Search Product
               </label>
 
-              
-              
-              
               <BasicTextFields
                 sx={{ pt: 0.5 }}
                 type={"text"}
@@ -61,21 +58,9 @@ export default function ProfitMarginReport() {
                 placeholder="Search Product"
                 onChangeFun={handleChangeInventory}
                 required={"required"}
-                
               />
             </Grid>
-            
-            
 
-
-
-
-
-
-
-
-
-            
             <Grid item xs={12} sm={6} md={4}>
               <label className="q-details-page-label" htmlFor="limitFilter">
                 Category
@@ -102,6 +87,7 @@ export default function ProfitMarginReport() {
             laodMoreData={laodMoreData}
             loader={loader}
             sortByItemName={sortByItemName}
+            endOfDataList={endOfDataList}
           />
         </Grid>
       </Grid>

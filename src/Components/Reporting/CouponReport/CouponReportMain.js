@@ -31,10 +31,7 @@ const CouponReportMain = () => {
         <DateRange onDateRangeChange={handleDateRangeChange} />
       </Grid>
 
-      <CouponReportList
-        selectedDateRange={selectedDateRange}
-        
-      />
+      <CouponReportList selectedDateRange={selectedDateRange} />
     </>
   );
 };

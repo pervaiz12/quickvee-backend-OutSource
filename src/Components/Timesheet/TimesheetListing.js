@@ -36,6 +36,7 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import PasswordShow from "../../Common/passwordShow";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../reuseableComponents/NoDataFound";
 
 const TimesheetListing = ({ data }) => {
   const dispatch = useDispatch();
@@ -118,7 +119,7 @@ const TimesheetListing = ({ data }) => {
         }));
         setemployeeList(mappedOptions);
       } catch (error) {
-        if (error.status == 401 || error.response.status === 401) {
+        if (error?.status == 401 || error?.response?.status === 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
         } else if (error.status == "Network Error") {
@@ -1108,7 +1109,10 @@ const TimesheetListing = ({ data }) => {
   return (
     <>
       {renderDataTable()}
-
+      <Grid sx={{mt:3.5}}>
+      {!employeeList.length && <NoDataFound />}
+      </Grid>
+     
       {/* Modal for Add Clock-in/ClocK-out start  */}
       <Modal
         open={showModal}

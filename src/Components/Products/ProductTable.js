@@ -30,6 +30,7 @@ import { fetchStoreSettingSetupData } from "../../Redux/features/SettingSetup/Se
 import { changeShowStatus } from "../../Redux/features/Product/ProductSlice";
 import Skeleton from "react-loading-skeleton";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
+import NoDataFound from "../../reuseableComponents/NoDataFound";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -434,7 +435,7 @@ const ProductTable = ({
                       loading ? (
                         <h3 className="all-product-list">Loading...</h3>
                       ) : !productList?.length ? (
-                        <h3 className="all-product-list">No Result Found</h3>
+                        <h3 className="all-product-list">{!productList?.length && <NoDataFound />}</h3>
                       ) : (
                         <h3 className="all-product-list"></h3>
                       )
@@ -763,6 +764,7 @@ const ProductTable = ({
                       </Droppable>
                     </DragDropContext>
                   </InfiniteScroll>
+                  
                 </TableContainer>
                 {/* </div> */}
               </div>

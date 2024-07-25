@@ -17,6 +17,20 @@ const transactionsList = [
     title: "Credit Card",
   },
 ];
+const transactionsListSuperadmin = [
+  {
+    title: "Both",
+  },
+  {
+    title: "Cash",
+  },
+  {
+    title: "Credit Card",
+  },
+  {
+    title: "Unpaid",
+  },
+];
 
 const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
   const [selected, setSelected] = useState(false);
@@ -34,9 +48,10 @@ const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
   const handleSearch = () => {
     // console.log("Search ID:", searchId);
   };
-  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
-  let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
-  const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
 
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
@@ -148,8 +163,17 @@ const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
       try {
         const response = await axios.post(
           BASE_URL + EMPLOYEE_LIST,
-          { merchant_id: merchant_id,token_id:userTypeData?.token_id,login_type:userTypeData?.login_type },
-          { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` } }
+          {
+            merchant_id: merchant_id,
+            token_id: userTypeData?.token_id,
+            login_type: userTypeData?.login_type,
+          },
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${userTypeData?.token}`,
+            },
+          }
         );
 
         const EmpList = response.data.result;
@@ -199,7 +223,7 @@ const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
                 <Grid item xs={12} sm={6} md={4}>
                   <label>Employee</label>
                   <SelectDropDown
-                   sx={{pt:0.5}}
+                    sx={{ pt: 0.5 }}
                     heading={"All"}
                     listItem={employeeList}
                     onClickHandler={handleOptionClick}
@@ -211,8 +235,12 @@ const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
                 <Grid item xs={12} sm={6} md={4}>
                   <label htmlFor="transactionFilter">Payment Type</label>
                   <SelectDropDown
-                  sx={{pt:0.5}}
-                    listItem={transactionsList}
+                    sx={{ pt: 0.5 }}
+                    listItem={
+                      userTypeData.login_type === "superadmin"
+                        ? transactionsListSuperadmin
+                        : transactionsList
+                    }
                     onClickHandler={handleOptionClick}
                     selectedOption={selectedTransaction}
                     dropdownFor={"transaction"}

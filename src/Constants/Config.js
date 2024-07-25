@@ -348,6 +348,10 @@ module.exports = Object.freeze({
   ADD_NEW_BRANDS_DATA: "Product_api_react/add_brand_tag",
   UPDATE_BRANDS_DATA: "Product_api_react/update_brand_tag",
   DELETE_BRAND_DATA: "Product_api_react/delete_brand_tag",
+
+  // Order Retrieve
+  SPLIT_LIST: "Order_list_api/get_split_records",
+  ORDERRETRIEVE_SUBMIT: "Order_list_api/order_recover",
 });
 
 // All api calls are initialized in this component for this application

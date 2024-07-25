@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import FilterVendorList from "../VendorDetails/FilterVendorList";
 import VendorSalesReportList from "./VendorSalesReportList";
-import DateRangeComponent from '../../../reuseableComponents/DateRangeComponent';
+import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 
 const VendorSalesReportMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
@@ -12,13 +12,11 @@ const VendorSalesReportMain = () => {
   const [VendorIdData, setVendorIdData] = useState(null);
 
   const handleFilterDataChange = (option) => {
-    if(option == "All") {
-      setVendorIdData("all")
-    }else{
-      setVendorIdData(option.id)
+    if (option == "All") {
+      setVendorIdData("all");
+    } else {
+      setVendorIdData(option.id);
     }
-
-    
   };
 
   return (
@@ -33,12 +31,11 @@ const VendorSalesReportMain = () => {
           <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
         </div>
       </div>
-    
-          <VendorSalesReportList
-            selectedDateRange={selectedDateRange}
-            VendorIdData={VendorIdData}
-          />
-        
+
+      <VendorSalesReportList
+        selectedDateRange={selectedDateRange}
+        VendorIdData={VendorIdData}
+      />
     </>
   );
 };

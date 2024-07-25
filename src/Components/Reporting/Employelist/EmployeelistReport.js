@@ -16,6 +16,7 @@ import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItems
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -39,9 +40,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-    
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
@@ -70,15 +69,6 @@ const EmployeelistReport = () => {
     fetchData();
   }, [dispatch]);
 
-  
-  
-
-
-
-
-
-
-
   useEffect(() => {
     if (
       !AllEmployeeListState.loading &&
@@ -90,12 +80,11 @@ const EmployeelistReport = () => {
           return { ...data, fullName: fullName };
         }
       );
-      
+
       setAllEmployeeData(updatedData);
     }
   }, [AllEmployeeListState.loading, AllEmployeeListState.employeeListData]);
 
-  
   const [sortOrder, setSortOrder] = useState("asc");
   const sortByItemName = (type, name) => {
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
@@ -195,52 +184,17 @@ const EmployeelistReport = () => {
                           </StyledTableRow>
                         ))
                       ) : (
-                        <Grid container sx={{ padding: 2.5 }}>
-                          <Grid item xs={12}>
-                            <p>No. Data found.</p>
-                          </Grid>
-                        </Grid>
+                        ""
                       )}
                     </TableBody>
                   </StyledTable>
+                  {!employeeData?.length && <NoDataFound />}
                 </TableContainer>
               )}
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-      
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </>
   );
 };

@@ -1,9 +1,6 @@
 import React from "react";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 
-
-
-
 import Discount_per_sales_logic from "./discount_per_sales_logic";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import DashboardTables from "./paginationTable";

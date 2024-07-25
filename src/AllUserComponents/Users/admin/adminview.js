@@ -24,6 +24,7 @@ import useDebounce from "../../../hooks/useDebouncs";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import PasswordShow from "../../../Common/passwordShow";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 export default function AdminView({ setVisible, setEditAdminId }) {
   const { userTypeData } = useAuthDetails();
@@ -73,7 +74,7 @@ export default function AdminView({ setVisible, setEditAdminId }) {
         })
       );
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
+      if (error?.status == 401 || error?.response?.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -88,7 +89,6 @@ export default function AdminView({ setVisible, setEditAdminId }) {
   useEffect(() => {
     if (!AdminRecord.loading && AdminRecord.AdminRecord?.length >= 1) {
       setAdminsDataState(AdminRecord.AdminRecord);
-      setTotalCount(AdminRecord.AdminRecord?.length);
     }
   }, [AdminRecord.AdminRecord]);
   useEffect(() => {
@@ -295,7 +295,7 @@ export default function AdminView({ setVisible, setEditAdminId }) {
                     </StyledTable>
                   </TableContainer>
                 ) : (
-                  <p className="px-5 py-4">No Data Found</p>
+                  <NoDataFound table={true} />
                 )}
               </>
             )}

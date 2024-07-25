@@ -513,7 +513,6 @@
   flex-wrap: wrap;
   justify-content: center;
   padding: 20px 20px 0px 20px !important;
-
 }
 
 .vendor-add-input .dropdownBox {
@@ -538,7 +537,8 @@
   cursor: pointer;
 }
 
-.vendor-add-input button {}
+.vendor-add-input button {
+}
 
 .bulkvendor-table-container {
   box-shadow: none;
@@ -599,7 +599,8 @@
   opacity: 1;
 }
 
-.bulk-vendor-table {}
+.bulk-vendor-table {
+}
 
 /* alert toast css */
 .toast-modal {
@@ -744,7 +745,8 @@
   font-family: CircularSTDBook !important;
 }
 
-.varient-select-section {}
+.varient-select-section {
+}
 
 .varient-select-section h2 {
   text-align: left;
@@ -908,4 +910,12 @@
 
 .check-box-area {
   margin-top: 20px;
+}
+
+.create-item-box {
+  background-color: #eaf9ff;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  cursor: pointer;
+  border-radius: 2px;
 }

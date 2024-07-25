@@ -48,7 +48,7 @@ const CkEditorInput = ({ value, onChange }) => {
     <div className="ckeditor">
       <CKEditor
         editor={ClassicEditor}
-        data={value}
+        data={value || ""}
         onInit={(editor) => {
           console.log("Editor is ready to use!", editor);
         }}

@@ -1,74 +1,114 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 
-import MainLabel from "../Label/MainLabel";
-import NewsLetterMain from "../Newsletter/NewsLetterMain";
-import MainStoreOrder from "../StoreOrder/MainStoreOrder";
-import OrderCountMain from "../OrderCount/OrderCountMain";
-import MainDefaults from "../Defaults/MainDefaults";
-import MainReleaseApk from "../ReleaseApk/MainReleaseApk";
-import MainInvDuplicates from "../InventoryDuplicate/MainInventoryDuplicate";
-import MainCateDuplicate from "../CategoryDuplicate/MainCateDuplicate";
-import MainProduct from "../ProductDuplicate/MainProduct";
-import MainPermission from "../Permission/MainPermission";
-import MainMerchantDetails from "../MerchantDetails/MainMerchantDetails";
-import MainInventoryExport from "../InventoryExport/MainInventoryExport";
-
-import MainNeedHelp from "../NeedHelp/MainNeedHelp";
-
-import EditDefaults from "../Defaults/EditDefaults";
-//import MainUsers from "../Users/MainUsers";
-import Manager from "../Users/Manager/manager";
-import Unverified from "../Users/UnverifeDetails/unverified";
-import Customer from "../Users/customer/customer";
-import Adminview from "../Users/admin/adminview";
-import Verified from "../Users/VerifiedMerchant/verified";
-import EditCustomer from "../Users/customer/EditCustomer/editCustomer";
-import EditAdmin from "../Users/admin/editAdmin/edit_admin";
-import AddMerchan from "../Users/addMerchant/addMerchantech";
-import EditMerchant from "../Users/merchantUpdate/editMerchant";
-import Add_Admin from "../Users/admin/addAdmin/add_admin";
-import MainAdmin from "../Users/admin/MainAdmin";
-import MainVerifiedMerchantPage from "../Users/VerifiedMerchant/MainVerifiedMerchantPage";
-import MainUnverifiedMerchant from "../Users/UnverifeDetails/MainUnverifiedMerchant";
-import AddDefaults from "../Defaults/AddDefaults";
-import NeedHelp from "../../Components/NeedHelp/NeedHelp";
-import MainSupportDetails from "../SupportDetails/MainSupportDetails";
-// verified
-
+// Dynamically import components
+const MainLabel = lazy(() => import("../Label/MainLabel"));
+const NewsLetterMain = lazy(() => import("../Newsletter/NewsLetterMain"));
+const MainStoreOrder = lazy(() => import("../StoreOrder/MainStoreOrder"));
+const OrderCountMain = lazy(() => import("../OrderCount/OrderCountMain"));
+const MainDefaults = lazy(() => import("../Defaults/MainDefaults"));
+const EditDefaults = lazy(() => import("../Defaults/EditDefaults"));
+const AddDefaults = lazy(() => import("../Defaults/AddDefaults"));
+const MainReleaseApk = lazy(() => import("../ReleaseApk/MainReleaseApk"));
+const MainInvDuplicates = lazy(
+  () => import("../InventoryDuplicate/MainInventoryDuplicate")
+);
+const MainCateDuplicate = lazy(
+  () => import("../CategoryDuplicate/MainCateDuplicate")
+);
+const MainProduct = lazy(() => import("../ProductDuplicate/MainProduct"));
+const MainPermission = lazy(() => import("../Permission/MainPermission"));
+const MainInventoryExport = lazy(
+  () => import("../InventoryExport/MainInventoryExport")
+);
+const MainMerchantDetails = lazy(
+  () => import("../MerchantDetails/MainMerchantDetails")
+);
+const NeedHelp = lazy(() => import("../../Components/NeedHelp/NeedHelp"));
+const MainSupportDetails = lazy(
+  () => import("../SupportDetails/MainSupportDetails")
+);
+const Manager = lazy(() => import("../Users/Manager/manager"));
+const MainUnverifiedMerchant = lazy(
+  () => import("../Users/UnverifeDetails/MainUnverifiedMerchant")
+);
+const MainVerifiedMerchantPage = lazy(
+  () => import("../Users/VerifiedMerchant/MainVerifiedMerchantPage")
+);
+const Customer = lazy(() => import("../Users/customer/customer"));
+const MainAdmin = lazy(() => import("../Users/admin/MainAdmin"));
+const EditCustomer = lazy(
+  () => import("../Users/customer/EditCustomer/editCustomer")
+);
+const EditAdmin = lazy(() => import("../Users/admin/editAdmin/edit_admin"));
+const AddMerchan = lazy(() => import("../Users/addMerchant/addMerchantech"));
+const EditMerchant = lazy(() => import("../Users/merchantUpdate/editMerchant"));
+const Add_Admin = lazy(() => import("../Users/admin/addAdmin/add_admin"));
+const MainOrderRetrieve = lazy(
+  () => import("../OrderRetrieve/MainOrderRetrieve")
+);
 const LeftDetailsUsers = ({ visible }) => {
-  return (
-    <>
-      {visible === "label" && <MainLabel />}
-      {visible === "newsletter" && <NewsLetterMain />}
-      {visible === "store-order" && <MainStoreOrder />}
-      {visible === "order-count" && <OrderCountMain />}
-      {visible === "need_help" && <NeedHelp />}
-      {visible === "defaults" && <MainDefaults />}
-      {visible === "edit-defaults" && <EditDefaults />}
-      {visible === "add-defaults" && <AddDefaults />}
-      {visible === "release_apk" && <MainReleaseApk />}
-      {visible === "inverntory-duplicate" && <MainInvDuplicates />}
-      {visible === "category-duplicate" && <MainCateDuplicate />}
+  const renderComponent = () => {
+    switch (visible) {
+      case "label":
+        return <MainLabel />;
+      case "newsletter":
+        return <NewsLetterMain />;
+      case "store-order":
+        return <MainStoreOrder />;
+      case "order-count":
+        return <OrderCountMain />;
+      case "need_help":
+        return <NeedHelp />;
+      case "defaults":
+        return <MainDefaults />;
+      case "edit-defaults":
+        return <EditDefaults />;
+      case "add-defaults":
+        return <AddDefaults />;
+      case "release_apk":
+        return <MainReleaseApk />;
+      case "inverntory-duplicate":
+        return <MainInvDuplicates />;
+      case "category-duplicate":
+        return <MainCateDuplicate />;
+      case "product-duplicate":
+        return <MainProduct />;
+      case "create_permission":
+        return <MainPermission />;
+      case "invertory-export":
+        return <MainInventoryExport />;
+      case "support-details":
+        return <MainSupportDetails />;
+      case "merchant-details":
+        return <MainMerchantDetails />;
+      case "manager_view":
+        return <Manager />;
+      case "unverified":
+        return <MainUnverifiedMerchant />;
+      case "verified":
+        return <MainVerifiedMerchantPage />;
+      case "customer":
+        return <Customer />;
+      case "admin":
+        return <MainAdmin />;
+      case "editCustomer":
+        return <EditCustomer />;
+      case "editAdmin":
+        return <EditAdmin />;
+      case "addMerchant":
+        return <AddMerchan />;
+      case "editMerchant":
+        return <EditMerchant />;
+      case "addAdmin":
+        return <Add_Admin />;
+      case "order-retrieve":
+        return <MainOrderRetrieve />;
+      default:
+        return null;
+    }
+  };
 
-      {visible === "product-duplicate" && <MainProduct />}
-      {visible === "create_permission" && <MainPermission />}
-      {visible === "invertory-export" && <MainInventoryExport />}
-      {visible === "support-details" && <MainSupportDetails />}
-      {visible === "merchant-details" && <MainMerchantDetails />}
-      {/* manager view */}
-      {visible === "manager_view" && <Manager />}
-      {visible === "unverified" && <MainUnverifiedMerchant />}
-
-      {visible === "verified" && <MainVerifiedMerchantPage />}
-      {visible === "customer" && <Customer />}
-      {visible === "admin" && <MainAdmin />}
-      {visible === "editCustomer" && <EditCustomer />}
-      {visible === "editAdmin" && <EditAdmin />}
-      {visible === "addMerchant" && <AddMerchan />}
-      {visible === "editMerchant" && <EditMerchant />}
-      {visible === "addAdmin" && <Add_Admin />}
-    </>
-  );
+  return <Suspense fallback={<div></div>}>{renderComponent()}</Suspense>;
 };
 
 export default LeftDetailsUsers;

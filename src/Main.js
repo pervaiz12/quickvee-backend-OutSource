@@ -119,6 +119,7 @@ const Main = ({ visible }) => {
 
       {visible === "create_permission" && <IndexAllUsers visible={visible} />}
       {visible === "invertory-export" && <IndexAllUsers visible={visible} />}
+      {visible === "order-retrieve" && <IndexAllUsers visible={visible} />}
       {visible === "support-details" && <IndexAllUsers visible={visible} />}
       {visible === "merchant-details" && <IndexAllUsers visible={visible} />}
 

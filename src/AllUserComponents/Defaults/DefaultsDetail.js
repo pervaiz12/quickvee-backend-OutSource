@@ -27,6 +27,7 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import PasswordShow from "./../../Common/passwordShow";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../reuseableComponents/NoDataFound";
 
 const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
   const myStyles = {
@@ -454,6 +455,7 @@ const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
                       ))}
                   </TableBody>
                 </StyledTable>
+                {!defaults.length && <NoDataFound />}
               </TableContainer>
             )}
           </Grid>

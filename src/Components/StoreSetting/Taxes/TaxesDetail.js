@@ -114,6 +114,7 @@ const TaxesDetail = () => {
               }}
               table={"taxes"}
               className="q-category-bottom-categories-single-category"
+              loading={AlltaxesDataState.loading}
             />
           </div>
         </div>

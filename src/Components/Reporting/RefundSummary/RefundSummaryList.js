@@ -15,6 +15,7 @@ import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "../../../Common/passwordShow";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -38,9 +39,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-    
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
@@ -102,7 +101,6 @@ const RefundSummaryList = ({ data }) => {
         0
       );
       setTotalRefundAmount(totalRefundAmount);
-      
     } else {
       setrefundData("");
     }
@@ -111,18 +109,6 @@ const RefundSummaryList = ({ data }) => {
     RefundReportData.loading,
     RefundReportData.refundreportData,
   ]);
-
-  
-  
-
-
-
-
-
-
-
-
-
 
   const tableRow = [
     { type: "str", name: "name", label: "Item Name" },
@@ -150,142 +136,6 @@ const RefundSummaryList = ({ data }) => {
     setrefundData(sortedItems);
     setSortOrder(newOrder);
   };
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   return (
     <>
@@ -318,9 +168,13 @@ const RefundSummaryList = ({ data }) => {
                           <p>{data.name}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                        {data?.f_name || data?.l_name ? (
-                          <p>{data?.f_name || ""} {data?.l_name || ""}</p>
-                        ) :""}
+                          {data?.f_name || data?.l_name ? (
+                            <p>
+                              {data?.f_name || ""} {data?.l_name || ""}
+                            </p>
+                          ) : (
+                            ""
+                          )}
                         </StyledTableCell>
                         <StyledTableCell>
                           <p>{formatDate(data.create_date)}</p>
@@ -332,39 +186,30 @@ const RefundSummaryList = ({ data }) => {
                           <p>{priceFormate(data.refund_qty)}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          
                           <p>${priceFormate(data.total)}</p>
                         </StyledTableCell>
                       </StyledTableRow>
                     </>
                   ))
                 ) : (
-                  <Grid container sx={{ padding: 2.5 }}>
-                    <Grid item xs={12}>
-                      No data Found.
-                    </Grid>
-                  </Grid>
+                  ""
                 )}
                 {refundata && (
-                  <StyledTableRow>
+                  <StyledTableRow className="trBG_Color">
                     <StyledTableCell></StyledTableCell>
-                    <StyledTableCell></StyledTableCell> 
+                    <StyledTableCell></StyledTableCell>
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell>
-                      <p
-                        style={{
-                          color: "#0A64F9",
-                        }}
-                      >
+                      <p className="totalReport">
                         Total
                       </p>
                     </StyledTableCell>
-                    <StyledTableCell style={{ color: "#0A64F9" }}>
-                      {priceFormate(total)}
+                    <StyledTableCell >
+                    <p className="totalReport">{priceFormate(total)} </p>
                     </StyledTableCell>
 
                     <StyledTableCell>
-                      <p style={{ color: "#0A64F9" }}>
+                      <p className="totalReport">
                         ${priceFormate(totalRefundAmountState.toFixed(2))}
                       </p>
                     </StyledTableCell>
@@ -372,6 +217,7 @@ const RefundSummaryList = ({ data }) => {
                 )}
               </TableBody>
             </StyledTable>
+            {!refundata.length && <NoDataFound />}
           </TableContainer>
         )}
       </Grid>

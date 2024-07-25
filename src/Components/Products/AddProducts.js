@@ -9,9 +9,11 @@ import {
   checkUpcOnVarientEdit,
   editProductData,
   emptyProduct,
+  fetchBrands,
   fetchCategoryList,
   fetchProductList,
   fetchProductsDataById,
+  fetchTags,
   fetchTaxList,
   fetchVarientList,
   fetchVarietDataById,
@@ -36,6 +38,7 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import PasswordShow from "../../Common/passwordShow";
 import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 import SearchableDropdown from "../../CommonComponents/SearchableDropdown";
+import CreatableDropdown from "../../CommonComponents/CreatableDropdown";
 const VariantAttributes = lazy(() => import("./VariantAttributes"));
 const GeneratePUC = lazy(() => import("./GeneratePUC"));
 const EditPage = lazy(() => import("./EditPage"));
@@ -80,6 +83,16 @@ const AddProducts = () => {
     frequentlyBought: [],
     files: [],
     uploadFiles: [],
+  });
+
+  const [speciality, setSpeciality] = useState({
+    tags: [],
+    brands: [],
+  });
+
+  const [selectedSpeciality, setSelectedSpeciality] = useState({
+    tags: [],
+    brands: [],
   });
 
   //fetch data states
@@ -293,6 +306,88 @@ const AddProducts = () => {
       (item) => item?.id !== id
     );
     setProductInfo((prev) => ({
+      ...prev,
+      [name]: filterOptionItems,
+    }));
+  };
+
+  const handleSelectSpeciality = (value, name) => {
+    if (name === "tags") {
+      const titleExists = (array, title) => {
+        return array.some((item) =>
+          item?.title
+            ? item?.title?.toLowerCase() === title?.toLowerCase()
+            : item?.toLowerCase() === title?.toLowerCase()
+        );
+      };
+
+      if (titleExists(selectedSpeciality[name], value?.title)) {
+        return;
+      }
+
+      if (selectedSpeciality[name]?.length < 15) {
+        setSelectedSpeciality((prev) => ({
+          ...prev,
+          [name]: [...prev[name], value],
+        }));
+      } else {
+        return;
+      }
+    } else if (name === "brands") {
+      setSelectedSpeciality((prev) => ({
+        ...prev,
+        [name]: [value],
+      }));
+    }
+    setSpeciality((prev) => ({ ...prev }));
+  };
+
+  const handleInsertItemInList = (value, name) => {
+    console.log(value, name);
+    if (name === "tags") {
+      const filterData = selectedSpeciality[name]?.filter((item) => {
+        return item?.title
+          ? item?.title?.trim().toLowerCase() === value?.trim().toLowerCase()
+          : item?.trim().toLowerCase() === value?.trim().toLowerCase();
+      });
+      if (filterData?.length) {
+        return;
+      } else {
+        setSelectedSpeciality((prev) => ({
+          ...prev,
+          [name]: [
+            ...prev[name],
+            {
+              id: (Math.floor(Math.random() * (99000 - 1)) + 1).toString(),
+              title: value.trim(),
+              merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+              type: "0",
+            },
+          ],
+        }));
+      }
+    } else {
+      setSelectedSpeciality((prev) => ({
+        ...prev,
+        [name]: [
+          {
+            id: (Math.floor(Math.random() * (10000 - 1)) + 1).toString(),
+            title: value.trim(),
+            merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+            type: "1",
+          },
+        ],
+      }));
+    }
+  };
+
+  const handleDeleteSpeciality = (id, name) => {
+    const numberRegex = /^[0-9]+$/;
+    const isNumber = numberRegex.test(id);
+    const filterOptionItems = selectedSpeciality[name].filter((item) =>
+      isNumber ? item?.id !== id : item !== id
+    );
+    setSelectedSpeciality((prev) => ({
       ...prev,
       [name]: filterOptionItems,
     }));
@@ -524,7 +619,26 @@ const AddProducts = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Called API
+        const tagsData = new FormData();
+        tagsData.append(
+          "merchant_id",
+          LoginGetDashBoardRecordJson?.data?.merchant_id
+        );
+        tagsData.append("type", 0);
+        tagsData.append("login_type", userTypeData?.login_type);
+        tagsData.append("token_id", userTypeData?.token_id);
+        tagsData.append("token", userTypeData?.token);
+
+        const brandsData = new FormData();
+        brandsData.append(
+          "merchant_id",
+          LoginGetDashBoardRecordJson?.data?.merchant_id
+        );
+        brandsData.append("type", 1);
+        brandsData.append("login_type", userTypeData?.login_type);
+        brandsData.append("token_id", userTypeData?.token_id);
+        brandsData.append("token", userTypeData?.token);
+
         const formData = new FormData();
         formData.append(
           "merchant_id",
@@ -548,77 +662,74 @@ const AddProducts = () => {
           ...userTypeData,
         };
 
-        // Fetch inventory settings
-        try {
-          const res = await dispatch(getInventorySetting(formData)).unwrap();
-          if (!!+res) {
-            setCostPer(+res);
-          }
-        } catch (error) {
-          if (error.status == 401 || error.response.status === 401) {
-            getUnAutherisedTokenMessage();
-            handleCoockieExpire();
-          } else if (error.status == "Network Error") {
-            getNetworkError();
-          }
+        const [
+          inventorySetting,
+          varientList,
+          categoryList,
+          taxList,
+          productList,
+          tags,
+          brands,
+        ] = await Promise.all([
+          dispatch(getInventorySetting(formData)).unwrap(),
+          dispatch(fetchVarientList(inventoryList)).unwrap(),
+          dispatch(fetchCategoryList(inventoryData)).unwrap(),
+          dispatch(fetchTaxList(inventoryData)).unwrap(),
+          dispatch(fetchProductList(inventoryData)).unwrap(),
+          dispatch(fetchTags(tagsData)).unwrap(),
+          dispatch(fetchBrands(brandsData)).unwrap(),
+        ]);
+
+        // Handle inventory setting
+        if (!!+inventorySetting) {
+          setCostPer(+inventorySetting);
         }
 
-        // Fetch variant list
-        try {
-          const res = await dispatch(fetchVarientList(inventoryList)).unwrap();
-          setDropdowndata((prev) => ({
-            ...prev,
-            varientList: res?.result,
-          }));
-        } catch (error) {
-          if (error.status == 401) {
-            getUnAutherisedTokenMessage();
-            handleCoockieExpire();
-          } else if (error.status == "Network Error") {
-            getNetworkError();
-          }
-        }
+        // Handle variant list
+        setDropdowndata((prev) => ({
+          ...prev,
+          varientList: varientList?.result,
+        }));
 
-        // Fetch category list
-        try {
-          const res = await dispatch(fetchCategoryList(inventoryData)).unwrap();
-          setDropdowndata((prev) => ({
-            ...prev,
-            categoryList: res?.result,
-          }));
-        } catch (error) {
-          if (error.status == 401) {
-            getUnAutherisedTokenMessage();
-            handleCoockieExpire();
-          } else if (error.status == "Network Error") {
-            getNetworkError();
-          }
-        }
+        // Handle category list
+        setDropdowndata((prev) => ({
+          ...prev,
+          categoryList: categoryList?.result,
+        }));
 
-        // Fetch tax list
-        try {
-          const res = await dispatch(fetchTaxList(inventoryData)).unwrap();
-          setDropdowndata((prev) => ({
-            ...prev,
-            taxList: res?.result,
-          }));
-        } catch (err) {
-          console.error("Error fetching tax list:", err);
-        }
+        // Handle tax list
+        setDropdowndata((prev) => ({
+          ...prev,
+          taxList: taxList?.result,
+        }));
 
-        // Fetch product list
-        try {
-          const res = await dispatch(fetchProductList(inventoryData)).unwrap();
-          setDropdowndata((prev) => ({
-            ...prev,
-            relatedProducttList: res?.result,
-            frequentlyBroughtList: res?.result,
-          }));
-        } catch (err) {
-          console.error("Error fetching product list:", err);
-        }
+        // Handle product list
+        setDropdowndata((prev) => ({
+          ...prev,
+          relatedProducttList: productList?.result,
+          frequentlyBroughtList: productList?.result,
+        }));
+
+        // Handle tags
+        setSpeciality((prev) => ({
+          ...prev,
+          tags: tags?.data,
+        }));
+
+        // Handle brands
+        setSpeciality((prev) => ({
+          ...prev,
+          brands: brands?.data,
+        }));
       } catch (err) {
-        console.error("Error in fetching data:", err);
+        if (err.status == 401 || err.response?.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (err.message === "Network Error") {
+          getNetworkError();
+        } else {
+          console.error("Error in fetching data:", err);
+        }
       }
     };
 
@@ -1600,6 +1711,12 @@ const AddProducts = () => {
           setOptions(res?.data?.options);
           setVarientData(res?.data?.product_variants);
           setIsMultipleVaient(Boolean(+res?.data?.productdata?.isvarient));
+          const tags = res?.data?.productdata?.tags?.split(",") || [];
+          const brands = [res?.data?.productdata?.brand] || [];
+          setSelectedSpeciality({
+            tags: tags,
+            brands: brands,
+          });
         }
       } catch (error) {
         if (error.status == 401 || error.response.status === 401) {
@@ -1722,12 +1839,21 @@ const AddProducts = () => {
     return arr?.[0]?.length ? arr : [];
   };
 
+  // fetching title data seperately
+  useEffect(() => {
+    setProductInfo((prev) => ({
+      ...prev,
+      title: productData?.title,
+      description: productData?.description,
+    }));
+  }, [productData]);
+
   useEffect(() => {
     if (isProductEdit) {
       // fill data fields after fetcing data
-      setProductInfo({
-        title: productData?.title,
-        description: productData?.description,
+
+      setProductInfo((prev) => ({
+        ...prev,
         category: selectedItemsFromdata(
           productData?.cotegory?.split(","),
           "categoryList"
@@ -1748,7 +1874,7 @@ const AddProducts = () => {
           ? productData?.media?.split(",")?.map((img) => img)
           : [],
         uploadFiles: [],
-      });
+      }));
 
       const varientOptions = [];
       // if first varient values only exist
@@ -2143,6 +2269,13 @@ const AddProducts = () => {
       varcompareprice: isMultipleVarient
         ? varientCategory("compareAtPrice", "", "0.00").join(",").trim()
         : "",
+
+      tags: selectedSpeciality["tags"]
+        ?.map((item) => (item?.title ? item?.title?.trim() : item?.trim()))
+        .toString(),
+      brand: selectedSpeciality["brands"]
+        ?.map((item) => (item?.title ? item?.title?.trim() : item?.trim()))
+        .toString(),
     };
 
     if (isProductEdit) {
@@ -2428,7 +2561,6 @@ const AddProducts = () => {
                     error={error}
                     // handleUpdateError={handleUpdateError}
                     placeholder="Search Taxes"
-                    pageUrl={pageUrl}
                   />
                 </div>
 
@@ -2445,7 +2577,6 @@ const AddProducts = () => {
                     // handleUpdateError={handleUpdateError}
                     placeholder="Search Related Products"
                     productTitle={productInfo?.title}
-                    pageUrl={pageUrl}
                   />
                 </div>
 
@@ -2462,7 +2593,38 @@ const AddProducts = () => {
                     // handleUpdateError={handleUpdateError}
                     placeholder="Search Products"
                     productTitle={productInfo?.title}
-                    pageUrl={pageUrl}
+                  />
+                </div>
+
+                <div className="q-add-categories-single-input  mt-3 px-5">
+                  <CreatableDropdown
+                    title="Tags"
+                    keyName="tags"
+                    name="title"
+                    optionList={speciality?.tags}
+                    handleSelectProductOptions={handleSelectSpeciality}
+                    handleDeleteSelectedOption={handleDeleteSpeciality}
+                    onEnter={handleInsertItemInList}
+                    selectedOption={selectedSpeciality?.tags}
+                    error={error}
+                    // handleUpdateError={handleUpdateError}
+                    placeholder="Select Tags"
+                  />
+                </div>
+
+                <div className="q-add-categories-single-input  mt-3 px-5">
+                  <CreatableDropdown
+                    title="Brands"
+                    keyName="brands"
+                    name="title"
+                    optionList={speciality?.brands}
+                    handleSelectProductOptions={handleSelectSpeciality}
+                    handleDeleteSelectedOption={handleDeleteSpeciality}
+                    onEnter={handleInsertItemInList}
+                    selectedOption={selectedSpeciality?.brands}
+                    error={error}
+                    // handleUpdateError={handleUpdateError}
+                    placeholder="Search Brands"
                   />
                 </div>
 

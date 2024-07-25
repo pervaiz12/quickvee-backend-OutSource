@@ -18,6 +18,7 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -255,7 +256,7 @@ const OrderRefundReportList = (props) => {
                         </StyledTableRow>
                       ))}
                     {allOrderData.length > 0 && (
-                      <StyledTableRow>
+                      <StyledTableRow className="trBG_Color">
                         <StyledTableCell></StyledTableCell>
                         <StyledTableCell></StyledTableCell>
                         <StyledTableCell></StyledTableCell>
@@ -270,11 +271,12 @@ const OrderRefundReportList = (props) => {
                             style={{
                               color: "#0A64F9",
                             }}
+                            className="totalReport"
                           >
                             Grand Total
                           </p>
                         </StyledTableCell>
-                        <StyledTableCell style={{ color: "#0A64F9" }}>
+                        <StyledTableCell style={{ color: "#0A64F9" }} className="totalReport">
                           $
                           {parseFloat(
                             calculateGrandTotal(allOrderData, "amount")
@@ -288,107 +290,13 @@ const OrderRefundReportList = (props) => {
                   </TableBody>
                 </StyledTable>
               </TableContainer>
-              {!isAllOrderDataValid && (
-                <div className="box">
-                  <div className="q-category-bottom-categories-single-category">
-                    <p>No data found</p>
-                  </div>
-                </div>
+              {!allOrderData.length && (
+                <NoDataFound />
               )}
             </>
           )}
         </Grid>
       </Grid>
-     
-     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
      
     </>
   );

@@ -26,6 +26,7 @@ import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import PasswordShow from "../../../Common/passwordShow";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const Customer = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -341,7 +342,7 @@ const Customer = () => {
                     </StyledTable>
                   </TableContainer>
                 ) : (
-                  <p className="px-5 py-4">No Data Found</p>
+                  <NoDataFound table={true} />
                 )}
               </>
             )}

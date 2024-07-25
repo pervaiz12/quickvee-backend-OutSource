@@ -22,6 +22,7 @@ import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import PasswordShow from "../../../Common/passwordShow";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -262,7 +263,7 @@ export default function Manager() {
                     </StyledTable>
                   </TableContainer>
                 ) : (
-                  <p className="px-5 py-4">No Data Found</p>
+                  <NoDataFound table={true} />
                 )}
               </>
             )}

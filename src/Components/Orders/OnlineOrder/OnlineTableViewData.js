@@ -33,6 +33,7 @@ import useDebounce from "../../../hooks/useDebouncs";
 import AskConform from "../../../reuseableComponents/AskConform";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -714,12 +715,11 @@ const OnlineTableViewData = (props) => {
                             }
                           )
                         ) : (
-                          <>
-                            <p className="px-5 py-4">No Data Found</p>
-                          </>
+                          ""
                         )}
                       </TableBody>
                     </StyledTable>
+                    {!Object.entries(allOnlineStoreOrder).length && <NoDataFound table={true} />}
                   </TableContainer>
                 </>
               )}

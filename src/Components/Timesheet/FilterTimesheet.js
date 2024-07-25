@@ -46,7 +46,7 @@ const FilterTimesheet = ({
 
         const EmpList = response.data.result;
 
-        const mappedOptions = EmpList.map((empdata) => ({
+        const mappedOptions = EmpList?.map((empdata) => ({
           id: empdata.id,
           // title: empdata.f_name + " " + empdata.l_name,
           // title: (empdata.f_name ? empdata.f_name : "") + " " + (empdata.l_name ? empdata.l_name : ""),

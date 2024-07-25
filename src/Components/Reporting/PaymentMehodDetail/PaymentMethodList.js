@@ -15,6 +15,7 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import PasswordShow from "../../../Common/passwordShow";
 import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -35,9 +36,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    
-  },
+  "&:nth-of-type(odd)": {},
   "&:last-child td, &:last-child th": {
     backgroundColor: "#F5F5F5",
   },
@@ -92,7 +91,7 @@ const PaymentMethodList = ({ data }) => {
       console.log("arr");
       setpaymentReport(arr);
       const gotTotal = arr.reduce((acc, item) => {
-        console.log("item.amt",item.amt,"acc",acc)
+        console.log("item.amt", item.amt, "acc", acc);
         return acc + (isNaN(parseFloat(item.amt)) ? 0 : parseFloat(item.amt));
       }, 0);
       setTotal(gotTotal);
@@ -104,18 +103,6 @@ const PaymentMethodList = ({ data }) => {
     paymentReportDataState.paymentMethodData,
   ]);
 
-  
-  
-
-
-
-
-
-
-
-
-  
-
   return (
     <>
       <Grid container style={{ marginBottom: 0 }} className="box_shadow_div">
@@ -126,7 +113,7 @@ const PaymentMethodList = ({ data }) => {
             <TableContainer>
               <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
                 <TableHead>
-                  <StyledTableCell>Card type</StyledTableCell>
+                  <StyledTableCell>Payment type</StyledTableCell>
                   <StyledTableCell>Total</StyledTableCell>
                 </TableHead>
                 <TableBody>
@@ -156,14 +143,11 @@ const PaymentMethodList = ({ data }) => {
                       }
                     })
                   ) : (
-                    <Grid container sx={{ padding: 2.5 }}>
-                      <Grid item xs={12}>
-                        <p>No. Data found.</p>
-                      </Grid>
-                    </Grid>
+                    ""
                   )}
                 </TableBody>
               </StyledTable>
+              {!total && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>

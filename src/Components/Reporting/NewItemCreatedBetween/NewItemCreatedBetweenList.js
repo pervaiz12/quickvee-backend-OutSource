@@ -16,6 +16,7 @@ import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItems
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import PasswordShow from "../../../Common/passwordShow";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -39,16 +40,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-   
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
 }));
 
 const NewItemCreatedBetweenList = (props) => {
-
   const dispatch = useDispatch();
   const {
     LoginGetDashBoardRecordJson,
@@ -92,7 +90,6 @@ const NewItemCreatedBetweenList = (props) => {
 
   useEffect(() => {
     if (!AllNewItemDataState.loading && AllNewItemDataState.NewItemData) {
-      
       setallNewItemData(AllNewItemDataState.NewItemData);
     } else {
       setallNewItemData("");
@@ -102,14 +99,6 @@ const NewItemCreatedBetweenList = (props) => {
     AllNewItemDataState.loading,
     AllNewItemDataState.NewItemData,
   ]);
-
-  
-  
-
-
-
-
-
 
   const formatDate = (dateString) => {
     const [day, month, year] = dateString.split("-");
@@ -233,38 +222,15 @@ const NewItemCreatedBetweenList = (props) => {
                       </StyledTableRow>
                     ))
                   ) : (
-                    <Grid container sx={{ padding: 2.5 }}>
-                      <Grid item xs={12}>
-                        <p>No. Data found.</p>
-                      </Grid>
-                    </Grid>
+                    ""
                   )}
                 </TableBody>
               </StyledTable>
+              {!allNewItemData.length  && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>
       </Grid>
-      
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </>
   );
 };
