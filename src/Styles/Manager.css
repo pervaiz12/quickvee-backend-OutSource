@@ -233,3 +233,8 @@ display: block;
   outline: none;
   padding: 0px 2px 0px 4px;
 }
+
+.isSplite_Checkbox{
+  padding-top: 5px !important;
+  padding-bottom: 0px !important;
+}

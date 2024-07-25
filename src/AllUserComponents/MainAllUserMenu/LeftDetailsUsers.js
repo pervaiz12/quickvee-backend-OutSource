@@ -33,6 +33,7 @@ import MainUnverifiedMerchant from "../Users/UnverifeDetails/MainUnverifiedMerch
 import AddDefaults from "../Defaults/AddDefaults";
 import NeedHelp from "../../Components/NeedHelp/NeedHelp";
 import MainSupportDetails from "../SupportDetails/MainSupportDetails";
+import MainOrderRetrieve from "../OrderRetrieve/MainOrderRetrieve";
 // verified
 
 const LeftDetailsUsers = ({ visible }) => {
@@ -53,6 +54,7 @@ const LeftDetailsUsers = ({ visible }) => {
       {visible === "product-duplicate" && <MainProduct />}
       {visible === "create_permission" && <MainPermission />}
       {visible === "invertory-export" && <MainInventoryExport />}
+      {visible === "order-retrieve" && <MainOrderRetrieve />}
       {visible === "support-details" && <MainSupportDetails />}
       {visible === "merchant-details" && <MainMerchantDetails />}
       {/* manager view */}

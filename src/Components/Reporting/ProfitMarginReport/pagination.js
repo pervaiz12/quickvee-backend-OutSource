@@ -14,6 +14,8 @@ import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import { Grid } from "@mui/material";
+
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -83,7 +85,6 @@ export default function Pagination(props) {
       </TableContainer>
     );
   };
-  console.log("props.endOfDataList",props.endOfDataList)
   return (
     <>
       {props.loader ? (
@@ -141,7 +142,6 @@ export default function Pagination(props) {
                 ""
               )}
             </TableBody>
-          
           </StyledTable>
           {props.searchProduct.length ? (
             props.laodMoreData ? (
@@ -161,7 +161,11 @@ export default function Pagination(props) {
               ""
             )
           ) : (
-           <NoDataFound  />
+            <Grid container>
+              <Grid item sx={{ p: 2.5 }}>
+                <p>No Data Available</p>
+              </Grid>
+            </Grid>
           )}
         </TableContainer>
       )}

@@ -20,7 +20,7 @@ import PasswordShow from "../../../Common/passwordShow";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
-import NoDataFound from "../../../reuseableComponents/NoDataFound";
+// import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -285,8 +285,9 @@ const DetailsSaleReport = ({ data }) => {
           </>
         ))
       ) : (
-        <Grid sx={{ pt: 2.5 }}>
-          <NoDataFound />
+        <Grid className="box_shadow_div" sx={{ p: 2.5 }}>
+          {/* <NoDataFound /> */}
+          <p>No Data Found</p>
         </Grid>
       )}
       {Object.entries(detailCategorySale).length > 0 && (
