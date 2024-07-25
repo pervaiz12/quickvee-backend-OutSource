@@ -48,11 +48,11 @@ export default function TagModal(props) {
             className="title_attributes_section "
             style={{ margin: "1rem 1rem" }}
           >
-            <label className="mb-2">Title</label>
+            <label className="mb-2">Tag</label>
             <BasicTextFields
               value={props?.tagText?.Tag}
               name="Tag"
-              placeholder="Enter  title"
+              placeholder="Enter Tag"
               //   maxLength={35}
               onKeyPressFun={props.handleKeyPress}
               onChangeFun={props.onChangeGetData}

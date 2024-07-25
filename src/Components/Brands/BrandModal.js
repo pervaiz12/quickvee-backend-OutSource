@@ -48,11 +48,11 @@ export default function BrandModal(props) {
             className="title_attributes_section "
             style={{ margin: "1rem 1rem" }}
           >
-            <label className="mb-2">Title</label>
+            <label className="mb-2">Brand</label>
             <BasicTextFields
               value={props?.brandText?.brand}
               name="brand"
-              placeholder="Enter  title"
+              placeholder="Enter Brand"
               maxLength={35}
               onKeyPressFun={props.handleKeyPress}
               onChangeFun={props.onChangeGetData}

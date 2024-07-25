@@ -46,7 +46,7 @@ export default function BrandLogic() {
   const rowHeader = [
     {
       id: 1,
-      title: "Title",
+      title: "Brands",
     },
     {
       id: 2,

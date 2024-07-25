@@ -43,7 +43,7 @@ export default function TagLogic() {
   const rowHeader = [
     {
       id: 1,
-      title: "Title",
+      title: "Tags",
     },
     {
       id: 2,
