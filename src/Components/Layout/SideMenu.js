@@ -844,6 +844,36 @@ const menuItems = [
         text: "Attributes",
         link: "/attributes",
       },
+      {
+        id: 95,
+        icon: (
+          <img
+            src={AttributesIcon}
+            alt="brands"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img src={AtriIcon} alt="atributes" className="h-6 w-10 mt-4 mb-4" />
+        ),
+        text: "Brands",
+        link: "/brands",
+      },
+      {
+        id: 3,
+        icon: (
+          <img
+            src={AttributesIcon}
+            alt="Tags"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img src={AtriIcon} alt="atributes" className="h-6 w-10 mt-4 mb-4" />
+        ),
+        text: "Tags",
+        link: "/tags",
+      },
     ],
   },
 

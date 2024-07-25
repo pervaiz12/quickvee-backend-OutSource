@@ -88,6 +88,9 @@ import AddCoupon from "../Coupons/AddCoupon";
 import AddVendors from "../Vendors/AddVendors";
 import NeedHelp from "../NeedHelp/NeedHelp";
 import MainDigitalMarketing from "../StoreSetting/DigitalMarketing/MainDigitalMarketing";
+import BrandsList from "../Brands/MainBrand";
+import MainTags from "../Tags/MainTags";
+
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -133,7 +136,6 @@ const LeftSide = ({ visible }) => {
           {visible === "product-edit" && <AddProducts />}
           {visible === "product-sales" && <ProductSalesReport />}
           {visible === "edit-varient" && <AddProducts />}
-
 
           {visible === "info" && <Info />}
           {visible === "need_help" && <NeedHelp />}
@@ -187,6 +189,8 @@ const LeftSide = ({ visible }) => {
           {visible === "tip-report" && <TipReportMain />}
           {visible === "coupon-report" && <CouponReportMain />}
           {visible === "sales-report" && <SalesReportMain />}
+          {visible === "brands" && <BrandsList />}
+          {visible === "tags" && <MainTags />}
         </div>
       </div>
     </>

@@ -344,6 +344,10 @@ module.exports = Object.freeze({
   DIGITALMAKRTING_UPDATE: "Store_setting_react_api/add_digital_marketing_tags",
   DELETE_DIGITALMAKRTING:
     "Store_setting_react_api/delete_digital_marketing_tags",
+  GET_BRAND_DATA_LIST: "Product_api_react/list_brand_tag",
+  ADD_NEW_BRANDS_DATA: "Product_api_react/add_brand_tag",
+  UPDATE_BRANDS_DATA: "Product_api_react/update_brand_tag",
+  DELETE_BRAND_DATA: "Product_api_react/delete_brand_tag",
 });
 
 // All api calls are initialized in this component for this application

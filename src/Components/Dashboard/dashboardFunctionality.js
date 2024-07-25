@@ -31,7 +31,6 @@ export default function DashboardFunctionality() {
   console.log(data);
   let count = 0;
   const getDashboardCountRecord = async () => {
-   
     try {
       if (count === 0) {
         setLoading(true);

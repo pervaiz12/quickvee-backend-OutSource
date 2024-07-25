@@ -12,7 +12,8 @@ import DashboardFunctionality from "./dashboardFunctionality";
 import DashboardTables from "./paginationTable";
 import { useAuthDetails } from "./../../Common/cookiesHelper";
 const DashboardMain = () => {
-  const { dashboardCount, dashboardRecord,sortByItemName,loading } = DashboardFunctionality();
+  const { dashboardCount, dashboardRecord, sortByItemName, loading } =
+    DashboardFunctionality();
   const {
     LoginGetDashBoardRecordJson,
     LoginAllStore,

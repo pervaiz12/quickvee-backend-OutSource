@@ -635,6 +635,8 @@ function App() {
               path="/Digital-marketing-tags"
               element={<Main visible={"Digital-marketing-tags"} />}
             />
+            <Route exact path="/brands" element={<Main visible={"brands"} />} />
+            <Route exact path="/tags" element={<Main visible={"tags"} />} />
           </Route>
 
           {/* ------------------------Superadmin---------------- */}

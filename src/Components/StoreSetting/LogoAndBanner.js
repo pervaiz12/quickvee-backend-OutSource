@@ -24,7 +24,7 @@ const LogoAndBanner = ({
             <Grid container>
               <Grid item xs={12}>
                 <div className="info-banner-image-div">
-                  {infoRecord.image ? (
+                  {errors.imageErrors == "" && infoRecord.image ? (
                     <div className="info-delete cursor-pointer">
                       <div
                         className="verifiedTableIcon"
@@ -99,7 +99,7 @@ const LogoAndBanner = ({
                 <Grid container>
                   <Grid item xs={12}>
                     <div className="info-qrCodeDiv-image-div">
-                      {infoRecord.qrCode ? (
+                      {errors.qrCodeError == "" && infoRecord.qrCode ? (
                         <div className="info-delete-qr cursor-pointer">
                           <div
                             className="verifiedTableIcon"
@@ -165,7 +165,7 @@ const LogoAndBanner = ({
                       </div>
                     </div>
 
-                    {errors.imageErrors && (
+                    {errors.qrCodeError && (
                       <div className="error">{errors.qrCodeError}</div>
                     )}
                   </Grid>
@@ -184,7 +184,7 @@ const LogoAndBanner = ({
             <Grid container>
               <Grid item xs={12}>
                 <div className="info-qrCodeDiv-image-div">
-                  {infoRecord.receieptLogo ? (
+                  {errors.qrReciptError == "" && infoRecord.receieptLogo ? (
                     <div className="info-delete-qr cursor-pointer">
                       <div
                         className="verifiedTableIcon"
@@ -245,8 +245,8 @@ const LogoAndBanner = ({
                   </div>
                 </div>
 
-                {errors.imageErrors && (
-                  <div className="error">{errors.qrCodeError}</div>
+                {errors.qrReciptError && (
+                  <div className="error">{errors.qrReciptError}</div>
                 )}
               </Grid>
             </Grid>
