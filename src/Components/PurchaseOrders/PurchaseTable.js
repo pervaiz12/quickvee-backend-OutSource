@@ -27,6 +27,7 @@ import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import { priceFormate } from "../../hooks/priceFormate";
 import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "./../../Common/passwordShow";
+import NoDataFound from "../../reuseableComponents/NoDataFound";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -488,7 +489,7 @@ const PurchaseTable = ({ seVisible }) => {
                     </Table>
                   </TableContainer>
                 ) : (
-                  <p className="px-5 py-4">No Data Found</p>
+                 ""
                 )}
               </>
             )}
@@ -510,6 +511,7 @@ const PurchaseTable = ({ seVisible }) => {
           </Grid>
         </div>
       </div>
+      {!allPurchaseData?.length && <NoDataFound />}
     </>
   );
 };

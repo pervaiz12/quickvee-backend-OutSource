@@ -35,9 +35,6 @@ export default function InventoryList() {
                 Search Product
               </label>
 
-              
-              
-
               <BasicTextFields
                 sx={{ pt: 0.5 }}
                 type={"text"}
@@ -46,21 +43,9 @@ export default function InventoryList() {
                 placeholder="Search Product"
                 onChangeFun={handleChangeInventory}
                 required={"required"}
-                
               />
             </Grid>
-            
-            
 
-
-
-
-
-
-
-
-
-            
             <Grid item xs={12} sm={6} md={4}>
               <label className="q-details-page-label" htmlFor="limitFilter">
                 Category
@@ -78,7 +63,7 @@ export default function InventoryList() {
           </Grid>
         </Grid>
       </Grid>
-      <Grid container className="box_shadow_div">
+      <Grid container className="box_shadow_div ">
         <Grid item xs={12}>
           <Pagination
             searchProduct={searchProduct}

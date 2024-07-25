@@ -13,6 +13,7 @@ import { Grid } from "@mui/material";
 import { priceFormate } from "../../../hooks/priceFormate";
 import PasswordShow from "../../../Common/passwordShow";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -37,9 +38,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-    
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
@@ -84,133 +83,6 @@ const TaxesDetails = ({ data }) => {
     taxesreportDataState.loading,
     taxesreportDataState.taxesreportData,
   ]);
-
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   return (
     <>
@@ -275,14 +147,13 @@ const TaxesDetails = ({ data }) => {
                       )
                     )
                   ) : (
-                    <Grid container sx={{ padding: 2.5 }}>
-                      <Grid item xs={12}>
-                        <p>No. Data found.</p>
-                      </Grid>
-                    </Grid>
+                    ""
                   )}
                 </TableBody>
               </StyledTable>
+              {!(taxesreport.data1 || taxesreport.data2)  && (
+                  <NoDataFound />
+                )}
             </TableContainer>
           )}
         </Grid>

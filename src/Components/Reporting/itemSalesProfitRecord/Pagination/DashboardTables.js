@@ -14,6 +14,7 @@ import { Grid } from "@mui/material";
 import { priceFormate } from "../../../../hooks/priceFormate";
 import { SkeletonTable } from "../../../../reuseableComponents/SkeletonTable";
 import sortIcon from "../../../../Assests/Category/SortingW.svg";
+import NoDataFound from "../../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -57,11 +58,6 @@ export default function DashboardTables(props) {
     profit: 0.0,
     profitPercentage: 0.0,
   });
-  
-  
-
-
-
 
   useEffect(() => {
     if (props.getItemRecord) {
@@ -86,12 +82,6 @@ export default function DashboardTables(props) {
           },
           { sold: 0, costTotal: 0, sellingTotal: 0, profitTotal: 0 }
         );
-      
-        
-
-
-
-
 
       const profitPercentage = (profitTotal / sellingTotal) * 100 || 0;
       setTotalCost({
@@ -101,52 +91,10 @@ export default function DashboardTables(props) {
         profit: profitTotal.toFixed(2),
         profitPercentage: profitPercentage.toFixed(2),
       });
-
-      
-      
-
-
-
-
-
-
     } else {
       console.log("No report data available");
     }
   };
-
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const tableRow = [
     { type: "str", name: "category", label: "Category" },
@@ -186,85 +134,58 @@ export default function DashboardTables(props) {
             </TableHead>
             <TableBody>
               {Array.isArray(props.getItemRecord) &&
-              props.getItemRecord.length > 0 ? (
-                props.getItemRecord.map((item, index) => (
-                  <StyledTableRow key={index}>
-                    <StyledTableCell>
-                      {!!item?.category ? item?.category : "Deleted"}
-                    </StyledTableCell>
-                    <StyledTableCell>{item?.name}</StyledTableCell>
-                    <StyledTableCell>{item?.total_qty}</StyledTableCell>
-                    <StyledTableCell>
-                      
-                      
+              props.getItemRecord.length > 0
+                ? props.getItemRecord.map((item, index) => (
+                    <StyledTableRow key={index}>
+                      <StyledTableCell>
+                        {!!item?.category ? item?.category : "Deleted"}
+                      </StyledTableCell>
+                      <StyledTableCell>{item?.name}</StyledTableCell>
+                      <StyledTableCell>{item?.total_qty}</StyledTableCell>
+                      <StyledTableCell>
+                        <p>{formatCurrency(item?.costOfItem)}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{formatCurrency(item?.sellingPrice)}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{`${item?.profitMargin} %`}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{formatCurrency(item?.profitAmmount)}</p>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))
+                : ""}
 
-                      <p>{formatCurrency(item?.costOfItem)}</p>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      
-                      
-
-                      <p>{formatCurrency(item?.sellingPrice)}</p>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      
-                      
-
-
-
-
-
-
-
-
-                      <p>{`${item?.profitMargin} %`}</p>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      
-                      
-
-
-
-                      
-                      <p>{formatCurrency(item?.profitAmmount)}</p>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))
-              ) : (
-                <Grid sx={{ padding: 2.5, margin: 0 }} className="">
-                  <Grid item xs={12}>
-                    {props.getMessageRecord || "No data available"}
-                  </Grid>
-                </Grid>
-              )}
               {Array.isArray(props.getItemRecord) &&
               props.getItemRecord.length > 0 ? (
-                <StyledTableRow>
+                <StyledTableRow className="trBG_Color">
                   <StyledTableCell colSpan={2}>
-                    <p style={{ color: "#0A64F9" }}>Total</p>
+                    <p className=" totalReport">Total</p>
                   </StyledTableCell>
                   <StyledTableCell>
-                    <p style={{ color: "#0A64F9" }}>
+                    <p className=" totalReport">
                       {priceFormate(totalCost?.soldQty)}
                     </p>
                   </StyledTableCell>
                   <StyledTableCell>
-                    <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
+                    <p className=" totalReport">{`$${priceFormate(
                       totalCost?.costItem
                     )}`}</p>
                   </StyledTableCell>
                   <StyledTableCell>
-                    <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
+                    <p className=" totalReport">{`$${priceFormate(
                       totalCost?.totalSelling
                     )}`}</p>
                   </StyledTableCell>
                   <StyledTableCell>
                     <p
-                      style={{ color: "#0A64F9" }}
+                      className=" totalReport"
                     >{`${totalCost?.profitPercentage}%`}</p>
                   </StyledTableCell>
                   <StyledTableCell>
-                    <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
+                    <p className=" totalReport">{`$${priceFormate(
                       totalCost?.profit
                     )}`}</p>
                   </StyledTableCell>
@@ -274,6 +195,7 @@ export default function DashboardTables(props) {
               )}
             </TableBody>
           </StyledTable>
+          {!props.getItemRecord.length && <NoDataFound />}
         </TableContainer>
       )}
     </TableContainer>

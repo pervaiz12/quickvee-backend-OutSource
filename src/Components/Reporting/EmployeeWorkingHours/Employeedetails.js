@@ -16,6 +16,7 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import PasswordShow from "../../../Common/passwordShow";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -40,15 +41,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-    
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
 }));
 const Employeedetails = (props) => {
-  
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
@@ -58,7 +56,7 @@ const Employeedetails = (props) => {
   const AllEmpWorkingHrsDataState = useSelector(
     (state) => state.EmpWorkinghrsList
   );
-  
+
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   let merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   useEffect(() => {
@@ -102,9 +100,8 @@ const Employeedetails = (props) => {
     AllEmpWorkingHrsDataState.loading,
     AllEmpWorkingHrsDataState.ItemSalesData,
   ]);
-  
+
   const convertSecondsToHours = (seconds) => {
-    
     const hours = seconds / 3600;
     return hours;
   };
@@ -152,17 +149,6 @@ const Employeedetails = (props) => {
     );
     return formattedDate;
   };
-
-  
-  
-
-
-
-
-
-
-
-
 
   return (
     <>
@@ -217,7 +203,8 @@ const Employeedetails = (props) => {
                           <TableBody>
                             {Array.isArray(
                               allEmpWorkingHrsData[employeeName]
-                            ) && allEmpWorkingHrsData[employeeName].length &&
+                            ) &&
+                              allEmpWorkingHrsData[employeeName].length &&
                               allEmpWorkingHrsData[employeeName].map(
                                 (workData, dataIndex) => (
                                   <>
@@ -277,24 +264,16 @@ const Employeedetails = (props) => {
                             {Array.isArray(
                               allEmpWorkingHrsData[employeeName]
                             ) && (
-                              <StyledTableRow>
+                              <StyledTableRow className="trBG_Color">
                                 <StyledTableCell></StyledTableCell>
                                 <StyledTableCell></StyledTableCell>
                                 <StyledTableCell>
-                                  <p
-                                    style={{
-                                      color: "#0A64F9",
-                                    }}
-                                  >
+                                  <p className=" totalReport">
                                     Total
                                   </p>
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                  <p
-                                    style={{
-                                      color: "#0A64F9",
-                                    }}
-                                  >
+                                  <p className=" totalReport">
                                     {priceFormate(
                                       calTotalWork(
                                         allEmpWorkingHrsData[employeeName]
@@ -303,11 +282,7 @@ const Employeedetails = (props) => {
                                   </p>
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                  <p
-                                    style={{
-                                      color: "#0A64F9",
-                                    }}
-                                  >
+                                  <p className=" totalReport">
                                     {priceFormate(
                                       parseFloat(
                                         calTotalBreak(
@@ -318,11 +293,7 @@ const Employeedetails = (props) => {
                                   </p>
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                  <p
-                                    style={{
-                                      color: "#0A64F9",
-                                    }}
-                                  >
+                                  <p className=" totalReport">
                                     {priceFormate(
                                       parseFloat(
                                         calTotalActualWork(
@@ -348,85 +319,15 @@ const Employeedetails = (props) => {
                       </TableContainer>
                     </Grid>
                   </Grid>
-                  
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
                 </>
               ))}
           </>
         )}
       </div>
+      <Grid sx={{mt:3.5}}>
+      {!Object.keys(allEmpWorkingHrsData).length && <NoDataFound />}
+      </Grid> 
+      
     </>
   );
 };

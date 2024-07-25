@@ -13,6 +13,7 @@ export default function DashboardFunctionality() {
   const [dashboardCount, setDashboardCount] = React.useState("");
   const [dashboardRecord, setDashboardRecord] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [loadingCount, setLoadingCount] = React.useState(false);
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
 
@@ -29,15 +30,15 @@ export default function DashboardFunctionality() {
     merchant_id: merchant_id,
   };
   console.log(data);
-  let count = 0;
+  let countRecord = 0;
+  let countCardData = 0;
   const getDashboardCountRecord = async () => {
    
     try {
-      if (count === 0) {
-        setLoading(true);
-        count++;
+      if (countCardData === 0) {
+        setLoadingCount(true)
+        countCardData++;
       }
-
       const response = await axios.post(
         BASE_URL + DASHBOARD_COUNT_STORE,
         data,
@@ -59,11 +60,15 @@ export default function DashboardFunctionality() {
         getNetworkError();
       }
     }
-    setLoading(false);
+    setLoadingCount(false)
   };
 
   const getDashboardTableRecord = async () => {
     try {
+      if (countRecord === 0) {
+        setLoading(true);
+        countRecord++;
+      }
       const response = await axios.post(BASE_URL + DASHBOARD_TABLE_LIST, data, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -85,6 +90,7 @@ export default function DashboardFunctionality() {
         getNetworkError();
       }
     }
+    setLoading(false);
   };
 
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
@@ -104,13 +110,20 @@ export default function DashboardFunctionality() {
     // getDashboardCountRecord();
     // getDashboardTableRecord();
     // CountDashboardInterval();
+    // const fetchData = async () => {
+    //   await getDashboardTableRecord();
+    //   await getDashboardCountRecord();
+    // };
     const fetchData = async () => {
-      await getDashboardCountRecord();
-      await getDashboardTableRecord();
+      try {
+        await Promise.all([getDashboardTableRecord(), getDashboardCountRecord()]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
     fetchData();
     const interval = setInterval(fetchData, 5000);
     return () => clearInterval(interval);
   }, [merchant_id]);
-  return { dashboardCount, dashboardRecord, sortByItemName, loading };
+  return { dashboardCount, dashboardRecord, sortByItemName, loading,loadingCount };
 }

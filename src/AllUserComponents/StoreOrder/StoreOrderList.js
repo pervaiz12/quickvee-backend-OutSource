@@ -9,7 +9,6 @@ import { useAuthDetails } from "./../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import InputTextSearch from "../../reuseableComponents/InputTextSearch";
 
-
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -24,6 +23,7 @@ import PasswordShow from "./../../Common/passwordShow";
 
 import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../Assests/Category/SortingW.svg";
+import NoDataFound from "../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -122,7 +122,7 @@ const StoreOrderList = (props) => {
         }
       }
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
+      if (error?.status == 401 || error?.response?.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -142,7 +142,7 @@ const StoreOrderList = (props) => {
 
     // dispatch(getStoreOrderCount(data));
     getStoreOrderCountFun();
-  }, [debouncedValue, props.OrderTypeData]);
+  }, [debouncedValue, props.OrderTypeData, rowsPerPage,props.OrderStatusData]);
 
   const getStoreOrderCountFun = async () => {
     try {
@@ -158,7 +158,7 @@ const StoreOrderList = (props) => {
         }
       }
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
+      if (error?.status == 401 || error?.response?.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -398,7 +398,7 @@ const StoreOrderList = (props) => {
                     </StyledTable>
                   </TableContainer>
                 ) : (
-                  <p className="px-5 py-4">No Data Found</p>
+                 <NoDataFound table={true} />
                 )}
               </>
             )}

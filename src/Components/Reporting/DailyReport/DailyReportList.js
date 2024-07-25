@@ -18,6 +18,7 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 // ==================== TABLE STYLE ADDED ===================================================
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -122,17 +123,6 @@ const DailyReportList = ({ data }) => {
     setSortOrder(newOrder);
   };
   
-  
-
-
-
-
-
-
-
-
-
-
   const formatDate = (dateString) => {
     const options = { day: "2-digit", month: "short", year: "numeric" };
     const formattedDate = new Date(dateString).toLocaleDateString(
@@ -142,36 +132,6 @@ const DailyReportList = ({ data }) => {
     return formattedDate;
   };
 
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -225,17 +185,17 @@ const DailyReportList = ({ data }) => {
                               </StyledTableCell>
                             </StyledTableRow>
                           ))}
-                          <StyledTableCell>
+                          <StyledTableCell className="trBG_Color">
                             <div className="q-category-bottom-report-listing">
                               <div>
-                                <p className="report-sort">Grand Total</p>
+                                <p className="report-sort totalReport">Grand Total</p>
                               </div>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell>
+                          <StyledTableCell  className="trBG_Color">
                             <div className="q-category-bottom-report-listing">
                               <div>
-                                <p className="report-title">
+                                <p className="report-title totalReport">
                                   ${priceFormate(total.toFixed(2))}
                                 </p>
                               </div>
@@ -243,14 +203,11 @@ const DailyReportList = ({ data }) => {
                           </StyledTableCell>
                         </>
                       ) : (
-                        <Grid container sx={{ padding: 2.5 }} className=" ">
-                          <Grid item xs={12}>
-                            No data Found.
-                          </Grid>
-                        </Grid>
+                        ""
                       )}
                     </TableBody>
                   </StyledTable>
+                  {!dailyreport.length  && <NoDataFound table={true} />}
                 </TableContainer>
               )}
             </Grid>

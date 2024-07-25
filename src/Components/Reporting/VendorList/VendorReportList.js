@@ -22,6 +22,7 @@ import Pagination from "../../../AllUserComponents/Users/UnverifeDetails/Paginat
 import useDebounce from "../../../hooks/useDebouncs";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -46,9 +47,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
- 
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
@@ -81,7 +80,7 @@ const VendorReportList = (props) => {
       search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
       ...userTypeData,
     };
-   
+
     if (data) {
       dispatch(fetchVendorListData(data));
     }
@@ -101,7 +100,6 @@ const VendorReportList = (props) => {
 
   useEffect(() => {
     if (!AllVendorDataState.loading && AllVendorDataState.VendorListData) {
-      
       const { sortedItems, newOrder } = SortTableItemsHelperFun(
         AllVendorDataState.VendorListData,
         "str",
@@ -222,7 +220,7 @@ const VendorReportList = (props) => {
                             <p>{CheckData.phone}</p>
                           </StyledTableCell>
                           <StyledTableCell>
-                            <p>{CheckData.email}</p>
+                            <p>{CheckData.email ? CheckData.email : "" }</p>
                           </StyledTableCell>
                           <StyledTableCell>
                             <p>
@@ -242,12 +240,16 @@ const VendorReportList = (props) => {
                   </StyledTable>
                 </TableContainer>
               ) : (
-                <p className="px-5 py-4">No Data Found</p>
+                <>
+
+                 <NoDataFound table={true}/>
+              </>
               )}
             </>
           )}
         </Grid>
-        <Grid item xs={12}>
+
+        <Grid item sx={{ m: 2.5 }} xs={12}>
           <Pagination
             currentPage={currentPage}
             totalItems={totalCount}
@@ -261,7 +263,7 @@ const VendorReportList = (props) => {
           />
         </Grid>
       </Grid>
-      
+   
     </>
   );
 };

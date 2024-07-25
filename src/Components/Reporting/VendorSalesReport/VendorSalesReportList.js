@@ -17,6 +17,7 @@ import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItems
 import SortIconW from "../../../Assests/Category/SortingW.svg";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -60,10 +61,9 @@ const VendorSalesReportList = (props) => {
     GetSessionLogin,
   } = useAuthDetails();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-  
+
   useEffect(() => {
     if (props && props.selectedDateRange) {
-      
       const StartDateData = props.selectedDateRange.start_date;
       const EndDateData = props.selectedDateRange.end_date;
 
@@ -73,7 +73,7 @@ const VendorSalesReportList = (props) => {
         end_date: EndDateData,
         vendor_id: props.VendorIdData,
       };
-      
+
       if (data) {
         dispatch(fetchVendorSalesData(data));
       }
@@ -82,7 +82,6 @@ const VendorSalesReportList = (props) => {
 
   useEffect(() => {
     if (!AllVendorDataState.loading && AllVendorDataState.VendorSalesData) {
-      
       setallVendorData(AllVendorDataState.VendorSalesData);
     } else {
       setallVendorData("");
@@ -143,7 +142,6 @@ const VendorSalesReportList = (props) => {
         <>
           {allVendorData && Object.keys(allVendorData).length >= 1 ? (
             <>
-              
               {Object.entries(allVendorData).map(
                 ([vendorName, vendorIndex]) => (
                   <React.Fragment key={vendorName}>
@@ -158,7 +156,6 @@ const VendorSalesReportList = (props) => {
                             aria-label="customized table"
                           >
                             <TableHead>
-                             
                               <StyledTableCell>
                                 <button
                                   className="flex items-center"
@@ -208,7 +205,6 @@ const VendorSalesReportList = (props) => {
                             <TableBody>
                               {vendorIndex?.map((salesData, index) => (
                                 <StyledTableRow key={index}>
-                                  
                                   <StyledTableCell>
                                     <p>
                                       {formatDateTime(
@@ -231,14 +227,14 @@ const VendorSalesReportList = (props) => {
                                   </StyledTableCell>
                                 </StyledTableRow>
                               ))}
-                              <StyledTableRow>
+                              <StyledTableRow className="trBG_Color">
                                
                                 <StyledTableCell> </StyledTableCell>
                                 <StyledTableCell align="right">
-                                  <p style={{ color: "#0A64F9" }}>Total</p>
+                                  <p className="totalReport">Total</p>
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                  <p style={{ color: "#0A64F9" }}>
+                                  <p className="totalReport">
                                     $
                                     {priceFormate(
                                       parseFloat(
@@ -260,11 +256,10 @@ const VendorSalesReportList = (props) => {
               )}
             </>
           ) : (
-            <div className="box_shadow_div ">
-              <div className="m-5">
-                <p>No data found</p>
-              </div>
-            </div>
+            <Grid sx={{mt:3.5}}>
+                <NoDataFound />
+            </Grid>
+          
           )}
         </>
       )}

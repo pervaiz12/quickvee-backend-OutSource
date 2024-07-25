@@ -14,8 +14,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
-import sortIcon from "../../../Assests/Category/SortingW.svg"
+import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -39,9 +40,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-   
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
@@ -77,8 +76,19 @@ const TipReportList = (props) => {
     }
   }, [props, dispatch]);
 
+  // useEffect(() => {
+  //   if (!tipReportDataState.loading && tipReportDataState.TipReportData) {
+  //     setTipReportData(tipReportDataState.TipReportData);
+  //   } else {
+  //     setTipReportData([]);
+  //   }
+  // }, [tipReportDataState.loading, tipReportDataState.TipReportData]);
+  // let totalNetTip = 0;
+  // tipReportData?.forEach((tipData) => {
+  //   totalNetTip += parseFloat(tipData.net_tip);
+  // });
   useEffect(() => {
-    if (!tipReportDataState.loading && tipReportDataState.TipReportData) {
+    if (!tipReportDataState.loading && Array.isArray(tipReportDataState.TipReportData)) {
       setTipReportData(tipReportDataState.TipReportData);
     } else {
       setTipReportData([]);
@@ -86,10 +96,9 @@ const TipReportList = (props) => {
   }, [tipReportDataState.loading, tipReportDataState.TipReportData]);
 
   let totalNetTip = 0;
-
-  tipReportData?.forEach((tipData) => {
-    totalNetTip += parseFloat(tipData.net_tip);
-  });
+  if (Array.isArray(tipReportData)) {
+    totalNetTip = tipReportData.reduce((acc, tipData) => acc + parseFloat(tipData.net_tip), 0);
+  }
   const tableRow = [
     // { type: "num", name: "employee_id", label: "Employee ID" },
     { type: "str", name: "f_name", label: "Employee Name" },
@@ -105,7 +114,7 @@ const TipReportList = (props) => {
     );
     setTipReportData(sortedItems);
     setSortOrder(newOrder);
-  }
+  };
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -115,37 +124,29 @@ const TipReportList = (props) => {
           ) : (
             <TableContainer>
               <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-                
                 <TableHead>
-                  {tableRow.map((item)=><StyledTableCell>
-                    <button
-                    className="flex items-center"
-                    onClick={()=>sortByItemName(item.type,item.name)}
-                    >
-                      <p>{item.label}</p>
-                      <img src={sortIcon} alt="" className="pl-1" />
-                    </button>
-                  </StyledTableCell>)}
+                  {tableRow.map((item) => (
+                    <StyledTableCell>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName(item.type, item.name)}
+                      >
+                        <p>{item.label}</p>
+                        <img src={sortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
+                  ))}
                 </TableHead>
-                <TableBody>
+                {/* <TableBody>
                   {tipReportData.length > 0 &&
                     tipReportData.map((tipData, index) => (
                       <>
                         <StyledTableRow key={index}>
-                          
-                          
-
-
-
-
-
-
-
                            <StyledTableCell>
-                        {tipData?.f_name || tipData?.l_name ? (
-                          <p>{tipData?.f_name || ""} {tipData?.l_name || ""}</p>
-                        ) :""}
-                        </StyledTableCell>
+                            {tipData?.f_name || tipData?.l_name ? (
+                              <p>{tipData?.f_name || ""} {tipData?.l_name || ""}</p>
+                            ) :""}
+                          </StyledTableCell>
                           <StyledTableCell>
                             <p>
                               $
@@ -158,15 +159,14 @@ const TipReportList = (props) => {
                       </>
                     ))}
                   {tipReportData.length > 0 && (
-                    <StyledTableRow>
-                      
-                      
+                    <StyledTableRow className="trBG_Color">
+
                       <StyledTableCell>
-                        <p style={{ color: "#0A64F9" }}>Grand Total</p>
+                        <p style={{ color: "#0A64F9" }} className="totalReport">Grand Total</p>
                       </StyledTableCell>
                       <StyledTableCell>
                         <p
-                          className="report-title"
+                          className="report-title totalReport"
                           style={{ color: "#0A64F9" }}
                         >
                           ${priceFormate(totalNetTip.toFixed(2))}
@@ -181,52 +181,41 @@ const TipReportList = (props) => {
                       </div>
                     </div>
                   )}
-                </TableBody>
+                </TableBody> */}
+
+                <TableBody>
+                {Array.isArray(tipReportData) && tipReportData.length > 0 ? (
+                  tipReportData.map((tipData, index) => (
+                    <StyledTableRow key={index}>
+                      <StyledTableCell>
+                        <p>{`${tipData.f_name || ""} ${tipData.l_name || ""}`}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>${priceFormate(parseFloat(tipData.net_tip).toFixed(2))}</p>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))
+                ) : (""
+                )}
+                {Array.isArray(tipReportData) && tipReportData.length > 0 && (
+                  <StyledTableRow className="trBG_Color">
+                    <StyledTableCell>
+                      <p style={{ color: "#0A64F9" }} className="totalReport">Grand Total</p>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <p className="report-title totalReport" style={{ color: "#0A64F9" }}>
+                        ${priceFormate(totalNetTip.toFixed(2))}
+                      </p>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+              </TableBody>
               </StyledTable>
+              {!tipReportData.length > 0 && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>
       </Grid>
-     
-     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-     
     </>
   );
 };

@@ -11,17 +11,6 @@ const NewItemCreatedBetweenMain = () => {
 
   return (
     <>
-     
-     
-
-
-
-
-
-
-
-
-     
       <Grid
         container
         sx={{ padding: 2.5, mt: 3.6 }}
@@ -37,7 +26,7 @@ const NewItemCreatedBetweenMain = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid container sx={{ }}>
+      <Grid container sx={{}}>
         <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
 
