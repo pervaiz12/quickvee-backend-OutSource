@@ -17,6 +17,20 @@ const transactionsList = [
     title: "Credit Card",
   },
 ];
+const transactionsListSuperUser = [
+  {
+    title: "Both",
+  },
+  {
+    title: "Cash",
+  },
+  {
+    title: "Credit Card",
+  },
+  {
+    title: "Unpaid",
+  },
+];
 
 const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
   const [selected, setSelected] = useState(false);
@@ -212,7 +226,7 @@ const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
                   <label htmlFor="transactionFilter">Payment Type</label>
                   <SelectDropDown
                   sx={{pt:0.5}}
-                    listItem={transactionsList}
+                    listItem={userTypeData.login_type ==="superadmin" ? transactionsListSuperUser : transactionsList}
                     onClickHandler={handleOptionClick}
                     selectedOption={selectedTransaction}
                     dropdownFor={"transaction"}
