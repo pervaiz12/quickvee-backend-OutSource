@@ -12,7 +12,7 @@ import DashboardFunctionality from "./dashboardFunctionality";
 import DashboardTables from "./paginationTable";
 import { useAuthDetails } from "./../../Common/cookiesHelper";
 const DashboardMain = () => {
-  const { dashboardCount, dashboardRecord,sortByItemName,loading } = DashboardFunctionality();
+  const { dashboardCount, dashboardRecord,sortByItemName,loading,loadingCount } = DashboardFunctionality();
   const {
     LoginGetDashBoardRecordJson,
     LoginAllStore,
@@ -48,7 +48,7 @@ const DashboardMain = () => {
       </div>
       <div className="q-category-main-page">{/* <MainHeader /> */}</div>
       <div className="q-category-main-page pb-5">
-        <CardForm dashboardCount={dashboardCount} />
+        <CardForm dashboardCount={dashboardCount} loadingCount={loadingCount} />
       </div>
       <div className="q-category-main-page">
         {/* <NetSales /> */}

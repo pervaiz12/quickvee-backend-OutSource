@@ -127,7 +127,7 @@ export default function DashboardTables(props) {
 
   return (
     <>
-      {props.loading ? (
+      {props.loading && props?.dashboardRecord   ? (
         <SkeletonTable
           columns={[
             "Customer Name",
