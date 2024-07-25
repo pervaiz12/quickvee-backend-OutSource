@@ -62,7 +62,7 @@ import "./Styles/DailyDaterange.css";
 import "./Styles/Table.css";
 import "./Styles/DefaultsPage.css";
 import "react-loading-skeleton/dist/skeleton.css";
-
+import "./Styles/AlertModal.css";
 import "./Styles/ReceiptMainpage.css";
 import "./Styles/MainCatedetails.css";
 import MainResigtersetting from "./Components/StoreSetting/ResigterSetting/MainResigtersetting";
