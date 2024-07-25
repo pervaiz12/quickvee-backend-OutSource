@@ -105,8 +105,8 @@ export default function DashboardFunctionality() {
     // getDashboardTableRecord();
     // CountDashboardInterval();
     const fetchData = async () => {
-      await getDashboardCountRecord();
       await getDashboardTableRecord();
+      await getDashboardCountRecord();
     };
     fetchData();
     const interval = setInterval(fetchData, 5000);

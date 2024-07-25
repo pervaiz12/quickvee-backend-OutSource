@@ -1,195 +1,242 @@
-import React from "react";
-import {lazy, Suspense } from "react";
-import DashboardMain from "../Dashboard/DashboardMain";
-import MainOrder from "./../Orders/MainOrder";
-//import MainProduct from '../Category/MainCategory';
-import MainPurchase from "../PurchaseOrders/MainPurchase";
-import MainAttributes from "../Attributes/MainAttributes";
-import MainCategory from "../Category/MainCategory";
-import MainCoupon from "../Coupons/MainCoupon";
-import ProductEdit from "../Products/ProductEdit";
-import MainVendors from "../Vendors/MainVendors";
-import MainTimesheet from "../Timesheet/MainTimesheet";
-import MainImportData from "../ImportData/MainImportData";
-import MainProducts from "../Products/MainProducts";
-// import MainStoreSetting from '../StoreSetting/MainStoreSetting';
-import MainStoreOption from "../StoreSetting/StoreOption/MainStoreOption";
-import EditCategory from "../Category/EditCategory";
-import TopTenders from "../Dashboard/TopTenders";
+import React, { useEffect, lazy, Suspense } from "react";
 
-import Info from "../StoreSetting/Info";
-import Setup from "../StoreSetting/MainSetup/Setup";
-import MainStoreAlters from "../StoreSetting/StoreAlters/MainStoreAlters";
-import MainTaxes from "../StoreSetting/Taxes/MainTaxes";
-import MainInventory from "../StoreSetting/Inventory/MainInventory";
-import MainResigtersetting from "../StoreSetting/ResigterSetting/MainResigtersetting";
-import MainSyastemAccess from "../StoreSetting/SystemAccess/MainSystemAccess";
-import DailyTtlReport from "../Reporting/DailyReport/DailyTtlReport";
-import MainCatedetails from "../Reporting/CategoryDetails/MainCatedetails";
-import MainSalesPerson from "../Reporting/SalesByPerson/MainSalesPerson";
+const DashboardMain = lazy(() => import("../Dashboard/DashboardMain"));
+const MainOrder = lazy(() => import("./../Orders/MainOrder"));
+const MainPurchase = lazy(() => import("../PurchaseOrders/MainPurchase"));
+const MainAttributes = lazy(() => import("../Attributes/MainAttributes"));
+const MainCategory = lazy(() => import("../Category/MainCategory"));
+const MainCoupon = lazy(() => import("../Coupons/MainCoupon"));
+const ProductEdit = lazy(() => import("../Products/ProductEdit"));
+const MainVendors = lazy(() => import("../Vendors/MainVendors"));
+const MainTimesheet = lazy(() => import("../Timesheet/MainTimesheet"));
+const MainImportData = lazy(() => import("../ImportData/MainImportData"));
+const MainProducts = lazy(() => import("../Products/MainProducts"));
+const MainStoreOption = lazy(() => import("../StoreSetting/StoreOption/MainStoreOption"));
+const EditCategory = lazy(() => import("../Category/EditCategory"));
+const TopTenders = lazy(() => import("../Dashboard/TopTenders"));
+const Info = lazy(() => import("../StoreSetting/Info"));
+const Setup = lazy(() => import("../StoreSetting/MainSetup/Setup"));
+const MainStoreAlters = lazy(() => import("../StoreSetting/StoreAlters/MainStoreAlters"));
+const MainTaxes = lazy(() => import("../StoreSetting/Taxes/MainTaxes"));
+const MainInventory = lazy(() => import("../StoreSetting/Inventory/MainInventory"));
+const MainResigtersetting = lazy(() => import("../StoreSetting/ResigterSetting/MainResigtersetting"));
+const MainSyastemAccess = lazy(() => import("../StoreSetting/SystemAccess/MainSystemAccess"));
+const DailyTtlReport = lazy(() => import("../Reporting/DailyReport/DailyTtlReport"));
+const MainCatedetails = lazy(() => import("../Reporting/CategoryDetails/MainCatedetails"));
+const MainSalesPerson = lazy(() => import("../Reporting/SalesByPerson/MainSalesPerson"));
+const CheckIDVerifyMain = lazy(() => import("../Reporting/CheckIDVerify/CheckIDVerifyMain"));
+const InstantActvity = lazy(() => import("../Reporting/InstantPo/InstantActvity"));
+const TopSallerReport = lazy(() => import("../Reporting/TopSaller/TopSallerReport"));
+const EmployeeWorking = lazy(() => import("../Reporting/EmployeeWorkingHours/EmployeeWorking"));
+const MainSiftSummary = lazy(() => import("../Reporting/SiftSummary/MainSiftSummary"));
+const PaymentMethodReport = lazy(() => import("../Reporting/PaymentMehodDetail/PaymentMethodReport"));
+const MainItem = lazy(() => import("../Reporting/ItemType/MainItem"));
+const MainTaxesReport = lazy(() => import("../Reporting/Taxes/MainTaxesReport"));
+const CurrentInventoryValue = lazy(() => import("../Reporting/CurrentInventoryValue/CurrentInventoryValue"));
+const MainAddEmployee = lazy(() => import("../StoreSetting/AddEmployee/MainAddEmployee"));
+const ReceiptMainpage = lazy(() => import("../StoreSetting/Receipt/ReceiptMainpage"));
+const MainItemSales = lazy(() => import("../Reporting/ItemSales/MainItemSales"));
+const NewItemCreatedBetweenMain = lazy(() => import("../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain"));
+const Permission = lazy(() => import("../StoreSetting/AddEmployee/Permission"));
+const OrderSummaryDetails = lazy(() => import("../Reporting/SalesByPerson/MainOrderSumaaryDetails/OrderSummaryDetails"));
+const VendorListMain = lazy(() => import("../Reporting/VendorList/VendorListMain"));
+const VendorSalesReportMain = lazy(() => import("../Reporting/VendorSalesReport/VendorSalesReportMain"));
+const OrderRefundReportMain = lazy(() => import("../Reporting/OrderRefundReport/OrderRefundReportMain"));
+const ReorderInventoryMain = lazy(() => import("../Reporting/ReorderInventory/ReorderInventoryMain"));
+const EditVendors = lazy(() => import("../Vendors/EditVendors"));
+const SingleVendorsDetail = lazy(() => import("../Vendors/SingleVendorsDetail"));
+const AddProducts = lazy(() => import("../Products/AddProducts"));
+const MainLoayalty = lazy(() => import("../LoyaltyProgram/MainLoayalty"));
+const MainEmployeelist = lazy(() => import("../Reporting/Employelist/MainEmployeelist"));
+const AddPo = lazy(() => import("../PurchaseOrders/AddPo"));
+const EditCoupon = lazy(() => import("../Coupons/EditCoupon"));
+const StorePage = lazy(() => import("../Store/MerchantStore"));
+const ManagerStore = lazy(() => import("../Store/ManagerStore"));
+const ProductSalesReport = lazy(() => import("../Products/ProductSalesReport"));
+const TipReportMain = lazy(() => import("../Reporting/TipReport/TipReportMain"));
+const CouponReportMain = lazy(() => import("../Reporting/CouponReport/CouponReportMain"));
+const SalesReportMain = lazy(() => import("../Reporting/SalesReport/SalesReportMain"));
+const Discount_Per_Sales = lazy(() => import("../Reporting/Discount_Per_Sales/discount_per_sales"));
+const Items_sales_profit_record = lazy(() => import("../Reporting/itemSalesProfitRecord/items_sales_profit_record"));
+const RefundSummary = lazy(() => import("../Reporting/RefundSummary/RefundSummary"));
+const ReceivePurchaseOrderItems = lazy(() => import("../PurchaseOrders/ReceivePurchaseOrderItems"));
+const ModifyPurchaseOrder = lazy(() => import("../PurchaseOrders/ModifyPurchaseOrder"));
+const InventoryList = lazy(() => import("../Reporting/inventoryList/inventoryList"));
+const ProfitMarginReport = lazy(() => import("../Reporting/ProfitMarginReport/profitMarginReport"));
+const MainStocktake = lazy(() => import("../Stocktake/MainStocktake"));
+const AddNewStocktake = lazy(() => import("../Stocktake/AddNewStocktake"));
+const StocktakeList = lazy(() => import("../Stocktake/StocktakeList"));
+const StocktakeReport = lazy(() => import("../Stocktake/StocktakeReport"));
+const AddCategory = lazy(() => import("../Category/AddCategory"));
+const AddCoupon = lazy(() => import("../Coupons/AddCoupon"));
+const AddVendors = lazy(() => import("../Vendors/AddVendors"));
+const NeedHelp = lazy(() => import("../NeedHelp/NeedHelp"));
+const MainDigitalMarketing = lazy(() => import("../StoreSetting/DigitalMarketing/MainDigitalMarketing"));
 
-import CheckIDVerifyMain from "../Reporting/CheckIDVerify/CheckIDVerifyMain";
-import InstantActvity from "../Reporting/InstantPo/InstantActvity";
-import TopSallerReport from "../Reporting/TopSaller/TopSallerReport";
-import EmployeeWorking from "../Reporting/EmployeeWorkingHours/EmployeeWorking";
-import MainSiftSummary from "../Reporting/SiftSummary/MainSiftSummary";
-import PaymentMethodReport from "../Reporting/PaymentMehodDetail/PaymentMethodReport";
-import MainItem from "../Reporting/ItemType/MainItem";
-
-import MainTaxesReport from "../Reporting/Taxes/MainTaxesReport";
-import CurrentInventoryValue from "../Reporting/CurrentInventoryValue/CurrentInventoryValue";
-
-// import MainTaxesReport from "../Reporting/Taxes/MainTaxesReport";
-
-import MainTaxReporting from "../Reporting/Taxes/MainTaxReporting";
-import MainAddEmployee from "../StoreSetting/AddEmployee/MainAddEmployee";
-import ReceiptMainpage from "../StoreSetting/Receipt/ReceiptMainpage";
-import MainItemSales from "../Reporting/ItemSales/MainItemSales";
-import NewItemCreatedBetweenList from "../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenList";
-import NewItemCreatedBetweenMain from "../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import Permission from "../StoreSetting/AddEmployee/Permission";
-import OrderSummaryDetails from "../Reporting/SalesByPerson/MainOrderSumaaryDetails/OrderSummaryDetails";
-import VendorListMain from "../Reporting/VendorList/VendorListMain";
-import VendorSalesReportMain from "../Reporting/VendorSalesReport/VendorSalesReportMain";
-import OrderRefundReportMain from "../Reporting/OrderRefundReport/OrderRefundReportMain";
-import ReorderInventoryMain from "../Reporting/ReorderInventory/ReorderInventoryMain";
-import EditVendors from "../Vendors/EditVendors";
-import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
-import AddProducts from "../Products/AddProducts";
-import MainLoayalty from "../LoyaltyProgram/MainLoayalty";
-import MainEmployeelist from "../Reporting/Employelist/MainEmployeelist";
-import AddPo from "../PurchaseOrders/AddPo";
-//  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
-// import MainEmployee from "../Reporting/EmployeeWorkingHours/MainEmployee";
-// import MainInvDuplicates from '../InventoryDuplicates/MainInvDuplicates';
-import EditCoupon from "../Coupons/EditCoupon";
-import StorePage from "../Store/MerchantStore";
-import ManagerStore from "../Store/ManagerStore";
-import ProductSalesReport from "../Products/ProductSalesReport";
-import TipReportMain from "../Reporting/TipReport/TipReportMain";
-import CouponReportMain from "../Reporting/CouponReport/CouponReportMain";
-import SalesReportMain from "../Reporting/SalesReport/SalesReportMain";
-import Discount_Per_Sales from "../Reporting/Discount_Per_Sales/discount_per_sales";
-import Items_sales_profit_record from "../Reporting/itemSalesProfitRecord/items_sales_profit_record";
-import RefundSummary from "../Reporting/RefundSummary/RefundSummary";
-import ReceivePurchaseOrderItems from "../PurchaseOrders/ReceivePurchaseOrderItems";
-import ModifyPurchaseOrder from "../PurchaseOrders/ModifyPurchaseOrder";
-import InventoryList from "../Reporting/inventoryList/inventoryList";
-import ProfitMarginReport from "../Reporting/ProfitMarginReport/profitMarginReport";
-import MainStocktake from "../Stocktake/MainStocktake";
-import StocktakeReportPrint from "../Stocktake/StocktakeReportPrint";
-import AddNewStocktake from "../Stocktake/AddNewStocktake";
-import StocktakeList from "../Stocktake/StocktakeList";
-import StocktakeReport from "../Stocktake/StocktakeReport";
-import AddCategory from "../Category/AddCategory";
-import AddCoupon from "../Coupons/AddCoupon";
-import AddVendors from "../Vendors/AddVendors";
-import NeedHelp from "../NeedHelp/NeedHelp";
-import MainDigitalMarketing from "../StoreSetting/DigitalMarketing/MainDigitalMarketing";
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
-  });
+  }, [visible]);
+
+  const renderComponent = () => {
+    switch (visible) {
+      case "dashboard":
+        return <DashboardMain />;
+      case "order":
+        return <MainOrder />;
+      case "category":
+        return <MainCategory />;
+      case "add-category":
+        return <AddCategory />;
+      case "purchase-data":
+        return <MainPurchase />;
+      case "stocktake":
+        return <StocktakeList />;
+      case "stocktake-updateStocktake":
+      case "stocktake-AddStocktake":
+        return <AddNewStocktake />;
+      case "stocktake-void":
+      case "stocktake-completed":
+        return <StocktakeReport />;
+      case "add-purchase-data":
+        return <AddPo />;
+      case "edit-purchase-data":
+        return <ReceivePurchaseOrderItems />;
+      case "modify-purchase-order":
+        return <ModifyPurchaseOrder />;
+      case "attributes":
+        return <MainAttributes />;
+      case "products":
+        return <MainProducts />;
+      case "store":
+        return <StorePage />;
+      case "manager":
+        return <ManagerStore />;
+      case "coupons":
+        return <MainCoupon />;
+      case "add-coupons":
+        return <AddCoupon />;
+      case "coupons-edit-cop":
+        return <EditCoupon />;
+      case "vendors":
+        return <MainVendors />;
+      case "add-vendors":
+        return <AddVendors />;
+      case "timesheet":
+        return <MainTimesheet />;
+      case "import-data":
+        return <MainImportData />;
+      case "Digital-marketing-tags":
+        return <MainDigitalMarketing />;
+      case "store-setting":
+        return <MainStoreOption />;
+      case "category-edit-cat":
+        return <EditCategory />;
+      case "toptraders":
+        return <TopTenders />;
+      case "productedit":
+      case "product-edit":
+      case "edit-varient":
+        return <AddProducts />;
+      case "product-add":
+        return <AddProducts />;
+      case "product-sales":
+        return <ProductSalesReport />;
+      case "info":
+        return <Info />;
+      case "need_help":
+        return <NeedHelp />;
+      case "setup":
+        return <Setup />;
+      case "Alters":
+        return <MainStoreAlters />;
+      case "options":
+        return <MainStoreOption />;
+      case "taxes":
+        return <MainTaxes />;
+      case "inventory":
+        return <MainInventory />;
+      case "register":
+        return <MainResigtersetting />;
+      case "system-access":
+        return <MainSyastemAccess />;
+      case "daily-total-report":
+        return <DailyTtlReport />;
+      case "Details-category":
+        return <MainCatedetails />;
+      case "report-sales-person":
+        return <MainSalesPerson />;
+      case "id-verification":
+        return <CheckIDVerifyMain />;
+      case "inventory-list":
+        return <InventoryList />;
+      case "profit-Margin":
+        return <ProfitMarginReport />;
+      case "instant-activity":
+        return <InstantActvity />;
+      case "overall-top":
+        return <TopSallerReport />;
+      case "employee-working-hours":
+        return <EmployeeWorking />;
+      case "shift-summary":
+        return <MainSiftSummary />;
+      case "payment-method-details":
+        return <PaymentMethodReport />;
+      case "order-type":
+        return <MainItem />;
+      case "taxes-report":
+        return <MainTaxesReport />;
+      case "current-inventory-value":
+        return <CurrentInventoryValue />;
+      case "discount-per-sales-person":
+        return <Discount_Per_Sales />;
+      case "item-sales-profit-report":
+        return <Items_sales_profit_record />;
+      case "addemployee":
+        return <MainAddEmployee />;
+      case "employee-list":
+        return <MainEmployeelist />;
+      case "receipt":
+        return <ReceiptMainpage />;
+      case "item-sales":
+        return <MainItemSales />;
+      case "item-create-between":
+        return <NewItemCreatedBetweenMain />;
+      case "permission":
+        return <Permission />;
+      case "order-summary":
+        return <OrderSummaryDetails />;
+      case "vendors-list":
+        return <VendorListMain />;
+      case "edit-vendor":
+        return <EditVendors />;
+      case "vendor-details":
+        return <SingleVendorsDetail />;
+      case "loyalty-program":
+        return <MainLoayalty />;
+      case "recorder-inventory":
+        return <ReorderInventoryMain />;
+      case "vendors-sales-reports":
+        return <VendorSalesReportMain />;
+      case "order-refund-report":
+        return <OrderRefundReportMain />;
+      case "refund-report":
+        return <RefundSummary />;
+      case "tip-report":
+        return <TipReportMain />;
+      case "coupon-report":
+        return <CouponReportMain />;
+      case "sales-report":
+        return <SalesReportMain />;
+      default:
+        return <DashboardMain />;
+    }
+  };
 
   return (
-    <>
-      <div className="w-full">
-        <div className="">
-          {visible === "dashboard" && <DashboardMain />}
-          {visible === "order" && <MainOrder />}
-          {visible === "category" && <MainCategory />}
-          {visible === "add-category" && <AddCategory />}
-          {visible === "purchase-data" && <MainPurchase />}
-          {visible === "stocktake" && <StocktakeList />}
-          {visible === "stocktake-updateStocktake" && <AddNewStocktake />}
-          {visible === "stocktake-AddStocktake" && <AddNewStocktake />}
-          {visible === "stocktake-void" && <StocktakeReport />}
-          {visible === "stocktake-completed" && <StocktakeReport />}
-          {visible === "add-purchase-data" && <AddPo />}
-          {visible === "edit-purchase-data" && <ReceivePurchaseOrderItems />}
-          {visible === "modify-purchase-order" && <ModifyPurchaseOrder />}
-          {visible === "attributes" && <MainAttributes />}
-          {visible === "products" && <MainProducts />}
-          {visible === "store" && <StorePage />}
-          {visible === "manager" && <ManagerStore />}
-          {visible === "coupons" && <MainCoupon />}
-          {visible === "add-coupons" && <AddCoupon />}
-          {visible === "coupons-edit-cop" && <EditCoupon />}
-          {visible === "vendors" && <MainVendors />}
-          {visible === "add-vendors" && <AddVendors />}
-          {visible === "timesheet" && <MainTimesheet />}
-          {visible === "import-data" && <MainImportData />}
-          {visible === "Digital-marketing-tags" && <MainDigitalMarketing />}
-          {visible === "store-setting" && <MainStoreOption />}
-          {visible === "store-setting" && <MainStoreOption />}
-          {visible === "category-edit-cat" && <EditCategory />}
-          {/* {visible === "product-edit-cat" && <ProductEdit />} */}
-
-          {visible === "toptraders" && <TopTenders />}
-          {visible === "productedit" && <ProductEdit />}
-          {visible === "product-add" && <AddProducts />}
-          {visible === "product-edit" && <AddProducts />}
-          {visible === "product-sales" && <ProductSalesReport />}
-          {visible === "edit-varient" && <AddProducts />}
-
-
-          {visible === "info" && <Info />}
-          {visible === "need_help" && <NeedHelp />}
-          {visible === "setup" && <Setup />}
-          {visible === "Alters" && <MainStoreAlters />}
-          {visible === "options" && <MainStoreOption />}
-          {visible === "taxes" && <MainTaxes />}
-          {visible === "inventory" && <MainInventory />}
-          {visible === "register" && <MainResigtersetting />}
-          {visible === "system-access" && <MainSyastemAccess />}
-          {visible === "daily-total-report" && <DailyTtlReport />}
-          {visible === "Details-category" && <MainCatedetails />}
-          {visible === "report-sales-person" && <MainSalesPerson />}
-          {visible === "id-verification" && <CheckIDVerifyMain />}
-          {/* {visible === "credit-debit-sales" && < />} */}
-          {visible === "inventory-list" && <InventoryList />}
-          {visible === "profit-Margin" && <ProfitMarginReport />}
-          {visible === "instant-activity" && <InstantActvity />}
-          {visible === "overall-top" && <TopSallerReport />}
-          {visible === "employee-working-hours" && <EmployeeWorking />}
-          {visible === "shift-summary" && <MainSiftSummary />}
-          {visible === "payment-method-details" && <PaymentMethodReport />}
-          {visible === "order-type" && <MainItem />}
-
-          {visible === "taxes-report" && <MainTaxesReport />}
-          {visible === "current-inventory-value" && <CurrentInventoryValue />}
-          {visible === "discount-per-sales-person" && <Discount_Per_Sales />}
-          {visible === "item-sales-profit-report" && (
-            <Items_sales_profit_record />
-          )}
-
-          {visible === "addemployee" && <MainAddEmployee />}
-          {visible === "employee-list" && <MainEmployeelist />}
-          {visible === "receipt" && <ReceiptMainpage />}
-          {visible === "item-sales" && <MainItemSales />}
-          {visible === "item-create-between" && <NewItemCreatedBetweenMain />}
-          {visible === "permission" && <Permission />}
-          {visible === "order-summary" && <OrderSummaryDetails />}
-          {visible === "vendors-list" && <VendorListMain />}
-          {visible === "edit-vendor" && <EditVendors />}
-          {visible === "vendor-details" && <SingleVendorsDetail />}
-          {visible === "loyalty-program" && <MainLoayalty />}
-
-          {/* {visible === "order-summary" && <OrderSummeryPage />} */}
-
-          {visible === "recorder-inventory" && <ReorderInventoryMain />}
-
-          {visible === "vendors-sales-reports" && <VendorSalesReportMain />}
-          {visible === "order-refund-report" && <OrderRefundReportMain />}
-          {visible === "refund-report" && <RefundSummary />}
-          {visible === "tip-report" && <TipReportMain />}
-          {visible === "coupon-report" && <CouponReportMain />}
-          {visible === "sales-report" && <SalesReportMain />}
-        </div>
-      </div>
-    </>
+    <Suspense fallback={<div></div>}>
+      {renderComponent()}
+    </Suspense>
   );
 };
 
