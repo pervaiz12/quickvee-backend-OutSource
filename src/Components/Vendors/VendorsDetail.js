@@ -29,6 +29,7 @@ import TableRow from "@mui/material/TableRow";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../Assests/Category/SortingW.svg";
+import NoDataFound from "../../reuseableComponents/NoDataFound";
 // end table imports ----------------------------------------------------
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -285,75 +286,74 @@ const VendorsDetail = ({ setVisible }) => {
                       <StyledTableCell></StyledTableCell>
                     </TableHead>
                     <TableBody>
-                      {allvendors && allvendors.length > 0 ? (
-                        allvendors.map((singleVendor, index) => (
-                          <StyledTableRow key={index}>
-                            <StyledTableCell>
-                              <p
-                                className="text-[#0A64F9] cursor-pointer"
-                                onClick={() => {
-                                  handleEditClick(
-                                    singleVendor.vendor_name,
-                                    singleVendor.vendor_id
-                                  );
-                                }}
-                              >
-                                {singleVendor.vendor_name}
-                              </p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <p>{priceFormate(singleVendor.pay_count)}</p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <p>
-                                $
-                                {typeof singleVendor.amount === "number"
-                                  ? priceFormate(singleVendor.amount.toFixed(2))
-                                  : priceFormate(
-                                      parseFloat(singleVendor.amount).toFixed(2)
-                                    )}
-                              </p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <p>{singleVendor.recent_trans}</p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <Switch
-                                onChange={(event) =>
-                                  handleUpdateStatus(
-                                    event,
-                                    label,
-                                    singleVendor.vendor_id
-                                  )
-                                }
-                                {...label}
-                                checked={singleVendor.status}
-                              />
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <Link
-                                to={`/vendors/edit-vendor/${singleVendor.vendor_name}?vendorId=${singleVendor.vendor_id}`}
-                              >
-                                <img
-                                  className="edit_center"
-                                  singleVender={singleVendor}
-                                  // onClick={() => setVisible("EditVendors")}
-                                  src={EditIcon}
-                                  alt="Edit"
+                      {allvendors && allvendors.length > 0
+                        ? allvendors.map((singleVendor, index) => (
+                            <StyledTableRow key={index}>
+                              <StyledTableCell>
+                                <p
+                                  className="text-[#0A64F9] cursor-pointer"
+                                  onClick={() => {
+                                    handleEditClick(
+                                      singleVendor.vendor_name,
+                                      singleVendor.vendor_id
+                                    );
+                                  }}
+                                >
+                                  {singleVendor.vendor_name}
+                                </p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p>{priceFormate(singleVendor.pay_count)}</p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p>
+                                  $
+                                  {typeof singleVendor.amount === "number"
+                                    ? priceFormate(
+                                        singleVendor.amount.toFixed(2)
+                                      )
+                                    : priceFormate(
+                                        parseFloat(singleVendor.amount).toFixed(
+                                          2
+                                        )
+                                      )}
+                                </p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p>{singleVendor.recent_trans}</p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <Switch
+                                  onChange={(event) =>
+                                    handleUpdateStatus(
+                                      event,
+                                      label,
+                                      singleVendor.vendor_id
+                                    )
+                                  }
+                                  {...label}
+                                  checked={singleVendor.status}
                                 />
-                              </Link>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        ))
-                      ) : (
-                        <>
-                          <div className="p-3">
-                            <p>No record found.</p>
-                          </div>
-                        </>
-                      )}
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <Link
+                                  to={`/vendors/edit-vendor/${singleVendor.vendor_name}?vendorId=${singleVendor.vendor_id}`}
+                                >
+                                  <img
+                                    className="edit_center"
+                                    singleVender={singleVendor}
+                                    // onClick={() => setVisible("EditVendors")}
+                                    src={EditIcon}
+                                    alt="Edit"
+                                  />
+                                </Link>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          ))
+                        : ""}
                     </TableBody>
                   </StyledTable>
+                  {!allvendors.length && <NoDataFound />}
                 </TableContainer>
               </>
             )}

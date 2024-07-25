@@ -277,6 +277,7 @@ const CategoryDetail = ({ seVisible, setProductId }) => {
               className="q-category-bottom-categories-single-category"
               seVisible={seVisible}
               setProductId={setProductId}
+              loading={AllCategoriesDataState.loading}
             />
           </div>
 

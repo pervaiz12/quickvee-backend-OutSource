@@ -174,7 +174,6 @@ const AtrDataList = ({ seVisible }) => {
 
   return (
     <>
-
       <div className="box">
         <div className="q-attributes-bottom-detail-section">
           <div className="q-attributes-bottom-header-sticky">
@@ -185,7 +184,6 @@ const AtrDataList = ({ seVisible }) => {
                 Add Attribute <img src={AddIcon} alt="add-icon" />
               </p>
             </div>
-
           </div>
 
           <DraggableTable
@@ -194,10 +192,8 @@ const AtrDataList = ({ seVisible }) => {
             setFunction={setallattributes}
             editAttributeObj={true}
             table={"varients"}
+            loading={AllAttributesDataState.loading}
           />
-
-
-
 
           <Modal
             open={showModal}

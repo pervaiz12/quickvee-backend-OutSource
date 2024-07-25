@@ -25,6 +25,7 @@ import { priceFormate } from "../../hooks/priceFormate";
 import PasswordShow from "../../Common/passwordShow";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import Skeleton from "react-loading-skeleton";
+import NoDataFound from "../../reuseableComponents/NoDataFound";
 
 const CouponDiscount = ({ seVisible, setCouponId }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -180,7 +181,7 @@ const CouponDiscount = ({ seVisible, setCouponId }) => {
           <Grid container spacing={3} sx={{ p: 2.5 }}>
             {AllCouponDataState.loading ? (
               <>
-                {Object.values(couponList).length >= 1 &&
+                {
                   [1, 2, 3, 4].map((coupons, index) => (
                     <Grid item xs={12} sm={6}>
                       <Grid
@@ -488,6 +489,7 @@ const CouponDiscount = ({ seVisible, setCouponId }) => {
               </>
             )}
           </Grid>
+          {!Object.values(couponList).length  && !AllCouponDataState.loading && <NoDataFound table={true} />}
         </Grid>
       </Grid>
       <div>

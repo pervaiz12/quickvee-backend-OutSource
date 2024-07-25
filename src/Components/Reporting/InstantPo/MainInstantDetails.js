@@ -17,6 +17,7 @@ import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItems
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import PasswordShow from "../../../Common/passwordShow";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -29,7 +30,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
     fontFamily: "CircularSTDBook !important",
-    
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
@@ -41,9 +41,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-    
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
@@ -85,10 +83,10 @@ const MainInstantDetails = ({ data }) => {
         instantactivityDataState.instantactivityData.map((item) => {
           const AfterAdjustQty =
             parseInt(item.current_qty, 10) + parseInt(item.qty, 10);
-          
+
           const calculatedTotal =
             parseInt(item.qty, 10) * parseFloat(item.price);
-          
+
           return {
             ...item,
             afterAdjustQty: AfterAdjustQty,
@@ -157,7 +155,7 @@ const MainInstantDetails = ({ data }) => {
                         <img src={sortIcon} alt="" className="pl-1" />
                       </button>
                     </StyledTableCell>
-                    
+
                     <StyledTableCell>
                       <button
                         className="flex items-center"
@@ -167,8 +165,7 @@ const MainInstantDetails = ({ data }) => {
                         <img src={sortIcon} alt="" className="pl-1" />
                       </button>
                     </StyledTableCell>
-                   
-                   
+
                     <StyledTableCell>
                       <button
                         className="flex items-center"
@@ -243,14 +240,6 @@ const MainInstantDetails = ({ data }) => {
                                     }}
                                     className="me-3"
                                   >
-                                   
-                                   
-
-
-
-
-
-
                                     {formatDateTime(instantactivity.created_at)}
                                   </p>
                                   <p
@@ -270,17 +259,6 @@ const MainInstantDetails = ({ data }) => {
                                 </div>
                               </div>
                             </StyledTableCell>
-                            
-                            
-
-
-
-
-
-
-
-
-
 
                             <StyledTableCell>
                               <p>
@@ -290,13 +268,7 @@ const MainInstantDetails = ({ data }) => {
                                   : instantactivity.emp_name}
                               </p>
                             </StyledTableCell>
-                           
-                           
 
-
-
-
-                          
                             <StyledTableCell>
                               <p>{priceFormate(instantactivity.current_qty)}</p>
                             </StyledTableCell>
@@ -304,7 +276,6 @@ const MainInstantDetails = ({ data }) => {
                               <p>{priceFormate(instantactivity.qty)}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              
                               <p>
                                 {priceFormate(
                                   isNaN(instantactivity.afterAdjustQty)
@@ -326,31 +297,17 @@ const MainInstantDetails = ({ data }) => {
                                       : instantactivity.calculatedTotal
                                   )
                                 )}
-                                
-                                
-
-
-
-
-                                
                               </p>
                             </StyledTableCell>
                           </StyledTableRow>
                         );
                       })
                     ) : (
-                      <>
-                        <Grid container sx={{ padding: 2.5 }}>
-                          <Grid item xs={12}>
-                            <p style={{ whiteSpace: "nowrap" }}>
-                              No. Data found.
-                            </p>
-                          </Grid>
-                        </Grid>
-                      </>
+                      ""
                     )}
                   </TableBody>
                 </StyledTable>
+                {!instantactivity.length && <NoDataFound />}
               </TableContainer>
             </>
           )}

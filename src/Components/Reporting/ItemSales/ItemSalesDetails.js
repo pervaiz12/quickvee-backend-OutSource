@@ -16,8 +16,7 @@ import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "../../../Common/passwordShow";
-
-
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -42,9 +41,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-   
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
@@ -97,7 +94,6 @@ const ItemSalesDetails = (props) => {
       AllItemSalesDataState.ItemSalesData &&
       AllItemSalesDataState.ItemSalesData[0]
     ) {
-      
       setallItemSalesData(AllItemSalesDataState.ItemSalesData[0]);
     } else {
       setallItemSalesData("");
@@ -191,16 +187,9 @@ const ItemSalesDetails = (props) => {
                         </StyledTableCell>
                       </StyledTableRow>
                     ))}
-
-                  {!allItemSalesData.length >= 1 && (
-                    <div className="box">
-                      <div className="q-category-bottom-categories-single-category">
-                        <p>No data found</p>
-                      </div>
-                    </div>
-                  )}
                 </TableBody>
               </StyledTable>
+              {!allItemSalesData.length >= 1 && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>

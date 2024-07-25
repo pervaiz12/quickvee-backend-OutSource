@@ -16,6 +16,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import PasswordShow from "../../../Common/passwordShow";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -40,9 +41,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-    
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
@@ -100,101 +99,9 @@ const Itemdatadetails = ({
     );
   }
 
-  const renderDataTable = () => {
-    if (
-      orderReport.success === false &&
-      orderReport.message === "No data found for the specified criteria"
-    ) {
-      return (
-        <Grid container sx={{ p: 2.5 }} className="box_shadow_div">
-          No data available
-        </Grid>
-      );
-    } else if (orderReport && orderReport.length >= 1) {
-      return (
-        <>
-          <div className="q-attributes-bottom-detail-section text-center">
-            <Grid container className="box_shadow_div">
-              <TableContainer>
-                <StyledTable
-                  sx={{ minWidth: 500 }}
-                  aria-label="customized table"
-                >
-                  <TableHead>
-                    <StyledTableCell>Name</StyledTableCell>
-                    <StyledTableCell># Of Payments</StyledTableCell>
-                    <StyledTableCell>Net Revenue Without Tips</StyledTableCell>
-                    <StyledTableCell>Tips</StyledTableCell>
-                    <StyledTableCell>Net Revenue With Tips</StyledTableCell>
-                    <StyledTableCell>Details</StyledTableCell>
-                  </TableHead>
-                  <TableBody>
-                    {orderReport.map((orderReportDa, index) => (
-                      <StyledTableRow key={index}>
-                        <StyledTableCell>
-                          <p>{orderReportDa.order_method}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>{priceFormate(orderReportDa.total_count)}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>
-                            ${Number(orderReportDa.amt_without_tip).toFixed(2)}
-                          </p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>${Number(orderReportDa.tip).toFixed(2)}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>
-                            ${Number(orderReportDa.amount_with_tip).toFixed(2)}
-                          </p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          
-                          
-
-
-
-
-
-
-                          {selectedOrderSource !== "All" ? (
-                            <button>
-                              <p className="q-employee-in">View Details</p>
-                            </button>
-                          ) : (
-                            "-"
-                          )}
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))}
-                  </TableBody>
-                </StyledTable>
-              </TableContainer>
-            </Grid>
-          </div>
-        </>
-      );
-    }
-  };
 
   return (
     <>
-      
-      
-
-
-
-
-
-
-
-
-
-
-
-      
       <div className="q-attributes-bottom-detail-section text-center">
         <Grid container className="box_shadow_div">
           {orderReportDataState.loading ? (
@@ -279,11 +186,7 @@ const Itemdatadetails = ({
                 </StyledTable>
               </TableContainer>
               {!orderReport.length && (
-                <Grid container>
-                  <Grid item sx={{ p: 2.5 }}>
-                    <p>No Data Available</p>
-                  </Grid>
-                </Grid>
+                <NoDataFound />
               )}
             </>
           )}

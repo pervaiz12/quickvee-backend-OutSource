@@ -12,8 +12,8 @@ import Button from "@mui/material/Button";
 import { priceFormate } from "../../../hooks/priceFormate";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
-
 import Skeleton from "react-loading-skeleton";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 import { Grid } from "@mui/material";
 
 
@@ -139,11 +139,7 @@ export default function Pagination(props) {
                   </StyledTableRow>
                 ))
               ) : (
-                <StyledTableRow>
-                  <StyledTableCell>
-                    <p>{props.message}</p>
-                  </StyledTableCell>
-                </StyledTableRow>
+                ""
               )}
             </TableBody>
           </StyledTable>

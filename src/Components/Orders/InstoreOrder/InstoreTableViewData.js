@@ -26,6 +26,7 @@ import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItems
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 
 import PasswordShow from "../../../Common/passwordShow";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -88,8 +89,7 @@ const InstoreTableViewData = (props, searchId) => {
     const transactionType = (type) => {
       if (type === "Cash") {
         return "Cash";
-      }
-      else if (type === "Credit Card") {
+      } else if (type === "Credit Card") {
         return "Online";
       } else {
         return type;
@@ -136,8 +136,7 @@ const InstoreTableViewData = (props, searchId) => {
     const transactionType = (type) => {
       if (type === "Cash") {
         return "Cash";
-      }
-      else if (type === "Credit Card") {
+      } else if (type === "Credit Card") {
         return "Online";
       } else {
         return type;
@@ -352,53 +351,53 @@ const InstoreTableViewData = (props, searchId) => {
                       <TableBody>
                         {inStoreOrder &&
                         Array.isArray(inStoreOrder) &&
-                        inStoreOrder.length > 0 ? (
-                          inStoreOrder?.map((data, index) => (
-                            <StyledTableRow key={index}>
-                              <StyledTableCell>
-                                {data.billing_name || data.delivery_phn ? (
-                                  <>
-                                    <p className="text-[#000000] order_method">
-                                      {data.billing_name || ""}
-                                    </p>
-                                    <p className="text-[#818181]">
-                                      {data.email || ""}
-                                    </p>
-                                    <p className="text-[#818181]">
-                                      {data.delivery_phn || ""}
-                                    </p>
-                                  </>
-                                ) : (
-                                  <div>
-                                    <p>-</p>
-                                  </div>
-                                )}
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <p className="text-[#000000] order_method">
-                                  {data.order_id || ""}
-                                </p>
-                                <p className="text-[#818181]">
-                                  {data.merchant_time || ""}
-                                </p>
-                                <p className="text-[#818181]">
-                                  {data.order_method || ""}
-                                </p>
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <p> {"$" + data.amt || ""}</p>
-                                <p className="text-[#1EC26B]">
-                                  {capitalizeFirstLetter(
-                                    data.order_status || "",
-                                    data.m_status || "",
-                                    data.payment_id || "",
-                                    data.pax_details || "",
-                                    data.is_split_payment || ""
+                        inStoreOrder.length > 0
+                          ? inStoreOrder?.map((data, index) => (
+                              <StyledTableRow key={index}>
+                                <StyledTableCell>
+                                  {data.billing_name || data.delivery_phn ? (
+                                    <>
+                                      <p className="text-[#000000] order_method">
+                                        {data.billing_name || ""}
+                                      </p>
+                                      <p className="text-[#818181]">
+                                        {data.email || ""}
+                                      </p>
+                                      <p className="text-[#818181]">
+                                        {data.delivery_phn || ""}
+                                      </p>
+                                    </>
+                                  ) : (
+                                    <div>
+                                      <p>-</p>
+                                    </div>
                                   )}
-                                </p>
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                {/* <p
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <p className="text-[#000000] order_method">
+                                    {data.order_id || ""}
+                                  </p>
+                                  <p className="text-[#818181]">
+                                    {data.merchant_time || ""}
+                                  </p>
+                                  <p className="text-[#818181]">
+                                    {data.order_method || ""}
+                                  </p>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <p> {"$" + data.amt || ""}</p>
+                                  <p className="text-[#1EC26B]">
+                                    {capitalizeFirstLetter(
+                                      data.order_status || "",
+                                      data.m_status || "",
+                                      data.payment_id || "",
+                                      data.pax_details || "",
+                                      data.is_split_payment || ""
+                                    )}
+                                  </p>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  {/* <p
                                   onClick={() =>
                                     navigate(
                                       `/order/store-reporting/order-summary/${"MAL0100CA"}/${data.order_id}`
@@ -409,26 +408,23 @@ const InstoreTableViewData = (props, searchId) => {
                                 >
                                   View Details
                                 </p> */}
-                                <Link
-                                  className="whitespace-nowrap text-[#0A64F9]"
-                                  to={`/order/store-reporting/order-summary/${props.merchant_id}/${data?.order_id}`}
-                                  // onClick={() => handleSummeryPage(row.order_id)}
-                                  target="_blank"
-                                >
-                                  View Details
-                                  {/* Order Summery */}
-                                  {/* <img src={Summery} alt="" className="pl-1" /> */}
-                                </Link>
-                              </StyledTableCell>
-                            </StyledTableRow>
-                          ))
-                        ) : (
-                          <>
-                            <p className="px-5 py-4">No Data Found</p>
-                          </>
-                        )}
+                                  <Link
+                                    className="whitespace-nowrap text-[#0A64F9]"
+                                    to={`/order/store-reporting/order-summary/${props.merchant_id}/${data?.order_id}`}
+                                    // onClick={() => handleSummeryPage(row.order_id)}
+                                    target="_blank"
+                                  >
+                                    View Details
+                                    {/* Order Summery */}
+                                    {/* <img src={Summery} alt="" className="pl-1" /> */}
+                                  </Link>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            ))
+                          : ""}
                       </TableBody>
                     </StyledTable>
+                    {!inStoreOrder.length && <NoDataFound table={true} />}
                   </TableContainer>
                 </>
               )}

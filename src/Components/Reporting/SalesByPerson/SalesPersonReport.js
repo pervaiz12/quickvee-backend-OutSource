@@ -19,6 +19,7 @@ import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItems
 import PasswordShow from "../../../Common/passwordShow";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 // ==================== TABLE STYLE ADDED ===================================================
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -43,9 +44,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  
-  
-
 
   "& td, & th": {
     border: "none",
@@ -72,7 +70,7 @@ const SalesPersonReport = (props) => {
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
-  
+
   const dispatch = useDispatch();
   const [allSalesByPersonData, setallSalesByPersonData] = useState("");
   const AllSalesByPersonDataState = useSelector(
@@ -115,7 +113,6 @@ const SalesPersonReport = (props) => {
       !AllSalesByPersonDataState.loading &&
       AllSalesByPersonDataState.SalePersonData
     ) {
-      
       setallSalesByPersonData(AllSalesByPersonDataState.SalePersonData);
     } else {
       setallSalesByPersonData("");
@@ -138,17 +135,6 @@ const SalesPersonReport = (props) => {
     const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
     return `${formattedDate} ${formattedTime}`;
   };
-
-  
-  
-
-
-
-
-
-
-
-
 
   let grandTotal = 0;
   Object.keys(allSalesByPersonData).map((EmpData, index) => {
@@ -247,10 +233,6 @@ const SalesPersonReport = (props) => {
                       {items?.map((SalesData, index) => (
                         <StyledTableRow key={index}>
                           <StyledTableCell sx={{ width: "33%" }}>
-                            
-                            
-
-                            
                             <span
                               className="cursor-pointer text-[#0A64F9]"
                               onClick={() =>
@@ -308,11 +290,10 @@ const SalesPersonReport = (props) => {
           </>
         ))
       ) : (
-        <Grid container sx={{ padding: 2.5 }} className="box_shadow_div ">
-          <Grid item xs={12}>
-            No data Found.
-          </Grid>
+        <Grid sx={{pt:2.5}}>
+          <NoDataFound />
         </Grid>
+        
       )}
 
       {Object.entries(allSalesByPersonData).length > 0 && (

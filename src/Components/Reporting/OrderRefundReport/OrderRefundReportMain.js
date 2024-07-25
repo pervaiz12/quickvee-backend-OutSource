@@ -5,30 +5,21 @@ import OrderRefundReportList from "./OrderRefundReportList";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 
 const OrderRefundReportMain = () => {
-  
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
   };
 
-  
   const [selectedReason, setSelectedReason] = useState("All");
-
-  
-
-
 
   const handleReasonChange = (selectedReason) => {
     setSelectedReason(selectedReason.title);
   };
 
-
-
   return (
     <>
       <OrderRefundFilter
         title={"Order Refund Report"}
-    
         onReasonChange={handleReasonChange}
         selectedReason={selectedReason}
       />
@@ -37,7 +28,6 @@ const OrderRefundReportMain = () => {
 
       <OrderRefundReportList
         selectedDateRange={selectedDateRange}
-        
         reasonTitle={selectedReason}
       />
     </>

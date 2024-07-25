@@ -26,6 +26,7 @@ import useDebounce from "../../hooks/useDebouncs";
 import { useNavigate } from "react-router-dom";
 import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../Assests/Category/SortingW.svg";
+import NoDataFound from "../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -49,17 +50,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-    
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
 }));
-const StocktakeList = ({
-  setVisible,
-  
-}) => {
+const StocktakeList = ({ setVisible }) => {
   const navigate = useNavigate();
   const [searchId, setSearchId] = useState(""); // State to track search ID
   const [currentPage, setCurrentPage] = useState(1);
@@ -71,7 +67,7 @@ const StocktakeList = ({
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
-  
+
   const [StocktakeList, setStocktakeList] = useState([]);
   const dispatch = useDispatch();
 
@@ -149,7 +145,7 @@ const StocktakeList = ({
   const handleStocktakeIdClick = async (id) => {
     setStocltakeId(id);
     setLoader(true);
-    
+
     const result = await dispatch(
       fetchSingleStocktakeData({ merchant_id, id, userTypeData })
     );
@@ -158,17 +154,14 @@ const StocktakeList = ({
     console.log(loader);
     if (result) {
       if (result?.payload?.result?.status === "0") {
-       
         navigate(`/stocktake/completed/${id}`);
         setLoader(false);
       }
       if (result?.payload?.result?.status === "1") {
-        
         navigate(`/stocktake/UpdateStocktake/${id}`);
         setLoader(false);
       }
       if (result?.payload?.result?.status === "2") {
-        
         navigate(`/stocktake/void/${id}`);
         setLoader(false);
       }
@@ -243,9 +236,7 @@ const StocktakeList = ({
               <div className="q-category-bottom-header">
                 <p
                   onClick={() => {
-                    
                     navigate("/stocktake/AddStocktake");
-                    
                   }}
                 >
                   Add New Stocktake <img src={AddIcon} alt="add-icon" />{" "}
@@ -363,11 +354,7 @@ const StocktakeList = ({
                     </TableContainer>
                   </>
                 ) : (
-                  <>
-                    <div className="p-4">
-                      <p>No Result Found</p>
-                    </div>
-                  </>
+                  ""
                 )}
               </>
             )}
@@ -389,6 +376,7 @@ const StocktakeList = ({
           </Grid>
         </Grid>
       </Grid>
+      {!StocktakeListReducerState?.StocktakeList?.length && <NoDataFound />}
     </>
   );
 };

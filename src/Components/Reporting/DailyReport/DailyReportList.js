@@ -18,6 +18,7 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 // ==================== TABLE STYLE ADDED ===================================================
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -202,14 +203,11 @@ const DailyReportList = ({ data }) => {
                           </StyledTableCell>
                         </>
                       ) : (
-                        <Grid container sx={{ padding: 2.5 }} className=" ">
-                          <Grid item xs={12}>
-                            No data Found.
-                          </Grid>
-                        </Grid>
+                        ""
                       )}
                     </TableBody>
                   </StyledTable>
+                  {!dailyreport.length  && <NoDataFound table={true} />}
                 </TableContainer>
               )}
             </Grid>

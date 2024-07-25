@@ -14,8 +14,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
-import sortIcon from "../../../Assests/Category/SortingW.svg"
+import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -39,9 +40,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-   
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
@@ -115,7 +114,7 @@ const TipReportList = (props) => {
     );
     setTipReportData(sortedItems);
     setSortOrder(newOrder);
-  }
+  };
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -125,17 +124,18 @@ const TipReportList = (props) => {
           ) : (
             <TableContainer>
               <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-                
                 <TableHead>
-                  {tableRow.map((item)=><StyledTableCell>
-                    <button
-                    className="flex items-center"
-                    onClick={()=>sortByItemName(item.type,item.name)}
-                    >
-                      <p>{item.label}</p>
-                      <img src={sortIcon} alt="" className="pl-1" />
-                    </button>
-                  </StyledTableCell>)}
+                  {tableRow.map((item) => (
+                    <StyledTableCell>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName(item.type, item.name)}
+                      >
+                        <p>{item.label}</p>
+                        <img src={sortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
+                  ))}
                 </TableHead>
                 {/* <TableBody>
                   {tipReportData.length > 0 &&
@@ -195,12 +195,7 @@ const TipReportList = (props) => {
                       </StyledTableCell>
                     </StyledTableRow>
                   ))
-                ) : (
-                  <StyledTableRow>
-                    <StyledTableCell colSpan={tableRow.length}>
-                      <p>No data found</p>
-                    </StyledTableCell>
-                  </StyledTableRow>
+                ) : (""
                 )}
                 {Array.isArray(tipReportData) && tipReportData.length > 0 && (
                   <StyledTableRow className="trBG_Color">
@@ -216,6 +211,7 @@ const TipReportList = (props) => {
                 )}
               </TableBody>
               </StyledTable>
+              {!tipReportData.length > 0 && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>

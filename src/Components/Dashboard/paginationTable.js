@@ -14,6 +14,7 @@ import sortIcon from "../../Assests/Category/SortingW.svg";
 import Summery from "../../Assests/Category/Summery.svg";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
+import NoDataFound from "../../reuseableComponents/NoDataFound";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
@@ -242,10 +243,11 @@ export default function DashboardTables(props) {
                   </StyledTableRow>
                 ))
               ) : (
-                <p className="p-2">No record found</p>
+              ""
               )}
             </TableBody>
           </Table>
+          {!props.dashboardRecord.length && <NoDataFound table={true}/>}
         </TableContainer>
       )}
     </>
