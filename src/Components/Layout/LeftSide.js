@@ -1,4 +1,6 @@
 import React, { useEffect, lazy, Suspense } from "react";
+import DropCashMain from "../Reporting/DropCash/DropCashMain";
+import PayInMain from "../Reporting/PayIn/PayInMain";
 
 const DashboardMain = lazy(() => import("../Dashboard/DashboardMain"));
 const MainOrder = lazy(() => import("./../Orders/MainOrder"));
@@ -308,6 +310,10 @@ const LeftSide = ({ visible }) => {
         return <TipReportMain />;
       case "coupon-report":
         return <CouponReportMain />;
+      case "drop-cash-report":
+        return <DropCashMain />;
+      case "pay-in-report":
+        return <PayInMain />;
       case "sales-report":
         return <SalesReportMain />;
       case "brands":
