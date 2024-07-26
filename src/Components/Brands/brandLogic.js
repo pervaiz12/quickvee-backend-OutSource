@@ -16,7 +16,6 @@ export default function BrandLogic() {
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const getBrandListSlice = useSelector((state) => state?.brandData);
-  // console.log(getBrandListSlice);
   const [showModal, setShowModal] = useState(false);
   const [controltext, setControlText] = useState(false);
   const [brandText, setBrandText] = useState({ brand: "", id: "" });
@@ -30,11 +29,7 @@ export default function BrandLogic() {
   const [searchRecord, setSearchRecord] = useState("");
   const [loader, setLoader] = useState(false);
   const [tableLoader, setTableLoader] = useState(false);
-
-  // const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
-  // console.log(getBrandList);
-
+  const [skeletonLoader, setSkeltonLoader] = useState("");
   let merchant_id =
     !!LoginGetDashBoardRecordJson?.data?.merchant_id ||
     LoginGetDashBoardRecordJson?.data?.merchant_id !== "no_id"
@@ -42,11 +37,12 @@ export default function BrandLogic() {
       : "";
 
   let data = { merchant_id, type: 1, ...userTypeData };
+  const rowSkaleton = ["Brand", "", ""];
 
   const rowHeader = [
     {
       id: 1,
-      title: "Brands",
+      title: "Brand",
     },
     {
       id: 2,
@@ -61,6 +57,7 @@ export default function BrandLogic() {
     getBrandData();
   }, []);
   useEffect(() => {
+    setSkeltonLoader(getBrandListSlice?.loading);
     if (
       !getBrandListSlice?.loading &&
       !!getBrandListSlice?.BrandsData &&
@@ -68,6 +65,9 @@ export default function BrandLogic() {
     ) {
       setBrandList(getBrandListSlice?.BrandsData);
       setFilterSearch(getBrandListSlice?.BrandsData);
+    } else {
+      setBrandList([]);
+      setFilterSearch([]);
     }
   }, [getBrandListSlice?.loading]);
 
@@ -82,7 +82,6 @@ export default function BrandLogic() {
     }
   };
   const checkExistingBrand = (brand) => {
-    // console.log(getBrandListSlice?.BrandsData);
     let error = true;
     let brandtest = getBrandListSlice?.BrandsData?.find(
       (item) => item.title.toLowerCase() === brand.toLowerCase()
@@ -131,6 +130,7 @@ export default function BrandLogic() {
   };
   // ==========update=============
   const handleGetEditData = (id) => {
+    console.log(id);
     let brandtest = getBrandListSlice?.BrandsData?.find(
       (item) => item.id === id
     );
@@ -141,20 +141,17 @@ export default function BrandLogic() {
         id: brandtest?.id,
       }));
       setCheckBrandExist(brandtest?.title);
+      setControlText(true);
+      setShowModal(true);
     }
-    setControlText(true);
-    setShowModal(true);
   };
   // ==========update end===========
   // ==========delete brand=========
   const handleDeleteMerchant = async (tableData) => {
-    // console.log("handleDeleteMer", tableData);
-    // setDeleteTableId(tableData);
     setDeleteTableId(tableData);
     setDeleteModalOpen(true);
   };
   const handleDeleteBrand = async () => {
-    // console.log(id);
     setDeleteModalOpen(false);
     let brandtest = getBrandListSlice?.BrandsData?.find(
       (item) => item.id === deleteId
@@ -170,7 +167,6 @@ export default function BrandLogic() {
           Authorization: `Bearer ${token}`,
         },
       });
-      // console.log(response);
       if (response?.data?.status == true) {
         ToastifyAlert("Deleted Successfully", "success");
         setDeleteModalOpen(false);
@@ -190,7 +186,6 @@ export default function BrandLogic() {
     }
   };
   const onChangeGetData = (e) => {
-    // console.log(e);
     const { name, value } = e.target;
     let errorData = { ...errors };
     if (name.toLowerCase() === "brand") {
@@ -348,5 +343,7 @@ export default function BrandLogic() {
     loader,
     deleteId,
     tableLoader,
+    skeletonLoader,
+    rowSkaleton,
   };
 }

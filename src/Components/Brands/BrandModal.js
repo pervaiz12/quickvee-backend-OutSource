@@ -30,7 +30,7 @@ export default function BrandModal(props) {
           }}
         >
           <span style={{ cursor: "unset" }}>
-            {props.controltext ? "Update Brands" : "Add New Brands"}
+            {props.controltext ? "Update Brand" : "Add New Brand"}
           </span>
 
           <div>

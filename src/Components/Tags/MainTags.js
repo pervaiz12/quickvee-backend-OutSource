@@ -32,6 +32,8 @@ export default function MainTags() {
     loader,
     tableLoader,
     deleteId,
+    rowSkaleton,
+    skeletonLoader,
   } = TagLogic();
   return (
     <>
@@ -39,8 +41,7 @@ export default function MainTags() {
         <div className="q-attributes-bottom-detail-section">
           <div className="q-attributes-bottom-header-sticky">
             <div className="q-attributes-bottom-header">
-              <span>Tags</span>
-
+              <span>Tag</span>
               <p className="" onClick={openModal}>
                 Add Tag <img src={AddIcon} alt="add-icon" />
               </p>
@@ -68,10 +69,11 @@ export default function MainTags() {
                 handleGetEditData={handleGetEditData}
                 header={rowHeader}
                 listData={getTagList}
-                // handleDeleteBrand={handleDeleteBrand}
                 handleDeleteBrand={handleDeleteMerchant}
                 tableLoader={tableLoader}
                 deleteId={deleteId}
+                skeletonLoader={skeletonLoader}
+                rowSkelton={rowSkaleton}
               />
             </Grid>
           </Grid>
@@ -91,16 +93,13 @@ export default function MainTags() {
         loader={loader}
       />
       <DeleteModal
-        headerText=" Tags"
-        // otherMSG="Once The store is deleted Inventory and settings cannot be restored."
+        headerText=" Tag"
         open={deleteModalOpen}
         onClose={() => {
           setDeleteModalOpen(false);
         }}
         onConfirm={handleDeleteTag}
       />
-      {/* </div>
-      </div> */}
     </>
   );
 }

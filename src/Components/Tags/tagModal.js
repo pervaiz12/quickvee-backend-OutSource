@@ -30,7 +30,7 @@ export default function TagModal(props) {
           }}
         >
           <span style={{ cursor: "unset" }}>
-            {props.controltext ? "Update Tags" : "Add New Tags"}
+            {props.controltext ? "Update Tag" : "Add New Tag"}
           </span>
 
           <div>
@@ -53,7 +53,6 @@ export default function TagModal(props) {
               value={props?.tagText?.Tag}
               name="Tag"
               placeholder="Enter Tag"
-              //   maxLength={35}
               onKeyPressFun={props.handleKeyPress}
               onChangeFun={props.onChangeGetData}
               handlePaste={props.handlePaste}
@@ -85,8 +84,6 @@ export default function TagModal(props) {
             ) : (
               <>{props.controltext ? "Update" : "Add"}</>
             )}
-
-            {/* {props.controltext ? "Update" : "Add"} */}
           </button>
           <button
             onClick={props.handleClose}

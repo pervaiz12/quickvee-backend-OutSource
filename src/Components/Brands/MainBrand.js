@@ -1,5 +1,4 @@
 import React from "react";
-// import DraggableTable from "../../reuseableComponents/DraggableTable";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import BrandModal from "./BrandModal";
 import BrandLogic from "./brandLogic";
@@ -34,6 +33,8 @@ export default function BrandsList() {
     loader,
     deleteId,
     tableLoader,
+    skeletonLoader,
+    rowSkaleton,
   } = BrandLogic();
   return (
     <>
@@ -41,7 +42,7 @@ export default function BrandsList() {
         <div className="q-attributes-bottom-detail-section">
           <div className="q-attributes-bottom-header-sticky">
             <div className="q-attributes-bottom-header">
-              <span>Brands</span>
+              <span>Brand</span>
 
               <p className="" onClick={openModal}>
                 Add Brand <img src={AddIcon} alt="add-icon" />
@@ -73,6 +74,8 @@ export default function BrandsList() {
                 handleDeleteBrand={handleDeleteMerchant}
                 tableLoader={tableLoader}
                 deleteId={deleteId}
+                skeletonLoader={skeletonLoader}
+                rowSkelton={rowSkaleton}
               />
             </Grid>
           </Grid>
@@ -93,16 +96,13 @@ export default function BrandsList() {
         loader={loader}
       />
       <DeleteModal
-        headerText=" Brands"
-        // otherMSG="Once The store is deleted Inventory and settings cannot be restored."
+        headerText=" Brand"
         open={deleteModalOpen}
         onClose={() => {
           setDeleteModalOpen(false);
         }}
         onConfirm={handleDeleteBrand}
       />
-      {/* </div>
-      </div> */}
     </>
   );
 }

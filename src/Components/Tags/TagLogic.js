@@ -31,6 +31,7 @@ export default function TagLogic() {
   const [searchRecord, setSearchRecord] = useState("");
   const [loader, setLoader] = useState(false);
   const [tableLoader, setTableLoader] = useState(false);
+  const [skeletonLoader, setSkeltonLoader] = useState("");
 
   let merchant_id =
     !!LoginGetDashBoardRecordJson?.data?.merchant_id ||
@@ -39,11 +40,11 @@ export default function TagLogic() {
       : "";
 
   let data = { merchant_id, type: 0, ...userTypeData };
-
+  const rowSkaleton = ["Tag", "", ""];
   const rowHeader = [
     {
       id: 1,
-      title: "Tags",
+      title: "Tag",
     },
     {
       id: 2,
@@ -59,6 +60,7 @@ export default function TagLogic() {
     getBrandData();
   }, []);
   useEffect(() => {
+    setSkeltonLoader(getBrandListSlice?.loading);
     if (
       !getBrandListSlice?.loading &&
       !!getBrandListSlice?.BrandsData &&
@@ -66,6 +68,9 @@ export default function TagLogic() {
     ) {
       setGetTagList(getBrandListSlice?.BrandsData);
       setFilterSearch(getBrandListSlice?.BrandsData);
+    } else {
+      setGetTagList([]);
+      setFilterSearch([]);
     }
   }, [getBrandListSlice?.loading]);
 
@@ -104,7 +109,6 @@ export default function TagLogic() {
   };
   // ===========onchange function ===============
   const onChangeGetData = (e) => {
-    // console.log(e);
     const { name, value } = e.target;
     let errorData = { ...errors };
     if (name.toLowerCase() === "tag") {
@@ -128,19 +132,17 @@ export default function TagLogic() {
         id: brandtest?.id,
       }));
       setCheckTagExist(brandtest?.title);
+      setControlText(true);
+      setShowModal(true);
     }
-    setControlText(true);
-    setShowModal(true);
   };
 
   const checkExistingBrand = (brand) => {
-    // console.log(getBrandListSlice?.BrandsData);
     let error = true;
     let brandtest = getBrandListSlice?.BrandsData?.find(
       (item) => item.title.toLowerCase() === brand.toLowerCase()
     );
     if (brandtest) {
-      // console.log("helloo")
       if (
         checkTagExist !== "" &&
         checkTagExist.toLowerCase() !== brandtest?.title?.toLowerCase()
@@ -173,13 +175,10 @@ export default function TagLogic() {
   // =========== delete Tag start =================
   // ==========delete brand=========
   const handleDeleteMerchant = async (tableData) => {
-    // console.log("handleDeleteMer", tableData);
-    // setDeleteTableId(tableData);
     setDeleteTableId(tableData);
     setDeleteModalOpen(true);
   };
   const handleDeleteTag = async () => {
-    // console.log(id);
     setDeleteModalOpen(false);
     let brandtest = getBrandListSlice?.BrandsData?.find(
       (item) => item.id === deleteId
@@ -198,7 +197,6 @@ export default function TagLogic() {
         ToastifyAlert("Deleted Successfully", "success");
         setDeleteModalOpen(false);
         setDeleteTableId("");
-        // setSearchRecord("");
         getBrandData();
       }
     } catch (e) {
@@ -263,7 +261,6 @@ export default function TagLogic() {
                 },
               }
             );
-            // console.log(response);
             if (response?.data?.status == true) {
               setShowModal(false);
               ToastifyAlert("Added Successfully", "success");
@@ -353,5 +350,7 @@ export default function TagLogic() {
     loader,
     tableLoader,
     deleteId,
+    rowSkaleton,
+    skeletonLoader,
   };
 }

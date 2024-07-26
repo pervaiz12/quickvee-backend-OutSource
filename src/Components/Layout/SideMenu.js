@@ -73,7 +73,6 @@ import Support1 from "../../Assests/Category/Support-1.svg";
 import OrderRetrieve from "../../Assests/OrderRetireve/Order_retrive.svg";
 import OrderRetrievey from "../../Assests/OrderRetireve/Order_retrivey.svg";
 
-
 const SideMenu = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -852,14 +851,14 @@ const menuItems = [
         icon: (
           <img
             src={AttributesIcon}
-            alt="brands"
+            alt="brand"
             className="h-6 w-10 mt-4 mb-4 hoverable-image"
           />
         ),
         activeIcon: (
           <img src={AtriIcon} alt="atributes" className="h-6 w-10 mt-4 mb-4" />
         ),
-        text: "Brands",
+        text: "Brand",
         link: "/brands",
       },
       {
@@ -867,14 +866,14 @@ const menuItems = [
         icon: (
           <img
             src={AttributesIcon}
-            alt="Tags"
+            alt="Tag"
             className="h-6 w-10 mt-4 mb-4 hoverable-image"
           />
         ),
         activeIcon: (
           <img src={AtriIcon} alt="atributes" className="h-6 w-10 mt-4 mb-4" />
         ),
-        text: "Tags",
+        text: "Tag",
         link: "/tags",
       },
     ],
