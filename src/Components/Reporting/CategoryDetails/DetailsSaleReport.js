@@ -20,6 +20,7 @@ import PasswordShow from "../../../Common/passwordShow";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 // import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -289,12 +290,11 @@ const DetailsSaleReport = ({ data }) => {
           </>
         ))
       ) : (
-        <Grid className="box_shadow_div" sx={{ p: 2.5 }}>
-          {/* <NoDataFound /> */}
-          <p>No Data Found</p>
-        </Grid>
+            <Grid sx={{mt:3.5}}>
+                <NoDataFound />
+            </Grid>
       )}
-      {Object.entries(detailCategorySale).length > 0 && (
+      {Object.entries(detailCategorySale).length > 0 && !detailCategorySaleDataState.loading  && (
         <Grid container sx={{ marginY: 2.5 }} className="box_shadow_div">
           <Grid item xs={12}>
             <TableContainer>

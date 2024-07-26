@@ -100,7 +100,6 @@ const ItemSalesDetails = (props) => {
     }
   }, [
     AllItemSalesDataState,
-    AllItemSalesDataState.loading,
     AllItemSalesDataState.ItemSalesData,
   ]);
   const tableRow = [

@@ -57,6 +57,7 @@ const NewItemCreatedBetweenList = (props) => {
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
   const [allNewItemData, setallNewItemData] = useState([]);
+  const [apiStatus, setAPIStatus] = useState(false);
   const AllNewItemDataState = useSelector(
     (state) => state.NewItemCreatedBtnList
   );
@@ -75,11 +76,12 @@ const NewItemCreatedBetweenList = (props) => {
           ...userTypeData,
         };
         if (data) {
-          await dispatch(fetchNewItemCreatedBetweenData(data)).unwrap();
+         const res = await dispatch(fetchNewItemCreatedBetweenData(data)).unwrap();
+         setAPIStatus(res.status)
         }
       }
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
+      if (error?.status == 401 || error?.response?.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -96,7 +98,6 @@ const NewItemCreatedBetweenList = (props) => {
     }
   }, [
     AllNewItemDataState,
-    AllNewItemDataState.loading,
     AllNewItemDataState.NewItemData,
   ]);
 
@@ -156,7 +157,7 @@ const NewItemCreatedBetweenList = (props) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          {AllNewItemDataState.loading ? (
+          {AllNewItemDataState.loading || (!allNewItemData.length && apiStatus) ? (
             <SkeletonTable
               columns={["Date", "Category", "Item Name", "Price"]}
             />
@@ -222,11 +223,11 @@ const NewItemCreatedBetweenList = (props) => {
                       </StyledTableRow>
                     ))
                   ) : (
-                    ""
+                    ''
                   )}
                 </TableBody>
               </StyledTable>
-              {!allNewItemData.length  && <NoDataFound />}
+              {!allNewItemData.length  && <><NoDataFound /> </>}
             </TableContainer>
           )}
         </Grid>

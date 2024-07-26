@@ -94,10 +94,12 @@ const MainInstantDetails = ({ data }) => {
           };
         });
       setinstantactivity(AfterAdjustQtyAddedList);
+    }else{
+      setinstantactivity([]);
     }
   }, [
+  
     instantactivityDataState,
-    instantactivityDataState.loading,
     instantactivityDataState.instantactivityData,
   ]);
 
