@@ -76,8 +76,7 @@ const NewItemCreatedBetweenList = (props) => {
           ...userTypeData,
         };
         if (data) {
-         const res = await dispatch(fetchNewItemCreatedBetweenData(data)).unwrap();
-         setAPIStatus(res.status)
+          await dispatch(fetchNewItemCreatedBetweenData(data)).unwrap();
         }
       }
     } catch (error) {
@@ -91,15 +90,19 @@ const NewItemCreatedBetweenList = (props) => {
   };
 
   useEffect(() => {
-    if (!AllNewItemDataState.loading && AllNewItemDataState.NewItemData) {
-      setallNewItemData(AllNewItemDataState.NewItemData);
+    if (
+      !AllNewItemDataState.loading &&
+      AllNewItemDataState?.NewItemData &&
+      AllNewItemDataState?.NewItemData?.report_data
+    ) {
+      console.log(AllNewItemDataState.NewItemData.report_data);
+
+      setallNewItemData(AllNewItemDataState?.NewItemData?.report_data);
+      setAPIStatus(AllNewItemDataState.NewItemData.status);
     } else {
-      setallNewItemData("");
+      setallNewItemData([]);
     }
-  }, [
-    AllNewItemDataState,
-    AllNewItemDataState.NewItemData,
-  ]);
+  }, [AllNewItemDataState, AllNewItemDataState.NewItemData]);
 
   const formatDate = (dateString) => {
     const [day, month, year] = dateString.split("-");
@@ -152,12 +155,13 @@ const NewItemCreatedBetweenList = (props) => {
     );
     setSortOrder(newOrder);
   };
-
+  console.log("AllNewItemDataState.loading ", AllNewItemDataState.loading);
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          {AllNewItemDataState.loading || (!allNewItemData.length && apiStatus) ? (
+          {AllNewItemDataState.loading ||
+          (apiStatus && !allNewItemData.length) ? (
             <SkeletonTable
               columns={["Date", "Category", "Item Name", "Price"]}
             />
@@ -203,31 +207,29 @@ const NewItemCreatedBetweenList = (props) => {
                   </StyledTableCell>
                 </TableHead>
                 <TableBody>
-                  {allNewItemData && allNewItemData.length >= 1 ? (
-                    allNewItemData.map((ItemData, index) => (
-                      <StyledTableRow key={index}>
-                        <StyledTableCell>
-                          <p className="whitespace-nowrap">
-                            {formatDate(ItemData.created_on)}
-                          </p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>{ItemData.category}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>{ItemData.item_name}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>${priceFormate(ItemData.price)}</p>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))
-                  ) : (
-                    ''
-                  )}
+                  {allNewItemData && allNewItemData.length >= 1
+                    ? allNewItemData.map((ItemData, index) => (
+                        <StyledTableRow key={index}>
+                          <StyledTableCell>
+                            <p className="whitespace-nowrap">
+                              {formatDate(ItemData.created_on)}
+                            </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>{ItemData.category}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>{ItemData.item_name}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>${priceFormate(ItemData.price)}</p>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))
+                    : ""}
                 </TableBody>
               </StyledTable>
-              {!allNewItemData.length  && <><NoDataFound /> </>}
+              {!allNewItemData.length && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>
