@@ -784,6 +784,23 @@ const menuItems = [
       //   text: "Discount Per Sales Person",
       //   link: "/store-reporting/discount-per-sales-report",
       // },
+      ,
+      {
+        id: 6,
+        text: "New Reports",
+        dropDownItems: [
+          {
+            id: 96,
+            text: "Drop Cash",
+            link: "/store-reporting/drop-cash-report",
+          },
+          {
+            id: 97,
+            text: "Pay In",
+            link: "/store-reporting/pay-in-report",
+          },
+        ],
+      },
     ],
   },
   {
