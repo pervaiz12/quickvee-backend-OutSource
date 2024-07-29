@@ -1,6 +1,7 @@
 import React, { useEffect, lazy, Suspense } from "react";
 import DropCashMain from "../Reporting/DropCash/DropCashMain";
 import PayInMain from "../Reporting/PayIn/PayInMain";
+import MainEmployeeSalesPerCategory from "../Reporting/EmployeeSalesPerCategory/MainEmployeeSalesPerCategory";
 
 const DashboardMain = lazy(() => import("../Dashboard/DashboardMain"));
 const MainOrder = lazy(() => import("./../Orders/MainOrder"));
@@ -320,6 +321,8 @@ const LeftSide = ({ visible }) => {
         return <Brands />;
       case "tags":
         return <Tags />;
+      case "employee-sales-per-category-report":
+        return <MainEmployeeSalesPerCategory />;
       default:
         return <DashboardMain />;
     }
