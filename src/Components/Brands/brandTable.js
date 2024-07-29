@@ -53,7 +53,7 @@ export default function BrandTable(props) {
       {props.skeletonLoader === "" || props.skeletonLoader === true ? (
         <SkeletonTable columns={props?.rowSkelton} />
       ) : (
-        <TableContainer component={Paper}>
+        <TableContainer>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
               <TableRow>
