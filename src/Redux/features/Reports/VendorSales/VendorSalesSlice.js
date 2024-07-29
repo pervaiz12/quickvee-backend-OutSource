@@ -5,6 +5,7 @@ import { useAuthDetails } from "../../../../Common/cookiesHelper";
 const initialState = {
   loading: false,
   VendorSalesData: [],
+  status:false,
   successMessage: "",
   error: "",
 };
@@ -27,11 +28,18 @@ export const fetchVendorSalesData = createAsyncThunk(
           },
         }
       );
-      // console.log(response)
+      console.log(response)
       if (response.data.status === true) {
         // console.log(response.data.data_list
         //     )
-        return response.data.data_list;
+        const arr = response.data.data_list;
+        const status = response.data.status;
+        return {arr,status};
+      }
+      else if (response.data.status ===false ){
+        const arr = {};
+        const status = false;
+        return {arr,status};
       }
     } catch (error) {
       throw new Error(error.response.data.message);
@@ -48,7 +56,8 @@ const VendorSalesSlice = createSlice({
     });
     builder.addCase(fetchVendorSalesData.fulfilled, (state, action) => {
       state.loading = false;
-      state.VendorSalesData = action.payload;
+      state.VendorSalesData = action.payload.arr;
+      state.status= action.payload.status;
       state.error = "";
     });
     builder.addCase(fetchVendorSalesData.rejected, (state, action) => {

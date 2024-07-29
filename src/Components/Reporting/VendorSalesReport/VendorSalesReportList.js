@@ -125,7 +125,8 @@ const VendorSalesReportList = (props) => {
   };
   return (
     <>
-      {AllVendorDataState.loading ? (
+      {AllVendorDataState.loading ||
+      (AllVendorDataState.status && !Object.keys(allVendorData).length) ? (
         <Grid container className="box_shadow_div">
           <Grid item xs={12}>
             <div className="q-attributes-bottom-header bg-[#ffffff] ">
@@ -228,7 +229,6 @@ const VendorSalesReportList = (props) => {
                                 </StyledTableRow>
                               ))}
                               <StyledTableRow className="trBG_Color">
-                               
                                 <StyledTableCell> </StyledTableCell>
                                 <StyledTableCell align="right">
                                   <p className="totalReport">Total</p>
@@ -256,10 +256,9 @@ const VendorSalesReportList = (props) => {
               )}
             </>
           ) : (
-            <Grid sx={{mt:3.5}}>
-                <NoDataFound />
+            <Grid sx={{ mt: 3.5 }}>
+              <NoDataFound />
             </Grid>
-          
           )}
         </>
       )}

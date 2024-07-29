@@ -325,7 +325,7 @@ const Employeedetails = (props) => {
         )}
       </div>
       <Grid sx={{mt:3.5}}>
-      {!Object.keys(allEmpWorkingHrsData).length && <NoDataFound />}
+      {!Object.keys(allEmpWorkingHrsData).length && !AllEmpWorkingHrsDataState.loading && <NoDataFound />}
       </Grid> 
       
     </>

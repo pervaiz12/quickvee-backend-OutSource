@@ -20,6 +20,7 @@ import PasswordShow from "../../../Common/passwordShow";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 // import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -65,9 +66,11 @@ const DetailsSaleReport = ({ data }) => {
   const [order, setOrder] = useState("DESC");
   const [sorting_type, setSorting_type] = useState("categoryTotal");
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
+
   const detailCategorySaleDataState = useSelector(
     (state) => state.detailCategorySale
   );
+  console.log(detailCategorySaleDataState);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
     getDetailedCategorySalesData();
@@ -75,7 +78,6 @@ const DetailsSaleReport = ({ data }) => {
   const getDetailedCategorySalesData = async () => {
     try {
       if (!merchant_id) {
-        console.log("empty");
       } else {
         let NewData = {
           ...data,
@@ -163,13 +165,12 @@ const DetailsSaleReport = ({ data }) => {
     setdetailCategorySale(updatedCategorySale);
     setSortOrder(newOrder);
   };
-  console.log(
-    "Object.entries(detailCategorySale)",
-    Object.entries(detailCategorySale)
-  );
+
   return (
     <>
-      {detailCategorySaleDataState.loading ? (
+      {detailCategorySaleDataState.loading ||
+      (detailCategorySaleDataState.status &&
+        !Object.entries(detailCategorySale).length) ? (
         <>
           <Grid container className="box_shadow_div">
             <Grid item xs={12}>
@@ -260,24 +261,24 @@ const DetailsSaleReport = ({ data }) => {
                         </StyledTableCell>
                         <StyledTableCell>
                           <p className="totalReport">
-                          {items.reduce(
-                            (acc, item) => acc + parseInt(item.pro_qty) || 0,
-                            0
-                          )}
+                            {items.reduce(
+                              (acc, item) => acc + parseInt(item.pro_qty) || 0,
+                              0
+                            )}
                           </p>
                         </StyledTableCell>
                         <StyledTableCell>
-                        <p className="totalReport">
-                          $
-                          {priceFormate(
-                            items
-                              .reduce(
-                                (acc, item) =>
-                                  acc + parseFloat(item.product_total),
-                                0
-                              )
-                              .toFixed(2)
-                          )}
+                          <p className="totalReport">
+                            $
+                            {priceFormate(
+                              items
+                                .reduce(
+                                  (acc, item) =>
+                                    acc + parseFloat(item.product_total),
+                                  0
+                                )
+                                .toFixed(2)
+                            )}
                           </p>
                         </StyledTableCell>
                       </StyledTableRow>
@@ -289,40 +290,46 @@ const DetailsSaleReport = ({ data }) => {
           </>
         ))
       ) : (
-        <Grid className="box_shadow_div" sx={{ p: 2.5 }}>
-          {/* <NoDataFound /> */}
-          <p>No Data Found</p>
+        <Grid sx={{ mt: 3.5 }}>
+          <NoDataFound />
         </Grid>
       )}
-      {Object.entries(detailCategorySale).length > 0 && (
-        <Grid container sx={{ marginY: 2.5 }} className="box_shadow_div">
-          <Grid item xs={12}>
-            <TableContainer>
-              <StyledTable>
-                <TableBody>
-                  <StyledTableRow className="trBG_Color">
-                    <StyledTableCell sx={{ width: "55%" }}>
-                      <div className="q-category-bottom-report-listing">
-                        <div>
-                          <p className="totalReport">Grand Total</p>
+      {Object.entries(detailCategorySale).length > 0 &&
+        !detailCategorySaleDataState.loading && (
+          <Grid container sx={{ marginY: 2.5 }} className="box_shadow_div">
+            <Grid item xs={12}>
+              <TableContainer>
+                <StyledTable>
+                  <TableBody>
+                    <StyledTableRow className="trBG_Color">
+                      <StyledTableCell sx={{ width: "55%" }}>
+                        <div className="q-category-bottom-report-listing">
+                          <div>
+                            <p className="totalReport">Grand Total</p>
+                          </div>
                         </div>
-                      </div>
-                    </StyledTableCell>
+                      </StyledTableCell>
 
-                    <StyledTableCell sx={{ width: "23%" }}><p className="q-category-bottom-report-listing totalReport">{grandTotalProductQty}</p></StyledTableCell>
+                      <StyledTableCell sx={{ width: "23%" }}>
+                        <p className="q-category-bottom-report-listing totalReport">
+                          {grandTotalProductQty}
+                        </p>
+                      </StyledTableCell>
 
-                    <StyledTableCell>
-                      <div className="q-category-bottom-report-listing">
-                        <div className="totalReport">${priceFormate(grandTotal.toFixed(2))}</div>
-                      </div>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                </TableBody>
-              </StyledTable>
-            </TableContainer>
+                      <StyledTableCell>
+                        <div className="q-category-bottom-report-listing">
+                          <div className="totalReport">
+                            ${priceFormate(grandTotal.toFixed(2))}
+                          </div>
+                        </div>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  </TableBody>
+                </StyledTable>
+              </TableContainer>
+            </Grid>
           </Grid>
-        </Grid>
-      )}
+        )}
     </>
   );
 };

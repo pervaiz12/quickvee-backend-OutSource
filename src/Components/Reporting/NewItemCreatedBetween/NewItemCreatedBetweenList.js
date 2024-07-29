@@ -57,6 +57,7 @@ const NewItemCreatedBetweenList = (props) => {
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
   const [allNewItemData, setallNewItemData] = useState([]);
+  const [apiStatus, setAPIStatus] = useState(false);
   const AllNewItemDataState = useSelector(
     (state) => state.NewItemCreatedBtnList
   );
@@ -79,7 +80,7 @@ const NewItemCreatedBetweenList = (props) => {
         }
       }
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
+      if (error?.status == 401 || error?.response?.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -89,16 +90,17 @@ const NewItemCreatedBetweenList = (props) => {
   };
 
   useEffect(() => {
-    if (!AllNewItemDataState.loading && AllNewItemDataState.NewItemData) {
-      setallNewItemData(AllNewItemDataState.NewItemData);
+    if (
+      !AllNewItemDataState.loading &&
+      AllNewItemDataState?.NewItemData &&
+      AllNewItemDataState?.NewItemData?.report_data
+    ) {
+      setallNewItemData(AllNewItemDataState?.NewItemData?.report_data);
+      setAPIStatus(AllNewItemDataState.NewItemData.status);
     } else {
-      setallNewItemData("");
+      setallNewItemData([]);
     }
-  }, [
-    AllNewItemDataState,
-    AllNewItemDataState.loading,
-    AllNewItemDataState.NewItemData,
-  ]);
+  }, [AllNewItemDataState, AllNewItemDataState.NewItemData]);
 
   const formatDate = (dateString) => {
     const [day, month, year] = dateString.split("-");
@@ -128,35 +130,30 @@ const NewItemCreatedBetweenList = (props) => {
       const dateString = item.created_on;
       const [day, month, year] = dateString.split("-").map(Number);
       const date = `${year},${month},${day}`;
-      console.log("date in map ", date);
       return { ...item, created_on: date };
     });
-    console.log("itemsWithParsedDates", itemsWithParsedDates);
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
       itemsWithParsedDates,
       type,
       name,
       sortOrder
     );
-    console.log("sortOrder", sortedItems);
     setallNewItemData(
       sortedItems.map((item) => {
         const dateString = item.created_on;
-        console.log("item", dateString);
         const [year, month, day] = dateString.split(",").map(Number);
         const customdate = `${day}-${month}-${year}`;
-        console.log("date in map ", customdate);
         return { ...item, created_on: customdate };
       })
     );
     setSortOrder(newOrder);
   };
-
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          {AllNewItemDataState.loading ? (
+          {AllNewItemDataState.loading ||
+          (apiStatus && !allNewItemData.length) ? (
             <SkeletonTable
               columns={["Date", "Category", "Item Name", "Price"]}
             />
@@ -202,31 +199,29 @@ const NewItemCreatedBetweenList = (props) => {
                   </StyledTableCell>
                 </TableHead>
                 <TableBody>
-                  {allNewItemData && allNewItemData.length >= 1 ? (
-                    allNewItemData.map((ItemData, index) => (
-                      <StyledTableRow key={index}>
-                        <StyledTableCell>
-                          <p className="whitespace-nowrap">
-                            {formatDate(ItemData.created_on)}
-                          </p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>{ItemData.category}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>{ItemData.item_name}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>${priceFormate(ItemData.price)}</p>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))
-                  ) : (
-                    ""
-                  )}
+                  {allNewItemData && allNewItemData.length >= 1
+                    ? allNewItemData.map((ItemData, index) => (
+                        <StyledTableRow key={index}>
+                          <StyledTableCell>
+                            <p className="whitespace-nowrap">
+                              {formatDate(ItemData.created_on)}
+                            </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>{ItemData.category}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>{ItemData.item_name}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>${priceFormate(ItemData.price)}</p>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))
+                    : ""}
                 </TableBody>
               </StyledTable>
-              {!allNewItemData.length  && <NoDataFound />}
+              {!allNewItemData.length && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>
