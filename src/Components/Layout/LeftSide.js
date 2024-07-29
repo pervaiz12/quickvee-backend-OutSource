@@ -11,58 +11,135 @@ const MainVendors = lazy(() => import("../Vendors/MainVendors"));
 const MainTimesheet = lazy(() => import("../Timesheet/MainTimesheet"));
 const MainImportData = lazy(() => import("../ImportData/MainImportData"));
 const MainProducts = lazy(() => import("../Products/MainProducts"));
-const MainStoreOption = lazy(() => import("../StoreSetting/StoreOption/MainStoreOption"));
+const MainStoreOption = lazy(
+  () => import("../StoreSetting/StoreOption/MainStoreOption")
+);
 const EditCategory = lazy(() => import("../Category/EditCategory"));
 const TopTenders = lazy(() => import("../Dashboard/TopTenders"));
 const Info = lazy(() => import("../StoreSetting/Info"));
 const Setup = lazy(() => import("../StoreSetting/MainSetup/Setup"));
-const MainStoreAlters = lazy(() => import("../StoreSetting/StoreAlters/MainStoreAlters"));
+const MainStoreAlters = lazy(
+  () => import("../StoreSetting/StoreAlters/MainStoreAlters")
+);
 const MainTaxes = lazy(() => import("../StoreSetting/Taxes/MainTaxes"));
-const MainInventory = lazy(() => import("../StoreSetting/Inventory/MainInventory"));
-const MainResigtersetting = lazy(() => import("../StoreSetting/ResigterSetting/MainResigtersetting"));
-const MainSyastemAccess = lazy(() => import("../StoreSetting/SystemAccess/MainSystemAccess"));
-const DailyTtlReport = lazy(() => import("../Reporting/DailyReport/DailyTtlReport"));
-const MainCatedetails = lazy(() => import("../Reporting/CategoryDetails/MainCatedetails"));
-const MainSalesPerson = lazy(() => import("../Reporting/SalesByPerson/MainSalesPerson"));
-const CheckIDVerifyMain = lazy(() => import("../Reporting/CheckIDVerify/CheckIDVerifyMain"));
-const InstantActvity = lazy(() => import("../Reporting/InstantPo/InstantActvity"));
-const TopSallerReport = lazy(() => import("../Reporting/TopSaller/TopSallerReport"));
-const EmployeeWorking = lazy(() => import("../Reporting/EmployeeWorkingHours/EmployeeWorking"));
-const MainSiftSummary = lazy(() => import("../Reporting/SiftSummary/MainSiftSummary"));
-const PaymentMethodReport = lazy(() => import("../Reporting/PaymentMehodDetail/PaymentMethodReport"));
+const MainInventory = lazy(
+  () => import("../StoreSetting/Inventory/MainInventory")
+);
+const MainResigtersetting = lazy(
+  () => import("../StoreSetting/ResigterSetting/MainResigtersetting")
+);
+const MainSyastemAccess = lazy(
+  () => import("../StoreSetting/SystemAccess/MainSystemAccess")
+);
+const DailyTtlReport = lazy(
+  () => import("../Reporting/DailyReport/DailyTtlReport")
+);
+const MainCatedetails = lazy(
+  () => import("../Reporting/CategoryDetails/MainCatedetails")
+);
+const MainSalesPerson = lazy(
+  () => import("../Reporting/SalesByPerson/MainSalesPerson")
+);
+const CheckIDVerifyMain = lazy(
+  () => import("../Reporting/CheckIDVerify/CheckIDVerifyMain")
+);
+const InstantActvity = lazy(
+  () => import("../Reporting/InstantPo/InstantActvity")
+);
+const TopSallerReport = lazy(
+  () => import("../Reporting/TopSaller/TopSallerReport")
+);
+const EmployeeWorking = lazy(
+  () => import("../Reporting/EmployeeWorkingHours/EmployeeWorking")
+);
+const MainSiftSummary = lazy(
+  () => import("../Reporting/SiftSummary/MainSiftSummary")
+);
+const PaymentMethodReport = lazy(
+  () => import("../Reporting/PaymentMehodDetail/PaymentMethodReport")
+);
 const MainItem = lazy(() => import("../Reporting/ItemType/MainItem"));
-const MainTaxesReport = lazy(() => import("../Reporting/Taxes/MainTaxesReport"));
-const CurrentInventoryValue = lazy(() => import("../Reporting/CurrentInventoryValue/CurrentInventoryValue"));
-const MainAddEmployee = lazy(() => import("../StoreSetting/AddEmployee/MainAddEmployee"));
-const ReceiptMainpage = lazy(() => import("../StoreSetting/Receipt/ReceiptMainpage"));
-const MainItemSales = lazy(() => import("../Reporting/ItemSales/MainItemSales"));
-const NewItemCreatedBetweenMain = lazy(() => import("../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain"));
+const MainTaxesReport = lazy(
+  () => import("../Reporting/Taxes/MainTaxesReport")
+);
+const CurrentInventoryValue = lazy(
+  () => import("../Reporting/CurrentInventoryValue/CurrentInventoryValue")
+);
+const MainAddEmployee = lazy(
+  () => import("../StoreSetting/AddEmployee/MainAddEmployee")
+);
+const ReceiptMainpage = lazy(
+  () => import("../StoreSetting/Receipt/ReceiptMainpage")
+);
+const MainItemSales = lazy(
+  () => import("../Reporting/ItemSales/MainItemSales")
+);
+const NewItemCreatedBetweenMain = lazy(
+  () => import("../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain")
+);
 const Permission = lazy(() => import("../StoreSetting/AddEmployee/Permission"));
-const OrderSummaryDetails = lazy(() => import("../Reporting/SalesByPerson/MainOrderSumaaryDetails/OrderSummaryDetails"));
-const VendorListMain = lazy(() => import("../Reporting/VendorList/VendorListMain"));
-const VendorSalesReportMain = lazy(() => import("../Reporting/VendorSalesReport/VendorSalesReportMain"));
-const OrderRefundReportMain = lazy(() => import("../Reporting/OrderRefundReport/OrderRefundReportMain"));
-const ReorderInventoryMain = lazy(() => import("../Reporting/ReorderInventory/ReorderInventoryMain"));
+const OrderSummaryDetails = lazy(
+  () =>
+    import(
+      "../Reporting/SalesByPerson/MainOrderSumaaryDetails/OrderSummaryDetails"
+    )
+);
+const VendorListMain = lazy(
+  () => import("../Reporting/VendorList/VendorListMain")
+);
+const VendorSalesReportMain = lazy(
+  () => import("../Reporting/VendorSalesReport/VendorSalesReportMain")
+);
+const OrderRefundReportMain = lazy(
+  () => import("../Reporting/OrderRefundReport/OrderRefundReportMain")
+);
+const ReorderInventoryMain = lazy(
+  () => import("../Reporting/ReorderInventory/ReorderInventoryMain")
+);
 const EditVendors = lazy(() => import("../Vendors/EditVendors"));
-const SingleVendorsDetail = lazy(() => import("../Vendors/SingleVendorsDetail"));
+const SingleVendorsDetail = lazy(
+  () => import("../Vendors/SingleVendorsDetail")
+);
 const AddProducts = lazy(() => import("../Products/AddProducts"));
 const MainLoayalty = lazy(() => import("../LoyaltyProgram/MainLoayalty"));
-const MainEmployeelist = lazy(() => import("../Reporting/Employelist/MainEmployeelist"));
+const MainEmployeelist = lazy(
+  () => import("../Reporting/Employelist/MainEmployeelist")
+);
 const AddPo = lazy(() => import("../PurchaseOrders/AddPo"));
 const EditCoupon = lazy(() => import("../Coupons/EditCoupon"));
 const StorePage = lazy(() => import("../Store/MerchantStore"));
 const ManagerStore = lazy(() => import("../Store/ManagerStore"));
 const ProductSalesReport = lazy(() => import("../Products/ProductSalesReport"));
-const TipReportMain = lazy(() => import("../Reporting/TipReport/TipReportMain"));
-const CouponReportMain = lazy(() => import("../Reporting/CouponReport/CouponReportMain"));
-const SalesReportMain = lazy(() => import("../Reporting/SalesReport/SalesReportMain"));
-const Discount_Per_Sales = lazy(() => import("../Reporting/Discount_Per_Sales/discount_per_sales"));
-const Items_sales_profit_record = lazy(() => import("../Reporting/itemSalesProfitRecord/items_sales_profit_record"));
-const RefundSummary = lazy(() => import("../Reporting/RefundSummary/RefundSummary"));
-const ReceivePurchaseOrderItems = lazy(() => import("../PurchaseOrders/ReceivePurchaseOrderItems"));
-const ModifyPurchaseOrder = lazy(() => import("../PurchaseOrders/ModifyPurchaseOrder"));
-const InventoryList = lazy(() => import("../Reporting/inventoryList/inventoryList"));
-const ProfitMarginReport = lazy(() => import("../Reporting/ProfitMarginReport/profitMarginReport"));
+const TipReportMain = lazy(
+  () => import("../Reporting/TipReport/TipReportMain")
+);
+const CouponReportMain = lazy(
+  () => import("../Reporting/CouponReport/CouponReportMain")
+);
+const SalesReportMain = lazy(
+  () => import("../Reporting/SalesReport/SalesReportMain")
+);
+const Discount_Per_Sales = lazy(
+  () => import("../Reporting/Discount_Per_Sales/discount_per_sales")
+);
+const Items_sales_profit_record = lazy(
+  () => import("../Reporting/itemSalesProfitRecord/items_sales_profit_record")
+);
+const RefundSummary = lazy(
+  () => import("../Reporting/RefundSummary/RefundSummary")
+);
+const ReceivePurchaseOrderItems = lazy(
+  () => import("../PurchaseOrders/ReceivePurchaseOrderItems")
+);
+const ModifyPurchaseOrder = lazy(
+  () => import("../PurchaseOrders/ModifyPurchaseOrder")
+);
+const InventoryList = lazy(
+  () => import("../Reporting/inventoryList/inventoryList")
+);
+const ProfitMarginReport = lazy(
+  () => import("../Reporting/ProfitMarginReport/profitMarginReport")
+);
 const MainStocktake = lazy(() => import("../Stocktake/MainStocktake"));
 const AddNewStocktake = lazy(() => import("../Stocktake/AddNewStocktake"));
 const StocktakeList = lazy(() => import("../Stocktake/StocktakeList"));
@@ -71,7 +148,12 @@ const AddCategory = lazy(() => import("../Category/AddCategory"));
 const AddCoupon = lazy(() => import("../Coupons/AddCoupon"));
 const AddVendors = lazy(() => import("../Vendors/AddVendors"));
 const NeedHelp = lazy(() => import("../NeedHelp/NeedHelp"));
-const MainDigitalMarketing = lazy(() => import("../StoreSetting/DigitalMarketing/MainDigitalMarketing"));
+const Brands = lazy(() => import("../Brands/MainBrand"));
+const Tags = lazy(() => import("../Tags/MainTags"));
+
+const MainDigitalMarketing = lazy(
+  () => import("../StoreSetting/DigitalMarketing/MainDigitalMarketing")
+);
 
 const LeftSide = ({ visible }) => {
   useEffect(() => {
@@ -228,16 +310,16 @@ const LeftSide = ({ visible }) => {
         return <CouponReportMain />;
       case "sales-report":
         return <SalesReportMain />;
+      case "brands":
+        return <Brands />;
+      case "tags":
+        return <Tags />;
       default:
         return <DashboardMain />;
     }
   };
 
-  return (
-    <Suspense fallback={<div></div>}>
-      {renderComponent()}
-    </Suspense>
-  );
+  return <Suspense fallback={<div></div>}>{renderComponent()}</Suspense>;
 };
 
 export default LeftSide;

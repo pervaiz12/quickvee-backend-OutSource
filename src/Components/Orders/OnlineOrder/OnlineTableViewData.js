@@ -127,6 +127,7 @@ const OnlineTableViewData = (props) => {
     debouncedValue, //
     currentPage, //
     rowsPerPage, //
+    props?.OrderTypeData,
     // AllInStoreDataState.OrderListCount,
   ]);
 
@@ -162,7 +163,7 @@ const OnlineTableViewData = (props) => {
     props.selectedDateRange?.end_date,
     debouncedValue,
     props.order_method,
-    // props.OrderTypeData,
+    props.OrderTypeData,
     // props.OrderSourceData,
     // AllInStoreDataState.OrderListCount,
     // AllInStoreDataState.onlineStoreOrderData,

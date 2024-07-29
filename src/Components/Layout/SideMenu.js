@@ -73,7 +73,6 @@ import Support1 from "../../Assests/Category/Support-1.svg";
 import OrderRetrieve from "../../Assests/OrderRetireve/Order_retrive.svg";
 import OrderRetrievey from "../../Assests/OrderRetireve/Order_retrivey.svg";
 
-
 const SideMenu = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -846,6 +845,36 @@ const menuItems = [
         ),
         text: "Attributes",
         link: "/attributes",
+      },
+      {
+        id: 95,
+        icon: (
+          <img
+            src={AttributesIcon}
+            alt="brand"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img src={AtriIcon} alt="atributes" className="h-6 w-10 mt-4 mb-4" />
+        ),
+        text: "Brand",
+        link: "/brands",
+      },
+      {
+        id: 3,
+        icon: (
+          <img
+            src={AttributesIcon}
+            alt="Tag"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img src={AtriIcon} alt="atributes" className="h-6 w-10 mt-4 mb-4" />
+        ),
+        text: "Tag",
+        link: "/tags",
       },
     ],
   },

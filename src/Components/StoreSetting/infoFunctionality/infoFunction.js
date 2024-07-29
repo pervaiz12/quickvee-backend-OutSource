@@ -233,6 +233,7 @@ export default function InfoFunction() {
     imageErrors: "",
     bannerErrors: "",
     qrCodeError: "",
+    qrReciptError: "",
     address_1Error: "",
     cityError: "",
     zipCodeError: "",
@@ -703,9 +704,12 @@ export default function InfoFunction() {
                   prevState.image === selectedFile.name ? "0" : "1",
               }));
             };
+            errorMessage.imageErrors = "";
             reader.readAsDataURL(selectedFile);
             setImageBoolean(true);
           } else {
+            // setErrors((prev) => ({ ...prev, imageErrors: "Invalid image" }));
+            errorMessage.imageErrors = "Invalid image";
             setInfoRecord((prevState) => ({
               ...prevState,
               image: "", // Set qrCode to an empty string
@@ -716,8 +720,10 @@ export default function InfoFunction() {
             );
             e.target.value = null;
           }
+        } else {
+          errorMessage.imageErrors = "";
         }
-        errorMessage.imageErrors = "";
+        // console.log("jdjjdjd");
       }
     }
     if (name == "banners") {
@@ -774,12 +780,13 @@ export default function InfoFunction() {
                 prevState.qrCode === selectedFile.name ? "0" : "1",
             }));
           };
-
+          errorMessage.qrCodeError = "";
           reader.readAsDataURL(selectedFile);
           setQrCodeBoolean(true);
           // }
           // errorMessage.qrCodeError = "";
         } else {
+          errorMessage.qrCodeError = "Invalid image";
           setInfoRecord((prevState) => ({
             ...prevState,
             qrCode: "",
@@ -790,6 +797,8 @@ export default function InfoFunction() {
           );
           e.target.value = null;
         }
+      } else {
+        errorMessage.qrCodeError = "";
       }
     }
     if (name === "receieptLogo") {
@@ -811,12 +820,13 @@ export default function InfoFunction() {
                 prevState.receieptLogo === selectedFile.name ? "0" : "1",
             }));
           };
-
+          errorMessage.qrReciptError = "";
           reader.readAsDataURL(selectedFile);
           setReceieptLogoBool(true);
           // }
           // errorMessage.receieptLogoError = "";
         } else {
+          errorMessage.qrReciptError = "Invalid image";
           setInfoRecord((prevState) => ({
             ...prevState,
             receieptLogo: "",
@@ -827,6 +837,8 @@ export default function InfoFunction() {
           );
           e.target.value = null;
         }
+      } else {
+        errorMessage.qrReciptError = "";
       }
     }
     if (name == "phone") {
@@ -929,7 +941,9 @@ export default function InfoFunction() {
       error.phoneError == "" &&
       error.address_1Error == "" &&
       error.cityError == "" &&
-      error.zipCodeError == ""
+      error.zipCodeError == "" &&
+      error.qrReciptError == "" &&
+      error.qrCodeError == ""
     ) {
       return true;
     } else {

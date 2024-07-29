@@ -125,7 +125,6 @@ const Info = () => {
               ) : (
                 "Update"
               )}
-
             </button>
           </Grid>
         </Grid>

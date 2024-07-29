@@ -117,7 +117,6 @@ export default function DashboardFunctionality() {
     //   await getDashboardCountRecord();
     // };
     const source = axios.CancelToken.source();
-    
     const fetchData = async () => {
       try {
         await Promise.all([
@@ -134,6 +133,7 @@ export default function DashboardFunctionality() {
       clearInterval(interval);
       source.cancel("Operation canceled due to merchant_id change.");
     };
+    // return () => clearInterval(interval);
   }, [merchant_id]);
   return {
     dashboardCount,
