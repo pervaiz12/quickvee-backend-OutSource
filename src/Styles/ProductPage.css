@@ -919,3 +919,15 @@
   cursor: pointer;
   border-radius: 2px;
 }
+
+.max-item-error {
+  color: red;
+  font-size: 14px;
+  font-family: CircularSTDMedium !important;
+}
+
+.create-item-text {
+  color: #000;
+  font-size: 16px;
+  font-family: CircularSTDMedium !important;
+}

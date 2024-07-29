@@ -28,9 +28,16 @@ const CreatableDropdown = ({
   const handleFilterOptions = (e) => {
     let { value } = e.target;
     value = value.replace(/,/g, "");
-    setFilterValue(value);
+
+    if (!value) {
+      setFilterValue("");
+      setFilterOptions([]);
+      return;
+    }
+
+    setFilterValue(value ? value : "");
     const filterList = optionList?.filter((item) => {
-      return item?.[name]?.toLowerCase().includes(value?.toLowerCase());
+      return item?.[name]?.toLowerCase().includes(value?.trim()?.toLowerCase());
     });
     setFilterOptions(filterList?.length ? filterList : [`Create "${value}"`]);
   };
@@ -45,21 +52,27 @@ const CreatableDropdown = ({
   };
 
   const pressEnter = (e) => {
-    if (e?.key === "Enter" || e.type === "click") {
+    if (!filterValue.trim()) {
+      setFilterValue("");
+      return;
+    } else if (
+      (e?.key === "Enter" || e.type === "click") &&
+      filterValue.trim()
+    ) {
       if (selectedOption?.length < 15) {
-        onEnter(filterValue, keyName);
+        onEnter(filterValue.trim(), keyName);
         setFilterValue("");
         setFilterOptions(optionList);
       } else {
         setFilterValue("");
-        setFilterOptions(["cannot select more than 15 items."]);
+        setFilterOptions(["Reached maximum limit."]);
         return;
       }
     }
   };
 
   useEffect(() => {
-    if (filterValue) {
+    if (!!filterValue) {
       document.addEventListener("keypress", pressEnter);
       return () => {
         document.removeEventListener("keypress", pressEnter);
@@ -197,8 +210,23 @@ const CreatableDropdown = ({
               ? changeFilterableList()?.map((opt) => {
                   if (typeof opt === "string") {
                     return (
-                      <span className="create-item-box" onClick={pressEnter}>
-                        {opt}
+                      <span
+                        className={`${
+                          opt?.includes("limit".toLowerCase())
+                            ? ""
+                            : "create-item-box"
+                        }`}
+                        onClick={pressEnter}
+                      >
+                        <span
+                          className={`${
+                            opt?.includes("limit".toLowerCase())
+                              ? "max-item-error"
+                              : "create-item-text"
+                          }`}
+                        >
+                          {opt}
+                        </span>
                       </span>
                     );
                   } else if (opt?.id && opt?.[name]) {

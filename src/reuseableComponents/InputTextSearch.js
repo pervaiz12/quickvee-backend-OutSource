@@ -12,10 +12,9 @@ const InputTextSearch = ({
   handleSearchButton,
   handlefocus,
 }) => {
-  const { loading } = useSelector((state) => state.productsListData);
   return (
     <>
-      <FormControl fullWidth disabled={loading}>
+      <FormControl fullWidth>
         <OutlinedInput
           size="small"
           placeholder={placeholder}
