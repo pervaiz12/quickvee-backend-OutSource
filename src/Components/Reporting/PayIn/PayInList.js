@@ -106,7 +106,7 @@ const PayInList = (props) => {
       settotal(
         PayInReportDataState?.PayinReportData?.length > 0
           ? PayInReportDataState?.PayinReportData?.reduce(
-              (total, report) => total + parseFloat(report.actual_amt ?? 0),
+              (total, report) => total + parseFloat(report.amount ?? 0),
               0
             )
           : 0
@@ -127,7 +127,7 @@ const PayInList = (props) => {
   };
   const tableRow = [
     { type: "date", name: "created_at", label: "Transaction Date" },
-    { type: "num", name: "actual_amt", label: "Amount" },
+    { type: "num", name: "amount", label: "Amount" },
   ];
 
 
@@ -180,7 +180,7 @@ const PayInList = (props) => {
                         </StyledTableCell>
                         <StyledTableCell>
                           <p className="report-title">
-                            ${priceFormate(parseFloat( data.actual_amt ?? 0 ).toFixed(2))}
+                            ${priceFormate(parseFloat( data.amount ?? 0 ).toFixed(2))}
                           </p>
                         </StyledTableCell>
                       </StyledTableRow>
