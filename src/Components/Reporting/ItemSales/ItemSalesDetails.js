@@ -54,7 +54,8 @@ const ItemSalesDetails = (props) => {
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
   const [sortOrder, setSortOrder] = useState("asc");
-  const [allItemSalesData, setallItemSalesData] = useState("");
+  const [allItemSalesData, setallItemSalesData] = useState([]);
+  const [apiStatus, setapiStatus] = useState(false);
   const AllItemSalesDataState = useSelector(
     (state) => state.ItemSalesReportList
   );
@@ -95,8 +96,12 @@ const ItemSalesDetails = (props) => {
       AllItemSalesDataState.ItemSalesData[0]
     ) {
       setallItemSalesData(AllItemSalesDataState.ItemSalesData[0]);
+      setapiStatus(AllItemSalesDataState.ItemSalesData[3]);
+
     } else {
-      setallItemSalesData("");
+      setallItemSalesData([]);
+      // setapiStatus(false);
+      !AllItemSalesDataState?.ItemSalesData && setapiStatus(false);
     }
   }, [
     AllItemSalesDataState,
@@ -124,6 +129,8 @@ const ItemSalesDetails = (props) => {
     setallItemSalesData(sortedItems);
     setSortOrder(newOrder);
   };
+  console.log(AllItemSalesDataState.ItemSalesData)
+  console.log("AllItemSalesDataState.loading",AllItemSalesDataState.loading,"apiStatus",apiStatus,"!allItemSalesData.length",!allItemSalesData.length )
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -131,7 +138,7 @@ const ItemSalesDetails = (props) => {
           <div className="q-attributes-bottom-header">
             <span>Item Sales Report</span>
           </div>
-          {AllItemSalesDataState.loading ? (
+          {AllItemSalesDataState.loading || apiStatus && !allItemSalesData.length ? (
             <SkeletonTable columns={tableRow.map((item) => item.label)} />
           ) : (
             <TableContainer>

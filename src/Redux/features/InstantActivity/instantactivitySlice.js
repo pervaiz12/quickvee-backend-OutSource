@@ -5,6 +5,7 @@ import { BASE_URL, INSTANT_ACTIVITY_REPORT } from "../../../Constants/Config";
 const initialState = {
   loading: false,
   instantactivityData: [],
+  status:false,
   successMessage: "",
   error: "",
 };
@@ -27,12 +28,17 @@ export const fetchinstantactivityData = createAsyncThunk(
         }
       );
       if (response.data.status === "Success") {
-        return response.data.result;
+        // console.log(response.data)
+        const arr = response.data.result;
+        const status = response.data.status === "Success" ? true : false;
+        return {arr, status};
       } else if (
         response.data.status === "Failed" &&
         response.data.msg === "No. Data found."
       ) {
-        return response.data;
+        const arr = [];
+        const status =false;
+        return {arr,status};
       }
     } catch (error) {
       const customError = {
@@ -55,7 +61,8 @@ const instantactivitySlice = createSlice({
     });
     builder.addCase(fetchinstantactivityData.fulfilled, (state, action) => {
       state.loading = false;
-      state.instantactivityData = action.payload;
+      state.instantactivityData = action.payload.arr;
+      state.status= action.payload.status;
       state.error = "";
     });
     builder.addCase(fetchinstantactivityData.rejected, (state, action) => {

@@ -87,7 +87,9 @@ const OrderRefundReportList = (props) => {
         }
       }
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
+      if (error?.status == 401 
+        // || error.response.status === 401
+      ) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -105,7 +107,6 @@ const OrderRefundReportList = (props) => {
     }
   }, [
     AllOrderRefundData,
-    AllOrderRefundData.loading,
     AllOrderRefundData.OrderRefundData,
   ]);
 
@@ -163,7 +164,7 @@ const OrderRefundReportList = (props) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          {AllOrderRefundData.loading ? (
+          {AllOrderRefundData.loading || AllOrderRefundData.status && !allOrderData.length ? (
             <SkeletonTable columns={tableRow.map((item) => item.label)} />
           ) : (
             <>

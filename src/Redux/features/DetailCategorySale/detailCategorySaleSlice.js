@@ -9,6 +9,7 @@ const initialState = {
   loading: false,
   detailCategorySaleData: [],
   successMessage: "",
+  status:false,
   error: "",
 };
 
@@ -32,13 +33,14 @@ export const fetchdetailCategorySaleData = createAsyncThunk(
       if (response.data.status === true) {
         const categoryList = Object.keys(response.data.report_data);
         const reportData = response.data.report_data;
-        return { categoryList, reportData };
+        const status = response.data.status;
+        return { categoryList, reportData,status };
       } else if (
         response.data.status === false &&
         response.data.message === "No data found"
       ) {
         // If 'report_data' is null, return an empty array and object
-        return { categoryList: [], reportData: {} };
+        return { categoryList: [], reportData: {},status:false };
       } else {
         // Handle other error scenarios here if needed
         throw new Error(response.data.message);
@@ -68,6 +70,7 @@ const detailCategorySaleSlice = createSlice({
       state.loading = false;
       state.detailCategorySaleData = action.payload.reportData;
       state.categoryList = action.payload.categoryList;
+      state.status = action.payload.status;
       state.error = "";
     });
     builder.addCase(fetchdetailCategorySaleData.rejected, (state, action) => {

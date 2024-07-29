@@ -71,7 +71,9 @@ const RefundSummaryList = ({ data }) => {
         await dispatch(fetchRefundData(fetdata)).unwrap();
       }
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
+      if (error.status == 401
+        //  || error.response.status === 401
+        ) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -102,11 +104,10 @@ const RefundSummaryList = ({ data }) => {
       );
       setTotalRefundAmount(totalRefundAmount);
     } else {
-      setrefundData("");
+      setrefundData([]);
     }
   }, [
     RefundReportData,
-    RefundReportData.loading,
     RefundReportData.refundreportData,
   ]);
 
@@ -136,11 +137,11 @@ const RefundSummaryList = ({ data }) => {
     setrefundData(sortedItems);
     setSortOrder(newOrder);
   };
-
+  console.log("RefundReportData.loading",RefundReportData.loading)
   return (
     <>
       <Grid container className="box_shadow_div">
-        {RefundReportData.loading ? (
+        {RefundReportData.loading || RefundReportData.status && !refundata.length ? (
           <SkeletonTable columns={tableRow.map((item) => item.label)} />
         ) : (
           <TableContainer>
@@ -194,7 +195,7 @@ const RefundSummaryList = ({ data }) => {
                 ) : (
                   ""
                 )}
-                {refundata && (
+                {refundata && refundata.length >0 && (
                   <StyledTableRow className="trBG_Color">
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell></StyledTableCell>

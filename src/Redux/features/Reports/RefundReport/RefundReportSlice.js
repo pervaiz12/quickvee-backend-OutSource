@@ -5,6 +5,7 @@ import { BASE_URL, REFUND_REPORT } from "../../../../Constants/Config";
 const initialState = {
   loading: false,
   refundreportData: [],
+  status: false,
   successMessage: "",
   error: "",
 };
@@ -21,13 +22,20 @@ export const fetchRefundData = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(response.data)
       if (response.data.status === true) {
-        return response.data.report_data;
+        console.log(response.data)
+        const arr = response.data.report_data;
+        const status = response.data.status;
+        return {arr, status};
       } else if (
         response.data.status === false &&
-        response.data.msg === "No. Data found."
+        response.data.msg === "No Data Found."
       ) {
-        return response.data;
+        console.log("inside else",response.data)
+        const arr = [];
+        const status = false;
+        return {arr, status};
       }
     } catch (error) {
       // throw new Error(error.response.data.message);
@@ -50,7 +58,8 @@ const RefundReportSlice = createSlice({
     });
     builder.addCase(fetchRefundData.fulfilled, (state, action) => {
       state.loading = false;
-      state.refundreportData = action.payload;
+      state.refundreportData = action.payload.arr;
+      state.status = action.payload.status;
       state.error = "";
     });
     builder.addCase(fetchRefundData.rejected, (state, action) => {

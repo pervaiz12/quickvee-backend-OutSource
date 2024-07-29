@@ -95,8 +95,6 @@ const NewItemCreatedBetweenList = (props) => {
       AllNewItemDataState?.NewItemData &&
       AllNewItemDataState?.NewItemData?.report_data
     ) {
-      console.log(AllNewItemDataState.NewItemData.report_data);
-
       setallNewItemData(AllNewItemDataState?.NewItemData?.report_data);
       setAPIStatus(AllNewItemDataState.NewItemData.status);
     } else {
@@ -132,30 +130,24 @@ const NewItemCreatedBetweenList = (props) => {
       const dateString = item.created_on;
       const [day, month, year] = dateString.split("-").map(Number);
       const date = `${year},${month},${day}`;
-      console.log("date in map ", date);
       return { ...item, created_on: date };
     });
-    console.log("itemsWithParsedDates", itemsWithParsedDates);
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
       itemsWithParsedDates,
       type,
       name,
       sortOrder
     );
-    console.log("sortOrder", sortedItems);
     setallNewItemData(
       sortedItems.map((item) => {
         const dateString = item.created_on;
-        console.log("item", dateString);
         const [year, month, day] = dateString.split(",").map(Number);
         const customdate = `${day}-${month}-${year}`;
-        console.log("date in map ", customdate);
         return { ...item, created_on: customdate };
       })
     );
     setSortOrder(newOrder);
   };
-  console.log("AllNewItemDataState.loading ", AllNewItemDataState.loading);
   return (
     <>
       <Grid container className="box_shadow_div">
