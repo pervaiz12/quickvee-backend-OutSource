@@ -137,7 +137,7 @@ const Pagination = ({
           )}
         </>
       )}
-      {(data?.length >= 10 || (currentPage > 1 && data?.length)) && (
+      {totalItems >= 10  && (
         <ul className="flex justify-end">
           <li className={`page-item `}>
             <button
