@@ -7,7 +7,8 @@ import {
 
 const initialState = {
   loading: false,
-  NewItemData: {},
+  NewItemData: [],
+  status:false,
   successMessage: "",
   error: "",
 };
@@ -29,9 +30,15 @@ export const fetchNewItemCreatedBetweenData = createAsyncThunk(
           },
         }
       );
+       console.log(response);
       if (response.data.status === true) {
-        // console.log(response);
-        return response.data;
+        const arr = response.data
+        const status = response.data.status;
+        return {arr,status};
+      }else if (response.data.status === false) {
+        const arr = [];
+        const status = false;
+        return {arr,status};
       }
     } catch (error) {
       // throw new Error(error.response.data.message);
@@ -56,7 +63,8 @@ const NewItemCreatedBetweenSlice = createSlice({
       fetchNewItemCreatedBetweenData.fulfilled,
       (state, action) => {
         state.loading = false;
-        state.NewItemData = action.payload;
+        state.NewItemData = action.payload.arr;
+        state.status = action.payload.status;
         state.error = "";
       }
     );
