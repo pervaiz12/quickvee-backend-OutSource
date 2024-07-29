@@ -150,7 +150,10 @@ const AddVendors = lazy(() => import("../Vendors/AddVendors"));
 const NeedHelp = lazy(() => import("../NeedHelp/NeedHelp"));
 const Brands = lazy(() => import("../Brands/MainBrand"));
 const Tags = lazy(() => import("../Tags/MainTags"));
-
+const CategorySalesSummeryReport = lazy(
+  () =>
+    import("../Reporting/CategorySalesSummeryReport/categorySalesSummeryMain")
+);
 const MainDigitalMarketing = lazy(
   () => import("../StoreSetting/DigitalMarketing/MainDigitalMarketing")
 );
@@ -314,6 +317,8 @@ const LeftSide = ({ visible }) => {
         return <Brands />;
       case "tags":
         return <Tags />;
+      case "category-sales-summery-report":
+        return <CategorySalesSummeryReport />;
       default:
         return <DashboardMain />;
     }

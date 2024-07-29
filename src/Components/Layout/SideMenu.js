@@ -779,6 +779,7 @@ const menuItems = [
       // { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
       { id: 87, text: "Tip Report", link: "/store-reporting/tip-report" },
       { id: 88, text: "Coupon Report", link: "/store-reporting/coupon-report" },
+
       // {
       //   id: 89,
       //   text: "Discount Per Sales Person",
@@ -878,7 +879,6 @@ const menuItems = [
       },
     ],
   },
-
   {
     id: 5,
     icon: (

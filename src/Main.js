@@ -100,6 +100,9 @@ const Main = ({ visible }) => {
       {visible === "coupon-report" && <Layout visible={visible} />}
       {visible === "brands" && <Layout visible={visible} />}
       {visible === "tags" && <Layout visible={visible} />}
+      {visible === "category-sales-summery-report" && (
+        <Layout visible={visible} />
+      )}
 
       {/* multip user layout */}
       {visible === "multimerchant" && <IndexAllUsers />}

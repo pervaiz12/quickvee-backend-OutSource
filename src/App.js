@@ -184,6 +184,7 @@ function App() {
             path="/stocktake/print-stocktake-report"
             element={<StocktakeReportPrint />}
           />
+
           <Route
             exact
             path="/users/view/unapprove/need-help"
@@ -585,6 +586,12 @@ function App() {
               path="/store-reporting/coupon-report"
               element={<Main visible={"coupon-report"} />}
             />
+            {/*  category sales summery report*/}
+            <Route
+              path="/store-reporting/category-sales-summery-report"
+              element={<Main visible={"category-sales-summery-report"} />}
+            />
+            {/* category sales summery report */}
             <Route
               exact
               path="/need-help"
