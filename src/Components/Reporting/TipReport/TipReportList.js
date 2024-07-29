@@ -119,7 +119,7 @@ const TipReportList = (props) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          {tipReportDataState.loading ? (
+          {tipReportDataState.loading  || tipReportDataState.status &&  !tipReportData.length ? (
             <SkeletonTable columns={tableRow.map((item) => item.label)} />
           ) : (
             <TableContainer>
@@ -211,7 +211,7 @@ const TipReportList = (props) => {
                 )}
               </TableBody>
               </StyledTable>
-              {!tipReportData.length > 0 && <NoDataFound />}
+              {!tipReportData.length && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>

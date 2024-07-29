@@ -94,12 +94,10 @@ const MainInstantDetails = ({ data }) => {
           };
         });
       setinstantactivity(AfterAdjustQtyAddedList);
+    } else {
+      setinstantactivity([]);
     }
-  }, [
-    instantactivityDataState,
-    instantactivityDataState.loading,
-    instantactivityDataState.instantactivityData,
-  ]);
+  }, [instantactivityDataState, instantactivityDataState.instantactivityData]);
 
   const formatDateTime = (dateTimeString) => {
     const date = new Date(dateTimeString);
@@ -120,11 +118,13 @@ const MainInstantDetails = ({ data }) => {
     setinstantactivity(sortedItems);
     setSortOrder(newOrder);
   };
+  console.log("instantactivityDataState.loading ",instantactivityDataState.loading,"instantactivityDataState.status",instantactivityDataState.status )
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          {instantactivityDataState.loading ? (
+          {instantactivityDataState.loading ||
+          (instantactivityDataState.status && !instantactivity.length) ? (
             <>
               <SkeletonTable
                 columns={[
@@ -213,98 +213,100 @@ const MainInstantDetails = ({ data }) => {
                     </StyledTableCell>
                   </TableHead>
                   <TableBody>
-                    {instantactivity && instantactivity.length >= 1 ? (
-                      instantactivity.map((instantactivity, index) => {
-                        const AfterAdjustQty =
-                          parseInt(instantactivity.current_qty, 10) +
-                          parseInt(instantactivity.qty, 10);
-                        const calculatedTotal =
-                          parseInt(instantactivity.qty, 10) *
-                          parseFloat(instantactivity.price);
-                        return (
-                          <StyledTableRow>
-                            <StyledTableCell>
-                              <div>
-                                <p>{instantactivity.title}</p>
-                                <p
-                                  style={{
-                                    color: "#0A64F9",
-                                  }}
-                                >
-                                  {instantactivity.variant}
-                                </p>
-                                <div className="flex ">
+                    {instantactivity && instantactivity.length >= 1
+                      ? instantactivity.map((instantactivity, index) => {
+                          const AfterAdjustQty =
+                            parseInt(instantactivity.current_qty, 10) +
+                            parseInt(instantactivity.qty, 10);
+                          const calculatedTotal =
+                            parseInt(instantactivity.qty, 10) *
+                            parseFloat(instantactivity.price);
+                          return (
+                            <StyledTableRow>
+                              <StyledTableCell>
+                                <div>
+                                  <p>{instantactivity.title}</p>
                                   <p
                                     style={{
-                                      color: "#818181",
-                                    }}
-                                    className="me-3"
-                                  >
-                                    {formatDateTime(instantactivity.created_at)}
-                                  </p>
-                                  <p
-                                    style={{
-                                      color: "#818181",
+                                      color: "#0A64F9",
                                     }}
                                   >
-                                    {new Date(
-                                      instantactivity.created_at
-                                    ).toLocaleTimeString("en-US", {
-                                      hour: "2-digit",
-                                      minute: "2-digit",
-                                      second: "2-digit",
-                                      hour12: true,
-                                    })}
+                                    {instantactivity.variant}
                                   </p>
+                                  <div className="flex ">
+                                    <p
+                                      style={{
+                                        color: "#818181",
+                                      }}
+                                      className="me-3"
+                                    >
+                                      {formatDateTime(
+                                        instantactivity.created_at
+                                      )}
+                                    </p>
+                                    <p
+                                      style={{
+                                        color: "#818181",
+                                      }}
+                                    >
+                                      {new Date(
+                                        instantactivity.created_at
+                                      ).toLocaleTimeString("en-US", {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        second: "2-digit",
+                                        hour12: true,
+                                      })}
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
-                            </StyledTableCell>
+                              </StyledTableCell>
 
-                            <StyledTableCell>
-                              <p>
-                                {instantactivity.emp_name === null ||
-                                instantactivity.emp_name === ""
-                                  ? "Online"
-                                  : instantactivity.emp_name}
-                              </p>
-                            </StyledTableCell>
+                              <StyledTableCell>
+                                <p>
+                                  {instantactivity.emp_name === null ||
+                                  instantactivity.emp_name === ""
+                                    ? "Online"
+                                    : instantactivity.emp_name}
+                                </p>
+                              </StyledTableCell>
 
-                            <StyledTableCell>
-                              <p>{priceFormate(instantactivity.current_qty)}</p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <p>{priceFormate(instantactivity.qty)}</p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <p>
-                                {priceFormate(
-                                  isNaN(instantactivity.afterAdjustQty)
-                                    ? 0
-                                    : instantactivity.afterAdjustQty
-                                )}
-                              </p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <p>${priceFormate(instantactivity.price)}</p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <p>
-                                $
-                                {Math.abs(
-                                  priceFormate(
-                                    isNaN(instantactivity.calculatedTotal)
+                              <StyledTableCell>
+                                <p>
+                                  {priceFormate(instantactivity.current_qty)}
+                                </p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p>{priceFormate(instantactivity.qty)}</p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p>
+                                  {priceFormate(
+                                    isNaN(instantactivity.afterAdjustQty)
                                       ? 0
-                                      : instantactivity.calculatedTotal
-                                  )
-                                )}
-                              </p>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        );
-                      })
-                    ) : (
-                      ""
-                    )}
+                                      : instantactivity.afterAdjustQty
+                                  )}
+                                </p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p>${priceFormate(instantactivity.price)}</p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p>
+                                  $
+                                  {Math.abs(
+                                    priceFormate(
+                                      isNaN(instantactivity.calculatedTotal)
+                                        ? 0
+                                        : instantactivity.calculatedTotal
+                                    )
+                                  )}
+                                </p>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          );
+                        })
+                      : ""}
                   </TableBody>
                 </StyledTable>
                 {!instantactivity.length && <NoDataFound />}

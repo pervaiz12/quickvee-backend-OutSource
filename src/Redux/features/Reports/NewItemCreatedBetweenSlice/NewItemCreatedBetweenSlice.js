@@ -7,7 +7,7 @@ import {
 
 const initialState = {
   loading: false,
-  NewItemData: [],
+  NewItemData: {},
   successMessage: "",
   error: "",
 };
@@ -31,7 +31,7 @@ export const fetchNewItemCreatedBetweenData = createAsyncThunk(
       );
       if (response.data.status === true) {
         // console.log(response);
-        return response.data.report_data;
+        return response.data;
       }
     } catch (error) {
       // throw new Error(error.response.data.message);

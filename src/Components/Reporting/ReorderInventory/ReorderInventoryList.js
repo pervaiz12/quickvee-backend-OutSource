@@ -42,16 +42,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-    
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
 }));
 
 const ReorderInventoryList = (props) => {
-  
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
@@ -70,13 +67,15 @@ const ReorderInventoryList = (props) => {
       let data = {
         merchant_id,
         ...userTypeData,
-        
       };
       if (data) {
         await dispatch(fetchReorderInventoryData(data)).unwrap();
       }
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
+      if (
+        error.status == 401
+        // || error.response.status === 401
+      ) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -95,11 +94,7 @@ const ReorderInventoryList = (props) => {
     } else {
       setallReorderInventoryData([]);
     }
-  }, [
-    AllReorderInventoryDataState,
-    AllReorderInventoryDataState.loading,
-    AllReorderInventoryDataState.ReorderData,
-  ]);
+  }, [AllReorderInventoryDataState, AllReorderInventoryDataState.ReorderData]);
 
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
 
@@ -128,7 +123,9 @@ const ReorderInventoryList = (props) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          {AllReorderInventoryDataState.loading ? (
+          {AllReorderInventoryDataState.loading ||
+          (AllReorderInventoryDataState.status &&
+            !allReorderInventoryData?.length) ? (
             <SkeletonTable columns={columns.map((item) => item.label)} />
           ) : (
             <TableContainer>
@@ -148,55 +145,53 @@ const ReorderInventoryList = (props) => {
                 </TableHead>
                 <TableBody>
                   {allReorderInventoryData &&
-                  allReorderInventoryData?.length > 0 ? (
-                    allReorderInventoryData?.map((InvData, index) => (
-                      <StyledTableRow>
-                        <StyledTableCell>
-                          <p>{InvData.item_name}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>{InvData.variant}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>{InvData.category}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>{InvData.cost_vendor}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>
-                            {InvData?.instock
-                              ? priceFormate(InvData?.instock)
-                              : "0"}
-                          </p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>
-                            $
-                            {InvData?.item_price
-                              ? priceFormate(InvData?.item_price)
-                              : "$0.00"}
-                          </p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>
-                            {InvData?.reorder_level
-                              ? priceFormate(InvData?.reorder_level)
-                              : "0"}
-                          </p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>
-                            {InvData?.reorder_level
-                              ? priceFormate(InvData?.reorder_qty)
-                              : "0"}
-                          </p>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))
-                  ) : (
-                    ""
-                  )}
+                  allReorderInventoryData?.length > 0
+                    ? allReorderInventoryData?.map((InvData, index) => (
+                        <StyledTableRow>
+                          <StyledTableCell>
+                            <p>{InvData.item_name}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>{InvData.variant}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>{InvData.category}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>{InvData.cost_vendor}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>
+                              {InvData?.instock
+                                ? priceFormate(InvData?.instock)
+                                : "0"}
+                            </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>
+                              $
+                              {InvData?.item_price
+                                ? priceFormate(InvData?.item_price)
+                                : "$0.00"}
+                            </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>
+                              {InvData?.reorder_level
+                                ? priceFormate(InvData?.reorder_level)
+                                : "0"}
+                            </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>
+                              {InvData?.reorder_level
+                                ? priceFormate(InvData?.reorder_qty)
+                                : "0"}
+                            </p>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))
+                    : ""}
                 </TableBody>
               </StyledTable>
               {!allReorderInventoryData?.length && <NoDataFound />}
@@ -204,43 +199,6 @@ const ReorderInventoryList = (props) => {
           )}
         </Grid>
       </Grid>
-      
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
     </>
   );
 };

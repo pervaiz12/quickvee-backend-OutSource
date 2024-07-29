@@ -5,6 +5,7 @@ import { BASE_URL, TIP_REPORT_LIST } from "../../../../Constants/Config";
 const initialState = {
   loading: false,
   TipReportData: [],
+  status: false,
   successMessage: "",
   error: "",
 };
@@ -21,11 +22,18 @@ export const fetchTipReportData = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
-      // console.log(response)
+      console.log(response)
       if (response.data.status === true) {
         // console.log(response.data
         //     )
-        return response.data.tip_report_data;
+        const arr = response.data.tip_report_data;
+        const status = response.data.status;
+        return {arr,status};
+      }
+      else if(response.data.status === false) {
+        const arr = [];
+        const status = false;
+        return {arr,status};
       }
     } catch (error) {
       throw new Error(error.response.data.message);
@@ -42,7 +50,8 @@ const TipReportSlice = createSlice({
     });
     builder.addCase(fetchTipReportData.fulfilled, (state, action) => {
       state.loading = false;
-      state.TipReportData = action.payload;
+      state.TipReportData = action.payload.arr;
+      state.status = action.payload.status;
       state.error = "";
     });
     builder.addCase(fetchTipReportData.rejected, (state, action) => {

@@ -135,11 +135,13 @@ const CouponReportList = (props) => {
     setCouponReportData(sortedItems);
     setSortOrder(newOrder);
   };
+  console.log("CouponReportDataState.loading",CouponReportDataState.loading,"CouponReportDataState.status,",CouponReportDataState.status)
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          {CouponReportDataState.loading ? (
+          {CouponReportDataState.loading ||
+          (CouponReportDataState.status && !CouponReportData.length) ? (
             <SkeletonTable columns={tableRow.map((item) => item.label)} />
           ) : (
             <TableContainer>
@@ -178,7 +180,7 @@ const CouponReportList = (props) => {
                     ))}
                 </TableBody>
               </StyledTable>
-              {!CouponReportData.length  && <NoDataFound />}
+              {!CouponReportData.length && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>

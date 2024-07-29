@@ -27,12 +27,13 @@ export const fetchItemSalesData = createAsyncThunk(
         }
       );
       if (response.data.status === true) {
-        // console.log(response.data);
+
         // return response.data.item_sale_data
         return [
           response.data.item_sale_data,
           response.data.net_sale,
           response.data.total_sold,
+          response.data.status
         ];
       }
     } catch (error) {

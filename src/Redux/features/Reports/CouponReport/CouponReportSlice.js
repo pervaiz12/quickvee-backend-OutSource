@@ -5,6 +5,7 @@ import { BASE_URL, COUPON_REPORT_LIST } from "../../../../Constants/Config";
 const initialState = {
   loading: false,
   CouponReportData: [],
+  status: false,
   successMessage: "",
   error: "",
 };
@@ -25,11 +26,17 @@ export const fetchCouponReportData = createAsyncThunk(
           },
         }
       );
-      // console.log(response)
-      if (response.data.status === true) {
+      console.log(response)
+      if (response.data.coupon_report_data.length > 0) {
         // console.log(response.data
         //     )
-        return response.data.coupon_report_data;
+        const arr = response.data.coupon_report_data;
+        const status = response.data.status;
+        return {arr,status};
+      }else if (response.data.coupon_report_data.length === 0){
+        const arr = [];
+        const status = false;
+        return {arr,status};
       }
     } catch (error) {
       // throw new Error(error.response.data.message);
@@ -52,7 +59,8 @@ const CouponReportSlice = createSlice({
     });
     builder.addCase(fetchCouponReportData.fulfilled, (state, action) => {
       state.loading = false;
-      state.CouponReportData = action.payload;
+      state.CouponReportData = action.payload.arr;
+      state.status= action.payload.status;
       state.error = "";
     });
     builder.addCase(fetchCouponReportData.rejected, (state, action) => {
