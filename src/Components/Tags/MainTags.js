@@ -63,8 +63,6 @@ export default function MainTags() {
               />
             </Grid>
           </Grid>
-          <Grid container sx={{ padding: 2.5 }}>
-            <Grid item xs={12}>
               <BrandTable
                 handleGetEditData={handleGetEditData}
                 header={rowHeader}
@@ -75,8 +73,6 @@ export default function MainTags() {
                 skeletonLoader={skeletonLoader}
                 rowSkelton={rowSkaleton}
               />
-            </Grid>
-          </Grid>
         </div>
       </div>
       <TagModal
