@@ -1,22 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { BASE_URL, PAY_IN_REPORT } from "../../../../Constants/Config";
+import { BASE_URL, DROP_CASH_REPORT } from "../../../../Constants/Config";
 
 const initialState = {
   loading: false,
-  PayinReportData: [],
+  DropCashReportData: [],
   successMessage: "",
   error: "",
 };
 
 // Generate pening , fulfilled and rejected action type
-export const fetchPayinReportData = createAsyncThunk(
-  "PayinReportList/fetchPayinReportData.",
+export const fetchDropCashReportData = createAsyncThunk(
+  "DropCashReportList/fetchDropCashReportData.",
   async (data, { rejectWithValue }) => {
     try {
       const { token, ...dataNew } = data;
       const response = await axios.post(
-        BASE_URL + PAY_IN_REPORT,
+        BASE_URL + DROP_CASH_REPORT,
         dataNew,
         {
           headers: {
@@ -29,7 +29,7 @@ export const fetchPayinReportData = createAsyncThunk(
       if (response.data.status === true) {
         // console.log(response.data
         //     )
-        return response.data.emp_data;
+        return response.data.drop_cash_data;
       }
     } catch (error) {
       // throw new Error(error.response.data.message);
@@ -43,24 +43,24 @@ export const fetchPayinReportData = createAsyncThunk(
   }
 );
 
-const PayinReportSlice = createSlice({
-  name: "PayinReportList",
+const DropCashReportSlice = createSlice({
+  name: "DropCashReportList",
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(fetchPayinReportData.pending, (state) => {
+    builder.addCase(fetchDropCashReportData.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(fetchPayinReportData.fulfilled, (state, action) => {
+    builder.addCase(fetchDropCashReportData.fulfilled, (state, action) => {
       state.loading = false;
-      state.PayinReportData = action.payload;
+      state.DropCashReportData = action.payload;
       state.error = "";
     });
-    builder.addCase(fetchPayinReportData.rejected, (state, action) => {
+    builder.addCase(fetchDropCashReportData.rejected, (state, action) => {
       state.loading = false;
-      state.PayinReportData = {};
+      state.DropCashReportData = {};
       state.error = action.error.message;
     });
   },
 });
 
-export default PayinReportSlice.reducer;
+export default DropCashReportSlice.reducer;

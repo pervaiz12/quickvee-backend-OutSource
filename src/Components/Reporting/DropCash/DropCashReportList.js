@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchCouponReportData } from "../../../Redux/features/Reports/CouponReport/CouponReportSlice";
+import { fetchDropCashReportData } from "../../../Redux/features/Reports/DropCashReport/DropCashReportSlice";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { Grid } from "@mui/material";
@@ -58,9 +58,9 @@ const DropCashReportList = (props) => {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
-  const [CouponReportData, setCouponReportData] = useState([]);
+  const [DropCashReportData, setDropCashReportData] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
-  const CouponReportDataState = useSelector((state) => state.CouponReportList);
+  const DropCashReportDataState = useSelector((state) => state.DropCashReportList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
     getCouponReportData();
@@ -78,7 +78,7 @@ const DropCashReportList = (props) => {
         };
 
         if (data) {
-          await dispatch(fetchCouponReportData(data)).unwrap();
+          await dispatch(fetchDropCashReportData(data)).unwrap();
         }
       } catch (error) {
         console.log(error);
@@ -92,54 +92,60 @@ const DropCashReportList = (props) => {
 
   useEffect(() => {
     if (
-      !CouponReportDataState.loading &&
-      CouponReportDataState.CouponReportData
+      !DropCashReportDataState.loading &&
+      DropCashReportDataState.DropCashReportData
     ) {
-      const uodatedList = Array.isArray(CouponReportDataState?.CouponReportData)
-        ? CouponReportDataState?.CouponReportData?.map((item) => {
+      const uodatedList = Array.isArray(DropCashReportDataState?.DropCashReportData)
+        ? DropCashReportDataState?.DropCashReportData?.map((item) => {
             return {
               ...item,
-              couponName:
-                item.coupon_type === "Discount"
-                  ? "Direct Discount By App"
-                  : item.coupon_type,
             };
           })
-        : "";
-      setCouponReportData(uodatedList);
-    } else {
-      setCouponReportData([]);
-    }
-  }, [CouponReportDataState.loading, CouponReportDataState.CouponReportData]);
+        : [];
+      setDropCashReportData(uodatedList);
+      settotal(
+        DropCashReportDataState?.DropCashReportData?.length > 0
+          ? DropCashReportDataState?.DropCashReportData?.reduce(
+              (total, report) => total + parseFloat(report.amount ?? 0),
+              0
+            )
+          : 0
+      );
 
-  const formatDate = (dateString) => {
-    const options = { day: "2-digit", month: "short", year: "numeric" };
-    const formattedDate = new Date(dateString).toLocaleDateString(
-      "en-US",
-      options
-    );
-    return formattedDate;
+    } else {
+      setDropCashReportData([]);
+    }
+  }, [DropCashReportDataState.loading, DropCashReportDataState.DropCashReportData]);
+
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const dateOptions = { year: "numeric", month: "short", day: "numeric" };
+    const timeOptions = { hour: "numeric", minute: "numeric", hour12: true };
+    const formattedDate = date.toLocaleDateString("en-US", dateOptions);
+    const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
+    return `${formattedDate} ${formattedTime}`;
   };
   const tableRow = [
-    { type: "date", name: "date", label: "Date" },
-    { type: "str", name: "couponName", label: "Coupon Name" },
-    { type: "num", name: "total_coupons_used", label: "Total Coupon Used" },
+    { type: "date", name: "created_at", label: "Transaction Date" },
+    { type: "str", name: "reason", label: "Reason" },
+    { type: "num", name: "amount", label: "Amount" },
   ];
   const sortByItemName = (type, name) => {
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
-      CouponReportData,
+      DropCashReportData,
       type,
       name,
       sortOrder
     );
-    setCouponReportData(sortedItems);
+    setDropCashReportData(sortedItems);
     setSortOrder(newOrder);
   };
+  const [total, settotal] = useState(0);
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          {CouponReportDataState.loading ? (
+          {DropCashReportDataState.loading ? (
             <SkeletonTable columns={tableRow.map((item) => item.label)} />
           ) : (
             <TableContainer>
@@ -158,27 +164,51 @@ const DropCashReportList = (props) => {
                   ))}
                 </TableHead>
                 <TableBody>
-                  {CouponReportData.length > 0 &&
-                    CouponReportData.map((couponData, index) => (
+                {DropCashReportData.length > 0 ? (
+                        <>
+                  {DropCashReportData.length > 0 &&
+                    DropCashReportData.map((data, index) => (
                       <StyledTableRow>
                         <StyledTableCell>
                           <p className="report-title">
-                            {formatDate(couponData.date)}
+                            {formatDateTime(data.created_at)}
                           </p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p>{couponData.couponName}</p>
+                          <p>{data.reason}</p>
                         </StyledTableCell>
                         <StyledTableCell>
                           <p className="report-title">
-                            {priceFormate(couponData.total_coupons_used)}
+                            ${priceFormate(parseFloat( data.amount ?? 0 ).toFixed(2))}
                           </p>
                         </StyledTableCell>
                       </StyledTableRow>
                     ))}
+                   
+                    <StyledTableCell className="trBG_Color">
+                            <div className="">
+                              <div>
+                                <p className="report-sort totalReport">Total</p>
+                              </div>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell className="trBG_Color"></StyledTableCell>
+                          <StyledTableCell  className="trBG_Color">
+                            <div className="">
+                              <div>
+                                <p className="report-title totalReport">
+                                  ${priceFormate(total.toFixed(2))}
+                                </p>
+                              </div>
+                            </div>
+                          </StyledTableCell>
+                          </>
+                      ) : (
+                        ""
+                      )}
                 </TableBody>
               </StyledTable>
-              {!CouponReportData.length  && <NoDataFound />}
+              {!DropCashReportData.length  && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>

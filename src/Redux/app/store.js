@@ -68,6 +68,7 @@ import SupportDetailsSlice from "../features/SupportDetails/supportDetailsSlice"
 import DigitalMarketingSlice from "../features/DigitalMarketing/digitalMarketingSlice";
 import BrandsSlice from "../features/Brand/brandsSlice";
 import PayInReportSlice from "../features/Reports/PayInReport/PayInReportSlice";
+import DropCashReportSlice from "../features/Reports/DropCashReport/DropCashReportSlice";
 
 const store = configureStore({
   reducer: {
@@ -153,6 +154,7 @@ const store = configureStore({
     CouponReportList: CouponReportSlice,
     RefundDataList: RefundReportSlice,
     PayinReportList: PayInReportSlice,
+    DropCashReportList: DropCashReportSlice,
     supportDetail: SupportDetailsSlice,
     digitalmarketing: DigitalMarketingSlice,
     brandData: BrandsSlice,
