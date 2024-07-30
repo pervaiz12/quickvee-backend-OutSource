@@ -194,7 +194,7 @@ const EmployeeSalesPerCategoryFilter = ({ onFilterDataChange }) => {
                 dropdownFor={"employee"}
               />
             </Grid>
-            {/* <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4}>
               <label className="q-details-page-label" htmlFor="orderTypeFilter">
                 Category
               </label>
@@ -206,7 +206,7 @@ const EmployeeSalesPerCategoryFilter = ({ onFilterDataChange }) => {
                 selectedOption={selectedLCategoryType}
                 onClickHandler={handleOptionClick}
               />
-            </Grid> */}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

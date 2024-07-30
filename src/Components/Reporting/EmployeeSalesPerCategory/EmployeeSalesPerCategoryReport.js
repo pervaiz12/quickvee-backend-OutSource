@@ -129,6 +129,8 @@ const EmployeeSalesPerCategoryReport = (props) => {
   };
 
   let grandTotal = 0;
+  let itemSoldTotal = 0;
+  let qtyTotal = 0;
   Object.keys(allEmployeeSalesPerCategoryData).map((EmpData, index) => {
     const totalAmount = allEmployeeSalesPerCategoryData[EmpData]?.reduce(
       (total, SalesData) => {
@@ -137,6 +139,24 @@ const EmployeeSalesPerCategoryReport = (props) => {
       0
     );
     grandTotal += totalAmount;
+  });
+  Object.keys(allEmployeeSalesPerCategoryData).map((EmpData, index) => {
+    const totalAmountitemsold = allEmployeeSalesPerCategoryData[EmpData]?.reduce(
+      (total, SalesData) => {
+        return total + (parseFloat(SalesData?.total_items_sold) || 0);
+      },
+      0
+    );
+    itemSoldTotal += totalAmountitemsold;
+  });
+  Object.keys(allEmployeeSalesPerCategoryData).map((EmpData, index) => {
+    const totalAmountqyt = allEmployeeSalesPerCategoryData[EmpData]?.reduce(
+      (total, SalesData) => {
+        return total + (parseFloat(SalesData?.total_quantity) || 0);
+      },
+      0
+    );
+    qtyTotal += totalAmountqyt;
   });
 
   const sortByItemName = (type, name) => {
@@ -169,7 +189,7 @@ const EmployeeSalesPerCategoryReport = (props) => {
             </div>
           </Grid>
           <Grid item xs={12}>
-            <SkeletonTable columns={["Order ID", "Date", "Total"]} />
+            <SkeletonTable columns={["Category Name", "Item Sold", "Quantity", "Amount"]} />
           </Grid>
         </Grid>
       ) : Object.entries(allEmployeeSalesPerCategoryData).length > 0 ? (
@@ -191,9 +211,9 @@ const EmployeeSalesPerCategoryReport = (props) => {
                       <StyledTableCell>
                         <button
                           className="flex items-center"
-                          onClick={() => sortByItemName("id", "order_id")}
+                          onClick={() => sortByItemName("str", "category_name")}
                         >
-                          <p>Order ID</p>
+                          <p>Category Name</p>
                           <img src={SortIconW} alt="" className="pl-1" />
                         </button>
                       </StyledTableCell>
@@ -201,21 +221,32 @@ const EmployeeSalesPerCategoryReport = (props) => {
                         <button
                           className="flex items-center"
                           onClick={() =>
-                            sortByItemName("date", "merchant_time")
+                            sortByItemName("num", "total_items_sold")
                           }
                         >
-                          <p>Date</p>
+                          <p>Item Sold</p>
                           <img src={SortIconW} alt="" className="pl-1" />
                         </button>
                       </StyledTableCell>
-                      <StyledTableCell align="center">
+                      <StyledTableCell>
+                        <button
+                          className="flex items-center"
+                          onClick={() =>
+                            sortByItemName("num", "total_quantity")
+                          }
+                        >
+                          <p>Quantity</p>
+                          <img src={SortIconW} alt="" className="pl-1" />
+                        </button>
+                      </StyledTableCell>
+                      <StyledTableCell >
                         <button
                           className=""
-                          onClick={() => sortByItemName("num", "amt")}
+                          onClick={() => sortByItemName("num", "total_sales")}
                         >
                           <div className="flex items-center">
                             {" "}
-                            <p>Total</p>
+                            <p>Amount</p>
                             <img src={SortIconW} alt="" className="pl-1" />
                           </div>
                         </button>
@@ -224,47 +255,63 @@ const EmployeeSalesPerCategoryReport = (props) => {
                     <TableBody>
                       {items?.map((SalesData, index) => (
                         <StyledTableRow key={index}>
-                          <StyledTableCell sx={{ width: "33%" }}>
-                            <span
-                              className="cursor-pointer text-[#0A64F9]"
-                              onClick={() =>
-                                navigate(
-                                  `/order/store-reporting/order-summary/${merchant_id}/${SalesData.order_id}`
-                                )
-                              }
-                            >
-                              {SalesData.order_id}
-                            </span>
-                            {/* </Link> */}
+                          <StyledTableCell >
+                          <p>{SalesData.category_name}</p>
                           </StyledTableCell>
-                          <StyledTableCell
-                            sx={{
-                              borderRight: "1px solid #E3E3E3",
-                              width: "33%",
-                            }}
-                          >
-                            <p>{formatDateTime(SalesData.merchant_time)}</p>
+                          <StyledTableCell>
+                            <p>{SalesData.total_items_sold}</p>
                           </StyledTableCell>
-                          <StyledTableCell align="center" sx={{ width: "33%" }}>
-                            <p> ${priceFormate(SalesData.amt)}</p>
+                          <StyledTableCell >
+                            <p>{SalesData.total_quantity}</p>
+                          </StyledTableCell>
+                          <StyledTableCell >
+                            <p> ${priceFormate(SalesData.total_sales)}</p>
                           </StyledTableCell>
                         </StyledTableRow>
                       ))}
                       <StyledTableRow className="trBG_Color">
-                        <StyledTableCell></StyledTableCell>
-                        <StyledTableCell align="center">
+                        <StyledTableCell>
                           <div className=" totalReport">
                             <div>Total </div>
                           </div>
                         </StyledTableCell>
-                        <StyledTableCell align="center">
+                        <StyledTableCell>
+                          <div className="totalReport">
+                            <div>
+                              {`${ allEmployeeSalesPerCategoryData[EmpData].reduce(
+                                  (total, SalesData) => {
+                                    return (
+                                      total + (parseFloat(SalesData?.total_items_sold) || 0)
+                                    );
+                                  },
+                                  0
+                              )}`}
+                            </div>
+                          </div>
+                        </StyledTableCell>
+                        <StyledTableCell >
+                        <div className="totalReport">
+                            <div>
+                            {`${
+                                allEmployeeSalesPerCategoryData[EmpData].reduce(
+                                  (total, SalesData) => {
+                                    return (
+                                      total + (parseFloat(SalesData?.total_quantity) || 0)
+                                    );
+                                  },
+                                  0
+                              )}`}
+                            </div>
+                          </div>
+                        </StyledTableCell>
+                        <StyledTableCell >
                           <div className="totalReport">
                             <div>
                               {`$${priceFormate(
                                 allEmployeeSalesPerCategoryData[EmpData].reduce(
                                   (total, SalesData) => {
                                     return (
-                                      total + (parseFloat(SalesData?.amt) || 0)
+                                      total + (parseFloat(SalesData?.total_sales) || 0)
                                     );
                                   },
                                   0
@@ -294,20 +341,25 @@ const EmployeeSalesPerCategoryReport = (props) => {
           aria-label="customized table"
           style={{ marginBottom: "1rem", transform: "translate(0rem, -1rem)" }}
         >
-          <StyledTableRow className="trBG_Color">
-            <StyledTableCell sx={{ width: "33%" }}></StyledTableCell>
-            <StyledTableCell align="center" sx={{ width: "33%" }}>
-              <div className="q-category-bottom-report-listing">
-                <div>
+          <StyledTableRow className="trBG_Color grandTotal">
+            <StyledTableCell sx={{ width: "33%" }} >
+              <div className="">
                   <p className="totalReport">Grand Total</p>
-                </div>
               </div>
             </StyledTableCell>
-            <StyledTableCell align="center">
-              <div className="q-category-bottom-report-listing">
-                <div>
+            <StyledTableCell sx={{ width: "25%" }} >
+              <div className="">
+                  <p className="totalReport">{itemSoldTotal}</p>
+              </div>
+            </StyledTableCell>
+            <StyledTableCell sx={{ width: "23%" }}>
+              <div className="">
+                  <p className="totalReport">{qtyTotal}</p>
+              </div>
+            </StyledTableCell>
+            <StyledTableCell  >
+              <div className="">
                   <p className="totalReport">${priceFormate(grandTotal.toFixed(2))}</p>
-                </div>
               </div>
             </StyledTableCell>
           </StyledTableRow>
