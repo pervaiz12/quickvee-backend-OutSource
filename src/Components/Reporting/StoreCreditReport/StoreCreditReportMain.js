@@ -47,11 +47,11 @@ export default function StoreCreditReportMain() {
     <>
       <Grid
         container
-        sx={{ padding: 2.5, mt: 3.6 }}
+        sx={{pt:2.5, mt: 3.6 }}
         className="box_shadow_div "
       >
-        <Grid item xs={12}>
-          <Grid container>
+        <Grid item xs={12} >
+          <Grid container sx={{px:2.5}}>
             <Grid item xs={12}>
               <h1 style={{ marginBottom: 0 }} className="heading ">
                 Store Credit Report
@@ -59,8 +59,8 @@ export default function StoreCreditReportMain() {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
       <StoreCreditReportTable />
+      </Grid>
     </>
   );
 }

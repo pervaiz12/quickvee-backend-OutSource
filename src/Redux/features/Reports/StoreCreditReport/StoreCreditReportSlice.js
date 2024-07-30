@@ -5,6 +5,7 @@ import { BASE_URL, STORE_CREDIT_REPORT } from "../../../../Constants/Config";
 const initialState = {
   loading: false,
   StoreCreditReportArr: [],
+  status:false,
   successMessage: "",
   error: "",
 };
@@ -23,11 +24,18 @@ export const fetchStoreCreditReportArr = createAsyncThunk(
           Authorization: `Bearer ${tocken}`,
         },
       });
-      console.log(res);
+      // console.log(res);
       if (res.data.status === true) {
         // console.log(response.data
         //     )
-        return res.data;
+        const arr = res.data.store_credit_data;
+        const status = res.data.status;
+        return {arr,status}
+      }
+      else{
+        const arr = [];
+        const status = false;
+        return {arr,status}
       }
     } catch (error) {
       const customError = {
@@ -49,7 +57,8 @@ const StoreCreditReportSlice = createSlice({
         });
         builder.addCase(fetchStoreCreditReportArr.fulfilled, (state, action) => {
             state.loading = false;
-            state.StoreCreditReportArr = action.payload;
+            state.StoreCreditReportArr = action.payload.arr;
+            state.status= action.payload.status;
             state.error = "";
           });
           builder.addCase(fetchStoreCreditReportArr.rejected, (state, action) => {
