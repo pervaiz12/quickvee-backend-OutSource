@@ -5,6 +5,7 @@ import { BASE_URL, TOP_SALLER_REPORT } from "../../../Constants/Config";
 const initialState = {
   loading: false,
   topsallerData: [],
+  status: false,
   successMessage: "",
   error: "",
 };
@@ -23,12 +24,16 @@ export const fetchtopsallerData = createAsyncThunk(
         },
       });
       if (response.data.status === "Success") {
-        return response.data.result;
+        const arr = response.data.result;
+        const status = response.data.status;
+        return { arr, status };
       } else if (
         response.data.status === "Failed" &&
         response.data.msg === "No. Data found."
       ) {
-        return response.data;
+        const arr = [];
+        const status = false;
+        return { arr, status };
       }
     } catch (error) {
       // throw new Error(error.response.data.message);
@@ -52,7 +57,8 @@ const topsallerSlice = createSlice({
     });
     builder.addCase(fetchtopsallerData.fulfilled, (state, action) => {
       state.loading = false;
-      state.topsallerData = action.payload;
+      state.topsallerData = action.payload.arr;
+      state.status = action.payload.status;
       state.error = "";
     });
     builder.addCase(fetchtopsallerData.rejected, (state, action) => {

@@ -152,6 +152,8 @@ module.exports = Object.freeze({
 
   // for item sales report
   GET_ITEMWISE_SALE_LIST: "ReportingReactapi/get_itemwise_sale_list",
+  PAY_IN_REPORT: "ReportingReactapi/pay_in_report",
+  DROP_CASH_REPORT: "ReportingReactapi/drop_cash_report",
 
   //Order Type
 

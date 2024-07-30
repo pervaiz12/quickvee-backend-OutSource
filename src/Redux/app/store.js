@@ -67,6 +67,8 @@ import StocktakeListSlice from "../features/Stocktake/StocktakeListSlice";
 import SupportDetailsSlice from "../features/SupportDetails/supportDetailsSlice";
 import DigitalMarketingSlice from "../features/DigitalMarketing/digitalMarketingSlice";
 import BrandsSlice from "../features/Brand/brandsSlice";
+import PayInReportSlice from "../features/Reports/PayInReport/PayInReportSlice";
+import DropCashReportSlice from "../features/Reports/DropCashReport/DropCashReportSlice";
 import CategorySalesReportSlice from "../features/CategorySalesSummeryReport/categorySalesSummeryReportSlice";
 
 const store = configureStore({
@@ -152,7 +154,8 @@ const store = configureStore({
     TipReportList: TipReportSlice,
     CouponReportList: CouponReportSlice,
     RefundDataList: RefundReportSlice,
-
+    PayinReportList: PayInReportSlice,
+    DropCashReportList: DropCashReportSlice,
     supportDetail: SupportDetailsSlice,
     digitalmarketing: DigitalMarketingSlice,
     brandData: BrandsSlice,

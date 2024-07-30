@@ -14,6 +14,10 @@ export default function CategorySalesSummeryReportMain() {
     selectedLCategoryType,
     onDateRangeChange,
     getCategorySalesReport,
+    sortByItemName,
+    totalCost,
+    rowHeader,
+    TableLoader,
   } = CategorySalesSummeryReportLogic();
   return (
     <>
@@ -53,6 +57,10 @@ export default function CategorySalesSummeryReportMain() {
         <Grid item xs={12}>
           <CategorySalesSummeryReportTable
             getCategorySalesReport={getCategorySalesReport}
+            sortByItemName={sortByItemName}
+            totalCost={totalCost}
+            TableLoader={TableLoader}
+            rowHeader={rowHeader}
           />
         </Grid>
       </Grid>

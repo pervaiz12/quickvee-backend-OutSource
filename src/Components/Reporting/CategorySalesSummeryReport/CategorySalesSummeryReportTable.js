@@ -55,7 +55,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const CategorySalesSummeryReportTable = (props) => {
   //   const [sortOrder, setSortOrder] = useState("asc");
-  const dispatch = useDispatch();
+  //   const dispatch = useDispatch();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
   const {
@@ -66,8 +66,8 @@ const CategorySalesSummeryReportTable = (props) => {
   } = useAuthDetails();
 
   // ====================== STATE DECLARED ==================================
-  const [dailyreport, setdailyreport] = useState([]);
-  const [total, settotal] = useState(0);
+  //   const [dailyreport, setdailyreport] = useState([]);
+  //   const [total, settotal] = useState(0);
   // ====================== END STATE DECLARED ==================================
   //   const dailyreportDataState = useSelector((state) => state.dailyreport);
   //   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
@@ -119,7 +119,7 @@ const CategorySalesSummeryReportTable = (props) => {
   //     );
   //     setdailyreport(sortedItems);
   //     setSortOrder(newOrder);
-  //   };
+  //   };         <SkeletonTable columns={props?.rowSkelton} />
 
   const formatDate = (dateString) => {
     const options = { day: "2-digit", month: "short", year: "numeric" };
@@ -132,122 +132,180 @@ const CategorySalesSummeryReportTable = (props) => {
 
   return (
     <>
-      <Grid container className="box_shadow_div">
-        <Grid item xs={12}>
-          <Grid container>
-            <Grid item xs={12}>
-              {/* {dailyreportDataState.loading ? (
+      {props.TableLoader ? (
+        <SkeletonTable columns={props?.rowHeader} />
+      ) : (
+        <Grid container className="box_shadow_div">
+          <Grid item xs={12}>
+            <Grid container>
+              <Grid item xs={12}>
+                {/* {dailyreportDataState.loading ? (
                 <SkeletonTable columns={["Date", "Total"]} />
               ) : ( */}
-              <TableContainer>
-                <StyledTable
-                  sx={{ minWidth: 500 }}
-                  aria-label="customized table"
-                >
-                  <TableHead>
-                    <StyledTableCell>
-                      <button
-                        className="flex items-center"
-                        //   onClick={() =>
-                        //     sortByItemName("date", "merchant_time")
-                        //   }
-                      >
-                        <p className="whitespace-nowrap">Name of Category</p>
-                        <img src={sortIcon} alt="" className="pl-1" />
-                      </button>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <button
-                        className="flex items-center"
-                        //   onClick={() => sortByItemName("num", "amt")}
-                      >
-                        <p className="whitespace-nowrap">Units Sold</p>
-                        <img src={sortIcon} alt="" className="pl-1" />
-                      </button>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <button
-                        className="flex items-center"
-                        //   onClick={() => sortByItemName("num", "amt")}
-                      >
-                        <p className="whitespace-nowrap">Total Sales</p>
-                        <img src={sortIcon} alt="" className="pl-1" />
-                      </button>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <button
-                        className="flex items-center"
-                        //   onClick={() => sortByItemName("num", "amt")}
-                      >
-                        <p className="whitespace-nowrap"> Total Cost</p>
-                        <img src={sortIcon} alt="" className="pl-1" />
-                      </button>
-                    </StyledTableCell>
-                  </TableHead>
-                  <TableBody>
-                    {Array.isArray(props.getCategorySalesReport) &&
-                    props.getCategorySalesReport.length > 0 ? (
-                      <>
-                        {props.getCategorySalesReport?.map(
-                          (dailyreport, index) => (
-                            <StyledTableRow key={index}>
-                              <StyledTableCell>
-                                <p className="report-sort">
-                                  {!!dailyreport?.category_name
-                                    ? dailyreport?.category_name
-                                    : "Deleted"}
-                                </p>
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <p className="report-title">
-                                  {/* ${priceFormate(dailyreport.amt)} */}
-                                  {!!dailyreport?.total_sale_qty}
-                                </p>
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <p className="report-title">
-                                  $
-                                  {priceFormate(
-                                    !!dailyreport?.total_sale_price
-                                      ? dailyreport?.total_sale_price
-                                      : 0.0
-                                  )}
-                                </p>
-                              </StyledTableCell>
-                            </StyledTableRow>
-                          )
-                        )}
-                        {/* <StyledTableCell className="trBG_Color">
-                          <div className="q-category-bottom-report-listing">
-                            <div>
-                              <p className="report-sort totalReport">
-                                Grand Total
-                              </p>
-                            </div>
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell className="trBG_Color">
-                          <div className="q-category-bottom-report-listing">
-                            <div>
-                              <p className="report-title totalReport">
-                                ${priceFormate(total.toFixed(2))}
-                              </p>
-                            </div>
-                          </div>
-                        </StyledTableCell> */}
-                      </>
-                    ) : (
-                      ""
-                    )}
-                  </TableBody>
-                </StyledTable>
-                {/* {!dailyreport.length && <NoDataFound table={true} />} */}
-              </TableContainer>
-              {/* )} */}
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead>
+                      <StyledTableCell>
+                        <button
+                          className="flex items-center"
+                          onClick={() =>
+                            props.sortByItemName("str", "category_name")
+                          }
+                        >
+                          <p className="whitespace-nowrap">Name of Category</p>
+                          <img src={sortIcon} alt="" className="pl-1" />
+                        </button>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <button
+                          className="flex items-center"
+                          onClick={() =>
+                            props.sortByItemName("num", "total_sale_qty")
+                          }
+                        >
+                          <p className="whitespace-nowrap">Units Sold</p>
+                          <img src={sortIcon} alt="" className="pl-1" />
+                        </button>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <button
+                          className="flex items-center"
+                          onClick={() =>
+                            props.sortByItemName("num", "total_sale_price")
+                          }
+                        >
+                          <p className="whitespace-nowrap">Total Sales</p>
+                          <img src={sortIcon} alt="" className="pl-1" />
+                        </button>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <button
+                          className="flex items-center"
+                          // onClick={() =>
+                          //   props.sortByItemName(
+                          //     "num",
+                          //     "dailyreport?.variant_cpi"
+                          //   )
+                          // }
+                        >
+                          <p className="whitespace-nowrap"> Total Cost</p>
+                          {/* <img src={sortIcon} alt="" className="pl-1" /> */}
+                        </button>
+                      </StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                      {Array.isArray(props.getCategorySalesReport) &&
+                      props.getCategorySalesReport.length > 0 ? (
+                        <>
+                          {props.getCategorySalesReport?.map(
+                            (dailyreport, index) => (
+                              <StyledTableRow key={index}>
+                                <StyledTableCell>
+                                  <p className="report-sort">
+                                    {!!dailyreport?.category_name
+                                      ? dailyreport?.category_name
+                                      : "Deleted"}
+                                  </p>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <p className="report-title">
+                                    {!!dailyreport?.total_sale_qty
+                                      ? dailyreport?.total_sale_qty
+                                      : 0}
+                                  </p>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  {`$${priceFormate(
+                                    Number(
+                                      !!dailyreport?.total_sale_price
+                                        ? dailyreport?.total_sale_price.toLocaleString(
+                                            "en-US",
+                                            { useGrouping: false }
+                                          )
+                                        : 0.0
+                                    ).toFixed(2)
+                                  )}`}
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  {`$${priceFormate(
+                                    Number(
+                                      !!dailyreport?.variant_cpi
+                                        ? !!dailyreport?.total_sale_qty
+                                          ? (
+                                              dailyreport?.total_sale_qty *
+                                              dailyreport?.variant_cpi
+                                            ).toFixed(2)
+                                          : dailyreport?.variant_cpi ==
+                                                (null || undefined) &&
+                                              dailyreport?.product_cpi ==
+                                                (null || undefined)
+                                            ? "0.0"
+                                            : dailyreport?.variant_cpi ==
+                                                  (null || undefined) &&
+                                                !!dailyreport?.product_cpi
+                                              ? dailyreport?.product_cpi *
+                                                dailyreport?.total_sale_qty
+                                              : !!dailyreport?.variant_cpi &&
+                                                  !!dailyreport?.product_cpi
+                                                ? dailyreport?.variant_cpi *
+                                                  dailyreport?.variant_cpi
+                                                : "0.0"
+                                        : "0.0"
+                                    ).toLocaleString("en-US", {
+                                      useGrouping: false,
+                                    })
+                                  )}`}
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            )
+                          )}
+                        </>
+                      ) : (
+                        ""
+                      )}
+                      {Array.isArray(props.getCategorySalesReport) &&
+                      props.getCategorySalesReport.length > 0 ? (
+                        <StyledTableRow className="trBG_Color">
+                          <StyledTableCell>
+                            <p className=" totalReport">Total</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p className=" totalReport">
+                              {priceFormate(props.totalCost?.unitsold)}
+                            </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p className=" totalReport">{`$${priceFormate(
+                              props.totalCost?.totalSales
+                            )}`}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p className=" totalReport">{`$${priceFormate(
+                              props.totalCost?.totalCost
+                            )}`}</p>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ) : (
+                        ""
+                      )}
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+                {Array.isArray(props.getCategorySalesReport) &&
+                props.getCategorySalesReport.length <= 0 ? (
+                  <NoDataFound />
+                ) : (
+                  ""
+                )}
+                {/* )} */}
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      )}
     </>
   );
 };

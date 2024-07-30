@@ -8,6 +8,7 @@ import {
 const initialState = {
   loading: false,
   ReorderData: [],
+  status:false,
   successMessage: "",
   error: "",
 };
@@ -30,7 +31,9 @@ export const fetchReorderInventoryData = createAsyncThunk(
       );
       if (response.data.status === true) {
         // console.log(response);
-        return response.data.reorder_array;
+        const arr = response.data.reorder_array;
+        const status = response.data.status
+        return {arr, status};
       }
     } catch (error) {
       const customError = {
@@ -52,7 +55,8 @@ const ReorderInventorySlice = createSlice({
     });
     builder.addCase(fetchReorderInventoryData.fulfilled, (state, action) => {
       state.loading = false;
-      state.ReorderData = action.payload;
+      state.ReorderData = action.payload.arr;
+      state.status= action.payload.status;
       state.error = "";
     });
     builder.addCase(fetchReorderInventoryData.rejected, (state, action) => {

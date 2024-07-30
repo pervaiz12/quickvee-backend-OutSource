@@ -780,11 +780,33 @@ const menuItems = [
       { id: 87, text: "Tip Report", link: "/store-reporting/tip-report" },
       { id: 88, text: "Coupon Report", link: "/store-reporting/coupon-report" },
 
+      ,
       // {
       //   id: 89,
       //   text: "Discount Per Sales Person",
       //   link: "/store-reporting/discount-per-sales-report",
       // },
+      {
+        id: 6,
+        text: "New Reports",
+        dropDownItems: [
+          {
+            id: 96,
+            text: "Drop Cash",
+            link: "/store-reporting/drop-cash-report",
+          },
+          {
+            id: 97,
+            text: "Pay In",
+            link: "/store-reporting/pay-in-report",
+          },
+          {
+            id: 98,
+            text: "Category Sales Summery Report",
+            link: "/store-reporting/category-sales-summery-report",
+          },
+        ],
+      },
     ],
   },
   {

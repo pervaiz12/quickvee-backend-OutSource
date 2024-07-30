@@ -1,23 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { BASE_URL, COUPON_REPORT_LIST } from "../../../../Constants/Config";
+import { BASE_URL, PAY_IN_REPORT } from "../../../../Constants/Config";
 
 const initialState = {
   loading: false,
-  CouponReportData: [],
-  status: false,
+  PayinReportData: [],
   successMessage: "",
   error: "",
 };
 
 // Generate pening , fulfilled and rejected action type
-export const fetchCouponReportData = createAsyncThunk(
-  "CouponReportList/fetchCouponReportData.",
+export const fetchPayinReportData = createAsyncThunk(
+  "PayinReportList/fetchPayinReportData.",
   async (data, { rejectWithValue }) => {
     try {
       const { token, ...dataNew } = data;
       const response = await axios.post(
-        BASE_URL + COUPON_REPORT_LIST,
+        BASE_URL + PAY_IN_REPORT,
         dataNew,
         {
           headers: {
@@ -26,17 +25,11 @@ export const fetchCouponReportData = createAsyncThunk(
           },
         }
       );
-      console.log(response)
-      if (response.data.coupon_report_data.length > 0) {
+      // console.log(response)
+      if (response.data.status === true) {
         // console.log(response.data
         //     )
-        const arr = response.data.coupon_report_data;
-        const status = response.data.status;
-        return {arr,status};
-      }else if (response.data.coupon_report_data.length === 0){
-        const arr = [];
-        const status = false;
-        return {arr,status};
+        return response.data.emp_data;
       }
     } catch (error) {
       // throw new Error(error.response.data.message);
@@ -50,25 +43,24 @@ export const fetchCouponReportData = createAsyncThunk(
   }
 );
 
-const CouponReportSlice = createSlice({
-  name: "CouponReportList",
+const PayinReportSlice = createSlice({
+  name: "PayinReportList",
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(fetchCouponReportData.pending, (state) => {
+    builder.addCase(fetchPayinReportData.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(fetchCouponReportData.fulfilled, (state, action) => {
+    builder.addCase(fetchPayinReportData.fulfilled, (state, action) => {
       state.loading = false;
-      state.CouponReportData = action.payload.arr;
-      state.status= action.payload.status;
+      state.PayinReportData = action.payload;
       state.error = "";
     });
-    builder.addCase(fetchCouponReportData.rejected, (state, action) => {
+    builder.addCase(fetchPayinReportData.rejected, (state, action) => {
       state.loading = false;
-      state.CouponReportData = {};
+      state.PayinReportData = {};
       state.error = action.error.message;
     });
   },
 });
 
-export default CouponReportSlice.reducer;
+export default PayinReportSlice.reducer;

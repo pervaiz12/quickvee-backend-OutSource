@@ -5,11 +5,7 @@ import {
   CategoryAllData,
   getCategorySalesSummeryData,
 } from "../../../Redux/features/CategorySalesSummeryReport/categorySalesSummeryReportSlice";
-import {
-  BASE_URL,
-  CATEGORY_SALES_SUMMERY_REPORT,
-} from "../../../Constants/Config";
-import axios from "axios";
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 
 export default function CategorySalesSummeryReportLogic() {
   const dispatch = useDispatch();
@@ -28,6 +24,41 @@ export default function CategorySalesSummeryReportLogic() {
   const [categoryAll, setCategoryAll] = useState([]);
   const [selectedLCategoryType, setselectedLCategoryType] = useState("All");
   const [getCategorySalesReport, setCategorySalesReport] = useState([]);
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [TableLoader, setTableLoader] = useState("");
+  const [totalCost, setTotalCost] = useState({
+    unitsold: 0,
+    totalSales: 0.0,
+    totalCost: 0.0,
+    // totalSelling: 0.0,
+    // sellingPrice: 0.0,
+    // profit: 0.0,
+    // profitPercentage: 0.0,
+  });
+  const rowHeader = [
+    "Name of Category",
+    "Units Sold",
+    "Totals Sales",
+    "Total Cost",
+  ];
+  // const rowHeader = [
+  //   {
+  //     id: 1,
+  //     title: "Name of Category",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Units Sold",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Totals Sales",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "Total Cost",
+  //   },
+  // ];
 
   //   listing category
   useEffect(() => {
@@ -61,13 +92,115 @@ export default function CategorySalesSummeryReportLogic() {
   //   selected  drop down ------------
   // ------ Category sales report --------------
   useEffect(() => {
+    setTableLoader(AllCategoryData?.loading);
     if (AllCategoryData?.CategorySalesReportRecord) {
       setCategorySalesReport(AllCategoryData.CategorySalesReportRecord);
+      getDiscountRecord(AllCategoryData.CategorySalesReportRecord);
     } else {
       setCategorySalesReport([]);
     }
-  }, [AllCategoryData?.CategorySalesReportRecord?.length]);
+  }, [
+    AllCategoryData?.loading,
+    AllCategoryData?.CategorySalesReportRecord?.length,
+  ]);
   // ------ Category sales report --------------
+  // -------category add totla data---------
+  // const getDiscountRecord = (data) => {
+  //   if (Array.isArray(data) && data.length > 0) {
+  //     const { unitsold, totalSales, totalCost } = data.reduce(
+  //       (acc, item) => {
+  //         const unitsold = item?.total_sale_qty || 0;
+  //         const totalSales =
+  //           parseFloat(
+  //             !!item?.total_sale_price ? item?.total_sale_price : 0.0
+  //           ) || 0;
+  //         // const totalCost = !!item?.variant_cpi
+  //         //   ? parseFloat(item?.variant_cpi)
+  //         //   : item?.variant_cpi == (null || undefined) && !!item?.product_cpi
+  //         //     ? parseFloat(item?.product_cpi)
+  //         //     : item?.variant_cpi == (null || undefined) &&
+  //         //         item?.product_cpi == (null || undefined)
+  //         //       ? 0.0
+  //         //       : !!item?.variant_cpi && !!item?.product_cpi
+  //         //         ? parseFloat(item?.variant_cpi)
+  //         //         : 0.0;
+  //         const totalCost =
+  //           item?.total_sale_qty *
+  //           parseFloat(item?.variant_cpi || item?.product_cpi || 0);
+  //         // const TotalNewCost = totalCost * item?.total_sale_qty;
+  //         return {
+  //           unitsold: parseInt(acc.unitsold) + parseInt(unitsold),
+  //           totalSales: parseFloat(acc.totalSales) + totalSales,
+  //           totalCost: parseFloat(acc.totalCost) + totalCost,
+  //           // profitTotal: acc.profitTotal + profit,
+  //         };
+  //       },
+  //       { unitsold: 0, totalSales: 0 }
+  //     );
+  //     // const profitPercentage = (profitTotal / sellingTotal) * 100 || 0;
+  //     console.log("unitsold", unitsold);
+  //     console.log("totalSales", totalSales);
+  //     console.log("total cost", totalCost);
+
+  //     setTotalCost({
+  //       unitsold: unitsold,
+  //       totalSales: totalSales.toFixed(2),
+  //       // totalSelling: sellingTotal.toFixed(2),
+  //       // profit: profitTotal.toFixed(2),
+  //       // profitPercentage: profitPercentage.toFixed(2),
+  //     });
+  //   } else {
+  //     console.log("No report data available");
+  //   }
+  // };
+  const getDiscountRecord = (data) => {
+    if (Array.isArray(data) && data.length > 0) {
+      const { unitsold, totalSales, totalCost } = data.reduce(
+        (acc, item) => {
+          const unitsold = item?.total_sale_qty || 0;
+          const totalSales = parseFloat(item?.total_sale_price || 0);
+          const totalCost =
+            item?.total_sale_qty *
+            parseFloat(item?.variant_cpi || item?.product_cpi || 0);
+
+          return {
+            unitsold: parseInt(acc.unitsold) + parseInt(unitsold),
+            totalSales: parseFloat(acc.totalSales) + totalSales,
+            totalCost: parseFloat(acc.totalCost) + totalCost,
+          };
+        },
+        { unitsold: 0, totalSales: 0, totalCost: 0 } // Initial values including totalCost
+      );
+
+      console.log("unitsold", unitsold);
+      console.log("totalSales", totalSales);
+      console.log("totalCost", totalCost);
+
+      setTotalCost({
+        unitsold: unitsold,
+        totalSales: totalSales.toFixed(2),
+        totalCost: totalCost.toFixed(2),
+      });
+    } else {
+      console.log("No report data available");
+    }
+  };
+
+  // -------category add total data-----
+
+  // ----------sort function start---------------
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder, sortIcon } = SortTableItemsHelperFun(
+      getCategorySalesReport,
+      type,
+      name,
+      sortOrder
+    );
+    setCategorySalesReport(sortedItems);
+    setSortOrder(newOrder);
+  };
+
+  // ----------sort function end-----------------
   //  drop down select drop down-------------
   const onDateRangeChange = async (Date) => {
     const newPacket = {
@@ -99,6 +232,8 @@ export default function CategorySalesSummeryReportLogic() {
   };
   //  selected drop down ---------------
   //  listing category
+  // sort table start---------------
+  // sort table end-----------------
   return {
     title,
     categoryAll,
@@ -106,5 +241,9 @@ export default function CategorySalesSummeryReportLogic() {
     selectedLCategoryType,
     onDateRangeChange,
     getCategorySalesReport,
+    sortByItemName,
+    totalCost,
+    rowHeader,
+    TableLoader,
   };
 }
