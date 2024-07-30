@@ -637,7 +637,7 @@ const menuItems = [
           },
           {
             id: 90,
-            text: "Item Sales Profit Report",
+            text: "Product Profitability Report",
             link: "/store-reporting/item-sale-profit-report",
           },
           { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
@@ -685,7 +685,7 @@ const menuItems = [
           },
           {
             id: 94,
-            text: "Profit Margin Report",
+            text: "Profit Margin Per Item Listing",
             link: "/store-reporting/profit-margin-report",
           },
         ],
