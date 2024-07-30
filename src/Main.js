@@ -103,6 +103,7 @@ const Main = ({ visible }) => {
       {visible === "brands" && <Layout visible={visible} />}
       {visible === "tags" && <Layout visible={visible} />}
       {visible === "store-credit-report" && <Layout visible={visible} />}
+      {visible === "detailed-loyalty-points-report" && <Layout visible={visible} />}
       
 
       {/* multip user layout */}

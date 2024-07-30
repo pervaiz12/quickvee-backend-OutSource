@@ -602,6 +602,11 @@ function App() {
             />
             <Route
               exact
+              path="/store-reporting/detailed-loyalty-points-report"
+              element={<Main visible={"detailed-loyalty-points-report"} />}
+            />
+            <Route
+              exact
               path="/need-help"
               element={<Main visible={"need_help"} />}
             />

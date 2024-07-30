@@ -558,7 +558,7 @@ export default function Unverified({ setMerchantId, setVisible }) {
                           <StyledTableRow>
                             <StyledTableCell>
                               <div className="flex cursor-default">
-                                <BootstrapTooltip title={data.name}>
+                                <BootstrapTooltip title={<p className="capitalize">{data.name}</p>}>
                                   <div className="text-[#000000] order_method capitalize">
                                     {data.name.length < 18
                                       ? data.name
