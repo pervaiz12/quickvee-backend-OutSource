@@ -43,17 +43,22 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: "none",
   },
 }));
-export default function StoreCreditReportTable() {
+export default function StoreCreditReportTable({
+  totalValueIssued,
+  totalValueRedeemed,
+  outStandingsBalance,
+  setTotalValueIssued,
+  setTotalValueRedeemed,
+  setOutStandingsBalance,
+}) {
   const [dataArr, setDataArr] = useState([]);
-  const [totalValueIssued, setTotalValueIssued] = useState(0);
-  const [totalValueRedeemed, setTotalValueRedeemed] = useState(0);
-  const [outStandingsBalance, setOutStandingsBalance] = useState(0);
+
   const [sortOrder, setSortOrder] = useState("asc");
   // console.log(dataArr);
   const tableRow = [
-    { type: "str", name: "customer_name", label: "Customer" },
-    { type: "num", name: "total_credit_amount", label: "Total issued" },
-    { type: "num", name: "total_debit_amount", label: "Total redeemed" },
+    { type: "str", name: "customer_name", label: "Customer Name" },
+    { type: "num", name: "total_credit_amount", label: "Total Issued" },
+    { type: "num", name: "total_debit_amount", label: "Total Redeemed" },
     { type: "num", name: "available_balance", label: "Balance" },
   ];
 
@@ -64,7 +69,7 @@ export default function StoreCreditReportTable() {
   useEffect(() => {
     if (
       !StoreCreditReportReduxState.loading &&
-      StoreCreditReportReduxState.StoreCreditReportArr 
+      StoreCreditReportReduxState.StoreCreditReportArr
     ) {
       setTotalValueIssued(
         StoreCreditReportReduxState.StoreCreditReportArr.reduce(
@@ -103,77 +108,83 @@ export default function StoreCreditReportTable() {
 
   return (
     <>
-  
-      {StoreCreditReportReduxState.loading ||
-      (StoreCreditReportReduxState.status && !dataArr.length) ? (
-        <SkeletonTable columns={tableRow.map((item) => item.label)} />
-      ) : (
-        <Grid container>
-          <Grid item xs={12}>
-            <TableContainer>
-              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-                <TableHead>
-                  {tableRow.map((item, index) => (
-                    <StyledTableCell key={index}>
-                      <button
-                        className="flex items-center"
-                        onClick={() => sortByItemName(item.type, item.name)}
-                      >
-                        <p>{item.label}</p>
-                        <img src={sortIcon} alt="" className="pl-1" />
-                      </button>
-                    </StyledTableCell>
-                  ))}
-                </TableHead>
-                <TableBody>
-                  {dataArr.length > 0 &&
-                    dataArr?.map((item, index) => (
-                      <>
-                        <StyledTableRow key={index}>
-                          <StyledTableCell>
-                            <p>{item.customer_name}</p>
+      {
+        <Grid container className="box_shadow_div">
+          {StoreCreditReportReduxState.loading ||
+          (StoreCreditReportReduxState.status && !dataArr.length) ? (
+            <SkeletonTable columns={tableRow.map((item) => item.label)} />
+          ) : (
+            <Grid container>
+              <Grid item xs={12}>
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead>
+                      {tableRow.map((item, index) => (
+                        <StyledTableCell key={index}>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName(item.type, item.name)}
+                          >
+                            <p>{item.label}</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                      ))}
+                    </TableHead>
+                    <TableBody>
+                      {dataArr.length > 0 &&
+                        dataArr?.map((item, index) => (
+                          <>
+                            <StyledTableRow key={index}>
+                              <StyledTableCell>
+                                <p>{item.customer_name}</p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p>${priceFormate(item.total_credit_amount)}</p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p>${priceFormate(item.total_debit_amount)}</p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p>${priceFormate(item.available_balance)}</p>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          </>
+                        ))}
+                      {dataArr.length > 0 && (
+                        <StyledTableRow>
+                          <StyledTableCell className="trBG_Color">
+                            <p className="report-sort totalReport">Total</p>
                           </StyledTableCell>
-                          <StyledTableCell>
-                            <p>${priceFormate(item.total_credit_amount)}</p>
+                          <StyledTableCell className="trBG_Color">
+                            <p className="report-title totalReport">
+                              ${priceFormate(totalValueIssued?.toFixed(2))}
+                            </p>
                           </StyledTableCell>
-                          <StyledTableCell>
-                            <p>${priceFormate(item.total_debit_amount)}</p>
+                          <StyledTableCell className="trBG_Color">
+                            <p className="report-title totalReport">
+                              ${priceFormate(totalValueRedeemed?.toFixed(2))}
+                            </p>
                           </StyledTableCell>
-                          <StyledTableCell>
-                            <p>${priceFormate(item.available_balance)}</p>
+                          <StyledTableCell className="trBG_Color">
+                            <p className="report-title totalReport">
+                              ${priceFormate(outStandingsBalance?.toFixed(2))}
+                            </p>
                           </StyledTableCell>
                         </StyledTableRow>
-                      </>
-                    ))}
-                  {dataArr.length > 0 && (
-                    <StyledTableRow>
-                      <StyledTableCell className="trBG_Color">
-                        <p className="report-sort totalReport">Total</p>
-                      </StyledTableCell>
-                      <StyledTableCell className="trBG_Color">
-                        <p className="report-title totalReport">
-                          ${priceFormate(totalValueIssued?.toFixed(2))}
-                        </p>
-                      </StyledTableCell>
-                      <StyledTableCell className="trBG_Color">
-                        <p className="report-title totalReport">
-                          ${priceFormate(totalValueRedeemed?.toFixed(2))}
-                        </p>
-                      </StyledTableCell>
-                      <StyledTableCell className="trBG_Color">
-                        <p className="report-title totalReport">
-                          ${priceFormate(outStandingsBalance?.toFixed(2))}
-                        </p>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  )}
-                </TableBody>
-              </StyledTable>
-              {!dataArr.length && <NoDataFound />}
-            </TableContainer>
-          </Grid>
+                      )}
+                    </TableBody>
+                  </StyledTable>
+                  {!dataArr.length && <NoDataFound />}
+                </TableContainer>
+              </Grid>
+            </Grid>
+          )}
         </Grid>
-      )}
+      }
     </>
   );
 }
