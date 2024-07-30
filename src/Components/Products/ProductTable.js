@@ -31,6 +31,7 @@ import { changeShowStatus } from "../../Redux/features/Product/ProductSlice";
 import Skeleton from "react-loading-skeleton";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import NoDataFound from "../../reuseableComponents/NoDataFound";
+import ImportImageModal from "./ImportImageModal";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -435,7 +436,9 @@ const ProductTable = ({
                       loading ? (
                         <h3 className="all-product-list">Loading...</h3>
                       ) : !productList?.length ? (
-                        <h3 className="all-product-list">{!productList?.length && <NoDataFound />}</h3>
+                        <h3 className="all-product-list">
+                          {!productList?.length && <NoDataFound />}
+                        </h3>
                       ) : (
                         <h3 className="all-product-list"></h3>
                       )
@@ -461,6 +464,7 @@ const ProductTable = ({
                               <StyledTableCell align={"center"}>
                                 Images
                               </StyledTableCell>
+                              <StyledTableCell>Import Image</StyledTableCell>
                               {selectedListingType === "Variant listing" ? (
                                 ""
                               ) : (
@@ -669,6 +673,7 @@ const ProductTable = ({
                                               )}
                                             </p>
                                           </StyledTableCell>
+
                                           <StyledTableCell align={"center"}>
                                             <div className="categories-items">
                                               <div className="flex items-center space-x-2 text-base"></div>
@@ -729,6 +734,12 @@ const ProductTable = ({
                                               </div>
                                             </div>
                                           </StyledTableCell>
+                                          <StyledTableCell>
+                                            <ImportImageModal
+                                              productTitle={product.title}
+                                            />
+                                          </StyledTableCell>
+
                                           {selectedListingType ===
                                           "Variant listing" ? (
                                             ""
@@ -764,7 +775,6 @@ const ProductTable = ({
                       </Droppable>
                     </DragDropContext>
                   </InfiniteScroll>
-                  
                 </TableContainer>
                 {/* </div> */}
               </div>

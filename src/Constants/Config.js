@@ -355,6 +355,7 @@ module.exports = Object.freeze({
   SPLIT_LIST: "Order_list_api/get_split_records",
   ORDERRETRIEVE_SUBMIT: "Order_list_api/order_recover",
   STORE_CREDIT_REPORT:"ReportingReactapi/store_credit_report",
+  GET_RELATED_PRODUCT:"Product_api_react/getRelatedProduct",
 });
 
 // All api calls are initialized in this component for this application
