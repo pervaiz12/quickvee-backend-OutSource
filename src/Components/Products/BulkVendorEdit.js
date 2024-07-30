@@ -548,7 +548,7 @@ const BulkVendorEdit = ({
                 hideSelectedValue={true}
                 hideSelectedList={vendorItems}
                 name="name"
-                placeholder="Enter vendor Name"
+                placeholder="Enter Vendor Name"
                 modalType={modalType}
               />
             </Suspense>

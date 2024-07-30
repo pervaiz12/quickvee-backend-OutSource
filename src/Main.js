@@ -100,9 +100,11 @@ const Main = ({ visible }) => {
       {visible === "coupon-report" && <Layout visible={visible} />}
       {visible === "drop-cash-report" && <Layout visible={visible} />}
       {visible === "pay-in-report" && <Layout visible={visible} />}
+      {visible === "employee-sales-per-category-report" && <Layout visible={visible} />}
       {visible === "brands" && <Layout visible={visible} />}
       {visible === "tags" && <Layout visible={visible} />}
       {visible === "store-credit-report" && <Layout visible={visible} />}
+      {visible === "detailed-loyalty-points-report" && <Layout visible={visible} />}
       
 
       {/* multip user layout */}
