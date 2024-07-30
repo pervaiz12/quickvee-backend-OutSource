@@ -34,7 +34,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { Grid } from "@mui/material";
+import { Grid, Tooltip, tooltipClasses } from "@mui/material";
 
 import View from "../../../Assests/VerifiedMerchant/View.svg";
 import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
@@ -82,6 +82,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   // hide last border
 }));
 
+const BootstrapTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: '#f5f5f9',
+    '&::before': {
+      border: '1px solid #dadde9',
+    },
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(16),
+    border: '1px solid #dadde9',
+  },
+}));
 export default function Unverified({ setMerchantId, setVisible }) {
   //  ============== DEFINED REDUX STATES ============================
   const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
@@ -226,9 +243,10 @@ export default function Unverified({ setMerchantId, setVisible }) {
         })
       ).unwrap();
     } catch (error) {
-      if (error.status == 401
+      if (
+        error.status == 401
         //  || error.response.status === 401
-        ) {
+      ) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -539,12 +557,15 @@ export default function Unverified({ setMerchantId, setVisible }) {
                         {unverifiedMerchants?.map((data, index) => (
                           <StyledTableRow>
                             <StyledTableCell>
-                              <div className="flex">
-                                <div className="text-[#000000] order_method capitalize">
-                                  {data.name.length < 18
-                                    ? data.name
-                                    : data.name.slice(0, 18) + `...` || ""}
-                                </div>
+                              <div className="flex cursor-default">
+                                <BootstrapTooltip title={data.name}>
+                                  <div className="text-[#000000] order_method capitalize">
+                                    {data.name.length < 18
+                                      ? data.name
+                                      : data.name.slice(0, 18) + `...` || ""}
+                                  </div>
+                                </BootstrapTooltip>
+
                                 <div className="mx-2 ">
                                   (State: {data.a_state})
                                 </div>

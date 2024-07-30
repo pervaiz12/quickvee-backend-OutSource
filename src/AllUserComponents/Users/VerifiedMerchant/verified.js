@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Cookies from "js-cookie";
-import { Grid } from "@mui/material";
+import { Grid, Tooltip, tooltipClasses } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -76,7 +76,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: "none",
   },
 }));
-
+const BootstrapTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: "#f5f5f9",
+    "&::before": {
+      border: "1px solid #dadde9",
+    },
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 500,
+    fontSize: theme.typography.pxToRem(16),
+    border: "1px solid #dadde9",
+  },
+}));
 export default function Verified({ setVisible, setMerchantId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -487,12 +503,14 @@ export default function Verified({ setVisible, setMerchantId }) {
                         {VerifiedMerchantListState?.map((data, index) => (
                           <StyledTableRow key={data.id}>
                             <StyledTableCell>
-                              <div className="flex">
-                                <div className="text-[#000000] order_method capitalize">
-                                  {data.name.length < 18
-                                    ? data.name
-                                    : data.name.slice(0, 18) + `...` || ""}
-                                </div>
+                              <div className="flex cursor-default">
+                                <BootstrapTooltip title={data.name}>
+                                  <div className="text-[#000000] order_method capitalize">
+                                    {data.name.length < 18
+                                      ? data.name
+                                      : data.name.slice(0, 18) + `...` || ""}
+                                  </div>
+                                </BootstrapTooltip>
                                 <div className="mx-2 ">
                                   (State: {data.a_state})
                                 </div>
@@ -582,7 +600,7 @@ export default function Verified({ setVisible, setMerchantId }) {
                     </StyledTable>
                   </TableContainer>
                 ) : (
-                  <NoDataFound table={true}/>
+                  <NoDataFound table={true} />
                 )}
               </>
             )}
