@@ -64,7 +64,7 @@ export default function StoreCreditReportTable() {
   useEffect(() => {
     if (
       !StoreCreditReportReduxState.loading &&
-      StoreCreditReportReduxState.StoreCreditReportArr.length > 0
+      StoreCreditReportReduxState.StoreCreditReportArr 
     ) {
       setTotalValueIssued(
         StoreCreditReportReduxState.StoreCreditReportArr.reduce(
@@ -103,11 +103,12 @@ export default function StoreCreditReportTable() {
 
   return (
     <>
+  
       {StoreCreditReportReduxState.loading ||
       (StoreCreditReportReduxState.status && !dataArr.length) ? (
         <SkeletonTable columns={tableRow.map((item) => item.label)} />
       ) : (
-        <Grid container sx={{ pt: 2.5 }}>
+        <Grid container>
           <Grid item xs={12}>
             <TableContainer>
               <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">

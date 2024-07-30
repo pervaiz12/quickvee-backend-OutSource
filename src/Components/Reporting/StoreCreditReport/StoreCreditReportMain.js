@@ -23,7 +23,6 @@ export default function StoreCreditReportMain() {
   }, [merchant_id]);
   const getStoreCreditReportTableData = async () => {
     if (merchant_id) {
-  
       try {
         let data = {
           merchant_id,
@@ -31,7 +30,6 @@ export default function StoreCreditReportMain() {
         };
 
         if (data) {
-          console.log("Merchant")
           await dispatch(fetchStoreCreditReportArr(data)).unwrap();
         }
       } catch (error) {
@@ -45,13 +43,9 @@ export default function StoreCreditReportMain() {
   };
   return (
     <>
-      <Grid
-        container
-        sx={{pt:2.5, mt: 3.6 }}
-        className="box_shadow_div "
-      >
-        <Grid item xs={12} >
-          <Grid container sx={{px:2.5}}>
+      <Grid container sx={{ pt: 2.5, mt: 3.6 }} className="box_shadow_div ">
+        <Grid item xs={12}>
+          <Grid container sx={{ px: 2.5,pb:2.5 }}>
             <Grid item xs={12}>
               <h1 style={{ marginBottom: 0 }} className="heading ">
                 Store Credit Report
@@ -59,7 +53,7 @@ export default function StoreCreditReportMain() {
             </Grid>
           </Grid>
         </Grid>
-      <StoreCreditReportTable />
+        <StoreCreditReportTable />
       </Grid>
     </>
   );

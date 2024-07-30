@@ -13,10 +13,7 @@ const initialState = {
 export const fetchStoreCreditReportArr = createAsyncThunk(
     "StoreCreditReport/fetchStoreCreditReportArr",
   async (data, { rejectWithValue }) => {
-    console.log("hello test")
-
     try {
-        console.log("data",data)
       const { tocken, ...dataNew } = data;
       const res = await axios.post(BASE_URL + STORE_CREDIT_REPORT, dataNew, {
         headers: {
@@ -24,7 +21,7 @@ export const fetchStoreCreditReportArr = createAsyncThunk(
           Authorization: `Bearer ${tocken}`,
         },
       });
-      // console.log(res);
+      console.log(res.data);
       if (res.data.status === true) {
         // console.log(response.data
         //     )
@@ -32,7 +29,8 @@ export const fetchStoreCreditReportArr = createAsyncThunk(
         const status = res.data.status;
         return {arr,status}
       }
-      else{
+      else if(res.data.status === false) {
+        console.log("inside else if")
         const arr = [];
         const status = false;
         return {arr,status}
