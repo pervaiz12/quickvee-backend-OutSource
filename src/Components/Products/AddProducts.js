@@ -55,6 +55,7 @@ const AddProducts = () => {
 
   const [fetchDataLoading, setFetchDataLoading] = useState(false);
   const location = useLocation();
+  const varientPageParamas = new URLSearchParams(location.search);
 
   // find add or edit url
   const pageUrl =
@@ -1736,13 +1737,14 @@ const AddProducts = () => {
   };
 
   const fetchSingleVarientData = async () => {
-    const data = location?.state;
+    const id = varientPageParamas.get("var_id");
+    const title = varientPageParamas.get("title");
     const formData = new FormData();
     setSingleVarientPageLoading(true);
 
-    formData.append("id", data?.var_id);
+    formData.append("id", id);
     formData.append("single_product", 0);
-    formData.append("product_name", data?.title);
+    formData.append("product_name", title);
     formData.append("login_type", userTypeData?.login_type);
     formData.append("token_id", userTypeData?.token_id);
     formData.append("token", userTypeData?.token);
