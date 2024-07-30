@@ -157,6 +157,10 @@ const Tags = lazy(() => import("../Tags/MainTags"));
 const MainDigitalMarketing = lazy(
   () => import("../StoreSetting/DigitalMarketing/MainDigitalMarketing")
 );
+const StoreCreditReportMain = lazy(
+  () => import("../Reporting/StoreCreditReport/StoreCreditReportMain")
+);
+const DetailedLoyaltyPointReportMain = lazy(()=>import("../Reporting/DetailedLoyaltyPointReport/DetailedLoyaltyPointReportMain"))
 
 const LeftSide = ({ visible }) => {
   useEffect(() => {
@@ -321,6 +325,10 @@ const LeftSide = ({ visible }) => {
         return <Brands />;
       case "tags":
         return <Tags />;
+      case "store-credit-report":
+        return <StoreCreditReportMain />;
+        case  "detailed-loyalty-points-report":
+          return<DetailedLoyaltyPointReportMain />
       case "employee-sales-per-category-report":
         return <MainEmployeeSalesPerCategory />;
       default:

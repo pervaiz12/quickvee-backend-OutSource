@@ -69,6 +69,7 @@ import DigitalMarketingSlice from "../features/DigitalMarketing/digitalMarketing
 import BrandsSlice from "../features/Brand/brandsSlice";
 import PayInReportSlice from "../features/Reports/PayInReport/PayInReportSlice";
 import DropCashReportSlice from "../features/Reports/DropCashReport/DropCashReportSlice";
+import StoreCreditReportSlice from "../features/Reports/StoreCreditReport/StoreCreditReportSlice";
 import EmployeeSalesPerCategorySlice from "../features/Reports/EmployeeSalesPerCategory/EmployeeSalesPerCategorySlice";
 
 const store = configureStore({
@@ -161,6 +162,7 @@ const store = configureStore({
     supportDetail: SupportDetailsSlice,
     digitalmarketing: DigitalMarketingSlice,
     brandData: BrandsSlice,
+    storeCreditReportList: StoreCreditReportSlice,
   },
 
   //setting setup

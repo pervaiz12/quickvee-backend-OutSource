@@ -25,7 +25,7 @@ export default function Items_sales_profit_record() {
               <Grid container>
                 <Grid item xs={12}>
                   <h1 style={{ marginBottom: 0 }} className="heading ">
-                    Item Sales Profit Report
+                  Product Profitability Report
                   </h1>
                 </Grid>
               </Grid>

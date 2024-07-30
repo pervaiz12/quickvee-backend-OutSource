@@ -1709,7 +1709,7 @@ const AddProducts = () => {
           setOptions(res?.data?.options);
           setVarientData(res?.data?.product_variants);
           setIsMultipleVaient(Boolean(+res?.data?.productdata?.isvarient));
-          const tags = !!res?.data?.productdata?.tags?.split(",")
+          const tags = !!res?.data?.productdata?.tags
             ? res?.data?.productdata?.tags?.split(",")
             : [] || [];
           const brands = !!res?.data?.productdata?.brand
@@ -1845,8 +1845,8 @@ const AddProducts = () => {
   useEffect(() => {
     setProductInfo((prev) => ({
       ...prev,
-      title: productData?.title,
-      description: productData?.description,
+      title: productData?.title ? productData?.title : "",
+      description: productData?.description ? productData?.description : "",
     }));
   }, [productData]);
 
@@ -2459,7 +2459,7 @@ const AddProducts = () => {
         </div>
       ) : !isProductVariant ? (
         <>
-          <Suspense fallback={<CircularProgress />}>
+          <Suspense fallback={<div></div>}>
             <EditPage
               openEditModal={openEditModal}
               handleCloseEditModal={handleCloseEditModal}
@@ -2784,7 +2784,7 @@ const AddProducts = () => {
                 </div>
 
                 <div className="mt-6 px-5">
-                  <Suspense fallback={<CircularProgress />}>
+                  <Suspense fallback={<div></div>}>
                     <VariantAttributes
                       varientDropdownList={dropdownData?.varientList}
                       varientError={varientError}
@@ -2803,7 +2803,7 @@ const AddProducts = () => {
                 </div>
 
                 <div className="">
-                  <Suspense fallback={<CircularProgress />}>
+                  <Suspense fallback={<div></div>}>
                     <GeneratePUC
                       handleVarientTitleBasedItemList={
                         handleVarientTitleBasedItemList
@@ -2922,7 +2922,7 @@ const AddProducts = () => {
             ) : (
               <div class="q-add-categories-section-middle-form ">
                 <div className="mt_card_header">
-                  <Suspense fallback={<CircularProgress />}>
+                  <Suspense fallback={<div></div>}>
                     <EditPage
                       openEditModal={openEditModal}
                       handleCloseEditModal={handleCloseEditModal}

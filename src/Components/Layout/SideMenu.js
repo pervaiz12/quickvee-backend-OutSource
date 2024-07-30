@@ -637,7 +637,7 @@ const menuItems = [
           },
           {
             id: 90,
-            text: "Item Sales Profit Report",
+            text: "Product Profitability Report",
             link: "/store-reporting/item-sale-profit-report",
           },
           { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
@@ -685,7 +685,7 @@ const menuItems = [
           },
           {
             id: 94,
-            text: "Profit Margin Report",
+            text: "Profit Margin Per Item Listing",
             link: "/store-reporting/profit-margin-report",
           },
         ],
@@ -799,16 +799,21 @@ const menuItems = [
             text: "Pay In",
             link: "/store-reporting/pay-in-report",
           },
-
-
-
-
-
           {
             id: 99,
             text: "Employee Sales Per Category",
             link: "/store-reporting/employee-sales-per-category-report",
           },
+          {
+            id: 100,
+            text: "Store Credit Report",
+            link:'/store-reporting/store-credit-report',
+          },
+          {
+            id: 101,
+            text: "Detailed Loyalty Points Report",
+            link:'/store-reporting/detailed-loyalty-points-report',
+          }
         ],
       },
     ],

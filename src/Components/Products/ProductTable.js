@@ -772,7 +772,7 @@ const ProductTable = ({
           </div>
         </div>
         <DeleteModal
-          headerText="Category"
+          headerText="Product"
           open={deleteModalOpen}
           onClose={() => {
             setDeleteModalOpen(false);

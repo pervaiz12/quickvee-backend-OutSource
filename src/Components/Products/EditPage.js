@@ -112,7 +112,7 @@ const EditPage = ({
               <TabContext value={value}>
                 {renderTabList}
                 <TabPanel value="1">
-                  <Suspense fallback={<CircularProgress />}>
+                  <Suspense fallback={<div></div>}>
                     <BulkVarientEdit
                       formData={formData}
                       handleCopyAllVarientValue={handleCopyAllVarientValue}
@@ -123,7 +123,7 @@ const EditPage = ({
                 </TabPanel>
 
                 <TabPanel value="2">
-                  <Suspense fallback={<CircularProgress />}>
+                  <Suspense fallback={<div></div>}>
                     <BulkVendorEdit
                       productData={productData}
                       varientIndex={varientIndex}
@@ -134,7 +134,7 @@ const EditPage = ({
                   </Suspense>
                 </TabPanel>
                 <TabPanel value="3">
-                  <Suspense fallback={<CircularProgress />}>
+                  <Suspense fallback={<div></div>}>
                     <BulkInstantPo
                       productData={productData}
                       modalType={modalType}
