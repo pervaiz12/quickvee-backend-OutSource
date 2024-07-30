@@ -799,6 +799,22 @@ const menuItems = [
             text: "Pay In",
             link: "/store-reporting/pay-in-report",
           },
+          
+
+
+
+
+
+
+
+
+
+          
+          {
+            id: 100,
+            text: "Store Credit Report",
+            link:'/store-reporting/store-credit-report',
+          }
         ],
       },
     ],
