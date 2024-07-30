@@ -342,12 +342,12 @@ const EmployeeSalesPerCategoryReport = (props) => {
           style={{ marginBottom: "1rem", transform: "translate(0rem, -1rem)" }}
         >
           <StyledTableRow className="trBG_Color grandTotal">
-            <StyledTableCell sx={{ width: "33%" }} >
+            <StyledTableCell sx={{ width: "32%" }} >
               <div className="">
                   <p className="totalReport">Grand Total</p>
               </div>
             </StyledTableCell>
-            <StyledTableCell sx={{ width: "25%" }} >
+            <StyledTableCell sx={{ width: "23.5%" }} >
               <div className="">
                   <p className="totalReport">{itemSoldTotal}</p>
               </div>
