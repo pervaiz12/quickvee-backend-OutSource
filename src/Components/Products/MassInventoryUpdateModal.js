@@ -124,13 +124,7 @@ const MassInventoryUpdateModal = memo(({ showModal, handleClose }) => {
             className="view-category-item-modal mass-inventory-modal"
             style={myStyles}
           >
-            <div class="cancel-btn">
-              <img
-                src={CloseIcon}
-                className="cancel-image"
-                onClick={() => handleClose()}
-              />
-            </div>
+           
             <div
               className="q-add-categories-section-header text-[18px]"
               style={{
@@ -142,6 +136,13 @@ const MassInventoryUpdateModal = memo(({ showModal, handleClose }) => {
                 <img src={backIcon} alt="Timesheet" className="w-6 h-6" />
                 <span>Mass Inventory Update</span>
               </span>
+              <div class="cancel-btn">
+              <img
+                src={CloseIcon}
+                className="cancel-image"
+                onClick={() => handleClose()}
+              />
+            </div>
             </div>
 
             <div className="view-category-item-modal-header">
