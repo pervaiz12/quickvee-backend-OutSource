@@ -536,7 +536,7 @@ const BulkVendorEdit = ({
       <div class="add-vendor-area">
         <div className="q-add-categories-single-input">
           <div class="vendor-add-input">
-            <Suspense fallback={<CircularProgress />}>
+            <Suspense fallback={<div></div>}>
               <SearchableDropdown
                 keyName="stores"
                 optionList={vendor}
