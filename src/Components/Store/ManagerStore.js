@@ -17,7 +17,10 @@ import AddManagerFormModel from "./AddManagerFormModel";
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "./../../Common/cookiesHelper";
 import "../../Styles/Manager.css";
-import { deleteManagerById, getManagerListing } from "../../Redux/features/user/managerSlice";
+import {
+  deleteManagerById,
+  getManagerListing,
+} from "../../Redux/features/user/managerSlice";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import Loader from "../../CommonComponents/Loader";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
@@ -115,30 +118,30 @@ const ManagerStore = () => {
 
   // }
 
-  const fetchManagerListing=()=>{
+  const fetchManagerListing = () => {
     setLoading(true);
     const data = {
       admin_id: LoginGetDashBoardRecordJson?.data?.user_id,
     };
     dispatch(getManagerListing(data))
-    .then((res) => {
-      if (res?.payload?.msg === "Data found.") {
-        setManagerList(res?.payload?.result);
-      }else if(res?.payload?.msg === "No data found."){
-        setManagerList([]);
-      }
-    })
-    .catch(() => {
-      ToastifyAlert("Error!", "error");
-    })
-    .finally(() => {
-      setLoading(false);
-    });
-  }
+      .then((res) => {
+        if (res?.payload?.msg === "Data found.") {
+          setManagerList(res?.payload?.result);
+        } else if (res?.payload?.msg === "No data found.") {
+          setManagerList([]);
+        }
+      })
+      .catch(() => {
+        ToastifyAlert("Error!", "error");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
     // calling manager listing API.
-    fetchManagerListing();   
+    fetchManagerListing();
   }, []);
 
   let getSingleStore = (result) => {
@@ -158,29 +161,31 @@ const ManagerStore = () => {
     }
   };
 
-
   const handleDeleteManager = (id) => {
     const data = {
       manager_id: id,
-    }
+    };
     const userConfirmed = window.confirm(
       "Are you sure you want to delete this ?"
     );
     if (userConfirmed) {
       if (id) {
-        dispatch(deleteManagerById(data)).then((res)=>{
-         if(res?.payload?.status){
-        ToastifyAlert("Deleted Successfully", "success")
-        fetchManagerListing();
-         }
-        }).catch((_)=>{
-        ToastifyAlert("Error!", "error")
-        });
+        dispatch(deleteManagerById(data))
+          .then((res) => {
+            if (res?.payload?.status) {
+              ToastifyAlert("Deleted Successfully", "success");
+              fetchManagerListing();
+            }
+          })
+          .catch((_) => {
+            ToastifyAlert("Error!", "error");
+          });
       }
     } else {
       console.log("Deletion canceled by user");
     }
   };
+
   return (
     <>
       <Grid container-fluid className="managerStore-title-main border" px={2}>
@@ -189,7 +194,11 @@ const ManagerStore = () => {
             <p className="managerStore-title select-none">Manager</p>
             <div className="flex items-center cursor-pointer">
               {/* <p className="me-3 select-none managerStore-btn" style={{whiteSpace:"nowrap"}}>Add Manager</p> <img src={AddIcon} /> */}
-              <AddManagerFormModel stores={LoginAllStore} modalType="add"  fetchManagerListing={fetchManagerListing}/>
+              <AddManagerFormModel
+                stores={LoginAllStore}
+                modalType="add"
+                fetchManagerListing={fetchManagerListing}
+              />
             </div>
           </div>
         </Grid>
@@ -230,18 +239,20 @@ const ManagerStore = () => {
                           <div className="user-operation">
                             <p>
                               <AddManagerFormModel
-                              stores={LoginAllStore}
-                              modalType="edit"
-                              modalData={item}
-                              fetchManagerListing={fetchManagerListing}
-                            />
-                            
+                                stores={LoginAllStore}
+                                modalType="edit"
+                                modalData={item}
+                                fetchManagerListing={fetchManagerListing}
+                              />
                             </p>
                             <p>
-                              <img src={DeleteIcon} alt="delete-icon" onClick={()=> handleDeleteManager(item?.id)}/>
+                              <img
+                                src={DeleteIcon}
+                                alt="delete-icon"
+                                onClick={() => handleDeleteManager(item?.id)}
+                              />
                             </p>
                           </div>
-            
                         </div>
 
                         <div className="store-items-store-name-address">
@@ -265,7 +276,6 @@ const ManagerStore = () => {
                                         store?.merchant_id === merchantData
                                     );
                                   if (matchedStore) {
-                                    // console.log(handleGetStoreData)
                                     return (
                                       <p
                                         key={index}
