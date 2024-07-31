@@ -142,6 +142,13 @@ const MassInventoryUpdateModal = memo(({ showModal, handleClose }) => {
                   onClick={() => handleClose()}
                 />
               </div>
+              <div class="cancel-btn">
+              <img
+                src={CloseIcon}
+                className="cancel-image"
+                onClick={() => handleClose()}
+              />
+            </div>
             </div>
 
             <div className="view-category-item-modal-header">
