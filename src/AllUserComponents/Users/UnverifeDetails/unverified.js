@@ -48,6 +48,7 @@ import DeleteModal from "../../../reuseableComponents/DeleteModal";
 import DislikeModal from "../../../reuseableComponents/DislikeModal";
 import emailLogo from "../../../Assests/Dashboard/email.svg";
 import phoneLogo from "../../../Assests/Dashboard/phone.svg";
+import ipLogo from "../../../Assests/Dashboard/IP.svg";
 import { setIsStoreActive } from "../../../Redux/features/NavBar/MenuSlice";
 import PasswordShow from "../../../Common/passwordShow";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
@@ -593,7 +594,7 @@ export default function Unverified({ setMerchantId, setVisible }) {
                               <div className="text-[#818181] flex">
                               {data.ipv4 && (
                                   <img
-                                    src={phoneLogo}
+                                    src={ipLogo}
                                     alt=""
                                     className="pe-1"
                                   />
