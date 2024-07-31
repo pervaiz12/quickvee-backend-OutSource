@@ -141,9 +141,9 @@ export default function ImportImageModal({ productTitle, productId }) {
     });
   };
   const handleSubmitButton = async () => {
-    if(!selectedImageArray.length ) {
+    if (!selectedImageArray.length) {
       alert("Please select at least one images");
-      return
+      return;
     }
     const data = {
       product_id: productId,
@@ -160,16 +160,42 @@ export default function ImportImageModal({ productTitle, productId }) {
         },
       });
       console.log(res);
-      if(res.data.status ===true){
-        ToastifyAlert("Updated Successfully","success")
-        handleClose()
-      }else if(res.data.status ===false){
-        ToastifyAlert(res.data.message,"error")
+      if (res.data.status === true) {
+        ToastifyAlert("Updated Successfully", "success");
+        handleClose();
+      } else if (res.data.status === false) {
+        ToastifyAlert(res.data.message, "error");
       }
-    } catch (e) {
-
-    }
-    setIsLoadingSubmit(false)
+    } catch (e) {}
+    setIsLoadingSubmit(false);
+  };
+  const customStyles = {
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 9999,
+      position: "absolute",
+    }),
+    menuPortal: (base) => ({
+      ...base,
+      zIndex: 9999,
+    }),
+    control: (provided, state) => ({
+      ...provided,
+      borderColor: state.isFocused ? "black" : provided.borderColor,
+      boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
+      height: 40,
+      minHeight: 40,
+      "&:hover": {
+        borderColor: "black" ? "black" : provided["&:hover"].borderColor,
+      },
+    }),
+    input: (provided) => ({
+      ...provided,
+      "&:focus": {
+        borderColor: "black",
+        outline: "none",
+      },
+    }),
   };
   return (
     <>
@@ -221,6 +247,7 @@ export default function ImportImageModal({ productTitle, productId }) {
                     merchant_id: item.merchant_id,
                   }))}
                 onChange={handleOptionClick}
+                styles={customStyles}
               />
             </Grid>
           </Grid>
