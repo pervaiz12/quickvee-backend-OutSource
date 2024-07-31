@@ -36,22 +36,30 @@ const FormInputFields = {
   stores: ["Store Name-1", "Store Name-Lorem 2", "Store 3"],
 };
 const AddManagerFormModel = (props) => {
-  const {modalData, modalType, fetchManagerListing} = props;
+  const { modalData, modalType, fetchManagerListing } = props;
+  const [modalName, setModalName] = useState(modalType);
 
   const dispatch = useDispatch();
-  const { LoginGetDashBoardRecordJson, userTypeData, GetSessionLogin } = useAuthDetails();
+  const {
+    LoginGetDashBoardRecordJson,
+    userTypeData,
+    GetSessionLogin,
+    storeData,
+  } = useAuthDetails();
 
-  let storeData = props.stores?.data?.stores;
+  // let storeData = props.stores?.data?.stores;
   const [open, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState([]);
+  console.log("selectedOption", selectedOption);
   const [formInputs, setFormInputs] = useState(FormInputFields);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    modalType === 'add' && setSelectedOption([]);    
-    modalType === 'add' && setFormInputs(FormInputFields);
+    modalType === "add" && setSelectedOption([]);
+    modalType === "add" && setFormInputs(FormInputFields);
     setError({});
-  }
+    fetchData();
+  };
   const [loading, setLoading] = useState(false);
 
   const [error, setError] = useState({});
@@ -59,14 +67,14 @@ const AddManagerFormModel = (props) => {
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
 
-    if (name === 'mobile') {
+    if (name === "mobile") {
       // Allow only numeric characters
-      const numericValue = value.replace(/[^0-9]/g, '');
+      const numericValue = value.replace(/[^0-9]/g, "");
       setFormInputs((prevState) => ({
         ...prevState,
         [name]: numericValue,
       }));
-    }else{
+    } else {
       setFormInputs((prevState) => ({
         ...prevState,
         [name]: value,
@@ -74,12 +82,14 @@ const AddManagerFormModel = (props) => {
     }
   };
 
-  useEffect(()=>{
-    if(modalData){
-      const getSelectedItems = modalData?.merchant_id?.split(',')?.map((item)=> {
-        return storeData?.filter((st)=> st?.merchant_id === item)
-      })
-      setSelectedOption(getSelectedItems?.flat())
+  const fetchData = () => {
+    if (modalData) {
+      const getSelectedItems = modalData?.merchant_id
+        ?.split(",")
+        ?.map((item) => {
+          return storeData?.filter((st) => st?.merchant_id === item);
+        });
+      setSelectedOption(getSelectedItems?.flat());
 
       setFormInputs({
         fname: modalData?.f_name,
@@ -90,7 +100,12 @@ const AddManagerFormModel = (props) => {
         stores: ["Store Name-1", "Store Name-Lorem 2", "Store 3"],
       });
     }
-  },[modalData, modalType, storeData])
+  };
+
+  useEffect(() => {
+    fetchData();
+    return () => setSelectedOption([]);
+  }, [modalData, modalType]);
 
   const handleSelectedOptions = (value, name) => {
     setSelectedOption((prev) => [...prev, value]);
@@ -113,16 +128,18 @@ const AddManagerFormModel = (props) => {
       .string()
       .required("Last Name is Required")
       .matches(/^[^\d]*$/, "last name only contains alphabet"),
-      email: yup.string()
+    email: yup
+      .string()
       .matches(emailRegex, "Invalid email address")
       .required("Email is required"),
     mobile: yup
       .string()
       .matches(/^[0-9]{10}$/, "Mobile number is not valid")
       .required("Mobile number is required"),
-    password: modalType === 'add' ?  yup
-      .string()
-      .required("Password is Required") : yup.string(),
+    password:
+      modalType === "add"
+        ? yup.string().required("Password is Required")
+        : yup.string(),
     selectedOption: yup
       .array()
       .min(1, "select an store")
@@ -131,19 +148,18 @@ const AddManagerFormModel = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
 
-    const formData ={
-      f_name: formInputs['fname'],
-      l_name: formInputs['lname'],
-      email: formInputs['email'],
-      phone: formInputs['mobile'],
-password: formInputs['password']?.trim(),
-store_id: selectedOption?.map((i) => i?.merchant_id).toString(),
-manager_id: modalType === 'add' ? "":modalData?.id,
-created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
-...userTypeData,
-    }
+    const formData = {
+      f_name: formInputs["fname"],
+      l_name: formInputs["lname"],
+      email: formInputs["email"],
+      phone: formInputs["mobile"],
+      password: formInputs["password"]?.trim(),
+      store_id: selectedOption?.map((i) => i?.merchant_id).toString(),
+      manager_id: modalType === "add" ? "" : modalData?.id,
+      created_by_id: LoginGetDashBoardRecordJson?.data?.user_id,
+      ...userTypeData,
+    };
     try {
       const response = await formSchema.validate(
         { ...formInputs, selectedOption },
@@ -157,16 +173,20 @@ created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
         try {
           const res = await dispatch(addManager(formData));
           if (res?.payload?.status) {
-            modalType === 'add' ? 
-            ToastifyAlert("Added Successfully", "success") : 
-            ToastifyAlert("Updated Successfully", "success")
-            // call here fetch api of all manager 
-            fetchManagerListing()
+            modalType === "add"
+              ? ToastifyAlert("Added Successfully", "success")
+              : ToastifyAlert("Updated Successfully", "success");
+            // call here fetch api of all manager
+            fetchManagerListing();
             handleClose();
             setSelectedOption([]);
             setFormInputs(FormInputFields);
-          } else if (res?.payload?.status === false && res?.payload?.msg === "Email already exists, please enter a different email.") {
-            ToastifyAlert(res?.payload?.msg, 'error');
+          } else if (
+            res?.payload?.status === false &&
+            res?.payload?.msg ===
+              "Email already exists, please enter a different email."
+          ) {
+            ToastifyAlert(res?.payload?.msg, "error");
           }
         } catch (err) {
           ToastifyAlert("Error!", "error");
@@ -194,9 +214,13 @@ created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
           className="me-3 select-none managerStore-btn managerStore-btn-add"
           style={{ whiteSpace: "nowrap" }}
         >
-          {props?.modalType === 'add' ? 'Add Manager' : <img src={EditIcon} alt="edit-icon" /> }  
+          {props?.modalType === "add" ? (
+            "Add Manager"
+          ) : (
+            <img src={EditIcon} alt="edit-icon" />
+          )}
         </p>
-         {props?.modalType === 'add' ? <img src={AddIcon} />:''}
+        {props?.modalType === "add" ? <img src={AddIcon} /> : ""}
       </Button>
       <Modal
         open={open}
@@ -213,7 +237,7 @@ created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
                   className="me-3 select-none "
                   style={{ whiteSpace: "nowrap" }}
                 >
-                     {props?.modalType === 'add' ? 'Add Manager' : 'Edit Manager' }  
+                  {props?.modalType === "add" ? "Add Manager" : "Edit Manager"}
                 </span>
                 <img
                   src={CrossIcon}
@@ -224,7 +248,7 @@ created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
                 />
               </Grid>
             </Grid>
-            
+
             <div className="manager-form">
               <Grid container spacing={2}>
                 <Grid item xs={4} className="input-box">
@@ -235,7 +259,7 @@ created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
                     onChangeFun={onChangeHandler}
                     placeholder="First Name"
                   />
-                   {error?.fname ? (
+                  {error?.fname ? (
                     <span className="error-alert">{error?.fname}</span>
                   ) : (
                     ""
@@ -249,7 +273,7 @@ created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
                     onChangeFun={onChangeHandler}
                     placeholder="Last Name"
                   />
-                    {error?.lname ? (
+                  {error?.lname ? (
                     <span className="error-alert">{error?.lname}</span>
                   ) : (
                     ""
@@ -265,7 +289,7 @@ created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
                     placeholder="Mobile"
                     maxLength={10}
                   />
-                    {error?.mobile ? (
+                  {error?.mobile ? (
                     <span className="error-alert">{error?.mobile}</span>
                   ) : (
                     ""
@@ -281,7 +305,7 @@ created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
                     onChangeFun={onChangeHandler}
                     placeholder="Email"
                   />
-                    {error?.email ? (
+                  {error?.email ? (
                     <span className="error-alert">{error?.email}</span>
                   ) : (
                     ""
@@ -295,7 +319,7 @@ created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
                     onChangeFun={onChangeHandler}
                     placeholder="Password"
                   />
-                    {error?.password ? (
+                  {error?.password ? (
                     <span className="error-alert">{error?.password}</span>
                   ) : (
                     ""
@@ -314,8 +338,8 @@ created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
                       selectedOption={selectedOption}
                       handleDeleteSelectedOption={handleDeleteSelectedOption}
                       //  selectedOption={productInfo?.relatedProduct}
-                       error={error}
-                       placeholder="Enter Store Name"
+                      error={error}
+                      placeholder="Enter Store Name"
                       // handleUpdateError={handleUpdateError}
                     />
                   </div>
@@ -323,20 +347,23 @@ created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
               </Grid>
             </div>
             <div className="q-add-categories-section-middle-footer">
-              <button className="quic-btn quic-btn-save" disabled={loading}> 
-              {loading ? <Box className="loader-box">
-                  <CircularProgress />
-                </Box>: modalType === 'add' ? 'Add': 'Edit'} 
-                </button>
+              <button className="quic-btn quic-btn-save" disabled={loading}>
+                {loading ? (
+                  <Box className="loader-box">
+                    <CircularProgress />
+                  </Box>
+                ) : modalType === "add" ? (
+                  "Add"
+                ) : (
+                  "Update"
+                )}
+              </button>
 
               <button
                 onClick={() => handleClose()}
                 className="quic-btn quic-btn-cancle"
               >
-                
-            
                 Cancel
-                
               </button>
             </div>
           </form>

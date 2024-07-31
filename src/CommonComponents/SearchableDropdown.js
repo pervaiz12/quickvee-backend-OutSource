@@ -226,19 +226,20 @@ const SearchableDropdown = ({
           <div className="options-box custom-scroll">
             {showOptions
               ? changeFilterableList()?.map((opt) => {
+                  const isInSelectedOptions = selectedOption?.some(
+                    (selected) => selected.id === opt.id
+                  );
                   if (typeof opt === "string") {
                     return <p>{opt}</p>;
                   } else if (opt?.id && opt?.[name]) {
                     return (
                       <span
                         className={
-                          selectedOption?.includes(opt)
-                            ? "item active-item"
-                            : "item"
+                          isInSelectedOptions ? "item active-item" : "item"
                         }
                         key={opt?.id}
                         onClick={() =>
-                          selectedOption?.includes(opt)
+                          isInSelectedOptions
                             ? handleDeleteSelectedOption(opt?.id, keyName)
                             : handleSelectProductOptions(opt, keyName)
                         }

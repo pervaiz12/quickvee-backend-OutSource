@@ -45,6 +45,9 @@ export const useAuthDetails = () => {
   const GetSessionLogin =
     getUserLoginAuth !== "" ? JSON.parse(getUserLoginAuth) : [];
   //  --------------------------------------------------------------
+  const storeData = !!localStorage.getItem("AllStore")
+    ? JSON.parse(localStorage.getItem("AllStore"))
+    : "";
 
   // ---------------------------------------------------------------
 
@@ -56,5 +59,6 @@ export const useAuthDetails = () => {
     user_id,
     inventory_approval,
     future_date,
+    storeData,
   };
 };
