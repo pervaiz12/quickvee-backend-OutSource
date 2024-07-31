@@ -149,6 +149,9 @@ const StorePage = () => {
       }
     });
   };
+  const storedData = localStorage.getItem("AllStore")
+    ? JSON.parse(localStorage.getItem("AllStore"))
+    : "";
   return (
     <>
       {LoginAllStore?.data?.login_type == "admin" ? (
@@ -156,7 +159,7 @@ const StorePage = () => {
           <Grid container spacing={2} className="store-items-list ">
             {Array.isArray(LoginAllStore?.data?.stores) &&
             LoginAllStore?.data?.stores.length > 0 ? (
-              LoginAllStore?.data?.stores.map((store, Index) => {
+              storedData?.map((store, Index) => {
                 return (
                   <Grid
                     item
@@ -172,11 +175,14 @@ const StorePage = () => {
                         handleSubmitStoreRecord(store?.merchant_id)
                       }
                     >
-                      <div className="me-5 storeImageLogo" style={{
-                        backgroundImage: !!store.img
-                          ? `url(${BASE_URL}upload/${store.img})`
-                          : `url(${storeDefaultImage})`,
-                      }}>
+                      <div
+                        className="me-5 storeImageLogo"
+                        style={{
+                          backgroundImage: !!store.img
+                            ? `url(${BASE_URL}upload/${store.img})`
+                            : `url(${storeDefaultImage})`,
+                        }}
+                      >
                         {/* <img
                           className="w-store"
                           src={
@@ -220,7 +226,7 @@ const StorePage = () => {
       ) : LoginAllStore?.data?.login_type == "merchant" ? (
         <Grid container className="store-items-list" spacing={2}>
           {Array.isArray(LoginAllStore?.data?.stores) ? (
-            LoginAllStore?.data?.stores.map((store, Index) => {
+            storedData.map((store, Index) => {
               return (
                 <Grid item className="store-items " xs={12} sm={6} key={Index}>
                   {/* <Link to={`/?m_id=${store?.merchant_id}`}> */}
@@ -228,11 +234,14 @@ const StorePage = () => {
                     className="store-item-card border my-2 p-2"
                     onClick={() => handleSubmitStoreRecord(store?.merchant_id)}
                   >
-                    <div className="me-5 storeImageLogo" style={{
+                    <div
+                      className="me-5 storeImageLogo"
+                      style={{
                         backgroundImage: !!store.img
                           ? `url(${BASE_URL}upload/${store.img})`
                           : `url(${storeDefaultImage})`,
-                      }}>
+                      }}
+                    >
                       {/* <img
                         className="w-store"
                         src={
@@ -271,7 +280,7 @@ const StorePage = () => {
       ) : LoginAllStore?.data?.login_type == "manager" ? (
         <Grid container className="store-items-list" spacing={2}>
           {Array.isArray(LoginAllStore?.data?.stores) ? (
-            LoginAllStore?.data?.stores.map((store, Index) => {
+            storedData.map((store, Index) => {
               return (
                 <Grid item className="store-items " xs={12} sm={6} key={Index}>
                   {/* <Link to={`/?m_id=${store?.merchant_id}`}> */}
@@ -279,11 +288,14 @@ const StorePage = () => {
                     className="store-item-card border my-2 p-2"
                     onClick={() => handleSubmitStoreRecord(store?.merchant_id)}
                   >
-                    <div className="me-5 storeImageLogo"  style={{
+                    <div
+                      className="me-5 storeImageLogo"
+                      style={{
                         backgroundImage: !!store.img
                           ? `url(${BASE_URL}upload/${store.img})`
                           : `url(${storeDefaultImage})`,
-                      }}>
+                      }}
+                    >
                       {/* <img
                         className="w-store"
                         src={

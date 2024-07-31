@@ -153,14 +153,25 @@ const AddVendors = lazy(() => import("../Vendors/AddVendors"));
 const NeedHelp = lazy(() => import("../NeedHelp/NeedHelp"));
 const Brands = lazy(() => import("../Brands/MainBrand"));
 const Tags = lazy(() => import("../Tags/MainTags"));
-
+const CategorySalesSummeryReport = lazy(
+  () =>
+    import("../Reporting/CategorySalesSummeryReport/categorySalesSummeryMain")
+);
+const SalesByHoursReport = lazy(
+  () => import("../Reporting/SalesByHourReport/SalesByHourMain")
+);
 const MainDigitalMarketing = lazy(
   () => import("../StoreSetting/DigitalMarketing/MainDigitalMarketing")
 );
 const StoreCreditReportMain = lazy(
   () => import("../Reporting/StoreCreditReport/StoreCreditReportMain")
 );
-const DetailedLoyaltyPointReportMain = lazy(()=>import("../Reporting/DetailedLoyaltyPointReport/DetailedLoyaltyPointReportMain"))
+const DetailedLoyaltyPointReportMain = lazy(
+  () =>
+    import(
+      "../Reporting/DetailedLoyaltyPointReport/DetailedLoyaltyPointReportMain"
+    )
+);
 
 const LeftSide = ({ visible }) => {
   useEffect(() => {
@@ -325,10 +336,14 @@ const LeftSide = ({ visible }) => {
         return <Brands />;
       case "tags":
         return <Tags />;
+      case "category-sales-summery-report":
+        return <CategorySalesSummeryReport />;
+      case "sales-by-hour-report":
+        return <SalesByHoursReport />;
       case "store-credit-report":
         return <StoreCreditReportMain />;
-        case  "detailed-loyalty-points-report":
-          return<DetailedLoyaltyPointReportMain />
+      case "detailed-loyalty-points-report":
+        return <DetailedLoyaltyPointReportMain />;
       case "employee-sales-per-category-report":
         return <MainEmployeeSalesPerCategory />;
       default:

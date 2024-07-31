@@ -69,6 +69,8 @@ import DigitalMarketingSlice from "../features/DigitalMarketing/digitalMarketing
 import BrandsSlice from "../features/Brand/brandsSlice";
 import PayInReportSlice from "../features/Reports/PayInReport/PayInReportSlice";
 import DropCashReportSlice from "../features/Reports/DropCashReport/DropCashReportSlice";
+import CategorySalesReportSlice from "../features/CategorySalesSummeryReport/categorySalesSummeryReportSlice";
+import SalesByHoursReportSlice from "../features/Reports/SalesByHours/SalesByHoursSlice";
 import StoreCreditReportSlice from "../features/Reports/StoreCreditReport/StoreCreditReportSlice";
 import EmployeeSalesPerCategorySlice from "../features/Reports/EmployeeSalesPerCategory/EmployeeSalesPerCategorySlice";
 import DetailedLoyaltyPointsReportSlice from "../features/Reports/DatailedLoyaltyPointsReport/DetailedLoyaltyPointsReportSlice";
@@ -162,6 +164,8 @@ const store = configureStore({
     supportDetail: SupportDetailsSlice,
     digitalmarketing: DigitalMarketingSlice,
     brandData: BrandsSlice,
+    categorySalesReportData: CategorySalesReportSlice,
+    SalesByHoursData: SalesByHoursReportSlice,
     storeCreditReportList: StoreCreditReportSlice,
     DetailedLoyaltyPointsReport: DetailedLoyaltyPointsReportSlice,
   },

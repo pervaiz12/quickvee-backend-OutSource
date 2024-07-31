@@ -90,6 +90,9 @@ export default function AdminView({ setVisible, setEditAdminId }) {
     if (!AdminRecord.loading && AdminRecord.AdminRecord?.length >= 1) {
       setAdminsDataState(AdminRecord.AdminRecord);
     }
+    else{
+      setAdminsDataState([])
+    }
   }, [AdminRecord.AdminRecord]);
   useEffect(() => {
     setTotalCount(adminRecordCount);

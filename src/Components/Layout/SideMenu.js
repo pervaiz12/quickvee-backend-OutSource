@@ -779,12 +779,13 @@ const menuItems = [
       // { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
       { id: 87, text: "Tip Report", link: "/store-reporting/tip-report" },
       { id: 88, text: "Coupon Report", link: "/store-reporting/coupon-report" },
+
+      ,
       // {
       //   id: 89,
       //   text: "Discount Per Sales Person",
       //   link: "/store-reporting/discount-per-sales-report",
       // },
-      ,
       {
         id: 6,
         text: "New Reports",
@@ -800,20 +801,30 @@ const menuItems = [
             link: "/store-reporting/pay-in-report",
           },
           {
+            id: 98,
+            text: "Category Sales Summery Report",
+            link: "/store-reporting/category-sales-summery-report",
+          },
+          {
             id: 99,
+            text: "Sales by Hour Report",
+            link: "/store-reporting/sales-by-hour-report",
+          },
+          {
+            id: 102,
             text: "Employee Sales Per Category",
             link: "/store-reporting/employee-sales-per-category-report",
           },
           {
             id: 100,
             text: "Store Credit Report",
-            link:'/store-reporting/store-credit-report',
+            link: "/store-reporting/store-credit-report",
           },
           {
             id: 101,
             text: "Detailed Loyalty Points Report",
-            link:'/store-reporting/detailed-loyalty-points-report',
-          }
+            link: "/store-reporting/detailed-loyalty-points-report",
+          },
         ],
       },
     ],
@@ -910,7 +921,6 @@ const menuItems = [
       },
     ],
   },
-
   {
     id: 5,
     icon: (
