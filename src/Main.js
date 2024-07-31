@@ -105,6 +105,7 @@ const Main = ({ visible }) => {
       {visible === "category-sales-summery-report" && (
         <Layout visible={visible} />
       )}
+      {visible === "sales-by-hour-report" && <Layout visible={visible} />}
 
       {/* multip user layout */}
       {visible === "multimerchant" && <IndexAllUsers />}

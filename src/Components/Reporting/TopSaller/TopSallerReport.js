@@ -65,7 +65,7 @@ const TopSallerReport = () => {
         limit: orderTypValue,
         ...userTypeData,
       };
-      
+
       setFilteredData(updatedData);
     } else {
       // Handle other cases or log an error
@@ -84,7 +84,7 @@ const TopSallerReport = () => {
         break;
       case "limit":
         setselectedLimitType(option.title);
-        
+
         break;
       case "category":
         if (option === "All") {
@@ -163,7 +163,7 @@ const TopSallerReport = () => {
         <Grid item xs={12}>
           <CustomHeader>Top Sellers</CustomHeader>
 
-          <Grid container sx={{ px: 2.5,pt:1 }}>
+          <Grid container sx={{ px: 2.5, pt: 1 }}>
             <Grid xs={12} sm={6} md={4}>
               <div className="heading">Filter By</div>
             </Grid>

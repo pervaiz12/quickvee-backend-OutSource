@@ -156,6 +156,9 @@ const CategorySalesSummeryReport = lazy(
   () =>
     import("../Reporting/CategorySalesSummeryReport/categorySalesSummeryMain")
 );
+const SalesByHoursReport = lazy(
+  () => import("../Reporting/SalesByHourReport/SalesByHourMain")
+);
 const MainDigitalMarketing = lazy(
   () => import("../StoreSetting/DigitalMarketing/MainDigitalMarketing")
 );
@@ -325,6 +328,8 @@ const LeftSide = ({ visible }) => {
         return <Tags />;
       case "category-sales-summery-report":
         return <CategorySalesSummeryReport />;
+      case "sales-by-hour-report":
+        return <SalesByHoursReport />;
       default:
         return <DashboardMain />;
     }

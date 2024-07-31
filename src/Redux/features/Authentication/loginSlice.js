@@ -148,6 +148,7 @@ const initialState = {
 export const handleUserType = createAsyncThunk(
   "LoginAuth/handleUserType",
   async (data, { rejectWithValue }) => {
+    const data1 = data;
     try {
       const response = await axios.post(
         BASE_URL + LOGIN_OTP_SUBMIT_AUTHENTICATION,
@@ -157,17 +158,62 @@ export const handleUserType = createAsyncThunk(
         }
       );
       localStorage.removeItem("AllStore");
+
       if (response.data.status === true) {
         // Encrypt response data before storing in cookies
-        const encryptedData = CryptoJS.AES.encrypt(
-          JSON.stringify(response.data),
-          "secret key"
-        ).toString();
-        Cookies.set("loginDetails", encryptedData);
-        Cookies.set("token_data", encryptedData);
+        // =============================================
+        if (response.data.login_type == "superadmin") {
+          const encryptedData = CryptoJS.AES.encrypt(
+            JSON.stringify(response.data),
+            "secret key"
+          ).toString();
+          Cookies.set("loginDetails", encryptedData);
+          Cookies.set("token_data", encryptedData);
+        } else {
+          if (response.data.final_login !== 1) {
+            const { stores, ...data } = response?.data?.data;
+
+            const final_login = response.data.final_login;
+            const status = response.data.status;
+            const storesNew = response.data.data.stores.slice(0, 4);
+            const newData = { ...data, stores: storesNew };
+
+            const dataToStore = {
+              data: newData,
+              final_login,
+              status,
+              stores: storesNew,
+            };
+            console.log("superadmin", response.data);
+            console.log("dataToStore", dataToStore);
+            // =============================================
+            // ---------------------------------------------------
+            localStorage.setItem(
+              "AllStore",
+              JSON.stringify(response?.data?.data?.stores)
+            );
+
+            // -------------------------------------------
+            // =============================================
+
+            const encryptedData = CryptoJS.AES.encrypt(
+              JSON.stringify(dataToStore),
+              "secret key"
+            ).toString();
+            Cookies.set("loginDetails", encryptedData);
+            Cookies.set("token_data", encryptedData);
+          } else {
+            const encryptedData = CryptoJS.AES.encrypt(
+              JSON.stringify(response?.data),
+              "secret key"
+            ).toString();
+            Cookies.set("loginDetails", encryptedData);
+            Cookies.set("token_data", encryptedData);
+          }
+        }
 
         // Store user authentication record in local storage
-        const encoded = btoa(JSON.stringify(data));
+        const encoded = btoa(JSON.stringify(data1));
         Cookies.set("user_auth_record", encoded);
 
         return response.data;

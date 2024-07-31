@@ -805,6 +805,11 @@ const menuItems = [
             text: "Category Sales Summery Report",
             link: "/store-reporting/category-sales-summery-report",
           },
+          {
+            id: 99,
+            text: "Sales by Hour Report",
+            link: "/store-reporting/sales-by-hour-report",
+          },
         ],
       },
     ],

@@ -6,9 +6,13 @@ import {
   getCategorySalesSummeryData,
 } from "../../../Redux/features/CategorySalesSummeryReport/categorySalesSummeryReportSlice";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import PasswordShow from "../../../Common/passwordShow";
 
 export default function CategorySalesSummeryReportLogic() {
   const dispatch = useDispatch();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
+
   const AllCategoryData = useSelector(
     (state) => state?.categorySalesReportData
   );
@@ -213,7 +217,12 @@ export default function CategorySalesSummeryReportLogic() {
     };
     try {
       await dispatch(getCategorySalesSummeryData(newPacket)).unwrap();
-    } catch (e) {}
+    } catch (e) {
+      if (e.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
+    }
   };
   //  drop down select drop down end---------
   const handleOptionClick = (option, dropdown) => {

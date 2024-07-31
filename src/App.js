@@ -591,6 +591,10 @@ function App() {
               path="/store-reporting/category-sales-summery-report"
               element={<Main visible={"category-sales-summery-report"} />}
             />
+            <Route
+              path="/store-reporting/sales-by-hour-report"
+              element={<Main visible={"sales-by-hour-report"} />}
+            />
             {/* category sales summery report */}
             <Route
               exact

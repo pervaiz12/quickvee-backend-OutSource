@@ -70,6 +70,7 @@ import BrandsSlice from "../features/Brand/brandsSlice";
 import PayInReportSlice from "../features/Reports/PayInReport/PayInReportSlice";
 import DropCashReportSlice from "../features/Reports/DropCashReport/DropCashReportSlice";
 import CategorySalesReportSlice from "../features/CategorySalesSummeryReport/categorySalesSummeryReportSlice";
+import SalesByHoursReportSlice from "../features/Reports/SalesByHours/SalesByHoursSlice";
 
 const store = configureStore({
   reducer: {
@@ -160,6 +161,7 @@ const store = configureStore({
     digitalmarketing: DigitalMarketingSlice,
     brandData: BrandsSlice,
     categorySalesReportData: CategorySalesReportSlice,
+    SalesByHoursData: SalesByHoursReportSlice,
   },
 
   //setting setup
