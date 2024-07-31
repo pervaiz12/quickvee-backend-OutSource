@@ -535,6 +535,16 @@ export default function Verified({ setVisible, setMerchantId }) {
                                 )}{" "}
                                 <p> {data.a_phone || ""}</p>
                               </div>
+                              <div className="text-[#818181] flex">
+                                {data.ipv4 && (
+                                  <img
+                                    src={phoneLogo}
+                                    alt=""
+                                    className="pe-1"
+                                  />
+                                )}{" "}
+                              <p> {data.ipv4 || ""}</p>
+                              </div>
                             </StyledTableCell>
                             <StyledTableCell>
                               <div className="text-[#000000] order_method capitalize">

@@ -590,6 +590,16 @@ export default function Unverified({ setMerchantId, setVisible }) {
                                 )}{" "}
                                 <p> {data.a_phone || ""}</p>
                               </div>
+                              <div className="text-[#818181] flex">
+                              {data.ipv4 && (
+                                  <img
+                                    src={phoneLogo}
+                                    alt=""
+                                    className="pe-1"
+                                  />
+                                )}{" "}
+                              <p> {data.ipv4 || ""}</p>
+                              </div>
                             </StyledTableCell>
                             <StyledTableCell>
                               <div class="text-[#000000] order_method capitalize">
