@@ -188,6 +188,7 @@ module.exports = Object.freeze({
 
   // REPORT_BY_SALES_PERSON
   REPORT_BY_SALES_PERSON: "ReportingReactapi/report_by_sales_person",
+  GIFT_CARD_REPORT: "ReportingReactapi/gift_card_report_api",
 
   DETAIL_CATEGORY_SALE_REPORT: "vendor_report_api/detailed_category_sale",
 
@@ -356,9 +357,6 @@ module.exports = Object.freeze({
   SPLIT_LIST: "Order_list_api/get_split_records",
   ORDERRETRIEVE_SUBMIT: "Order_list_api/order_recover",
   STORE_CREDIT_REPORT:"ReportingReactapi/store_credit_report",
-  GET_RELATED_PRODUCT:"Product_api_react/getRelatedProduct",
-  DETAILED_LOYALTY_POINTS:"ReportingReactapi/loyalty_points_report",
-  IMAGE_DUPLICATE: "Productapi/image_duplicate",
 });
 
 // All api calls are initialized in this component for this application
