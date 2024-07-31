@@ -355,9 +355,10 @@ module.exports = Object.freeze({
   // Order Retrieve
   SPLIT_LIST: "Order_list_api/get_split_records",
   ORDERRETRIEVE_SUBMIT: "Order_list_api/order_recover",
-  CATEGORY_SALES_SUMMERY_REPORT: "ReportingReactapi/category_sale_summary",
-  SALES_BY_HOURS_REPORT: "ReportingReactapi/sale_per_hour",
-  STORE_CREDIT_REPORT: "ReportingReactapi/store_credit_report",
+  STORE_CREDIT_REPORT:"ReportingReactapi/store_credit_report",
+  GET_RELATED_PRODUCT:"Product_api_react/getRelatedProduct",
+  DETAILED_LOYALTY_POINTS:"ReportingReactapi/loyalty_points_report",
+  IMAGE_DUPLICATE: "Productapi/image_duplicate",
 });
 
 // All api calls are initialized in this component for this application

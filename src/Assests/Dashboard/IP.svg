@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_3528" data-name="Rectangle 3528" width="20" height="20" transform="translate(-2742 3459)" fill="none" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="IP" transform="translate(2742 -3459)" clip-path="url(#clip-path)">
+    <g id="placeholder" transform="translate(-2739.053 3460.441)">
+      <path id="Path_10500" data-name="Path 10500" d="M12.279,2.107A7.193,7.193,0,0,0,1.667,11.8h0a7.261,7.261,0,0,0,.9.908l4.266,4.267a.5.5,0,0,0,.71,0L11.815,12.7a7.194,7.194,0,0,0,2.571-5.511,7.146,7.146,0,0,0-2.107-5.086ZM6,6.048V9.157a.5.5,0,0,1-1,0V6.048a.5.5,0,0,1,1,0ZM6.48,9.157V6.048a.5.5,0,0,1,.5-.5H8.765a1.279,1.279,0,0,1,0,2.559H7.484V9.157a.5.5,0,0,1-1,0Zm0,0" fill="#afafaf"/>
+      <path id="Path_10501" data-name="Path 10501" d="M225.393,196.186a.275.275,0,0,0-.275-.275h-1.281v.55h1.281A.275.275,0,0,0,225.393,196.186Zm0,0" transform="translate(-216.352 -189.361)" fill="#afafaf"/>
+    </g>
+  </g>
+</svg>

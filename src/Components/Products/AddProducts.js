@@ -491,6 +491,7 @@ const AddProducts = () => {
   };
 
   const handleDeleteSelectedImage = (type, imageToDelete) => {
+    console.log("handleDeleteSelectedImage", type, imageToDelete);
     let deleteImage;
     if (type === "string") {
       deleteImage = productInfo?.files?.filter((img) => {
@@ -2450,6 +2451,8 @@ const AddProducts = () => {
       ...updatedErrorValue,
     }));
   };
+
+  console.log('file', productInfo);
 
   // varient form onchange validation function
   return (

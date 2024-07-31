@@ -73,7 +73,7 @@ import CategorySalesReportSlice from "../features/CategorySalesSummeryReport/cat
 import SalesByHoursReportSlice from "../features/Reports/SalesByHours/SalesByHoursSlice";
 import StoreCreditReportSlice from "../features/Reports/StoreCreditReport/StoreCreditReportSlice";
 import EmployeeSalesPerCategorySlice from "../features/Reports/EmployeeSalesPerCategory/EmployeeSalesPerCategorySlice";
-
+import DetailedLoyaltyPointsReportSlice from "../features/Reports/DatailedLoyaltyPointsReport/DetailedLoyaltyPointsReportSlice";
 const store = configureStore({
   reducer: {
     VendorList: VendorListReducer,
@@ -167,6 +167,7 @@ const store = configureStore({
     categorySalesReportData: CategorySalesReportSlice,
     SalesByHoursData: SalesByHoursReportSlice,
     storeCreditReportList: StoreCreditReportSlice,
+    DetailedLoyaltyPointsReport: DetailedLoyaltyPointsReportSlice,
   },
 
   //setting setup

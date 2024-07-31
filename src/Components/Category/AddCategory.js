@@ -285,7 +285,7 @@ const AddCategory = ({ seVisible }) => {
   const back = () => {
     navigate(-1);
   };
-
+  console.log("defaultList",defaultList)
   return (
     <>
       <div className="box">
@@ -324,7 +324,7 @@ const AddCategory = ({ seVisible }) => {
             >
               <label for="title">Title</label>
             </div>
-
+            
             <Autocomplete
               id="size-small-standard"
               size="small"

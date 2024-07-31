@@ -58,9 +58,11 @@ const Customer = () => {
   useEffect(() => {
     if (!customerRecord.loading && customerRecord.CustomerRecord?.length >= 1) {
       setCustomersDataState(customerRecord.CustomerRecord);
+    } else{
+      setCustomersDataState([])
     }
   }, [customerRecord.CustomerRecord]);
-
+ 
   // on load setting count of Customers list & on every change...
   useEffect(() => {
     setTotalCount(customerRecordCount);
