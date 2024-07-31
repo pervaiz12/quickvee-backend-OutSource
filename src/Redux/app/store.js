@@ -71,7 +71,7 @@ import PayInReportSlice from "../features/Reports/PayInReport/PayInReportSlice";
 import DropCashReportSlice from "../features/Reports/DropCashReport/DropCashReportSlice";
 import StoreCreditReportSlice from "../features/Reports/StoreCreditReport/StoreCreditReportSlice";
 import EmployeeSalesPerCategorySlice from "../features/Reports/EmployeeSalesPerCategory/EmployeeSalesPerCategorySlice";
-
+import DetailedLoyaltyPointsReportSlice from "../features/Reports/DatailedLoyaltyPointsReport/DetailedLoyaltyPointsReportSlice";
 const store = configureStore({
   reducer: {
     VendorList: VendorListReducer,
@@ -163,6 +163,7 @@ const store = configureStore({
     digitalmarketing: DigitalMarketingSlice,
     brandData: BrandsSlice,
     storeCreditReportList: StoreCreditReportSlice,
+    DetailedLoyaltyPointsReport: DetailedLoyaltyPointsReportSlice,
   },
 
   //setting setup

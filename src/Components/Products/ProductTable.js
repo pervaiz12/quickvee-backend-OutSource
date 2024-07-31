@@ -784,6 +784,7 @@ const ProductTable = ({
                                           <StyledTableCell>
                                             <ImportImageModal
                                               productTitle={product.title}
+                                              productId={product.id}
                                             />
                                           </StyledTableCell>
 
