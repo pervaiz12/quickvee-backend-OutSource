@@ -8,16 +8,23 @@ import {
   Modal,
   Radio,
   RadioGroup,
+  Skeleton,
 } from "@mui/material";
 
 import backIcon from "../../Assests/Taxes/Left.svg";
 import axios from "axios";
-import { BASE_URL, GET_RELATED_PRODUCT,IMAGE_DUPLICATE } from "../../Constants/Config";
+import {
+  BASE_URL,
+  GET_RELATED_PRODUCT,
+  IMAGE_DUPLICATE,
+} from "../../Constants/Config";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 
 import CloseIcon from "../../Assests/Dashboard/cross.svg";
 import Select from "react-select";
 import ImportImage from "../../Assests/Defaults/Import_Image.svg";
+import NoDataFound from "../../reuseableComponents/NoDataFound";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const myStyles = {
   width: "60%",
@@ -28,35 +35,37 @@ const myStyles = {
   fontFamily: "'CircularSTDMedium', sans-serif !important",
 };
 
-export default function ImportImageModal({ productTitle,productId }) {
+export default function ImportImageModal({ productTitle, productId }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
     setSuggestedProducts([]);
+    setIsOptionSelected(false);
   };
 
   const [selectedStore, setSelectedStore] = useState("");
-  const [selectedSuggestedProduct, setSelectedSuggestedProduct] = useState("");
   const [suggestedProducts, setSuggestedProducts] = useState([]);
-  const [selectedProductTitle, setSelectedProductTitle] = useState("");
   const [selectedImageArray, setSelectedImageArray] = useState([]);
-  console.log("selectedImageArray", selectedImageArray);
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
-    useAuthDetails();
+  const [imageSources, setImageSources] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
+  const [isOptionSelected, setIsOptionSelected] = useState(false);
+  const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
 
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
 
   const handleOptionClick = async (value) => {
     setSelectedStore(value.merchant_id);
-
+    setIsOptionSelected(true);
     const data = {
       merchant_id: value.merchant_id,
       title: productTitle,
     };
 
     try {
+      setLoading(true);
       const res = await axios.post(BASE_URL + GET_RELATED_PRODUCT, data, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -71,6 +80,7 @@ export default function ImportImageModal({ productTitle,productId }) {
     } catch (e) {
       // Handle error
     }
+    setLoading(false);
   };
 
   const defaultImage = `${BASE_URL}upload/products/MaskGroup4542.png`;
@@ -83,8 +93,6 @@ export default function ImportImageModal({ productTitle,productId }) {
           `${BASE_URL}upload/products/${selectedStore}/${mediaItem}`
       );
   };
-
-  const [imageSources, setImageSources] = useState([]);
 
   useEffect(() => {
     setImageSources(
@@ -121,7 +129,7 @@ export default function ImportImageModal({ productTitle,productId }) {
     console.log("handleProductChange", arr);
     setSelectedImageArray([...arr.media.split(",")]);
   };
-  const addImageToselectedImageArrayState = (media)=>{
+  const addImageToselectedImageArrayState = (media) => {
     setSelectedImageArray((prevSelectedImageArray) => {
       if (prevSelectedImageArray.includes(media)) {
         // Remove the image if it's already in the array
@@ -131,26 +139,38 @@ export default function ImportImageModal({ productTitle,productId }) {
         return [...prevSelectedImageArray, media];
       }
     });
-  }
-  const handleSubmitButton = async () =>{
-    const data ={
-      product_id:productId,
-      fromstore:selectedStore,
-      tostore:merchant_id,
-      media_str:selectedImageArray.join(',')
+  };
+  const handleSubmitButton = async () => {
+    if(!selectedImageArray.length ) {
+      alert("Please select at least one images");
+      return
     }
-    try{
-      const res = await axios.post(BASE_URL + IMAGE_DUPLICATE,data,{
+    const data = {
+      product_id: productId,
+      fromstore: selectedStore,
+      tostore: merchant_id,
+      media_str: selectedImageArray.join(","),
+    };
+    try {
+      setIsLoadingSubmit(true);
+      const res = await axios.post(BASE_URL + IMAGE_DUPLICATE, data, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${userTypeData?.token}`,
-        }
-      })
-     
-    }catch(e){
+        },
+      });
+      console.log(res);
+      if(res.data.status ===true){
+        ToastifyAlert("Updated Successfully","success")
+        handleClose()
+      }else if(res.data.status ===false){
+        ToastifyAlert(res.data.message,"error")
+      }
+    } catch (e) {
 
     }
-  }
+    setIsLoadingSubmit(false)
+  };
   return (
     <>
       <img
@@ -204,68 +224,113 @@ export default function ImportImageModal({ productTitle,productId }) {
               />
             </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              name="radio-buttons-group"
-              onChange={handleProductChange}
-            >
-              <Grid container sx={{ px: 2.5 }}>
-                {suggestedProducts.length > 0 ?
-                  suggestedProducts.map((product, productIndex) => (
-                    <React.Fragment key={productIndex}>
-                      <Grid item xs={4} sx={{ px: 1 }}>
-                        <Grid container>
-                          <Grid item xs={12}>
-                            <FormControlLabel
-                              value={product.title}
-                              control={<Radio />}
-                              label={product.title}
-                            />
-                          </Grid>
-                        </Grid>
-                        <Grid container>
-                          <Grid item xs={12}>
+          {loading ? (
+            <Grid container sx={{ px: 2.5 }}>
+              {[...Array(3)].map((_, index) => (
+                <Grid item xs={4} sx={{ px: 1 }} key={index}>
+                  <Grid item xs={12} sx={{ px: 1 }}>
+                    <Grid container>
+                      <Grid item xs={6}>
+                        <Skeleton height={"50px"} />
+                      </Grid>
+                    </Grid>
+                    <Grid container>
+                      <Grid item xs={12}>
+                        <Grid
+                          container
+                          direction="row"
+                          justifyContent="start"
+                          alignItems="center"
+                        >
+                          {[...Array(3)].map((media, mediaIndex) => (
                             <Grid
-                              container
-                              direction="row"
-                              justifyContent="start"
-                              alignItems="center"
+                              key={mediaIndex}
+                              item
+                              xs={3}
+                              sx={{ mx: 0.5, mb: 0.5 }}
                             >
-                              {product.media
-                                .split(",")
-                                .map((media, mediaIndex) => (
-                                  <Grid
-                                    key={mediaIndex}
-                                    item
-                                    sx={{ mx: 0.5, mb: 0.5 }}
-                                    style={{
-                                      backgroundImage: `url(${imageSources[productIndex]?.[mediaIndex]})`,
-                                      backgroundSize: "cover",
-                                      backgroundPosition: "center",
-                                      height: "50px",
-                                      width: "50px",
-
-                                      borderRadius: "5px",
-                                      border: `${
-                                        selectedImageArray.includes(media)
-                                          ? "2px solid #0a64f9"
-                                          : "2px solid #ccc"
-                                      }`,
-                                    }}
-                                    onClick={()=>addImageToselectedImageArrayState(media)}
-                                  />
-                                ))}
+                              <Skeleton height={"80px"} width={"50px"} />
+                            </Grid>
+                          ))}
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Divider orientation="vertical" flexItem />
+                  </Grid>
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <Grid item xs={12}>
+              <RadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                name="radio-buttons-group"
+                onChange={handleProductChange}
+              >
+                <Grid container sx={{ px: 2.5 }}>
+                  {suggestedProducts.length > 0 ? (
+                    suggestedProducts.map((product, productIndex) => (
+                      <React.Fragment key={productIndex}>
+                        <Grid item xs={4} sx={{ px: 1 }}>
+                          <Grid container>
+                            <Grid item xs={12}>
+                              <FormControlLabel
+                                value={product.title}
+                                control={<Radio />}
+                                label={product.title}
+                              />
                             </Grid>
                           </Grid>
+                          <Grid container>
+                            <Grid item xs={12}>
+                              <Grid
+                                container
+                                direction="row"
+                                justifyContent="start"
+                                alignItems="center"
+                              >
+                                {product.media
+                                  .split(",")
+                                  .map((media, mediaIndex) => (
+                                    <Grid
+                                      key={mediaIndex}
+                                      item
+                                      sx={{ mx: 0.5, mb: 0.5 }}
+                                      style={{
+                                        backgroundImage: `url(${imageSources[productIndex]?.[mediaIndex]})`,
+                                        backgroundSize: "cover",
+                                        backgroundPosition: "center",
+                                        height: "50px",
+                                        width: "50px",
+
+                                        borderRadius: "5px",
+                                        border: `${
+                                          selectedImageArray.includes(media)
+                                            ? "2px solid #0a64f9"
+                                            : "2px solid #ccc"
+                                        }`,
+                                      }}
+                                      onClick={() =>
+                                        addImageToselectedImageArrayState(media)
+                                      }
+                                    />
+                                  ))}
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                          <Divider orientation="vertical" flexItem />
                         </Grid>
-                        <Divider orientation="vertical" flexItem />
-                      </Grid>
-                    </React.Fragment>
-                  )): ""}
-              </Grid>
-            </RadioGroup>
-          </Grid>
+                      </React.Fragment>
+                    ))
+                  ) : isOptionSelected ? (
+                    <NoDataFound table={true} />
+                  ) : (
+                    ""
+                  )}
+                </Grid>
+              </RadioGroup>
+            </Grid>
+          )}
 
           <Grid
             container
@@ -276,8 +341,11 @@ export default function ImportImageModal({ productTitle,productId }) {
           >
             <Grid item>
               <div className="">
-                <button onClick={handleSubmitButton} className="quic-btn quic-btn-save attributeUpdateBTN">
-                  {false && (
+                <button
+                  onClick={handleSubmitButton}
+                  className="quic-btn quic-btn-save attributeUpdateBTN"
+                >
+                  {isLoadingSubmit && (
                     <CircularProgress
                       color={"inherit"}
                       className="loaderIcon"
