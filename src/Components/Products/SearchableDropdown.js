@@ -14,6 +14,7 @@ const SearchableDropdown = ({
   error,
   handleUpdateError,
   name,
+  placeholder,
 }) => {
   const { checkLength } = Validation();
   const [filterOptions, setFilterOptions] = useState(optionList);
@@ -91,7 +92,7 @@ const SearchableDropdown = ({
             <input
               ref={ref}
               type="text"
-              placeholder="Enter category Name"
+              placeholder={placeholder}
               className="search-item"
               onFocus={handleFocus}
               onChange={handleFilterOptions}

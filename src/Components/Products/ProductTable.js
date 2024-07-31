@@ -72,6 +72,9 @@ const ProductTable = ({
   selectedStatus,
   selectedStatusValue,
   debouncedValue,
+  handleProductUnCheck,
+  handleProductCheck,
+  productIdList,
 }) => {
   let listing_type = 0;
   const ProductsListDataState = useSelector((state) => state.productsListData);
@@ -299,19 +302,19 @@ const ProductTable = ({
     } else {
       varientTitle = varientName;
     }
-
     if (
       selectedListingType === "Variant listing" &&
       productData?.isvarient === "1"
     ) {
-      navigate(
-        `/inventory/products/varient-edit/${id}/${
+      return {
+        link: `/inventory/products/varient-edit/${id}/${
           varientName ? varientTitle : null
-        }`,
-        { state: productData }
-      );
+        }?var_id=${productData?.var_id}&title=${productData?.title}`,
+      };
     } else {
-      navigate(`/inventory/products/edit/${id}`);
+      return {
+        link: `/inventory/products/edit/${id}`,
+      };
     }
   };
 
@@ -435,7 +438,9 @@ const ProductTable = ({
                       loading ? (
                         <h3 className="all-product-list">Loading...</h3>
                       ) : !productList?.length ? (
-                        <h3 className="all-product-list">{!productList?.length && <NoDataFound />}</h3>
+                        <h3 className="all-product-list">
+                          {!productList?.length && <NoDataFound table={true} />}
+                        </h3>
                       ) : (
                         <h3 className="all-product-list"></h3>
                       )
@@ -451,6 +456,11 @@ const ProductTable = ({
                             {...provided.droppableProps}
                           >
                             <TableHead>
+                              {selectedListingType === "Variant listing" ? (
+                                ""
+                              ) : (
+                                <StyledTableCell></StyledTableCell>
+                              )}
                               <StyledTableCell>Sort</StyledTableCell>
                               <StyledTableCell>Title</StyledTableCell>
                               <StyledTableCell>Category</StyledTableCell>
@@ -473,6 +483,12 @@ const ProductTable = ({
                                 productList.map((product, index) => {
                                   const getVarientName =
                                     product?.title?.split(/~~?/) || [];
+                                  const navigateData = handleNavigate(
+                                    product.id,
+                                    getVarientName[1],
+                                    product
+                                  );
+                                  console.log("navigateData", navigateData);
                                   return (
                                     <Draggable
                                       key={product?.id}
@@ -485,6 +501,41 @@ const ProductTable = ({
                                           {...provided.draggableProps}
                                           {...provided.dragHandleProps}
                                         >
+                                          {selectedListingType ===
+                                          "Variant listing" ? (
+                                            ""
+                                          ) : (
+                                            <StyledTableCell>
+                                              <label
+                                                className="q_resigter_setting_section"
+                                                style={{
+                                                  color: "#000",
+                                                  fontSize: "14px",
+                                                  padding: "0px",
+                                                }}
+                                              >
+                                                <input
+                                                  type="checkbox"
+                                                  id={product.id}
+                                                  checked={productIdList?.includes(
+                                                    product?.id
+                                                  )}
+                                                  onChange={() => {
+                                                    productIdList?.includes(
+                                                      product?.id
+                                                    )
+                                                      ? handleProductUnCheck(
+                                                          product?.id
+                                                        )
+                                                      : handleProductCheck(
+                                                          product?.id
+                                                        );
+                                                  }}
+                                                />
+                                                <span className="checkmark"></span>
+                                              </label>
+                                            </StyledTableCell>
+                                          )}
                                           <StyledTableCell>
                                             <img
                                               src={SortIcon}
@@ -496,15 +547,13 @@ const ProductTable = ({
                                             <p
                                               className="categories-title text-[#0A64F9]"
                                               style={{ cursor: "pointer" }}
-                                              onClick={() =>
-                                                handleNavigate(
-                                                  product?.id,
-                                                  getVarientName[1],
-                                                  product
-                                                )
-                                              }
                                             >
-                                              {product.title}
+                                              <Link
+                                                // target="_blank"
+                                                to={navigateData?.link}
+                                              >
+                                                {product.title}
+                                              </Link>
                                             </p>
                                           </StyledTableCell>
                                           <StyledTableCell>
@@ -764,7 +813,6 @@ const ProductTable = ({
                       </Droppable>
                     </DragDropContext>
                   </InfiniteScroll>
-                  
                 </TableContainer>
                 {/* </div> */}
               </div>
@@ -772,7 +820,7 @@ const ProductTable = ({
           </div>
         </div>
         <DeleteModal
-          headerText="Category"
+          headerText="Product"
           open={deleteModalOpen}
           onClose={() => {
             setDeleteModalOpen(false);

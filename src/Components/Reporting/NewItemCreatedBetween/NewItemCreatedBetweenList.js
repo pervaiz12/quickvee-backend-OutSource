@@ -57,7 +57,6 @@ const NewItemCreatedBetweenList = (props) => {
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
   const [allNewItemData, setallNewItemData] = useState([]);
-  const [apiStatus, setAPIStatus] = useState(false);
   const AllNewItemDataState = useSelector(
     (state) => state.NewItemCreatedBtnList
   );
@@ -96,7 +95,7 @@ const NewItemCreatedBetweenList = (props) => {
       AllNewItemDataState?.NewItemData?.report_data
     ) {
       setallNewItemData(AllNewItemDataState?.NewItemData?.report_data);
-      setAPIStatus(AllNewItemDataState.NewItemData.status);
+
     } else {
       setallNewItemData([]);
     }
@@ -153,7 +152,7 @@ const NewItemCreatedBetweenList = (props) => {
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           {AllNewItemDataState.loading ||
-          (apiStatus && !allNewItemData.length) ? (
+          (AllNewItemDataState.status && !allNewItemData.length) ? (
             <SkeletonTable
               columns={["Date", "Category", "Item Name", "Price"]}
             />

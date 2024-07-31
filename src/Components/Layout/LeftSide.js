@@ -1,6 +1,7 @@
 import React, { useEffect, lazy, Suspense } from "react";
 import DropCashMain from "../Reporting/DropCash/DropCashMain";
 import PayInMain from "../Reporting/PayIn/PayInMain";
+import MainEmployeeSalesPerCategory from "../Reporting/EmployeeSalesPerCategory/MainEmployeeSalesPerCategory";
 
 const DashboardMain = lazy(() => import("../Dashboard/DashboardMain"));
 const MainOrder = lazy(() => import("./../Orders/MainOrder"));
@@ -161,6 +162,15 @@ const SalesByHoursReport = lazy(
 );
 const MainDigitalMarketing = lazy(
   () => import("../StoreSetting/DigitalMarketing/MainDigitalMarketing")
+);
+const StoreCreditReportMain = lazy(
+  () => import("../Reporting/StoreCreditReport/StoreCreditReportMain")
+);
+const DetailedLoyaltyPointReportMain = lazy(
+  () =>
+    import(
+      "../Reporting/DetailedLoyaltyPointReport/DetailedLoyaltyPointReportMain"
+    )
 );
 
 const LeftSide = ({ visible }) => {
@@ -330,6 +340,12 @@ const LeftSide = ({ visible }) => {
         return <CategorySalesSummeryReport />;
       case "sales-by-hour-report":
         return <SalesByHoursReport />;
+      case "store-credit-report":
+        return <StoreCreditReportMain />;
+      case "detailed-loyalty-points-report":
+        return <DetailedLoyaltyPointReportMain />;
+      case "employee-sales-per-category-report":
+        return <MainEmployeeSalesPerCategory />;
       default:
         return <DashboardMain />;
     }

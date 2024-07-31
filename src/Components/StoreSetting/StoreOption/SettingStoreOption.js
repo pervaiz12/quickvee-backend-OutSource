@@ -440,13 +440,13 @@ export default function SettingStoreOption() {
                     />
                   </Grid>
                 </Grid>
-                <Grid container sx={{ px: 2.5 }}>
+                {/* <Grid container sx={{ px: 2.5 }}>
                   <Grid item xs={12}>
                     <p className="store-setting-p store-setting-pb-1-5">
                       The store will be able to accept online orders.
                     </p>
                   </Grid>
-                </Grid>
+                </Grid> */}
                 <Grid container sx={{ px: 2.5 }}>
                   <Grid item xs={12}>
                     <div className="store-setting-gry Admin_std">

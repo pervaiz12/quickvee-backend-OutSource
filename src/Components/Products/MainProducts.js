@@ -11,6 +11,7 @@ import useDebounce from "../../hooks/useDebouncs";
 import PasswordShow from "../../Common/passwordShow";
 import { CircularProgress } from "@mui/material";
 import { Suspense } from "react";
+import DeleteModal from "../../reuseableComponents/DeleteModal";
 
 const FilterProduct = lazy(() => import("./FilterProduct"));
 const ProductTable = lazy(() => import("./ProductTable"));
@@ -25,6 +26,7 @@ const MainProducts = () => {
   const [selectedEmployee, setSelectedEmployee] = useState("Select");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedStatusValue, setSelectedStatusValue] = useState("All");
+  const [productIdList, setProductIdList] = useState([]);
 
   const [selectedListingType, setSelectedListingType] =
     useState("Select listing");
@@ -47,14 +49,32 @@ const MainProducts = () => {
 
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
+  const [deleteCategoryId, setDeleteCategoryId] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const handleDeleteProduct = async (id) => {
+    setDeleteCategoryId(id);
+    setDeleteModalOpen(true);
+  };
+
   // Function to update the category ID, which will be passed to the child
   const handleCategoryChange = (catId) => {
+    setProductIdList([]);
     setSearchId("");
     setCategoryId(catId);
   };
 
   const handleSearch = (val) => {
     setSearchId(val);
+  };
+
+  const handleProductUnCheck = (id) => {
+    const filterId = productIdList?.filter((existId) => existId !== id);
+    setProductIdList(filterId);
+  };
+
+  const handleProductCheck = (id) => {
+    setProductIdList((prev) => [...prev, id]);
   };
 
   const filterCategoryOnDropDown = async () => {
@@ -74,6 +94,7 @@ const MainProducts = () => {
     };
 
     dispatch(emptyProduct([]));
+    handleOptionClick([]);
     try {
       await dispatch(fetchProductsData(data)).unwrap();
       // Handle response if needed
@@ -84,6 +105,12 @@ const MainProducts = () => {
       } else if (error.status == "Network Error") {
         getNetworkError();
       }
+    }
+  };
+
+  const confirmDeleteCategory = async () => {
+    if (deleteCategoryId) {
+      console.log("delete operation is run");
     }
   };
 
@@ -124,6 +151,7 @@ const MainProducts = () => {
         if (window.confirm("Are you sure you want to update?")) {
           dispatch(emptyProduct([]));
           setSearchId("");
+          handleOptionClick([]);
           let type_date = {
             merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
             id: option.id,
@@ -189,6 +217,7 @@ const MainProducts = () => {
         break;
       case "status":
         setSearchId("");
+        handleOptionClick([]);
         setSelectedStatus(option.id);
         setSelectedStatusValue(option.title);
         setTransactionDropdownVisible(false);
@@ -198,6 +227,7 @@ const MainProducts = () => {
         break;
       case "listingType":
         dispatch(emptyProduct([]));
+        handleOptionClick([]);
         if (option.id === 0) {
           setSelectedListingType("Product listing");
         } else if (option?.id === 1) {
@@ -218,7 +248,7 @@ const MainProducts = () => {
   return (
     <>
       <div className="q-attributes-main-page">
-        <Suspense fallback={<CircularProgress />}>
+        <Suspense fallback={<div></div>}>
           <FilterProduct
             {...{
               handleOptionClick,
@@ -240,6 +270,8 @@ const MainProducts = () => {
               searchId,
               handlefocus,
               setSearchId,
+              productIdList,
+              handleDeleteProduct,
             }}
           />
         </Suspense>
@@ -253,7 +285,7 @@ const MainProducts = () => {
         ""
       )}
       <div className="q-attributes-main-page">
-        <Suspense fallback={<CircularProgress />}>
+        <Suspense fallback={<div></div>}>
           <ProductTable
             {...{
               selectedListingType,
@@ -268,10 +300,21 @@ const MainProducts = () => {
               selectedStatusValue,
               searchId,
               setSearchId,
+              handleProductUnCheck,
+              handleProductCheck,
+              productIdList,
             }}
           />
         </Suspense>
       </div>
+      <DeleteModal
+        headerText="Products"
+        open={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+        }}
+        onConfirm={confirmDeleteCategory}
+      />
     </>
   );
 };

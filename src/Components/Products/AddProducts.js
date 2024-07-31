@@ -55,6 +55,7 @@ const AddProducts = () => {
 
   const [fetchDataLoading, setFetchDataLoading] = useState(false);
   const location = useLocation();
+  const varientPageParamas = new URLSearchParams(location.search);
 
   // find add or edit url
   const pageUrl =
@@ -314,7 +315,7 @@ const AddProducts = () => {
   const handleSelectSpeciality = (value, name) => {
     if (name === "tags") {
       const titleExists = (array, title) => {
-        return array.some((item) =>
+        return array?.some((item) =>
           item?.title
             ? item?.title?.toLowerCase() === title?.toLowerCase()
             : item?.toLowerCase() === title?.toLowerCase()
@@ -331,6 +332,7 @@ const AddProducts = () => {
           [name]: [...prev[name], value],
         }));
       } else {
+        ToastifyAlert("Reached maximum limit.", "error");
         return;
       }
     } else if (name === "brands") {
@@ -343,8 +345,7 @@ const AddProducts = () => {
   };
 
   const handleInsertItemInList = (value, name) => {
-    console.log(value, name);
-    if (name === "tags") {
+    if (name === "tags" && value) {
       const filterData = selectedSpeciality[name]?.filter((item) => {
         return item?.title
           ? item?.title?.trim().toLowerCase() === value?.trim().toLowerCase()
@@ -359,7 +360,7 @@ const AddProducts = () => {
             ...prev[name],
             {
               id: (Math.floor(Math.random() * (99000 - 1)) + 1).toString(),
-              title: value.trim(),
+              title: value?.trim(),
               merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
               type: "0",
             },
@@ -372,7 +373,7 @@ const AddProducts = () => {
         [name]: [
           {
             id: (Math.floor(Math.random() * (10000 - 1)) + 1).toString(),
-            title: value.trim(),
+            title: value?.trim(),
             merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
             type: "1",
           },
@@ -1619,11 +1620,9 @@ const AddProducts = () => {
         setFormValue((prevFormValue) => {
           const newFormValue = [...new Set(varientTitle)].map(
             (title, index) => {
-              let trimmedTitle = title.replace(/\s*\/\s*/, "/").trim();
               const previousData =
-                prevFormValue.find((item) => trimmedTitle in item) || {};
-              const result =
-                previousData[title.replace(/\s*\/\s*/, "/").trim()];
+                prevFormValue.find((item) => title.trim() in item) || {};
+              const result = previousData[title.trim()];
 
               return {
                 [title]: {
@@ -1711,8 +1710,12 @@ const AddProducts = () => {
           setOptions(res?.data?.options);
           setVarientData(res?.data?.product_variants);
           setIsMultipleVaient(Boolean(+res?.data?.productdata?.isvarient));
-          const tags = res?.data?.productdata?.tags?.split(",") || [];
-          const brands = [res?.data?.productdata?.brand] || [];
+          const tags = !!res?.data?.productdata?.tags
+            ? res?.data?.productdata?.tags?.split(",")
+            : [] || [];
+          const brands = !!res?.data?.productdata?.brand
+            ? [res?.data?.productdata?.brand]
+            : [] || [];
           setSelectedSpeciality({
             tags: tags,
             brands: brands,
@@ -1734,13 +1737,14 @@ const AddProducts = () => {
   };
 
   const fetchSingleVarientData = async () => {
-    const data = location?.state;
+    const id = varientPageParamas.get("var_id");
+    const title = varientPageParamas.get("title");
     const formData = new FormData();
     setSingleVarientPageLoading(true);
 
-    formData.append("id", data?.var_id);
+    formData.append("id", id);
     formData.append("single_product", 0);
-    formData.append("product_name", data?.title);
+    formData.append("product_name", title);
     formData.append("login_type", userTypeData?.login_type);
     formData.append("token_id", userTypeData?.token_id);
     formData.append("token", userTypeData?.token);
@@ -1843,8 +1847,8 @@ const AddProducts = () => {
   useEffect(() => {
     setProductInfo((prev) => ({
       ...prev,
-      title: productData?.title,
-      description: productData?.description,
+      title: productData?.title ? productData?.title : "",
+      description: productData?.description ? productData?.description : "",
     }));
   }, [productData]);
 
@@ -2457,7 +2461,7 @@ const AddProducts = () => {
         </div>
       ) : !isProductVariant ? (
         <>
-          <Suspense fallback={<CircularProgress />}>
+          <Suspense fallback={<div></div>}>
             <EditPage
               openEditModal={openEditModal}
               handleCloseEditModal={handleCloseEditModal}
@@ -2614,7 +2618,7 @@ const AddProducts = () => {
 
                 <div className="q-add-categories-single-input  mt-3 px-5">
                   <CreatableDropdown
-                    title="Brands"
+                    title="Brand"
                     keyName="brands"
                     name="title"
                     optionList={speciality?.brands}
@@ -2624,7 +2628,7 @@ const AddProducts = () => {
                     selectedOption={selectedSpeciality?.brands}
                     error={error}
                     // handleUpdateError={handleUpdateError}
-                    placeholder="Search Brands"
+                    placeholder="Search Brand"
                   />
                 </div>
 
@@ -2782,7 +2786,7 @@ const AddProducts = () => {
                 </div>
 
                 <div className="mt-6 px-5">
-                  <Suspense fallback={<CircularProgress />}>
+                  <Suspense fallback={<div></div>}>
                     <VariantAttributes
                       varientDropdownList={dropdownData?.varientList}
                       varientError={varientError}
@@ -2801,7 +2805,7 @@ const AddProducts = () => {
                 </div>
 
                 <div className="">
-                  <Suspense fallback={<CircularProgress />}>
+                  <Suspense fallback={<div></div>}>
                     <GeneratePUC
                       handleVarientTitleBasedItemList={
                         handleVarientTitleBasedItemList
@@ -2920,7 +2924,7 @@ const AddProducts = () => {
             ) : (
               <div class="q-add-categories-section-middle-form ">
                 <div className="mt_card_header">
-                  <Suspense fallback={<CircularProgress />}>
+                  <Suspense fallback={<div></div>}>
                     <EditPage
                       openEditModal={openEditModal}
                       handleCloseEditModal={handleCloseEditModal}

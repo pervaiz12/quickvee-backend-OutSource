@@ -26,6 +26,8 @@ const FilterProduct = ({
   handleCategoryChange,
   handleSearch,
   searchId,
+  productIdList,
+  handleDeleteProduct,
 }) => {
   const { userTypeData } = useAuthDetails();
   const { loading } = useSelector((state) => state.productsListData);
@@ -244,10 +246,24 @@ const FilterProduct = ({
             ) : (
               ""
             )}
+
+            {productIdList?.length ? (
+              <Grid item xs={12} sm={6} md={4}>
+                <button
+                  style={{ height: "40px", padding: "0px 0px" }}
+                  className="quic-btn quic-btn-draft attributeUpdateBTN w-full"
+                  onClick={handleDeleteProduct}
+                >
+                  Delete Selected Product
+                </button>
+              </Grid>
+            ) : (
+              ""
+            )}
           </Grid>
         </Grid>
       </Grid>
-      <Suspense fallback={<CircularProgress />}>
+      <Suspense fallback={<div></div>}>
         <MassInventoryUpdateModal
           {...{
             showModal,

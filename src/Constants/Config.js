@@ -154,6 +154,7 @@ module.exports = Object.freeze({
   GET_ITEMWISE_SALE_LIST: "ReportingReactapi/get_itemwise_sale_list",
   PAY_IN_REPORT: "ReportingReactapi/pay_in_report",
   DROP_CASH_REPORT: "ReportingReactapi/drop_cash_report",
+  EMPLOYEE_SALES_PER_CATEGORY_REPORT: "ReportingReactapi/emp_category_sale",
 
   //Order Type
 
@@ -356,6 +357,7 @@ module.exports = Object.freeze({
   ORDERRETRIEVE_SUBMIT: "Order_list_api/order_recover",
   CATEGORY_SALES_SUMMERY_REPORT: "ReportingReactapi/category_sale_summary",
   SALES_BY_HOURS_REPORT: "ReportingReactapi/sale_per_hour",
+  STORE_CREDIT_REPORT: "ReportingReactapi/store_credit_report",
 });
 
 // All api calls are initialized in this component for this application
