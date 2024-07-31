@@ -64,10 +64,10 @@ export default function MainGiftCard() {
       </Grid>
       <Grid item xs={12}>
         <Grid container sx={{ px: 0.5 }} spacing={2}>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item xs={12} sm={6} md={3}>
             <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
               <div className="font-normal  tracking-normal Admin_std">
-                <p>Total value issued</p>
+                <p>Total value Sold</p>
               </div>
               <div className="text-[20px] font-bold mt-4 common-font-bold">
                 {!DetailedLoyaltyPointsReduxState.loading ? (
@@ -78,7 +78,7 @@ export default function MainGiftCard() {
               </div>
             </div>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item xs={12} sm={6} md={3}>
             <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
               <div className="font-normal  tracking-normal Admin_std">
                 <p>Total value redeemed</p>
@@ -92,10 +92,24 @@ export default function MainGiftCard() {
               </div>
             </div>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item xs={12} sm={6} md={3}>
             <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
               <div className="font-normal  tracking-normal Admin_std">
                 <p>OutStanding balance</p>
+              </div>
+              <div className="text-[20px] font-bold mt-4 common-font-bold">
+                {!DetailedLoyaltyPointsReduxState.loading ? (
+                  <p>{priceFormate(outStandingsBalance.toFixed(2))}</p>
+                ) : (
+                  <Skeleton />
+                )}
+              </div>
+            </div>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
+              <div className="font-normal  tracking-normal Admin_std">
+                <p>Gift Cards in Circulation</p>
               </div>
               <div className="text-[20px] font-bold mt-4 common-font-bold">
                 {!DetailedLoyaltyPointsReduxState.loading ? (

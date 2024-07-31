@@ -91,8 +91,8 @@ import {
     ]);
     // console.log(dataArr);
     const tableRow = [
-      { type: "str", name: "customer_name", label: "Customer Name" },
-      { type: "num", name: "total_credit_amount", label: "Total Issued" },
+      { type: "str", name: "customer_name", label: "Gift Card Number" },
+      { type: "num", name: "total_credit_amount", label: "Total Sold" },
       { type: "num", name: "total_debit_amount", label: "Total Redeemed" },
       { type: "num", name: "available_balance", label: "Balance" },
     ];
