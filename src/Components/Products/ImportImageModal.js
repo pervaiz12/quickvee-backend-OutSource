@@ -63,6 +63,8 @@ export default function ImportImageModal({ productTitle, productId }) {
     const data = {
       merchant_id: value.merchant_id,
       title: productTitle,
+      ...userTypeData,
+      
     };
 
     try {
@@ -151,6 +153,8 @@ export default function ImportImageModal({ productTitle, productId }) {
       fromstore: selectedStore,
       tostore: merchant_id,
       media_str: selectedImageArray.join(","),
+      ...userTypeData,
+      merchant_id,
     };
     try {
       setIsLoadingSubmit(true);

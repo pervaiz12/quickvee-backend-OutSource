@@ -46,6 +46,7 @@ const Add_Admin = lazy(() => import("../Users/admin/addAdmin/add_admin"));
 const MainOrderRetrieve = lazy(
   () => import("../OrderRetrieve/MainOrderRetrieve")
 );
+const RefundRequestMain = lazy(() => import("../../AllUserComponents/RefundRequest/RefundRequestMain"))
 const LeftDetailsUsers = ({ visible }) => {
   const renderComponent = () => {
     switch (visible) {
@@ -103,6 +104,8 @@ const LeftDetailsUsers = ({ visible }) => {
         return <Add_Admin />;
       case "order-retrieve":
         return <MainOrderRetrieve />;
+        case "refund-request":
+          return <RefundRequestMain />
       default:
         return null;
     }
