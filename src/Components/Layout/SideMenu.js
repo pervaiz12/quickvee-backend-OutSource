@@ -1285,6 +1285,25 @@ const SuperAdminMenuItems = [
     link: "/unapprove/store-order",
   },
   {
+    id: 1722490694702,
+    icon: (
+      <img
+        src={StoreIcon}
+        alt="Store Order"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={StoreActive}
+        alt="Refund Request"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    text: "Refund Request",
+    link: "/unapprove/refund-request",
+  },
+  {
     id: 5,
     icon: (
       <img

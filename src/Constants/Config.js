@@ -358,7 +358,9 @@ module.exports = Object.freeze({
   STORE_CREDIT_REPORT:"ReportingReactapi/store_credit_report",
   GET_RELATED_PRODUCT:"Product_api_react/getRelatedProduct",
   DETAILED_LOYALTY_POINTS:"ReportingReactapi/loyalty_points_report",
-  IMAGE_DUPLICATE: "Productapi/image_duplicate",
+  IMAGE_DUPLICATE: "Product_api_react/image_duplicate",
+  GET_REFUND_EMAILS:"Order_list_api/get_refund_emails",
+  GET_REFUND_EMAILS_COUNT:"Order_list_api/get_refund_emails_count"
 });
 
 // All api calls are initialized in this component for this application
