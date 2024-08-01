@@ -16,6 +16,7 @@ import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import sortIcon from "../../Assests/Category/SortingW.svg";
 import Pagination from "../Users/UnverifeDetails/Pagination";
 import { priceFormate } from "../../hooks/priceFormate";
+import { Link } from "react-router-dom";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -157,7 +158,14 @@ export default function RefundRequestTable({
                               <p>${priceFormate(item.refund_amt)}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{item.order_id}</p>
+                              <Link
+                                className="whitespace-nowrap text-[#0A64F9]"
+                                to={`/unapprove/refund-request/order-summary/${item.merchant_id}/${item?.order_id}`}
+                                // onClick={() => handleSummeryPage(row.order_id)}
+                                target="_blank"
+                              >
+                                <p>{item.order_id}</p>
+                              </Link>
                             </StyledTableCell>
                           </StyledTableRow>
                         </>
