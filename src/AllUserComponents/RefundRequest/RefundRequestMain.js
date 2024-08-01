@@ -11,8 +11,14 @@ import { useDispatch } from "react-redux";
 import PasswordShow from "../../Common/passwordShow";
 import useDebounce from "../../hooks/useDebouncs";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
-const sortList =["Active Refund","Closed Refund"]
-const orderSourceList = ["All", "Online Order", "Store Order"];
+const sortList = ["Active Refund", "Closed Refund"];
+const setOption = (option)=>{
+    if (option==="Active Refund"){
+        return "0"
+    }else if (option==="Closed Refund"){
+        return "1"
+    }
+}
 export default function RefundRequestMain() {
   const { userTypeData } = useAuthDetails();
 
@@ -22,6 +28,9 @@ export default function RefundRequestMain() {
   const [totalCount, setTotalCount] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchRecord, setSearchRecord] = useState("");
+  const [refundDropDownOptions, setRefundDropDownOptions] =
+    useState("Active Refund");
+    
   const debouncedValue = useDebounce(searchRecord);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const getRefundRequestTableData = async () => {
@@ -30,7 +39,7 @@ export default function RefundRequestMain() {
         perpage: rowsPerPage,
         page: currentPage,
         search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
-        is_close: "0",
+        is_close: setOption(refundDropDownOptions),
         ...userTypeData,
       };
       if (data) {
@@ -47,7 +56,7 @@ export default function RefundRequestMain() {
   const getRefundRequestDataCount = async () => {
     const data = {
       search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
-      is_close: "0",
+      is_close: setOption(refundDropDownOptions),
       ...userTypeData,
     };
     if (data) {
@@ -56,7 +65,7 @@ export default function RefundRequestMain() {
   };
   useEffect(() => {
     getRefundRequestTableData();
-  }, [debouncedValue, currentPage, rowsPerPage]);
+  }, [debouncedValue, currentPage, rowsPerPage,refundDropDownOptions]);
   useEffect(() => {
     getRefundRequestDataCount();
   }, [debouncedValue, currentPage, rowsPerPage]);
@@ -65,6 +74,9 @@ export default function RefundRequestMain() {
     setSearchRecord(value);
     setCurrentPage(1);
   };
+  const handleDropdownChange= (value) => {
+    setRefundDropDownOptions(value.title)
+  }
   return (
     <>
       <Grid container sx={{ pt: 2.5, mt: 3.6 }} className="box_shadow_div ">
@@ -100,8 +112,11 @@ export default function RefundRequestMain() {
         <Grid container sx={{ p: 2.5 }}>
           <Grid item xs={4}>
             <div className="heading">Filter By</div>
-            <SelectDropDown 
-                listItem={orderSourceList.map((item) => ({ title: item }))}
+            <SelectDropDown
+              selectedOption={refundDropDownOptions}
+              title={"title"}
+              listItem={sortList.map((item) => ({ title: item }))}
+              onClickHandler={handleDropdownChange}
             />
           </Grid>
         </Grid>

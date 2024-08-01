@@ -42,7 +42,7 @@ export default function ImportImageModal({ productTitle, productId }) {
     setOpen(false);
     setSuggestedProducts([]);
     setIsOptionSelected(false);
-    setSelectedImageArray([])
+    setSelectedImageArray([]);
   };
 
   const [selectedStore, setSelectedStore] = useState("");
@@ -61,10 +61,10 @@ export default function ImportImageModal({ productTitle, productId }) {
     setSelectedStore(value.merchant_id);
     setIsOptionSelected(true);
     const data = {
-      merchant_id: value.merchant_id,
+      selected_merchant_id: value.merchant_id,
       title: productTitle,
+      merchant_id,
       ...userTypeData,
-      
     };
 
     try {
@@ -387,7 +387,10 @@ export default function ImportImageModal({ productTitle, productId }) {
                   )}
                   Import Image
                 </button>
-                <button onClick={handleClose} className="quic-btn quic-btn-cancle attributeUpdateBTN ms-8">
+                <button
+                  onClick={handleClose}
+                  className="quic-btn quic-btn-cancle attributeUpdateBTN ms-8"
+                >
                   Cancel
                 </button>
               </div>
