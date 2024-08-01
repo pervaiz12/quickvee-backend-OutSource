@@ -42,6 +42,7 @@ export default function ImportImageModal({ productTitle, productId }) {
     setOpen(false);
     setSuggestedProducts([]);
     setIsOptionSelected(false);
+    setSelectedImageArray([])
   };
 
   const [selectedStore, setSelectedStore] = useState("");
@@ -382,7 +383,7 @@ export default function ImportImageModal({ productTitle, productId }) {
                   )}
                   Import Image
                 </button>
-                <button className="quic-btn quic-btn-cancle attributeUpdateBTN ms-8">
+                <button onClick={handleClose} className="quic-btn quic-btn-cancle attributeUpdateBTN ms-8">
                   Cancel
                 </button>
               </div>
