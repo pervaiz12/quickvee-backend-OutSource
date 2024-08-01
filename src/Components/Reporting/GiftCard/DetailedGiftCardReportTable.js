@@ -63,12 +63,10 @@ import {
         !GiftCardReportDataState.loading &&
         GiftCardReportDataState.GiftCardReportData
       ) {
-        setTotalValueIssued(GiftCardReportDataState.GiftCardReportData?.total_debit);
-        setTotalValueRedeemed(GiftCardReportDataState.GiftCardReportData?.total_credit);
-        setOutStandingsBalance(GiftCardReportDataState.GiftCardReportData?.total_balance);
-        setDataArr(
-          GiftCardReportDataState.GiftCardReportData.gc_data
-        );
+        setTotalValueIssued(GiftCardReportDataState?.TotalDebit);
+        setTotalValueRedeemed(GiftCardReportDataState?.TotalCredit);
+        setOutStandingsBalance(GiftCardReportDataState?.Totalbalance);
+        setDataArr(GiftCardReportDataState.GiftCardReportData);
       }
       else{
         setDataArr([])
@@ -146,17 +144,17 @@ import {
                         </StyledTableCell>
                         <StyledTableCell className="trBG_Color">
                           <p className="report-title totalReport">
-                            <p>{priceFormate(Number(totalValueIssued) || 0)}</p>
+                            <p>{priceFormate(Number(totalValueIssued) || "0.00")}</p>
                           </p>
                         </StyledTableCell>
                         <StyledTableCell className="trBG_Color">
                           <p className="report-title totalReport">
-                            <p>{priceFormate(Number(totalValueRedeemed) || 0)}</p>
+                            <p>{priceFormate(Number(totalValueRedeemed) || "0.00")}</p>
                           </p>
                         </StyledTableCell>
                         <StyledTableCell className="trBG_Color">
                           <p className="report-title totalReport">
-                            <p>{priceFormate(Number(outStandingsBalance) || 0)}</p>
+                            <p>{priceFormate(Number(outStandingsBalance) || "0.00")}</p>
                           </p>
                         </StyledTableCell>
                       </StyledTableRow>

@@ -23,8 +23,8 @@ export default function MainGiftCard() {
   const dispatch = useDispatch();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
-  const { GiftCardReportData } = useSelector(
-    (state) => state.GiftCardReportList
+  const GiftCardReportData = useSelector(
+      (state) => state.GiftCardReportList
   );
 
   const [totalValueIssued, setTotalValueIssued] = useState(0);
@@ -87,8 +87,8 @@ export default function MainGiftCard() {
                 <p>Total value Sold</p>
               </div>
               <div className="text-[20px] font-bold mt-4 common-font-bold">
-                {!GiftCardReportData ? (
-                  <p>{priceFormate(Number(GiftCardReportData?.total_debit) || 0.00)}</p>
+                {!GiftCardReportData.loading? (
+                  <p>{priceFormate(Number(GiftCardReportData?.TotalDebit) || "0.00")}</p>
                 ) : (
                   <Skeleton />
                 )}
@@ -101,8 +101,8 @@ export default function MainGiftCard() {
                 <p>Total value redeemed</p>
               </div>
               <div className="text-[20px] font-bold mt-4 common-font-bold">
-                {!GiftCardReportData ? (
-                  <p>{priceFormate(Number(GiftCardReportData?.total_credit) || 0.00)}</p>
+                {!GiftCardReportData.loading ? (
+                  <p>{priceFormate(Number(GiftCardReportData?.TotalCredit) || "0.00")}</p>
                 ) : (
                   <Skeleton />
                 )}
@@ -115,28 +115,28 @@ export default function MainGiftCard() {
                 <p>OutStanding balance</p>
               </div>
               <div className="text-[20px] font-bold mt-4 common-font-bold">
-                {!GiftCardReportData ? (
-                  <p>{priceFormate(Number(GiftCardReportData?.total_balance) || 0.00)}</p>
+                {!GiftCardReportData.loading ? (
+                  <p>{priceFormate(Number(GiftCardReportData?.Totalbalance) || "0.00")}</p>
                 ) : (
                   <Skeleton />
                 )}
               </div>
             </div>
           </Grid>
-          {/* <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
               <div className="font-normal  tracking-normal Admin_std">
-                <p>Gift Cards in Circulation</p>
+                <p>Gift Card in Circulation</p>
               </div>
               <div className="text-[20px] font-bold mt-4 common-font-bold">
-                {!GiftCardReportListReduxState.loading ? (
-                  <p>{priceFormate(outStandingsBalance.toFixed(2))}</p>
+                {!GiftCardReportData.loading ? (
+                  <p>{priceFormate(Number(GiftCardReportData?.Totalbalance) || "0.00")}</p>
                 ) : (
                   <Skeleton />
                 )}
               </div>
             </div>
-          </Grid> */}
+          </Grid>
         </Grid>
       </Grid>
       <DetailedGiftCardReportTable

@@ -612,7 +612,7 @@ const OrderRetrieve = () => {
       </div>
 
       <ConfirmModal
-        headerText="Are you sure you want to Retrieve Order?"
+        headerText="Are you sure you want to retrieve the order?"
         open={confirmModalOpen}
         onClose={() => {
           setConfirmModalOpen(false);
