@@ -27,9 +27,7 @@ export const fetchGiftCardReportData = createAsyncThunk(
       );
       // console.log(response)
       if (response.data.status === true) {
-        // console.log(response.data
-        //     )
-        return response.data.drop_cash_data;
+        return response.data;
       }
     } catch (error) {
       // throw new Error(error.response.data.message);

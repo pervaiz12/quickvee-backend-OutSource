@@ -52,49 +52,36 @@ import {
     setTotalValueRedeemed,
     setOutStandingsBalance,
   }) {
-    const DetailedLoyaltyPointsReduxState = useSelector(
-      (state) => state.DetailedLoyaltyPointsReport
+    const GiftCardReportDataState = useSelector(
+      (state) => state.GiftCardReportList
     );
     const [dataArr, setDataArr] = useState([]);
   
     const [sortOrder, setSortOrder] = useState("asc");
     useEffect(() => {
       if (
-        !DetailedLoyaltyPointsReduxState.loading &&
-        DetailedLoyaltyPointsReduxState.DetailedLoyaltyPointsReportArr
+        !GiftCardReportDataState.loading &&
+        GiftCardReportDataState.GiftCardReportData
       ) {
-        setTotalValueIssued(
-          DetailedLoyaltyPointsReduxState.DetailedLoyaltyPointsReportArr.reduce(
-            (acc, curr) => acc + parseFloat(curr.total_credit_points),
-            0
-          )
-        );
-        setTotalValueRedeemed(
-          DetailedLoyaltyPointsReduxState.DetailedLoyaltyPointsReportArr.reduce(
-            (acc, curr) => acc + parseFloat(curr.total_debit_points),
-            0
-          )
-        );
-        setOutStandingsBalance(
-          DetailedLoyaltyPointsReduxState.DetailedLoyaltyPointsReportArr.reduce(
-            (acc, curr) => acc + parseFloat(curr.available_lp),
-            0
-          )
-        );
+        setTotalValueIssued(GiftCardReportDataState.GiftCardReportData?.total_debit);
+        setTotalValueRedeemed(GiftCardReportDataState.GiftCardReportData?.total_credit);
+        setOutStandingsBalance(GiftCardReportDataState.GiftCardReportData?.total_balance);
         setDataArr(
-          DetailedLoyaltyPointsReduxState.DetailedLoyaltyPointsReportArr
+          GiftCardReportDataState.GiftCardReportData.gc_data
         );
       }
+      else{
+        setDataArr([])
+      }
     }, [
-      DetailedLoyaltyPointsReduxState,
-      DetailedLoyaltyPointsReduxState.DetailedLoyaltyPointsReportArr,
+      GiftCardReportDataState,
+      GiftCardReportDataState.GiftCardReportData,
     ]);
-    // console.log(dataArr);
     const tableRow = [
-      { type: "str", name: "customer_name", label: "Gift Card Number" },
-      { type: "num", name: "total_credit_amount", label: "Total Sold" },
-      { type: "num", name: "total_debit_amount", label: "Total Redeemed" },
-      { type: "num", name: "available_balance", label: "Balance" },
+      { type: "str", name: "number", label: "Gift Card Number" },
+      { type: "num", name: "total_debit", label: "Total Sold" },
+      { type: "num", name: "total_credit", label: "Total Redeemed" },
+      { type: "num", name: "total_balance", label: "Balance" },
     ];
     const sortByItemName = (type, name) => {
       const { sortedItems, newOrder } = SortTableItemsHelperFun(
@@ -138,16 +125,16 @@ import {
                         <>
                           <StyledTableRow key={index}>
                             <StyledTableCell>
-                              <p>{item.customer_name}</p>
+                              <p>{item.number}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{priceFormate(item.total_credit_points)}</p>
+                              <p>{priceFormate(item.total_debit)}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{priceFormate(item.total_debit_points)}</p>
+                              <p>{priceFormate(item.total_credit)}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{priceFormate(item.available_lp)}</p>
+                              <p>{priceFormate(item.total_balance)}</p>
                             </StyledTableCell>
                           </StyledTableRow>
                         </>
@@ -159,17 +146,17 @@ import {
                         </StyledTableCell>
                         <StyledTableCell className="trBG_Color">
                           <p className="report-title totalReport">
-                            {priceFormate(totalValueIssued?.toFixed(2))}
+                            <p>{priceFormate(Number(totalValueIssued) || 0)}</p>
                           </p>
                         </StyledTableCell>
                         <StyledTableCell className="trBG_Color">
                           <p className="report-title totalReport">
-                            {priceFormate(totalValueRedeemed?.toFixed(2))}
+                            <p>{priceFormate(Number(totalValueRedeemed) || 0)}</p>
                           </p>
                         </StyledTableCell>
                         <StyledTableCell className="trBG_Color">
                           <p className="report-title totalReport">
-                            {priceFormate(outStandingsBalance?.toFixed(2))}
+                            <p>{priceFormate(Number(outStandingsBalance) || 0)}</p>
                           </p>
                         </StyledTableCell>
                       </StyledTableRow>
