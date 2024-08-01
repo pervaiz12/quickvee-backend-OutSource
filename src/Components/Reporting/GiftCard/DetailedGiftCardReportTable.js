@@ -44,7 +44,7 @@ import {
     },
   }));
   
-  export default function DetailedLoyaltyReportTable({
+  export default function DetailedGiftCardReportTable({
     totalValueIssued,
     totalValueRedeemed,
     outStandingsBalance,

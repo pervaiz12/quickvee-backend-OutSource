@@ -1,9 +1,10 @@
 import { Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import DetailedLoyaltyReportTable from "./DetailedLoyaltyReportTable";
+import DetailedGiftCardReportTable from "./DetailedGiftCardReportTable";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { useDispatch } from "react-redux";
 import { fetchDetailedLoyaltyPointsReportArr } from "../../../Redux/features/Reports/DatailedLoyaltyPointsReport/DetailedLoyaltyPointsReportSlice";
+import { fetchGiftCardReportData } from "../../../Redux/features/Reports/GiftCard/GiftCardReportSlice";
 import PasswordShow from "../../../Common/passwordShow";
 import { useSelector } from "react-redux";
 import { priceFormate } from "../../../hooks/priceFormate";
@@ -122,7 +123,7 @@ export default function MainGiftCard() {
           </Grid>
         </Grid>
       </Grid>
-      <DetailedLoyaltyReportTable
+      <DetailedGiftCardReportTable
         {...{
           totalValueIssued,
           totalValueRedeemed,
