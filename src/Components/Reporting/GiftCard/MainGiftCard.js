@@ -88,7 +88,7 @@ export default function MainGiftCard() {
               </div>
               <div className="text-[20px] font-bold mt-4 common-font-bold">
                 {!GiftCardReportData.loading? (
-                  <p>{priceFormate(Number(GiftCardReportData?.TotalDebit) || "0.00")}</p>
+                  <p>${priceFormate(GiftCardReportData?.TotalDebit || "0.00")}</p>
                 ) : (
                   <Skeleton />
                 )}
@@ -102,7 +102,7 @@ export default function MainGiftCard() {
               </div>
               <div className="text-[20px] font-bold mt-4 common-font-bold">
                 {!GiftCardReportData.loading ? (
-                  <p>{priceFormate(Number(GiftCardReportData?.TotalCredit) || "0.00")}</p>
+                  <p>${priceFormate(GiftCardReportData?.TotalCredit || "0.00")}</p>
                 ) : (
                   <Skeleton />
                 )}
@@ -116,7 +116,7 @@ export default function MainGiftCard() {
               </div>
               <div className="text-[20px] font-bold mt-4 common-font-bold">
                 {!GiftCardReportData.loading ? (
-                  <p>{priceFormate(Number(GiftCardReportData?.Totalbalance) || "0.00")}</p>
+                  <p>${priceFormate(GiftCardReportData?.Totalbalance || "0.00")}</p>
                 ) : (
                   <Skeleton />
                 )}
@@ -130,7 +130,7 @@ export default function MainGiftCard() {
               </div>
               <div className="text-[20px] font-bold mt-4 common-font-bold">
                 {!GiftCardReportData.loading ? (
-                  // <p>{priceFormate(Number(GiftCardReportData?.Totalbalance) || "0.00")}</p>
+                  // <p>{priceFormate(GiftCardReportData?.Totalbalance || "0.00")}</p>
                   <p>{0}</p>
                 ) : (
                   <Skeleton />

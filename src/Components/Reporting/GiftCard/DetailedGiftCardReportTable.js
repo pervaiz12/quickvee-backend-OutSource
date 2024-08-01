@@ -126,13 +126,13 @@ import {
                               <p>{item.number}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{priceFormate(item.total_debit)}</p>
+                              <p>${priceFormate(item.total_debit)}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{priceFormate(item.total_credit)}</p>
+                              <p>${priceFormate(item.total_credit)}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{priceFormate(item.total_balance)}</p>
+                              <p>${priceFormate(item.total_balance)}</p>
                             </StyledTableCell>
                           </StyledTableRow>
                         </>
@@ -144,17 +144,17 @@ import {
                         </StyledTableCell>
                         <StyledTableCell className="trBG_Color">
                           <p className="report-title totalReport">
-                            <p>{priceFormate(Number(totalValueIssued) || "0.00")}</p>
+                            <p>${priceFormate(totalValueIssued || "0.00")}</p>
                           </p>
                         </StyledTableCell>
                         <StyledTableCell className="trBG_Color">
                           <p className="report-title totalReport">
-                            <p>{priceFormate(Number(totalValueRedeemed) || "0.00")}</p>
+                            <p>${priceFormate(totalValueRedeemed || "0.00")}</p>
                           </p>
                         </StyledTableCell>
                         <StyledTableCell className="trBG_Color">
                           <p className="report-title totalReport">
-                            <p>{priceFormate(Number(outStandingsBalance) || "0.00")}</p>
+                            <p>${priceFormate(outStandingsBalance || "0.00")}</p>
                           </p>
                         </StyledTableCell>
                       </StyledTableRow>
