@@ -484,7 +484,7 @@ const CateDuplicateStore = () => {
                   listItem={
                     MerchantList?.length &&
                     MerchantList?.map((item) => ({
-                      title: item?.name,
+                      title: `${item.name} - ${item.merchant_id}`,
                       id: item?.merchant_id,
                     }))
                   }
@@ -594,7 +594,7 @@ const CateDuplicateStore = () => {
                   listItem={
                     MerchantList?.length &&
                     MerchantList?.map((item) => ({
-                      title: item?.name,
+                      title: `${item.name} - ${item.merchant_id}`,
                       id: item?.merchant_id,
                     }))
                   }
