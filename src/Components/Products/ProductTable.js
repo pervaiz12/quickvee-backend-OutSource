@@ -472,7 +472,10 @@ const ProductTable = ({
                               <StyledTableCell align={"center"}>
                                 Images
                               </StyledTableCell>
-                              <StyledTableCell>Import Image</StyledTableCell>
+                              { userTypeData?.login_type ===
+                                              "superadmin" && selectedListingType !==
+                                              "Variant listing" ? <StyledTableCell>Import Image</StyledTableCell> : null}
+                              
                               {selectedListingType === "Variant listing" ? (
                                 ""
                               ) : (
@@ -781,12 +784,20 @@ const ProductTable = ({
                                               </div>
                                             </div>
                                           </StyledTableCell>
-                                          <StyledTableCell>
-                                            <ImportImageModal
-                                              productTitle={product.title}
-                                              productId={product.id}
-                                            />
-                                          </StyledTableCell>
+                                          {
+                                             userTypeData?.login_type ===
+                                              "superadmin" && selectedListingType !==
+                                              "Variant listing" ? (
+                                                <>
+                                              <StyledTableCell>
+                                                <ImportImageModal
+                                                  productTitle={product.title}
+                                                  productId={product.id}
+                                                />
+                                              </StyledTableCell>
+                                                </>
+                                              ): null
+                                          }
 
                                           {selectedListingType ===
                                           "Variant listing" ? (
