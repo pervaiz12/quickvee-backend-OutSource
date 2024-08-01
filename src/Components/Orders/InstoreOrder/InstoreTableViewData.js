@@ -91,8 +91,10 @@ const InstoreTableViewData = (props, searchId) => {
         return "Cash";
       } else if (type === "Credit Card") {
         return "Online";
-      } else {
-        return type;
+      } else if(type==="Cash & Credit Card"){
+        return "Both";
+      }else{
+        return type
       }
     };
     dispatch(
@@ -105,6 +107,7 @@ const InstoreTableViewData = (props, searchId) => {
         start_date: props.selectedDateRange?.start_date, //
         end_date: props.selectedDateRange?.end_date, //
         order_method: props.order_method ? props.order_method : "All",
+        emp_id: props?.EmployeeIDData,
         ...props.userTypeData, //
       })
     );
@@ -115,6 +118,7 @@ const InstoreTableViewData = (props, searchId) => {
     props.selectedDateRange?.end_date,
     debouncedValue,
     props.order_method,
+    props?.EmployeeIDData,
     // props.OrderSourceData,
 
     // AllInStoreDataState.OrderListCount,
@@ -130,6 +134,7 @@ const InstoreTableViewData = (props, searchId) => {
     props.selectedDateRange,
     currentPage,
     rowsPerPage,
+    props?.EmployeeIDData,
     // AllInStoreDataState.OrderListCount,
   ]);
   const fetchData = async () => {
@@ -138,8 +143,10 @@ const InstoreTableViewData = (props, searchId) => {
         return "Cash";
       } else if (type === "Credit Card") {
         return "Online";
-      } else {
-        return type;
+      } else if(type==="Cash & Credit Card"){
+        return "Both";
+      }else{
+        return type
       }
     };
     if (props?.selectedDateRange?.start_date) {
