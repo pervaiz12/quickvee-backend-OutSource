@@ -245,7 +245,7 @@ export default function ImportImageModal({ productTitle, productId }) {
               <label>Product Status</label>
               <Select
                 options={JSON.parse(localStorage.getItem("AllStore"))
-                  .filter((item) => item.merchant_id !== merchant_id)
+                  ?.filter((item) => item.merchant_id !== merchant_id)
                   .map((item) => ({
                     value: item.id,
                     label: item.name,

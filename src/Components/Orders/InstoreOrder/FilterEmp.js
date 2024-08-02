@@ -8,7 +8,7 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const transactionsList = [
   {
-    title: "Both",
+    title: "Cash & Credit Card",
   },
   {
     title: "Cash",
@@ -19,7 +19,7 @@ const transactionsList = [
 ];
 const transactionsListSuperadmin = [
   {
-    title: "Both",
+    title: "Cash & Credit Card",
   },
   {
     title: "Cash",
@@ -38,7 +38,7 @@ const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
   const [selectedEmployeeID, setSelectedEmployeeID] = useState("All");
   const [filteredData, setFilteredData] = useState({ emp_id: "all" });
 
-  const [selectedTransaction, setSelectedTransaction] = useState("Both");
+  const [selectedTransaction, setSelectedTransaction] = useState("Cash & Credit Card");
   // const [selectedOrderStatus, setSelectedOrderStatus] = useState("All");
 
   const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);

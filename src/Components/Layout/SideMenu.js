@@ -825,6 +825,11 @@ const menuItems = [
             text: "Detailed Loyalty Points Report",
             link: "/store-reporting/detailed-loyalty-points-report",
           },
+          {
+            id: 102,
+            text: "Gift Card Report",
+            link: "/store-reporting/gift-card-report",
+          },
         ],
       },
     ],
