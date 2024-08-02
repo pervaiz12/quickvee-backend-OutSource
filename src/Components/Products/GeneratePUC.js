@@ -428,6 +428,21 @@ const GeneratePUC = ({
                           >
                             Instant PO
                           </button>
+                          <button
+                            className="quic-btn quic-btn-save edit"
+                            style={{
+                              backgroundColor: "#0A64F9",
+                            }}
+                            onClick={() =>
+                              handleCloseEditModal(
+                                "single_inventory_tranfer",
+                                formValue?.[0]?.productEditId,
+                                varientTitle[index]
+                              )
+                            }
+                          >
+                            Inventory Transfer
+                          </button>
                         </div>
                       ) : (
                         ""
@@ -626,6 +641,20 @@ const GeneratePUC = ({
                     }
                   >
                     Instant PO
+                  </button>
+                  <button
+                    className="quic-btn quic-btn-save edit"
+                    style={{
+                      backgroundColor: "#0A64F9",
+                    }}
+                    onClick={() =>
+                      handleCloseEditModal(
+                        "single_inventory_tranfer",
+                        formValue?.[0]?.productEditId
+                      )
+                    }
+                  >
+                    Inventory Transfer
                   </button>
                 </div>
               ) : (

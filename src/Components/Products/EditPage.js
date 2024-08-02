@@ -16,7 +16,7 @@ import { Suspense } from "react";
 const BulkVarientEdit = lazy(() => import("./BulkVarientEdit"));
 const BulkVendorEdit = lazy(() => import("./BulkVendorEdit"));
 const BulkInstantPo = lazy(() => import("./BulkInstantPo"));
-
+const InventoryTransferModel = lazy(() => import("./InventoryTransferModel"));
 const EditPage = ({
   openEditModal,
   handleCloseEditModal,
@@ -30,9 +30,11 @@ const EditPage = ({
   fetchProductDataById,
   isVarientEdit,
   fetchSingleVarientData,
+  varientName
 }) => {
-  const [value, setValue] = React.useState("");
+  console.log("productData index edit", varientIndex);
 
+  const [value, setValue] = React.useState("");
   const handleChange = useCallback((event, newValue) => {
     setValue(newValue);
   }, []);
@@ -42,6 +44,8 @@ const EditPage = ({
       setValue("2");
     } else if (modalType === "single_instant") {
       setValue("3");
+    } else if (modalType === "single_inventory_tranfer") {
+      setValue("4");
     } else {
       setValue("1");
     }
@@ -59,13 +63,16 @@ const EditPage = ({
           aria-label="lab API tabs example"
           className="tab-list"
         >
-          {modalType !== "single_vendor" && modalType !== "single_instant" ? (
+          {modalType !== "single_vendor" &&
+          modalType !== "single_instant" &&
+          modalType !== "single_inventory_tranfer" ? (
             <Tab label="Bulk Variant Edit" value="1" />
           ) : (
             ""
           )}
 
-          {modalType !== "single_instant" ? (
+          {modalType !== "single_instant" &&
+          modalType !== "single_inventory_tranfer" ? (
             <Tab
               label={`${
                 modalType !== "single_vendor"
@@ -77,7 +84,8 @@ const EditPage = ({
           ) : (
             ""
           )}
-          {modalType !== "single_vendor" ? (
+          {modalType !== "single_vendor" &&
+          modalType !== "single_inventory_tranfer" ? (
             <Tab
               label={`${
                 modalType !== "single_instant"
@@ -86,6 +94,12 @@ const EditPage = ({
               }`}
               value="3"
             />
+          ) : (
+            ""
+          )}
+          {modalType === "single_inventory_tranfer" &&
+          modalType !== "single_instant" ? (
+            <Tab label="Inventory Transfer" value="4" />
           ) : (
             ""
           )}
@@ -103,7 +117,7 @@ const EditPage = ({
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >
-        <Box className="product-edit-modal custom-scroll">
+        <Box className="product-edit-modal custom-scroll" >
           <div class="cancel-btn" onClick={handleCloseEditModal}>
             <img src={CloseIcon} className="cancel-image" />
           </div>
@@ -145,6 +159,17 @@ const EditPage = ({
                       fetchProductDataById={fetchProductDataById}
                       fetchSingleVarientData={fetchSingleVarientData}
                       inventoryData={inventoryData}
+                    />
+                  </Suspense>
+                </TabPanel>
+                <TabPanel value="4">
+                  <Suspense fallback={<div></div>}>
+                    <InventoryTransferModel
+                      productData={productData}
+                      varientData={varientData}
+                      fetchProductDataById={fetchProductDataById}
+                      fetchSingleVarientData={fetchSingleVarientData}
+                      varientName={varientName}
                     />
                   </Suspense>
                 </TabPanel>

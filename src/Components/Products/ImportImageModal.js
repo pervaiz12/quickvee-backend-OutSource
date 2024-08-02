@@ -202,6 +202,20 @@ export default function ImportImageModal({ productTitle, productId }) {
       },
     }),
   };
+//   const onLongPress = () => {
+//     console.log('longpress is triggered');
+// };
+
+// const onClick = () => {
+//     console.log('click is triggered')
+// }
+
+// const defaultOptions = {
+//     shouldPreventDefault: true,
+//     delay: 500,
+// };
+// const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
+
   return (
     <>
       <img
