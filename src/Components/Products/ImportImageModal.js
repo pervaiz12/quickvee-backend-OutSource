@@ -242,7 +242,6 @@ export default function ImportImageModal({ productTitle, productId }) {
           </div>
           <Grid container sx={{ p: 2.5 }}>
             <Grid item xs={12}>
-              <label>Product Status</label>
               <Select
                 options={JSON.parse(localStorage.getItem("AllStore"))
                   ?.filter((item) => item.merchant_id !== merchant_id)
@@ -253,6 +252,7 @@ export default function ImportImageModal({ productTitle, productId }) {
                   }))}
                 onChange={handleOptionClick}
                 styles={customStyles}
+                placeholder={'Select Store...'}
               />
             </Grid>
           </Grid>
