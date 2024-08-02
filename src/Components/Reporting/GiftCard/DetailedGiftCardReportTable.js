@@ -94,12 +94,12 @@ import {
     return (
       <>
         <Grid container className="box_shadow_div">
-          {/* {StoreCreditReportReduxState.loading ||
-            (StoreCreditReportReduxState.status && !dataArr.length) ?
+          {GiftCardReportDataState.loading ||
+            (GiftCardReportDataState.status && !dataArr.length) ?
             
             (
               <SkeletonTable columns={tableRow.map((item) => item.label)} />
-            ) : ( */}
+            ) : (
           <Grid container>
             <Grid item xs={12}>
               <TableContainer>
@@ -165,7 +165,7 @@ import {
               </TableContainer>
             </Grid>
           </Grid>
-          {/* )} */}
+           )} 
         </Grid>
       </>
     );
