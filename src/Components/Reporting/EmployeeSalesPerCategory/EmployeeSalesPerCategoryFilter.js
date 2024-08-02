@@ -195,7 +195,7 @@ const EmployeeSalesPerCategoryFilter = ({ onFilterDataChange }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <label className="q-details-page-label" htmlFor="orderTypeFilter">
+              <label className="q-details-page-label" style={{marginBottom:"0.24rem"}} htmlFor="orderTypeFilter">
                 Category
               </label>
               <SelectDropDown

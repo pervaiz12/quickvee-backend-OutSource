@@ -130,8 +130,7 @@ export default function MainGiftCard() {
               </div>
               <div className="text-[20px] font-bold mt-4 common-font-bold">
                 {!GiftCardReportData.loading ? (
-                  // <p>{priceFormate(GiftCardReportData?.Totalbalance || "0.00")}</p>
-                  <p>{0}</p>
+                  <p>{GiftCardReportData.GiftCardReportData?.length || 0}</p>
                 ) : (
                   <Skeleton />
                 )}

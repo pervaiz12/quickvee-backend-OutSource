@@ -274,8 +274,8 @@ const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
       border: 0,
     },
     "& td, & th": {
-    border: "none",
-  },
+      border: "none",
+    },
   }));
 
   const navigate = useNavigate();

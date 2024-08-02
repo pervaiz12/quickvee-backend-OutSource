@@ -23,7 +23,7 @@ const SearchableDropdown = ({
     const { value } = e.target;
 
     const filterList = optionList.filter((item) => {
-      return item.name.toLowerCase().includes(value.toLowerCase());
+      return item?.name?.toLowerCase()?.includes(value?.toLowerCase());
     });
     setFilterOptions(
       filterList?.length ? filterList : ["No Search Result Found"]

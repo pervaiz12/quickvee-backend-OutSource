@@ -29,12 +29,13 @@ const SearchableDropdown = ({
   const [filterValue, setFilterValue] = useState("");
   const isProductAdd = location.pathname.includes("/products/add");
   const isProductEdit = location.pathname.includes("/products/edit");
+  const isVarientMerging = location.pathname.includes("/inventory-merge");
 
   const handleFilterOptions = (e) => {
-    const { value } = e.target;
+    const { value } = e?.target;
     setFilterValue(value);
     const filterList = optionList?.filter((item) => {
-      return item?.[name]?.toLowerCase().includes(value?.toLowerCase());
+      return item?.[name]?.toLowerCase()?.includes(value?.toLowerCase());
     });
     setFilterOptions(
       filterList?.length ? filterList : ["No Search Result Found"]
@@ -56,7 +57,7 @@ const SearchableDropdown = ({
     // hide selected value if hideSelectedValue = true
     if (hideSelectedValue === true && hideSelectedList?.length) {
       const hideItemList = optionList?.filter((filtered) => {
-        return !hideSelectedList.some((item) => +item.id === +filtered.id);
+        return !hideSelectedList?.some((item) => +item?.id === +filtered?.id);
       });
       setFilterOptions(hideItemList);
     }
@@ -87,7 +88,11 @@ const SearchableDropdown = ({
 
   useEffect(() => {
     // set defaultTax in taxes dropdown
-    if (optionList?.length && keyName === "taxes" && isProductAdd) {
+    if (
+      optionList?.length &&
+      keyName === "taxes" &&
+      (isProductAdd || isVarientMerging)
+    ) {
       const findOption = optionList?.filter(
         (item) => item?.title === "DefaultTax"
       );
@@ -98,7 +103,7 @@ const SearchableDropdown = ({
   const changeFilterableList = () => {
     const filterOptionList = optionList?.filter(
       (product) =>
-        !product?.title?.toLowerCase().includes(productTitle?.toLowerCase())
+        !product?.title?.toLowerCase()?.includes(productTitle?.toLowerCase())
     );
     // filter incoming optionList items when onchange run
     if (filterOptions?.length) {
@@ -227,7 +232,7 @@ const SearchableDropdown = ({
             {showOptions
               ? changeFilterableList()?.map((opt) => {
                   const isInSelectedOptions = selectedOption?.some(
-                    (selected) => selected.id === opt.id
+                    (selected) => selected?.id === opt?.id
                   );
                   if (typeof opt === "string") {
                     return <p>{opt}</p>;
