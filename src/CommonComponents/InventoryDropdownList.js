@@ -30,12 +30,16 @@ const InventoryDropdownList = ({
   const [filterValue, setFilterValue] = useState("");
   const isProductAdd = location.pathname.includes("/products/add");
   const isProductEdit = location.pathname.includes("/products/edit");
+  const isVarientMerging = location.pathname.includes("/inventory-merge");
 
   const handleFilterOptions = (e) => {
     const { value } = e.target;
     setFilterValue(value);
     const filterList = optionList?.filter((item) => {
-      return item?.[name]?.toLowerCase().includes(value?.toLowerCase());
+      return (
+        item?.[name]?.toLowerCase().includes(value?.toLowerCase()) &&
+        +item?.isvarient === 0
+      );
     });
     setFilterOptions(
       filterList?.length ? filterList : ["No Search Result Found"]
@@ -101,18 +105,31 @@ const InventoryDropdownList = ({
   }, [optionList, keyName, productTitle]);
 
   const changeFilterableList = () => {
-    if (filterOptions?.length) {
-      return (
-        filterOptions.filter((product) => +product?.isvarient === 0) ?? [
-          "No Search Result Found",
-        ]
-      );
-    }
-    return (
-      optionList.filter((product) => +product?.isvarient === 0) ?? [
-        "No Search Result Found",
-      ]
+    const filterOptionList = optionList?.filter(
+      (product) =>
+        !product?.title?.toLowerCase().includes(productTitle?.toLowerCase())
     );
+
+    const filterOptionListinMerging = optionList.filter(
+      (product) => +product?.isvarient === 0
+    );
+
+    // filter incoming optionList items when onchange run
+    if (filterOptions?.length) {
+      return isProductEdit
+        ? filterOptions?.filter(
+            (product) =>
+              !product?.title
+                ?.toLowerCase()
+                .includes(productTitle?.toLowerCase())
+          )
+        : filterOptions;
+    }
+    return isProductEdit
+      ? filterOptionList
+      : isVarientMerging
+        ? filterOptionListinMerging
+        : optionList;
   };
 
   const toggleOption = () => {

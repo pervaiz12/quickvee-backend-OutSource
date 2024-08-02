@@ -29,6 +29,7 @@ const SearchableDropdown = ({
   const [filterValue, setFilterValue] = useState("");
   const isProductAdd = location.pathname.includes("/products/add");
   const isProductEdit = location.pathname.includes("/products/edit");
+  const isVarientMerging = location.pathname.includes("/inventory-merge");
 
   const handleFilterOptions = (e) => {
     const { value } = e.target;
@@ -87,7 +88,11 @@ const SearchableDropdown = ({
 
   useEffect(() => {
     // set defaultTax in taxes dropdown
-    if (optionList?.length && keyName === "taxes" && isProductAdd) {
+    if (
+      optionList?.length &&
+      keyName === "taxes" &&
+      (isProductAdd || isVarientMerging)
+    ) {
       const findOption = optionList?.filter(
         (item) => item?.title === "DefaultTax"
       );

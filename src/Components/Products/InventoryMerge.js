@@ -28,6 +28,8 @@ import { Box, CircularProgress, Grid } from "@mui/material";
 import makeAnimated from "react-select/animated";
 import Select from "react-select";
 import ProductSelection from "./ProductSelection";
+import * as yup from "yup";
+import { useNavigate } from "react-router-dom";
 
 const InventoryMerge = () => {
   const {
@@ -43,6 +45,7 @@ const InventoryMerge = () => {
   let titleTimeoutId;
   const fileUploadRef = useRef();
   const animatedComponents = makeAnimated();
+  const navigate = useNavigate();
 
   const dropDownStyle = {
     clearIndicator: (provided) => ({
@@ -91,11 +94,10 @@ const InventoryMerge = () => {
     }),
   };
 
-  const [isDeleted, setIsDeleted] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(true);
   const [varientName, setVarientName] = useState([{ value: "", label: "" }]);
   const [selectedVariant, setSelectedVarient] = useState({});
   const [productField, setProductField] = useState([]);
-  console.log("productField", productField);
   const [productInfo, setProductInfo] = useState({
     title: "",
     description: "",
@@ -544,6 +546,17 @@ const InventoryMerge = () => {
       // Map over the new data and merge with the previous state where necessary
       const updatedState = newData?.map((item) => {
         // If the item exists in the previous state, preserve the name
+        let newTitle = item.title?.toLowerCase() || "";
+
+        const titleNameUpdate = newTitle
+          .toLowerCase()
+          .replace(searchTitle, "")
+          .trim();
+
+        // Capitalize the first letter of each word in titleName
+        const formattedTitleNameUpdate = newTitle.replace(/\b\w/g, (char) =>
+          char.toUpperCase()
+        );
 
         if (prevStateMap.has(item.id)) {
           let prevTitle = prevStateMap.get(item.id).title;
@@ -565,7 +578,10 @@ const InventoryMerge = () => {
           };
         }
         // Otherwise, just return the new item
-        return item;
+        return {
+          ...item,
+          title: titleNameUpdate,
+        };
       });
 
       return updatedState;
@@ -590,6 +606,33 @@ const InventoryMerge = () => {
     // Update the state with the new array
     setProductField(updateField);
   };
+  const disallowedCharactersRegex = /[~\/\\,-]/;
+
+  const formValueInnerSchema = yup.object().shape({
+    title: yup
+      .string()
+      .required("Title is required")
+      .test(
+        "no-disallowed-characters",
+        "Title contains invalid characters",
+        (value) => !disallowedCharactersRegex.test(value)
+      ),
+  });
+
+  const formValueSchema = yup.array().of(formValueInnerSchema);
+
+  const formSchema = yup.object().shape({
+    title: yup
+      .string()
+      .required("Title is required")
+      .test(
+        "no-disallowed-characters",
+        "Title contains invalid characters",
+        (value) => !disallowedCharactersRegex.test(value)
+      ),
+    category: yup.array().min(1, "Select Category").required("Select Category"),
+    productField: formValueSchema,
+  });
 
   const updateVarientMerging = async () => {
     const files = productInfo?.filesadmin_id
@@ -626,61 +669,44 @@ const InventoryMerge = () => {
     };
 
     try {
-      const res = await dispatch(updateVariantMerging(data)).unwrap();
-      if (res?.status) {
-        ToastifyAlert("Update Successfully", "success");
+      const response = await formSchema.validate(
+        { ...productInfo, productField },
+        {
+          abortEarly: false,
+        }
+      );
+      setError({});
+      // check any error exist in error state and if response success and any productTitleError is exist
+      if (!!response && !productTitleError) {
+        try {
+          const res = await dispatch(updateVariantMerging(data)).unwrap();
+          if (res?.success_message === "Successfully created product.") {
+            ToastifyAlert("Update Successfully", "success");
+            navigate("/inventory/products");
+          } else {
+            ToastifyAlert(res?.update_message, "error");
+          }
+        } catch (error) {
+          if (error.status == 401 || error.response.status === 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
+          }
+        }
       }
-    } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
-        getUnAutherisedTokenMessage();
-        handleCoockieExpire();
-      } else if (error.status == "Network Error") {
-        getNetworkError();
+    } catch (err) {
+      let errorsList = {};
+      setError({});
+      if (err && err.inner) {
+        err?.inner?.forEach((error) => {
+          if (error?.path) {
+            errorsList[error.path] = error.message;
+          }
+        });
       }
-    } finally {
-      // setVarientLoading(false);
+      setError(errorsList);
     }
-
-    // try {
-    //   const response = await formSingleVarientChange.validate(
-    //     { formValue },
-    //     {
-    //       abortEarly: false,
-    //     }
-    //   );
-    //   setError({});
-    //   // check any error exist in error state and if response success and any productTitleError is exist
-    //   if (!!response && checkFormErrorExist()) {
-    //     setVarientLoading(true);
-    //     try {
-    //       const res = await dispatch(updateEditVarient(data)).unwrap();
-    //       if (res?.status) {
-    //         ToastifyAlert("Update Successfully", "success");
-    //         fetchSingleVarientData();
-    //       }
-    //     } catch (error) {
-    //       if (error.status == 401 || error.response.status === 401) {
-    //         getUnAutherisedTokenMessage();
-    //         handleCoockieExpire();
-    //       } else if (error.status == "Network Error") {
-    //         getNetworkError();
-    //       }
-    //     } finally {
-    //       setVarientLoading(false);
-    //     }
-    //   }
-    // } catch (err) {
-    //   let errorsList = {};
-    //   setError({});
-    //   if (err && err.inner) {
-    //     err?.inner?.forEach((error) => {
-    //       if (error?.path) {
-    //         errorsList[error.path] = error.message;
-    //       }
-    //     });
-    //   }
-    //   setError(errorsList);
-    // }
   };
 
   return (
@@ -950,7 +976,6 @@ const InventoryMerge = () => {
             </div>
 
             <div class="mt-6 px-5 multiple-items">
-              <span>Select for Delete</span>
               <div class="checkbox-area">
                 <input
                   type="checkbox"
@@ -958,10 +983,9 @@ const InventoryMerge = () => {
                   checked={isDeleted}
                   onChange={(e) => toggleDeletedOption(e)}
                   className="checkbox-input"
+                  style={{ marginRight: "10px" }}
                 />
-                <label for="isMultiple" className="check-text">
-                  Select for Delete
-                </label>
+                <span>Delete Selected Product</span>
               </div>
             </div>
 
@@ -1022,39 +1046,55 @@ const InventoryMerge = () => {
               />
             </div>
 
-            <div class="inputFields mt-6 mb-6 px-5">
-              {productField?.length
-                ? productField?.map((opt, index) => {
-                    const searchTitle = productInfo?.title
-                      ?.trim()
-                      .toLowerCase();
-                    let prevTitle = opt?.title;
+            {productField?.length ? (
+              <div class="inputFields mt-6 mb-6 px-5">
+                <Grid item>
+                  <h2 className="text-[18px] text-black opacity-100 Admin_std">
+                    Selected Products:
+                  </h2>
+                </Grid>
+                {productField?.length
+                  ? productField?.map((opt, index) => {
+                      const searchTitle = productInfo?.title
+                        ?.trim()
+                        .toLowerCase();
+                      let prevTitle = opt?.title;
 
-                    // Remove the search title from the previous title
-                    const titleName = prevTitle
-                      .toLowerCase()
-                      .replace(searchTitle, "")
-                      .trim();
+                      // Remove the search title from the previous title
+                      const titleName = prevTitle
+                        .toLowerCase()
+                        .replace(searchTitle, "")
+                        .trim();
 
-                    // Capitalize the first letter of each word in titleName
-                    const formattedTitleName = titleName.replace(
-                      /\b\w/g,
-                      (char) => char.toUpperCase()
-                    );
+                      // Capitalize the first letter of each word in titleName
+                      const formattedTitleName = titleName.replace(
+                        /\b\w/g,
+                        (char) => char.toUpperCase()
+                      );
 
-                    return (
-                      <div className="inventory-input-area">
-                        <input
-                          type="text"
-                          placeholder=""
-                          value={formattedTitleName}
-                          onChange={(e) => handleChangeProductTitle(e, index)}
-                        />
-                      </div>
-                    );
-                  })
-                : ""}
-            </div>
+                      return (
+                        <div className="inventory-input-area">
+                          <input
+                            type="text"
+                            placeholder=""
+                            value={formattedTitleName}
+                            onChange={(e) => handleChangeProductTitle(e, index)}
+                          />
+                          {error[`productField[${index}].${`title`}`] ? (
+                            <div className="error-alert">
+                              {error[`productField[${index}].${`title`}`]}
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      );
+                    })
+                  : ""}
+              </div>
+            ) : (
+              ""
+            )}
             <div
               className="q-category-bottom-header varient-box "
               style={{ marginRight: "0px" }}

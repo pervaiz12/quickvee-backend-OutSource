@@ -172,11 +172,37 @@ const SideMenu = () => {
           text: "Digital Marketing Tags",
           link: "/Digital-marketing-tags",
         };
+        const newUpdateInventoryMerge = {
+          id: 15,
+          icon: (
+            <img
+              src={AttributesIcon}
+              alt="inventory-merge"
+              className="h-6 w-10 mt-4 mb-4 hoverable-image"
+            />
+          ),
+          activeIcon: (
+            <img
+              src={AtriIcon}
+              alt="atributes"
+              className="h-6 w-10 mt-4 mb-4"
+            />
+          ),
+          text: "Inventory Merge",
+          link: "/inventory-merge",
+        };
+
         const updatedTest = updatedMenuItems.map((item) => {
           if (item.id === 9 && item.dropdownItems) {
             return {
               ...item,
               dropdownItems: [...item.dropdownItems, newMenuItemDigit],
+            };
+          }
+          if (item.id === 4 && item.dropdownItems) {
+            return {
+              ...item,
+              dropdownItems: [...item.dropdownItems, newUpdateInventoryMerge],
             };
           }
           return item;
@@ -917,21 +943,6 @@ const menuItems = [
         ),
         text: "Tag",
         link: "/tags",
-      },
-      {
-        id: 15,
-        icon: (
-          <img
-            src={AttributesIcon}
-            alt="inventory-merge"
-            className="h-6 w-10 mt-4 mb-4 hoverable-image"
-          />
-        ),
-        activeIcon: (
-          <img src={AtriIcon} alt="atributes" className="h-6 w-10 mt-4 mb-4" />
-        ),
-        text: "Inventory Merge",
-        link: "/inventory-merge",
       },
     ],
   },
