@@ -635,7 +635,7 @@ const InventoryMerge = () => {
   });
 
   const updateVarientMerging = async () => {
-    const files = productInfo?.filesadmin_id
+    const files = productInfo?.files
       ?.map((file) => file)
       .filter((i) => typeof i === "object")
       ?.map((i) => i?.file);

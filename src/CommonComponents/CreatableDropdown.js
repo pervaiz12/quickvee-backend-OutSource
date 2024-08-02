@@ -37,7 +37,9 @@ const CreatableDropdown = ({
 
     setFilterValue(value ? value : "");
     const filterList = optionList?.filter((item) => {
-      return item?.[name]?.toLowerCase().includes(value?.trim()?.toLowerCase());
+      return item?.[name]
+        ?.toLowerCase()
+        ?.includes(value?.trim()?.toLowerCase());
     });
     setFilterOptions(filterList?.length ? filterList : [`Create "${value}"`]);
   };
@@ -60,7 +62,7 @@ const CreatableDropdown = ({
       filterValue.trim()
     ) {
       if (selectedOption?.length < 15) {
-        onEnter(filterValue.trim(), keyName);
+        onEnter(filterValue?.trim(), keyName);
         setFilterValue("");
         setFilterOptions(optionList);
       } else {

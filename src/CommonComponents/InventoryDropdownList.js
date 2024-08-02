@@ -37,7 +37,7 @@ const InventoryDropdownList = ({
     setFilterValue(value);
     const filterList = optionList?.filter((item) => {
       return (
-        item?.[name]?.toLowerCase().includes(value?.toLowerCase()) &&
+        item?.[name]?.toLowerCase()?.includes(value?.toLowerCase()) &&
         +item?.isvarient === 0
       );
     });
@@ -61,7 +61,7 @@ const InventoryDropdownList = ({
     // hide selected value if hideSelectedValue = true
     if (hideSelectedValue === true && hideSelectedList?.length) {
       const hideItemList = optionList?.filter((filtered) => {
-        return !hideSelectedList.some((item) => +item.id === +filtered.id);
+        return !hideSelectedList?.some((item) => +item?.id === +filtered?.id);
       });
       setFilterOptions(hideItemList);
     }
@@ -107,7 +107,7 @@ const InventoryDropdownList = ({
   const changeFilterableList = () => {
     const filterOptionList = optionList?.filter(
       (product) =>
-        !product?.title?.toLowerCase().includes(productTitle?.toLowerCase())
+        !product?.title?.toLowerCase()?.includes(productTitle?.toLowerCase())
     );
 
     const filterOptionListinMerging = optionList.filter(
