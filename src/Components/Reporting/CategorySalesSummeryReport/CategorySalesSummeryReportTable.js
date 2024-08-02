@@ -246,12 +246,16 @@ const CategorySalesSummeryReportTable = (props) => {
                                             : dailyreport?.variant_cpi ==
                                                   (null || undefined) &&
                                                 !!dailyreport?.product_cpi
-                                              ? dailyreport?.product_cpi *
-                                                dailyreport?.total_sale_qty
+                                              ? (
+                                                  dailyreport?.product_cpi *
+                                                  dailyreport?.total_sale_qty
+                                                ).toFixed(2)
                                               : !!dailyreport?.variant_cpi &&
                                                   !!dailyreport?.product_cpi
-                                                ? dailyreport?.variant_cpi *
-                                                  dailyreport?.variant_cpi
+                                                ? (
+                                                    dailyreport?.total_sale_qty *
+                                                    dailyreport?.variant_cpi
+                                                  ).toFixed(2)
                                                 : "0.0"
                                         : "0.0"
                                     ).toLocaleString("en-US", {
