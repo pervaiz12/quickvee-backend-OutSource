@@ -111,6 +111,7 @@ const Main = ({ visible }) => {
       )}
       {visible === "sales-by-hour-report" && <Layout visible={visible} />}
       {visible === "store-credit-report" && <Layout visible={visible} />}
+      {visible === "gift-card-report" && <Layout visible={visible} />}
       {visible === "detailed-loyalty-points-report" && (
         <Layout visible={visible} />
       )}
@@ -120,6 +121,8 @@ const Main = ({ visible }) => {
       {visible === "label" && <IndexAllUsers visible={visible} />}
       {visible === "newsletter" && <IndexAllUsers visible={visible} />}
       {visible === "store-order" && <IndexAllUsers visible={visible} />}
+      {visible === "refund-request" && <IndexAllUsers visible={visible} />}
+      
       {visible === "order-count" && <IndexAllUsers visible={visible} />}
       {/* {visible === "need_help" && <IndexAllUsers visible={visible} />} */}
       {visible === "need_help" && <Layout visible={visible} />}

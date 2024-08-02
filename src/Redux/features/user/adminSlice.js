@@ -7,7 +7,7 @@ import {
 import axios from "axios";
 const initialState = {
   loading: false,
-  AdminRecord: {},
+  AdminRecord: [],
   adminRecordCount: 0,
   error: "",
 };
@@ -24,6 +24,9 @@ export const AdminFunction = createAsyncThunk(
       });
       if (response.data.status == 200) {
         return response.data.message;
+      }
+      else if (response.data.status === 400){
+        return []
       }
     } catch (error) {
       const customError = {

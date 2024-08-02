@@ -850,6 +850,11 @@ const menuItems = [
             text: "Detailed Loyalty Points Report",
             link: "/store-reporting/detailed-loyalty-points-report",
           },
+          {
+            id: 102,
+            text: "Gift Card Report",
+            link: "/store-reporting/gift-card-report",
+          },
         ],
       },
     ],
@@ -1308,6 +1313,25 @@ const SuperAdminMenuItems = [
     ),
     text: "Store Order",
     link: "/unapprove/store-order",
+  },
+  {
+    id: 1722490694702,
+    icon: (
+      <img
+        src={StoreIcon}
+        alt="Store Order"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={StoreActive}
+        alt="Refund Request"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    text: "Refund Request",
+    link: "/unapprove/refund-request",
   },
   {
     id: 5,

@@ -92,8 +92,10 @@ const OnlineTableViewData = (props) => {
         return "Cash";
       } else if (type === "Credit Card") {
         return "Online";
-      } else {
-        return type;
+      } else if(type==="Cash & Credit Card"){
+        return "Both";
+      }else{
+        return type
       }
     };
     const fetchData = async () => {
@@ -138,8 +140,10 @@ const OnlineTableViewData = (props) => {
         return "Cash";
       } else if (type === "Credit Card") {
         return "Online";
-      } else {
-        return type;
+      } else if(type==="Cash & Credit Card"){
+        return "Both";
+      }else{
+        return type
       }
     };
 

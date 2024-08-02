@@ -73,7 +73,9 @@ import CategorySalesReportSlice from "../features/CategorySalesSummeryReport/cat
 import SalesByHoursReportSlice from "../features/Reports/SalesByHours/SalesByHoursSlice";
 import StoreCreditReportSlice from "../features/Reports/StoreCreditReport/StoreCreditReportSlice";
 import EmployeeSalesPerCategorySlice from "../features/Reports/EmployeeSalesPerCategory/EmployeeSalesPerCategorySlice";
-
+import DetailedLoyaltyPointsReportSlice from "../features/Reports/DatailedLoyaltyPointsReport/DetailedLoyaltyPointsReportSlice";
+import GiftCardReportSlice from "../features/Reports/GiftCard/GiftCardReportSlice";
+import RefundRequestSlice from "../features/RefundRequest/RefundRequestSlice";
 const store = configureStore({
   reducer: {
     VendorList: VendorListReducer,
@@ -159,7 +161,7 @@ const store = configureStore({
     RefundDataList: RefundReportSlice,
     PayinReportList: PayInReportSlice,
     DropCashReportList: DropCashReportSlice,
-    DropCashReportList: DropCashReportSlice,
+    GiftCardReportList: GiftCardReportSlice,
     EmployeeSalesPerCategoryList: EmployeeSalesPerCategorySlice,
     supportDetail: SupportDetailsSlice,
     digitalmarketing: DigitalMarketingSlice,
@@ -167,6 +169,8 @@ const store = configureStore({
     categorySalesReportData: CategorySalesReportSlice,
     SalesByHoursData: SalesByHoursReportSlice,
     storeCreditReportList: StoreCreditReportSlice,
+    DetailedLoyaltyPointsReport: DetailedLoyaltyPointsReportSlice,
+    RefundRequestList: RefundRequestSlice, 
   },
 
   //setting setup

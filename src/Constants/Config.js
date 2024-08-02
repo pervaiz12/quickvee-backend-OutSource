@@ -188,6 +188,7 @@ module.exports = Object.freeze({
 
   // REPORT_BY_SALES_PERSON
   REPORT_BY_SALES_PERSON: "ReportingReactapi/report_by_sales_person",
+  GIFT_CARD_REPORT: "ReportingReactapi/gift_card_report_api",
 
   DETAIL_CATEGORY_SALE_REPORT: "vendor_report_api/detailed_category_sale",
 
@@ -355,9 +356,12 @@ module.exports = Object.freeze({
   // Order Retrieve
   SPLIT_LIST: "Order_list_api/get_split_records",
   ORDERRETRIEVE_SUBMIT: "Order_list_api/order_recover",
-  CATEGORY_SALES_SUMMERY_REPORT: "ReportingReactapi/category_sale_summary",
-  SALES_BY_HOURS_REPORT: "ReportingReactapi/sale_per_hour",
-  STORE_CREDIT_REPORT: "ReportingReactapi/store_credit_report",
+  STORE_CREDIT_REPORT:"ReportingReactapi/store_credit_report",
+  GET_RELATED_PRODUCT:"Product_api_react/getRelatedProduct",
+  DETAILED_LOYALTY_POINTS:"ReportingReactapi/loyalty_points_report",
+  IMAGE_DUPLICATE: "Product_api_react/image_duplicate",
+  GET_REFUND_EMAILS:"Order_list_api/get_refund_emails",
+  GET_REFUND_EMAILS_COUNT:"Order_list_api/get_refund_emails_count"
 });
 
 // All api calls are initialized in this component for this application

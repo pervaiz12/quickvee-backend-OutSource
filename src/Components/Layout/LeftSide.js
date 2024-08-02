@@ -1,8 +1,13 @@
 import React, { useEffect, lazy, Suspense } from "react";
-import DropCashMain from "../Reporting/DropCash/DropCashMain";
-import PayInMain from "../Reporting/PayIn/PayInMain";
-import MainEmployeeSalesPerCategory from "../Reporting/EmployeeSalesPerCategory/MainEmployeeSalesPerCategory";
+const DropCashMain = lazy(() => import("../Reporting/DropCash/DropCashMain"));
+const PayInMain = lazy(() => import("../Reporting/PayIn/PayInMain"));
+const MainEmployeeSalesPerCategory = lazy(
+  () =>
+    import("../Reporting/EmployeeSalesPerCategory/MainEmployeeSalesPerCategory")
+);
+const MainGiftCard = lazy(() => import("../Reporting/GiftCard/MainGiftCard"));
 const InventoryMerge = lazy(() => import("../Products/InventoryMerge"));
+
 const DashboardMain = lazy(() => import("../Dashboard/DashboardMain"));
 const MainOrder = lazy(() => import("./../Orders/MainOrder"));
 const MainPurchase = lazy(() => import("../PurchaseOrders/MainPurchase"));
@@ -344,6 +349,8 @@ const LeftSide = ({ visible }) => {
         return <StoreCreditReportMain />;
       case "detailed-loyalty-points-report":
         return <DetailedLoyaltyPointReportMain />;
+      case "gift-card-report":
+        return <MainGiftCard />;
       case "employee-sales-per-category-report":
         return <MainEmployeeSalesPerCategory />;
       case "inventory-merge":
