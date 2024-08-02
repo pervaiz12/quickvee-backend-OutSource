@@ -3,9 +3,18 @@ import SalesByHoursLogic from "./SalesByHoursLogic";
 import { Grid } from "@mui/material";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
+import SalesByHoursReportTable from "./SalesByHoursReportTable";
 
 export default function SalesByHourMain() {
-  const { title, onDateRangeChange } = SalesByHoursLogic();
+  const {
+    title,
+    onDateRangeChange,
+    SalesHoursData,
+    rowHeader,
+    TableLoader,
+    sortByItemName,
+    totalCost,
+  } = SalesByHoursLogic();
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -16,6 +25,17 @@ export default function SalesByHourMain() {
       <Grid container>
         <Grid item xs={12}>
           <DateRangeComponent onDateRangeChange={onDateRangeChange} />
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid item xs={12}>
+          <SalesByHoursReportTable
+            SalesHoursData={SalesHoursData}
+            TableLoader={TableLoader}
+            rowHeader={rowHeader}
+            sortByItemName={sortByItemName}
+            totalCost={totalCost}
+          />
         </Grid>
       </Grid>
     </>

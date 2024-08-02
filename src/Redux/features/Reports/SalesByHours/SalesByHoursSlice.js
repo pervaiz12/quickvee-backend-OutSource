@@ -4,7 +4,7 @@ import { BASE_URL, SALES_BY_HOURS_REPORT } from "../../../../Constants/Config";
 
 const initialState = {
   loading: false,
-  SalesByHours: [],
+  SalesByHoursData: [],
   successMessage: "",
   error: "",
 };
@@ -13,30 +13,30 @@ const initialState = {
 export const fetchSalesByHours = createAsyncThunk(
   "SalesByHours/fetchSalesByHours",
   async (data, { rejectWithValue }) => {
-    // console.log(data);
     const { token, ...dataNew } = data;
-    // try {
-    //   const response = await axios.post(
-    //     BASE_URL + SALES_BY_HOURS_REPORT,
-    //     dataNew,
-    //     {
-    //       headers: {
-    //         "Content-Type": "multipart/form-data",
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     }
-    //   );
-    //   if (response?.data?.status == true) {
-    //     return response?.data?.data;
-    //   }
-    // } catch (error) {
-    //   const customError = {
-    //     message: error.message,
-    //     status: error.response ? error.response.status : "Network Error",
-    //     data: error.response ? error.response.data : null,
-    //   };
-    //   return rejectWithValue(customError);
-    // }
+    try {
+      const response = await axios.post(
+        BASE_URL + SALES_BY_HOURS_REPORT,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response?.data?.status == true) {
+        return response?.data?.report_data;
+      }
+    } catch (error) {
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
+    }
   }
 );
 
@@ -49,12 +49,12 @@ const SalesByHoursSlice = createSlice({
     });
     builder.addCase(fetchSalesByHours.fulfilled, (state, action) => {
       state.loading = false;
-      state.SalesByHours = action.payload;
+      state.SalesByHoursData = action.payload;
       state.successMessage = "";
     });
     builder.addCase(fetchSalesByHours.rejected, (state, action) => {
       state.loading = false;
-      state.SalesByHours = [];
+      state.SalesByHoursData = [];
       state.successMessage = action.error.message;
     });
   },
