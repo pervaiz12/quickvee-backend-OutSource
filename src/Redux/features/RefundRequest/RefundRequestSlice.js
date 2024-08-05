@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { BASE_URL, GET_REFUND_EMAILS, GET_REFUND_EMAILS_COUNT } from "../../../Constants/Config";
+import {
+  BASE_URL,
+  GET_REFUND_EMAILS,
+  GET_REFUND_EMAILS_COUNT,
+} from "../../../Constants/Config";
 
 const initialState = {
   loading: false,
@@ -23,11 +27,15 @@ export const fetchRefundRequestArr = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(res);
+
       if (res.data.status === true) {
         return { arr: res.data.result, status: res.data.status };
       } else {
-        return { arr: [], status: false, error: res.data.message || 'Failed to fetch refund requests' };
+        return {
+          arr: [],
+          status: false,
+          error: res.data.message || "Failed to fetch refund requests",
+        };
       }
     } catch (err) {
       const customError = {
@@ -46,17 +54,25 @@ export const fetchRefundRequestArrCount = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const { token, ...dataNew } = data;
-      const res = await axios.post(BASE_URL + GET_REFUND_EMAILS_COUNT, dataNew, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(res);
+      const res = await axios.post(
+        BASE_URL + GET_REFUND_EMAILS_COUNT,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       if (res.data.status === true) {
         return { count: res.data.count, status: res.data.status };
       } else {
-        return { count: 0, status: false, error: res.data.message || 'Failed to fetch refund requests count' };
+        return {
+          count: 0,
+          status: false,
+          error: res.data.message || "Failed to fetch refund requests count",
+        };
       }
     } catch (err) {
       const customError = {
@@ -86,7 +102,9 @@ const RefundRequestSlice = createSlice({
       .addCase(fetchRefundRequestArr.rejected, (state, action) => {
         state.loading = false;
         state.RefundRequestArr = [];
-        state.error = action.payload ? action.payload.message : action.error.message;
+        state.error = action.payload
+          ? action.payload.message
+          : action.error.message;
       })
       .addCase(fetchRefundRequestArrCount.pending, (state) => {
         state.loading = true;
@@ -100,7 +118,9 @@ const RefundRequestSlice = createSlice({
       .addCase(fetchRefundRequestArrCount.rejected, (state, action) => {
         state.loading = false;
         state.RefundRequestCount = 0;
-        state.error = action.payload ? action.payload.message : action.error.message;
+        state.error = action.payload
+          ? action.payload.message
+          : action.error.message;
       });
   },
 });
