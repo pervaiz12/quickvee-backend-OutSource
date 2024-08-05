@@ -855,6 +855,11 @@ const menuItems = [
             text: "Gift Card Report",
             link: "/store-reporting/gift-card-report",
           },
+          {
+            id: 103,
+            text: "New Customers Added Report",
+            link: "/store-reporting/new-customers-added-report",
+          },
         ],
       },
     ],
