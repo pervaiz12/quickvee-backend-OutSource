@@ -54,7 +54,7 @@ export default function InventoryTransferModel({
   varientName,
   handleCloseEditModal,
   fetchProductDataById,
-}) {
+}) {  
 
   const inventoryTransferData = {
     quantity:

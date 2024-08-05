@@ -431,7 +431,8 @@ const GeneratePUC = ({
                             Instant PO
                           </button>
                           {parseInt(formValue?.[index]?.[title]?.["qty"]) > 0 &&
-                          userTypeData.login_type !== "superadmin" ? (
+                          userTypeData.login_type !== "superadmin" &&
+                          JSON.parse(localStorage.getItem("AllStore")) ? (
                             <button
                               className="quic-btn quic-btn-save edit"
                               style={{
@@ -650,7 +651,8 @@ const GeneratePUC = ({
                     Instant PO
                   </button>
                   {parseInt(formValue?.[0]?.["qty"]) > 0 &&
-                  userTypeData.login_type !== "superadmin" ? (
+                  userTypeData.login_type !== "superadmin" &&
+                  JSON.parse(localStorage.getItem("AllStore")) ? (
                     <button
                       className="quic-btn quic-btn-save edit"
                       style={{
