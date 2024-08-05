@@ -159,6 +159,7 @@ const EditPage = ({
                       fetchProductDataById={fetchProductDataById}
                       fetchSingleVarientData={fetchSingleVarientData}
                       inventoryData={inventoryData}
+                      varientName={varientName}
                     />
                   </Suspense>
                 </TabPanel>
@@ -170,6 +171,7 @@ const EditPage = ({
                       fetchProductDataById={fetchProductDataById}
                       fetchSingleVarientData={fetchSingleVarientData}
                       varientName={varientName}
+                      handleCloseEditModal={handleCloseEditModal}
                     />
                   </Suspense>
                 </TabPanel>

@@ -1,11 +1,14 @@
-import { Grid, TextareaAutosize } from "@mui/material";
+import { CircularProgress, Grid, TextareaAutosize } from "@mui/material";
 import React, { useState } from "react";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
-import { styled } from "@mui/system";
+import { Box, styled } from "@mui/system";
 import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAutosize";
 import CurrencyInputHelperFun from "../../helperFunctions/CurrencyInputHelperFun";
 import Select from "react-select";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import axios from "axios";
+import { BASE_URL, TRANSFER_INVENTORY } from "../../Constants/Config";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 const grey = {
   50: "#F3F6F9",
   100: "#E5EAF2",
@@ -44,16 +47,29 @@ const Textarea = styled(BaseTextareaAutosize)(
     }
   `
 );
-const inventoryTransferData = {
-  tostore: "",
-  quantity: "",
-  price: "",
-  description: "",
-};
-export default function InventoryTransferModel({ productData, varientData,varientName }) {
-  console.log("productData", productData);
-  console.log("productData", varientData);
-  console.log("productData varientName", varientName);
+
+export default function InventoryTransferModel({
+  productData,
+  varientData,
+  varientName,
+  handleCloseEditModal,
+  fetchProductDataById,
+}) {
+
+  const inventoryTransferData = {
+    quantity:
+      varientData.length > 0
+        ? varientData.find((varient) => varient.variant === varientName)
+            .quantity
+        : productData.quantity,
+    price:
+      varientData.length > 0
+        ? varientData.find((varient) => varient.variant === varientName)
+            .costperItem
+        : productData.costperItem,
+    description: "Inventory Transfer",
+    tostore: "",
+  };
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
 
@@ -61,8 +77,9 @@ export default function InventoryTransferModel({ productData, varientData,varien
   const [inventoryTransferState, setInventoryTransferState] = useState(
     inventoryTransferData
   );
+
   const [errors, setErrors] = useState({});
-  console.log("inventoryTransferState", inventoryTransferState);
+  const [loading, setLoading] = useState(false);
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
     if (name === "quantity" && !/^\d*$/.test(value)) {
@@ -103,19 +120,30 @@ export default function InventoryTransferModel({ productData, varientData,varien
           errorMsg = "Quantity must be a positive number";
         } else if (
           isNaN(value) ||
-          parseInt(value) > parseInt(productData.quantity)
+          parseInt(value) >
+            parseInt(
+              varientData.length > 0
+                ? varientData.find((varient) => varient.variant === varientName)
+                    .quantity
+                : productData.quantity
+            )
         ) {
-          errorMsg = "Quantity not greater than current quantity";
+          errorMsg = `Maximun Transfer Quantity is ${parseInt(
+            varientData.length > 0
+              ? varientData.find((varient) => varient.variant === varientName)
+                  .quantity
+              : productData.quantity
+          )}`;
         }
         break;
-      case "price":
-        if (!value) {
-          errorMsg = "Price is required";
-        } else if (isNaN(value) || parseFloat(value) <= 0) {
-          errorMsg = "Price must be a positive number";
-        }
-        break;
-        case "tostore":
+      // case "price":
+      //   if (!value) {
+      //     errorMsg = "Price is required";
+      //   } else if (isNaN(value) || parseFloat(value) <= 0) {
+      //     errorMsg = "Price must be a positive number";
+      //   }
+      //   break;
+      case "tostore":
         if (!value) {
           errorMsg = "Store selection is required";
         }
@@ -129,26 +157,56 @@ export default function InventoryTransferModel({ productData, varientData,varien
       [name]: errorMsg,
     }));
   };
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const validationErrors = {};
 
+    // Run validation for all fields
     for (const field in inventoryTransferState) {
       validateField(field, inventoryTransferState[field]);
+    }
+
+    // Check if there are any errors
+    for (const field in errors) {
       if (errors[field]) {
         validationErrors[field] = errors[field];
       }
     }
 
     if (Object.keys(validationErrors).length === 0) {
-      const data ={
-        product_name:productData.title,
-        fromstore:merchant_id,
+      const data = {
+        ...inventoryTransferState,
+        fromstore: merchant_id,
+        product_name: productData.title,
+        variant_name: varientName,
+        merchant_id,
+        ...userTypeData,
+      };
+      try {
+        setLoading(true);
+        const response = await axios.post(BASE_URL + TRANSFER_INVENTORY, data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${userTypeData?.token}`,
+          },
+        });
+        if (response.data.status === true) {
+          ToastifyAlert("Updated Successfully", "success");
+          await fetchProductDataById();
+          handleCloseEditModal();
+        } else if (response.data.status === false) {
+          // ToastifyAlert(response.data.message, "error");
+        }
+      } catch (error) {
+        console.error("Error during submission:", error);
+      } finally {
+        setLoading(false);
       }
-      console.log("Form submitted", inventoryTransferState);
     } else {
       console.log("Validation errors", validationErrors);
+      setErrors(validationErrors);
     }
   };
+
   const customStyles = {
     menu: (provided) => ({
       ...provided,
@@ -166,6 +224,7 @@ export default function InventoryTransferModel({ productData, varientData,varien
       boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
       height: 40,
       minHeight: 40,
+      marginTop: "5px",
       "&:hover": {
         borderColor: "black" ? "black" : provided["&:hover"].borderColor,
       },
@@ -188,12 +247,14 @@ export default function InventoryTransferModel({ productData, varientData,varien
         <Grid item xs={12}>
           <Grid container sx={{ px: 2.5, pt: 2.5 }}>
             <Grid item xs={12}>
-              <p className="heading">{`${productData.title} ${varientName}` } </p>
+              <p className="heading">
+                {productData.title} {varientName ? `- ${varientName}` : ""}{" "}
+              </p>
             </Grid>
           </Grid>
           <Grid container spacing={2} sx={{ px: 2.5, pt: 1 }}>
             <Grid item xs={4} className="varient-input-wrapper">
-              <label>Select Store</label>
+              <label style={{ marginBottom: "20px" }}>Select Store</label>
               <Select
                 options={JSON.parse(localStorage.getItem("AllStore"))
                   ?.filter((item) => item.merchant_id !== merchant_id)
@@ -203,6 +264,7 @@ export default function InventoryTransferModel({ productData, varientData,varien
                     merchant_id: item.merchant_id,
                   }))}
                 onChange={handleOptionClick}
+                placeholder="Search..."
                 styles={customStyles}
               />
               {errors.tostore && (
@@ -212,7 +274,7 @@ export default function InventoryTransferModel({ productData, varientData,varien
               )}
             </Grid>
             <Grid item xs={4} className="varient-input-wrapper">
-              <label>Enter Quantity</label>
+              <label>Transfer Quantity</label>
               <BasicTextFields
                 name="quantity"
                 value={inventoryTransferState.quantity}
@@ -227,7 +289,7 @@ export default function InventoryTransferModel({ productData, varientData,varien
               )}
             </Grid>
             <Grid item xs={4} className="varient-input-wrapper">
-              <label>Enter Price</label>
+              <label>Cost Per Item</label>
               <BasicTextFields
                 name="price"
                 value={inventoryTransferState.price}
@@ -257,7 +319,7 @@ export default function InventoryTransferModel({ productData, varientData,varien
             <Grid item xs={12}>
               <div className="box">
                 <div className="variant-attributes-container">
-                  <div className="q-add-categories-section-middle-footer  ">
+                  <div style={{paddingRight:0}} className="q-add-categories-section-middle-footer  ">
                     <div
                       style={{ padding: "0px" }}
                       className="q-category-bottom-header"
@@ -268,20 +330,20 @@ export default function InventoryTransferModel({ productData, varientData,varien
                           backgroundColor: "#0A64F9",
                         }}
                         onClick={handleSubmit}
-                        //   disabled={loading}
+                        disabled={loading}
                       >
-                        {/* {loading ? (
-                    <Box className="loader-box">
-                      <CircularProgress />
-                    </Box>
-                  ) : (
-                    ""
-                  )} */}
+                        {loading ? (
+                          <Box className="loader-box">
+                            <CircularProgress />
+                          </Box>
+                        ) : (
+                          ""
+                        )}
                         Update
                       </button>
                       <button
                         className="quic-btn quic-btn-cancle"
-                        //   onClick={handleCloseEditModal}
+                        onClick={handleCloseEditModal}
                       >
                         Cancel
                       </button>
