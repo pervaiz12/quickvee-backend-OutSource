@@ -9,6 +9,7 @@ import {
 const initialState = {
   loading: false,
   CategoryReport: [],
+  categoryloading: false,
   CategorySalesReportRecord: [],
   successMessage: "",
   error: "",
@@ -94,15 +95,15 @@ const CategorySalesReportSlice = createSlice({
     });
     // get category record---------
     builder.addCase(getCategorySalesSummeryData.pending, (state) => {
-      state.loading = true;
+      state.categoryloading = true;
     });
     builder.addCase(getCategorySalesSummeryData.fulfilled, (state, action) => {
-      state.loading = false;
+      state.categoryloading = false;
       state.CategorySalesReportRecord = action.payload;
       state.error = "";
     });
     builder.addCase(getCategorySalesSummeryData.rejected, (state, action) => {
-      state.loading = false;
+      state.categoryloading = false;
       state.CategorySalesReportRecord = [];
       state.error = action.error.message;
     });

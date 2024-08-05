@@ -58,12 +58,51 @@ const CategorySalesSummeryReportTable = (props) => {
   //   const dispatch = useDispatch();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
-  const {
-    LoginGetDashBoardRecordJson,
-    LoginAllStore,
-    userTypeData,
-    GetSessionLogin,
-  } = useAuthDetails();
+  // ===============
+  const calculatePrice = (dailyreport) => {
+    const { variant_cpi, product_cpi, total_sale_qty } = dailyreport;
+
+    if (!total_sale_qty) return "0.0";
+    if (variant_cpi) return (total_sale_qty * variant_cpi).toFixed(2);
+    if (!variant_cpi && product_cpi)
+      return (total_sale_qty * product_cpi).toFixed(2);
+
+    return "0.0";
+  };
+
+  const renderSalesReport = (salesReport) => {
+    return salesReport.map((dailyreport, index) => (
+      <StyledTableRow key={index}>
+        <StyledTableCell>
+          <p className="report-sort">
+            {dailyreport?.category_name || "Deleted"}
+          </p>
+        </StyledTableCell>
+        <StyledTableCell>
+          <p className="report-title">{dailyreport?.total_sale_qty || 0}</p>
+        </StyledTableCell>
+        <StyledTableCell>
+          {`$${priceFormate(
+            Number(
+              dailyreport?.total_sale_price
+                ? dailyreport?.total_sale_price.toLocaleString("en-US", {
+                    useGrouping: false,
+                  })
+                : 0.0
+            ).toFixed(2)
+          )}`}
+        </StyledTableCell>
+        <StyledTableCell>
+          {`$${priceFormate(
+            Number(calculatePrice(dailyreport)).toLocaleString("en-US", {
+              useGrouping: false,
+            })
+          )}`}
+        </StyledTableCell>
+      </StyledTableRow>
+    ));
+  };
+  // ===============
 
   // ====================== STATE DECLARED ==================================
   //   const [dailyreport, setdailyreport] = useState([]);
@@ -200,7 +239,8 @@ const CategorySalesSummeryReportTable = (props) => {
                       {Array.isArray(props.getCategorySalesReport) &&
                       props.getCategorySalesReport.length > 0 ? (
                         <>
-                          {props.getCategorySalesReport?.map(
+                          {renderSalesReport(props.getCategorySalesReport)}
+                          {/* {props.getCategorySalesReport?.map(
                             (dailyreport, index) => (
                               <StyledTableRow key={index}>
                                 <StyledTableCell>
@@ -246,12 +286,16 @@ const CategorySalesSummeryReportTable = (props) => {
                                             : dailyreport?.variant_cpi ==
                                                   (null || undefined) &&
                                                 !!dailyreport?.product_cpi
-                                              ? dailyreport?.product_cpi *
-                                                dailyreport?.total_sale_qty
+                                              ? (
+                                                  dailyreport?.product_cpi *
+                                                  dailyreport?.total_sale_qty
+                                                ).toFixed(2)
                                               : !!dailyreport?.variant_cpi &&
                                                   !!dailyreport?.product_cpi
-                                                ? dailyreport?.variant_cpi *
-                                                  dailyreport?.variant_cpi
+                                                ? (
+                                                    dailyreport?.total_sale_qty *
+                                                    dailyreport?.variant_cpi
+                                                  ).toFixed(2)
                                                 : "0.0"
                                         : "0.0"
                                     ).toLocaleString("en-US", {
@@ -261,7 +305,7 @@ const CategorySalesSummeryReportTable = (props) => {
                                 </StyledTableCell>
                               </StyledTableRow>
                             )
-                          )}
+                          )} */}
                         </>
                       ) : (
                         ""
@@ -269,20 +313,20 @@ const CategorySalesSummeryReportTable = (props) => {
                       {Array.isArray(props.getCategorySalesReport) &&
                       props.getCategorySalesReport.length > 0 ? (
                         <StyledTableRow className="trBG_Color">
-                          <StyledTableCell>
-                            <p className=" totalReport">Total</p>
+                          <StyledTableCell className="trBG_Color">
+                            <p className=" totalReport ">Total</p>
                           </StyledTableCell>
-                          <StyledTableCell>
+                          <StyledTableCell className="trBG_Color">
                             <p className=" totalReport">
                               {priceFormate(props.totalCost?.unitsold)}
                             </p>
                           </StyledTableCell>
-                          <StyledTableCell>
+                          <StyledTableCell className="trBG_Color">
                             <p className=" totalReport">{`$${priceFormate(
                               props.totalCost?.totalSales
                             )}`}</p>
                           </StyledTableCell>
-                          <StyledTableCell>
+                          <StyledTableCell className="trBG_Color">
                             <p className=" totalReport">{`$${priceFormate(
                               props.totalCost?.totalCost
                             )}`}</p>
