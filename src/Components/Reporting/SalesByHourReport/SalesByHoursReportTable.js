@@ -142,7 +142,7 @@ const SalesByHoursReportTable = (props) => {
                                   </p>
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                  <p className="report-title">
+                                  <p className="report-sort">
                                     {!!dailyreport?.interval_end
                                       ? dailyreport?.interval_end
                                       : ""}
