@@ -208,6 +208,17 @@ const DraggableTable = ({
     setProductId(id);
   };
 
+  function generateValue(index) {
+    const alphabet = "abcdefghijklmnopqrstuvwxyz";
+    let value = "";
+    index += 26; // Start from 'aa'
+    while (index >= 0) {
+      value = alphabet[index % 26] + value;
+      index = Math.floor(index / 26) - 1;
+    }
+    return value;
+  }
+
   const confirmDeleteCategory = async () => {
     console.log("run this drag");
     const sourceIndex = dragresult.source.index;
@@ -226,7 +237,8 @@ const DraggableTable = ({
     });
     const alternameList = {};
     updatedItems.forEach((category, index) => {
-      alternameList[`values[${category.id}]`] = tableRow[index].alternateName;
+      let value = generateValue(index);
+      alternameList[`values[${category.id}]`] = value;
     });
     // console.log("altername",alternameList)
     // return
