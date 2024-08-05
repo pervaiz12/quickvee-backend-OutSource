@@ -1064,13 +1064,11 @@ const InventoryMerge = () => {
                       const titleName = prevTitle
                         .toLowerCase()
                         .replace(searchTitle, "")
-                        .trim();
+                        .replace(/^\s+/, "");
 
                       // Capitalize the first letter of each word in titleName
-                      const formattedTitleName = titleName.replace(
-                        /\b\w/g,
-                        (char) => char.toUpperCase()
-                      );
+                      const formattedTitleName =
+                        titleName.charAt(0).toUpperCase() + titleName.slice(1);
 
                       return (
                         <div className="inventory-input-area">
@@ -1096,8 +1094,8 @@ const InventoryMerge = () => {
               ""
             )}
             <div
-              className="q-category-bottom-header varient-box "
-              style={{ marginRight: "0px" }}
+              className="q-category-bottom-header "
+              style={{ marginRight: "0px", justifyContent: "end" }}
             >
               <button
                 className="quic-btn quic-btn-save submit-btn-click"
@@ -1111,7 +1109,7 @@ const InventoryMerge = () => {
                 {/* ) : ( "" )}  */}
                 Update
               </button>
-              <button
+              {/* <button
                 className="quic-btn quic-btn-cancle"
                 onClick={() => {
                   // navigate("/inventory/products");
@@ -1119,7 +1117,7 @@ const InventoryMerge = () => {
                 style={{ marginLeft: "20px" }}
               >
                 Cancel
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
