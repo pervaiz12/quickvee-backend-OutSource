@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 
 import AddNewCategory from "../../Assests/Dashboard/Left.svg";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const GeneratePUC = ({
   handleVarientTitleBasedItemList,
@@ -20,6 +21,7 @@ const GeneratePUC = ({
   isVarientEdit,
 }) => {
   const navigate = useNavigate();
+  const { userTypeData } = useAuthDetails();
   const location = useLocation();
   const isProductEdit = location.pathname.includes("/products/edit");
   const isProductVariant = location.pathname.includes("/products/varient-edit");
@@ -100,7 +102,6 @@ const GeneratePUC = ({
     }
   };
   let count = 0;
-
   return (
     <>
       <Grid container className="mx-0">
@@ -422,12 +423,33 @@ const GeneratePUC = ({
                             onClick={() =>
                               handleCloseEditModal(
                                 "single_instant",
-                                formValue?.[index]?.[title]?.productEditId
+                                formValue?.[index]?.[title]?.productEditId,
+                                varientTitle[index]
                               )
                             }
                           >
                             Instant PO
                           </button>
+                          {parseInt(formValue?.[index]?.[title]?.["qty"]) > 0 &&
+                          userTypeData.login_type !== "superadmin" ? (
+                            <button
+                              className="quic-btn quic-btn-save edit"
+                              style={{
+                                backgroundColor: "#0A64F9",
+                              }}
+                              onClick={() =>
+                                handleCloseEditModal(
+                                  "single_inventory_tranfer",
+                                  formValue?.[0]?.productEditId,
+                                  varientTitle[index]
+                                )
+                              }
+                            >
+                              Inventory Transfer
+                            </button>
+                          ) : (
+                            ""
+                          )}
                         </div>
                       ) : (
                         ""
@@ -627,6 +649,25 @@ const GeneratePUC = ({
                   >
                     Instant PO
                   </button>
+                  {parseInt(formValue?.[0]?.["qty"]) > 0 &&
+                  userTypeData.login_type !== "superadmin" ? (
+                    <button
+                      className="quic-btn quic-btn-save edit"
+                      style={{
+                        backgroundColor: "#0A64F9",
+                      }}
+                      onClick={() =>
+                        handleCloseEditModal(
+                          "single_inventory_tranfer",
+                          formValue?.[0]?.productEditId
+                        )
+                      }
+                    >
+                      Inventory Transfer
+                    </button>
+                  ) : (
+                    ""
+                  )}
                 </div>
               ) : (
                 ""

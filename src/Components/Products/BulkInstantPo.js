@@ -21,14 +21,24 @@ const BulkInstantPo = ({
   inventoryData,
   isVarientEdit,
   fetchSingleVarientData,
+  varientName,
 }) => {
   const dispatch = useDispatch();
   const productId = useParams();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const { getUnAutherisedTokenMessage } = PasswordShow();
   const [instantPoSingle, setInstantPoSingle] = useState({
-    qty: "",
-    cost: "",
+    qty:
+      varientData?.length > 0
+        ? varientData?.find((varient) => varient?.variant === varientName)
+            ?.quantity
+        : productData?.quantity,
+    cost:
+      varientData?.length > 0
+        ? varientData.find((varient) => varient?.variant === varientName)
+            ?.costperItem
+        : productData?.costperItem,
+
     description: "",
   });
   const [loading, setLoading] = useState(false);
@@ -572,6 +582,14 @@ const BulkInstantPo = ({
                   return (
                     <div class="varient-container px-5">
                       <div class="varientform ">
+                        <Grid container sx={{  pt: 2.5 }}>
+                          <Grid item xs={12}>
+                            <p className="heading">
+                              {productData.title}{" "}
+                              {varientName ? `- ${varientName}` : ""}{" "}
+                            </p>
+                          </Grid>
+                        </Grid>
                         <p className="varientName">
                           {varientData?.[varientIndex]?.variant}
                         </p>
@@ -579,54 +597,56 @@ const BulkInstantPo = ({
                           {bulkInstantPo?.length
                             ? bulkInstantPo?.map((inp, formindex) => {
                                 return (
-                                  <div
-                                    className="col-qv-8 inputs"
-                                    key={formindex}
-                                  >
-                                    <div className="varient-input-wrapper">
-                                      <label>{inp?.label}</label>
-                                      <div className="input_area">
-                                        <input
-                                          class="varient-input-field"
-                                          type={inp?.type}
-                                          name={inp?.name}
-                                          value={instantPoSingle?.[inp?.name]}
-                                          placeholder={inp?.placeholder}
-                                          onChange={(e) =>
-                                            handleChangeSinglePo(e, index)
-                                          }
-                                          onBlur={(e) => handleBlur(e)}
-                                          maxLength={
-                                            // inp?.name === "qty" ? 6 : 9
-                                            inp?.name === "qty" &&
-                                            instantPoSingle?.[
-                                              inp?.name
-                                            ]?.includes("-")
-                                              ? 7
-                                              : inp?.name === "qty"
-                                                ? 6
-                                                : 9
-                                          }
-                                        />
-                                        {inp?.name === "qty" &&
-                                        !!required?.qty ? (
-                                          <span className="error-alert">
-                                            {required?.qty}
-                                          </span>
-                                        ) : (
-                                          ""
-                                        )}
-                                        {inp?.name === "cost" &&
-                                        !!required?.cost ? (
-                                          <span className="error-alert">
-                                            {required?.cost}
-                                          </span>
-                                        ) : (
-                                          ""
-                                        )}
+                                  <>
+                                    <div
+                                      className="col-qv-8 inputs"
+                                      key={formindex}
+                                    >
+                                      <div className="varient-input-wrapper">
+                                        <label>{inp?.label}</label>
+                                        <div className="input_area">
+                                          <input
+                                            class="varient-input-field"
+                                            type={inp?.type}
+                                            name={inp?.name}
+                                            value={instantPoSingle?.[inp?.name]}
+                                            placeholder={inp?.placeholder}
+                                            onChange={(e) =>
+                                              handleChangeSinglePo(e, index)
+                                            }
+                                            onBlur={(e) => handleBlur(e)}
+                                            maxLength={
+                                              // inp?.name === "qty" ? 6 : 9
+                                              inp?.name === "qty" &&
+                                              instantPoSingle?.[
+                                                inp?.name
+                                              ]?.includes("-")
+                                                ? 7
+                                                : inp?.name === "qty"
+                                                  ? 6
+                                                  : 9
+                                            }
+                                          />
+                                          {inp?.name === "qty" &&
+                                          !!required?.qty ? (
+                                            <span className="error-alert">
+                                              {required?.qty}
+                                            </span>
+                                          ) : (
+                                            ""
+                                          )}
+                                          {inp?.name === "cost" &&
+                                          !!required?.cost ? (
+                                            <span className="error-alert">
+                                              {required?.cost}
+                                            </span>
+                                          ) : (
+                                            ""
+                                          )}
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
+                                  </>
                                 );
                               })
                             : ""}

@@ -138,16 +138,18 @@ const AddProducts = () => {
   const [enbaledSubmit, setDisabledSubmit] = useState(false);
   const [singleVarientPageLoading, setSingleVarientPageLoading] =
     useState(false);
+    const [varientName, setVarientName] = useState('');
 
   // close alert
   const handleCloseAlertModal = () => {
     setOpenAlertModal((prev) => !prev);
   };
 
-  const handleCloseEditModal = (modalType, varientId) => {
+  const handleCloseEditModal = (modalType, varientId, varientName) => {
     setOpenEditModal((prev) => !prev);
     setModalType(modalType);
     setVarientIndex(varientId);
+    setVarientName(varientName ? varientName :'')
   };
 
   // clear all form input value
@@ -491,7 +493,6 @@ const AddProducts = () => {
   };
 
   const handleDeleteSelectedImage = (type, imageToDelete) => {
-    console.log("handleDeleteSelectedImage", type, imageToDelete);
     let deleteImage;
     if (type === "string") {
       deleteImage = productInfo?.files?.filter((img) => {
@@ -536,7 +537,7 @@ const AddProducts = () => {
     files = [...event?.dataTransfer?.files];
     if (files?.length) {
       const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-      files?.forEach((img) => {
+      files?.forEach((img, index) => {
         if (allowedTypes.includes(img?.type)) {
           const reader = new FileReader();
           reader.onloadend = () => {
@@ -548,7 +549,10 @@ const AddProducts = () => {
               ],
               ["uploadFiles"]: [
                 ...prevValue["uploadFiles"],
-                { file: img, base64: reader.result },
+                {
+                  file: changeSelectedImageName(img),
+                  base64: reader.result,
+                },
               ],
             }));
           };
@@ -746,12 +750,33 @@ const AddProducts = () => {
     setFilterOptionList(updatedDropdownList);
   };
 
+  function getRandomNumber(length) {
+    let randomNumber = "";
+    for (let i = 0; i < length; i++) {
+      randomNumber += Math.floor(Math.random() * 1000); // Append a random digit
+    }
+    return parseInt(randomNumber, 10); // Convert to integer
+  }
+
+  const changeSelectedImageName = (img) => {
+    const file = new File(
+      [img],
+      Date.now() + "_" + getRandomNumber(5) + "_" + "Img",
+      {
+        type: img.type,
+        lastModified: img.lastModified,
+      }
+    );
+    console.log("file", file);
+    return file;
+  };
+
   const handleImageChange = (e) => {
     let files = [];
     files = [...e?.target?.files];
     if (files?.length) {
       const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-      files?.forEach((img) => {
+      files?.forEach((img, index) => {
         if (allowedTypes.includes(img?.type)) {
           const reader = new FileReader();
           reader.onloadend = () => {
@@ -763,7 +788,10 @@ const AddProducts = () => {
               ],
               ["uploadFiles"]: [
                 ...prevValue["uploadFiles"],
-                { file: img, base64: reader.result },
+                {
+                  file: changeSelectedImageName(img),
+                  base64: reader.result,
+                },
               ],
             }));
           };
@@ -2452,8 +2480,6 @@ const AddProducts = () => {
     }));
   };
 
-  console.log('file', productInfo);
-
   // varient form onchange validation function
   return (
     <div className="box ">
@@ -2476,6 +2502,7 @@ const AddProducts = () => {
               handleCopyAllVarientValue={handleCopyAllVarientValue}
               inventoryData={inventoryData}
               fetchProductDataById={fetchProductDataById}
+              varientName={varientName}
             />
           </Suspense>
           {/* alert modal */}
@@ -2920,6 +2947,7 @@ const AddProducts = () => {
                   alignItems: "center",
                   width: "100%",
                 }}
+
               >
                 <CircularProgress />
                 <p style={{ marginTop: "20px" }}>Fetching Data...</p>
@@ -2941,6 +2969,7 @@ const AddProducts = () => {
                       fetchProductDataById={fetchProductDataById}
                       isVarientEdit={isVarientEdit}
                       fetchSingleVarientData={fetchSingleVarientData}
+                      varientName={varientName}
                     />
                   </Suspense>
                   <GeneratePUC
@@ -2959,6 +2988,7 @@ const AddProducts = () => {
                     productData={productData}
                     // varientData={varientData}
                     isVarientEdit={isVarientEdit}
+                
                   />
                 </div>
                 <div
