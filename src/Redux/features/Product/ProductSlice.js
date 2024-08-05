@@ -951,6 +951,36 @@ export const fetchBrands = createAsyncThunk(
   }
 );
 
+export const updateVariantMerging = createAsyncThunk(
+  "products/updateVariantMerging",
+  async (payload, { rejectWithValue }) => {
+    // const token = payload.get('token'); // Extract the token from FormData
+    // payload.delete('token');
+    const { token, ...newData } = payload;
+    try {
+      const response = await axios.post(
+        BASE_URL + "/api/Product_merge/merge",
+        newData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response?.data;
+    } catch (error) {
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
+    }
+  }
+);
+
 const productsSlice = createSlice({
   name: "products",
   initialState,

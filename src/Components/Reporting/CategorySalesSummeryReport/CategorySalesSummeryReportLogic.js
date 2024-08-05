@@ -22,7 +22,7 @@ export default function CategorySalesSummeryReportLogic() {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
-  const title = "Category Sales Report";
+  const title = "Category Sales Summery Report";
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   let data = { merchant_id, ...userTypeData };
   const [categoryAll, setCategoryAll] = useState([]);
@@ -96,17 +96,14 @@ export default function CategorySalesSummeryReportLogic() {
   //   selected  drop down ------------
   // ------ Category sales report --------------
   useEffect(() => {
-    setTableLoader(AllCategoryData?.loading);
+    setTableLoader(AllCategoryData?.categoryloading);
     if (AllCategoryData?.CategorySalesReportRecord) {
       setCategorySalesReport(AllCategoryData.CategorySalesReportRecord);
       getDiscountRecord(AllCategoryData.CategorySalesReportRecord);
     } else {
       setCategorySalesReport([]);
     }
-  }, [
-    AllCategoryData?.loading,
-    AllCategoryData?.CategorySalesReportRecord?.length,
-  ]);
+  }, [AllCategoryData?.categoryloading]);
   // ------ Category sales report --------------
   // -------category add totla data---------
   // const getDiscountRecord = (data) => {

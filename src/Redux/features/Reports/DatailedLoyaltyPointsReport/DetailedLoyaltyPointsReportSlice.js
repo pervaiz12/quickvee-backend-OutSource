@@ -1,39 +1,45 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { BASE_URL, DETAILED_LOYALTY_POINTS } from "../../../../Constants/Config";
+import {
+  BASE_URL,
+  DETAILED_LOYALTY_POINTS,
+} from "../../../../Constants/Config";
 
 const initialState = {
   loading: false,
   DetailedLoyaltyPointsReportArr: [],
-  status:false,
+  status: false,
   successMessage: "",
   error: "",
 };
 
 export const fetchDetailedLoyaltyPointsReportArr = createAsyncThunk(
-    "DetailedLoyaltyPointsReport/fetchDetailedLoyaltyPointsReportArr",
+  "DetailedLoyaltyPointsReport/fetchDetailedLoyaltyPointsReportArr",
   async (data, { rejectWithValue }) => {
     try {
-      const { tocken, ...dataNew } = data;
-      const res = await axios.post(BASE_URL + DETAILED_LOYALTY_POINTS, dataNew, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${tocken}`,
-        },
-      });
+      const { token, ...dataNew } = data;
+      const res = await axios.post(
+        BASE_URL + DETAILED_LOYALTY_POINTS,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(res.data);
       if (res.data.status === true) {
         // console.log(response.data)
-  
+
         const arr = res.data.loyalty_points_data;
         const status = res.data.status;
-        return {arr,status}
-      }
-      else if(res.data.status === false) {
-        console.log("inside else if")
+        return { arr, status };
+      } else if (res.data.status === false) {
+        console.log("inside else if");
         const arr = [];
         const status = false;
-        return {arr,status}
+        return { arr, status };
       }
     } catch (error) {
       const customError = {
@@ -47,23 +53,29 @@ export const fetchDetailedLoyaltyPointsReportArr = createAsyncThunk(
 );
 
 const DetailedLoyaltyPointsReportSlice = createSlice({
-    name: "DetailedLoyaltyPointsReport",
-    initialState,
-    extraReducers:(builder)=>{
-        builder.addCase(fetchDetailedLoyaltyPointsReportArr.pending, (state)=>{
-            state.loading=true;
-        });
-        builder.addCase(fetchDetailedLoyaltyPointsReportArr.fulfilled, (state, action) => {
-            state.loading = false;
-            state.DetailedLoyaltyPointsReportArr = action.payload.arr;
-            state.status= action.payload.status;
-            state.error = "";
-          });
-          builder.addCase(fetchDetailedLoyaltyPointsReportArr.rejected, (state, action) => {
-            state.loading = false;
-            state.DetailedLoyaltyPointsReportArr = [];
-            state.error = action.error.message;
-          });
-    }
-})
+  name: "DetailedLoyaltyPointsReport",
+  initialState,
+  extraReducers: (builder) => {
+    builder.addCase(fetchDetailedLoyaltyPointsReportArr.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      fetchDetailedLoyaltyPointsReportArr.fulfilled,
+      (state, action) => {
+        state.loading = false;
+        state.DetailedLoyaltyPointsReportArr = action.payload.arr;
+        state.status = action.payload.status;
+        state.error = "";
+      }
+    );
+    builder.addCase(
+      fetchDetailedLoyaltyPointsReportArr.rejected,
+      (state, action) => {
+        state.loading = false;
+        state.DetailedLoyaltyPointsReportArr = [];
+        state.error = action.error.message;
+      }
+    );
+  },
+});
 export default DetailedLoyaltyPointsReportSlice.reducer;

@@ -248,6 +248,12 @@ function App() {
 
             <Route
               exact
+              path="/inventory-merge"
+              element={<Main visible={"inventory-merge"} />}
+            />
+
+            <Route
+              exact
               path="/purchase-data"
               element={<Main visible={"purchase-data"} />}
             />
@@ -612,7 +618,7 @@ function App() {
               path="/store-reporting/pay-in-report"
               element={<Main visible={"pay-in-report"} />}
             />
-              <Route
+            <Route
               exact
               path="/store-reporting/store-credit-report"
               element={<Main visible={"store-credit-report"} />}

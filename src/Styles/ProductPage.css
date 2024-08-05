@@ -931,3 +931,21 @@
   font-size: 16px;
   font-family: CircularSTDMedium !important;
 }
+
+.inventory-input-area {
+  width: 100%;
+  display: block;
+}
+
+.inventory-input-area input {
+  width: 40%;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  padding: 7px;
+  box-sizing: border-box;
+  outline: 0;
+}
+
+.inventory-input-area input:nth-child(n + 1) {
+  margin-top: 10px;
+}

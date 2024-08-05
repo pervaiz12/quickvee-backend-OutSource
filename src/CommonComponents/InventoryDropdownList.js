@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
+import Select from "react-select";
 import "../Styles/ProductPage.css";
 import DownArrow from "../Assests/Dashboard/Down.svg";
 import CloseIcon from "../Assests/Dashboard/cross.svg";
 import Validation from "../Constants/Validation";
 import { useLocation } from "react-router-dom";
 
-const CreatableDropdown = ({
+const InventoryDropdownList = ({
   title,
   keyName,
   optionList,
@@ -13,10 +14,15 @@ const CreatableDropdown = ({
   handleDeleteSelectedOption,
   selectedOption,
   error,
+  handleUpdateError,
   name,
+  hideSelectedValue,
+  hideSelectedList,
   placeholder,
+  pageUrl,
+  productTitle,
   modalType,
-  onEnter,
+  onSelectUpdateState,
 }) => {
   const location = useLocation();
   const { checkLength } = Validation();
@@ -24,63 +30,60 @@ const CreatableDropdown = ({
   const [filterValue, setFilterValue] = useState("");
   const isProductAdd = location.pathname.includes("/products/add");
   const isProductEdit = location.pathname.includes("/products/edit");
+  const isVarientMerging = location.pathname.includes("/inventory-merge");
 
   const handleFilterOptions = (e) => {
-    let { value } = e.target;
-    value = value.replace(/,/g, "");
-
-    if (!value) {
-      setFilterValue("");
-      setFilterOptions([]);
-      return;
-    }
-
-    setFilterValue(value ? value : "");
+    const { value } = e.target;
+    setFilterValue(value);
     const filterList = optionList?.filter((item) => {
-      return item?.[name]
-        ?.toLowerCase()
-        ?.includes(value?.trim()?.toLowerCase());
+      return (
+        item?.[name]?.toLowerCase()?.includes(value?.toLowerCase()) &&
+        +item?.isvarient === 0
+      );
     });
-    setFilterOptions(filterList?.length ? filterList : [`Create "${value}"`]);
+    setFilterOptions(
+      filterList?.length ? filterList : ["No Search Result Found"]
+    );
   };
   const [showOptions, setShowOptions] = useState(false);
   const ref = useRef();
   const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    // check is frequentlyBought selected item length is 2 or not
+    if (keyName == "frequentlyBought" && selectedOption?.length === 2) {
+      setShowOptions(false);
+      setFilterValue("You can only select 2 items.");
+    } else {
+      setFilterValue("");
+    }
+
+    // hide selected value if hideSelectedValue = true
+    if (hideSelectedValue === true && hideSelectedList?.length) {
+      const hideItemList = optionList?.filter((filtered) => {
+        return !hideSelectedList?.some((item) => +item?.id === +filtered?.id);
+      });
+      setFilterOptions(hideItemList);
+    }
+  }, [selectedOption, hideSelectedValue, hideSelectedList, optionList]);
+
+  useEffect(() => {
+    // remove category error if exist.
+    if (selectedOption?.length > 0 && !!handleUpdateError) {
+      checkLength(keyName, selectedOption, error);
+      handleUpdateError(error);
+    } else if (selectedOption?.length) {
+      onSelectUpdateState(selectedOption);
+    } else if (!selectedOption?.length) {
+      onSelectUpdateState([]);
+    }
+  }, [selectedOption]);
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setShowOptions(false);
     }
   };
-
-  const pressEnter = (e) => {
-    if (!filterValue.trim()) {
-      setFilterValue("");
-      return;
-    } else if (
-      (e?.key === "Enter" || e.type === "click") &&
-      filterValue.trim()
-    ) {
-      if (selectedOption?.length < 15) {
-        onEnter(filterValue?.trim(), keyName);
-        setFilterValue("");
-        setFilterOptions(optionList);
-      } else {
-        setFilterValue("");
-        setFilterOptions(["Reached maximum limit."]);
-        return;
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (!!filterValue) {
-      document.addEventListener("keypress", pressEnter);
-      return () => {
-        document.removeEventListener("keypress", pressEnter);
-      };
-    }
-  }, [filterValue, filterOptions]);
 
   useEffect(() => {
     if (!modalType) {
@@ -91,12 +94,42 @@ const CreatableDropdown = ({
     }
   }, [showOptions, modalType]);
 
+  useEffect(() => {
+    // set defaultTax in taxes dropdown
+    if (optionList?.length && keyName === "taxes" && isProductAdd) {
+      const findOption = optionList?.filter(
+        (item) => item?.title === "DefaultTax"
+      );
+      handleSelectProductOptions(findOption[0], keyName);
+    }
+  }, [optionList, keyName, productTitle]);
+
   const changeFilterableList = () => {
+    const filterOptionList = optionList?.filter(
+      (product) =>
+        !product?.title?.toLowerCase()?.includes(productTitle?.toLowerCase())
+    );
+
+    const filterOptionListinMerging = optionList.filter(
+      (product) => +product?.isvarient === 0
+    );
+
     // filter incoming optionList items when onchange run
     if (filterOptions?.length) {
-      return filterOptions;
+      return isProductEdit
+        ? filterOptions?.filter(
+            (product) =>
+              !product?.title
+                ?.toLowerCase()
+                .includes(productTitle?.toLowerCase())
+          )
+        : filterOptions;
     }
-    return optionList;
+    return isProductEdit
+      ? filterOptionList
+      : isVarientMerging
+        ? filterOptionListinMerging
+        : optionList;
   };
 
   const toggleOption = () => {
@@ -108,14 +141,18 @@ const CreatableDropdown = ({
     const { name } = e.target;
     ref.current.focus();
     // check is frequentlyBought length is 2 or not
-    setShowOptions(true);
+    if (selectedOption?.length === 2 && keyName === "frequentlyBought") {
+      setShowOptions(false);
+    } else {
+      setShowOptions(true);
+    }
   };
 
   const handleBlurOption = async (e) => {
     const { name } = e.target;
     if (name === "category") {
       await checkLength(keyName, selectedOption, error);
-      //   handleUpdateError(error);
+      handleUpdateError(error);
     }
   };
   return (
@@ -156,18 +193,15 @@ const CreatableDropdown = ({
           >
             <div className="selected-item ">
               {selectedOption?.length
-                ? selectedOption?.map((option, index) => {
+                ? selectedOption?.map((option) => {
                     return (
-                      <div className="item" key={index}>
-                        <span>{option?.[name] ? option?.[name] : option}</span>
+                      <div className="item" key={option?.id}>
+                        <span>{option?.[name]}</span>
                         <img
                           src={CloseIcon}
                           className="cancel-image"
                           onClick={() =>
-                            handleDeleteSelectedOption(
-                              option?.id ? option?.id : option,
-                              keyName
-                            )
+                            handleDeleteSelectedOption(option?.id, keyName)
                           }
                         />
                       </div>
@@ -211,26 +245,7 @@ const CreatableDropdown = ({
             {showOptions
               ? changeFilterableList()?.map((opt) => {
                   if (typeof opt === "string") {
-                    return (
-                      <span
-                        className={`${
-                          opt?.includes("limit".toLowerCase())
-                            ? ""
-                            : "create-item-box"
-                        }`}
-                        onClick={pressEnter}
-                      >
-                        <span
-                          className={`${
-                            opt?.includes("limit".toLowerCase())
-                              ? "max-item-error"
-                              : "create-item-text"
-                          }`}
-                        >
-                          {opt}
-                        </span>
-                      </span>
-                    );
+                    return <p>{opt}</p>;
                   } else if (opt?.id && opt?.[name]) {
                     return (
                       <span
@@ -266,4 +281,4 @@ const CreatableDropdown = ({
   );
 };
 
-export default CreatableDropdown;
+export default InventoryDropdownList;

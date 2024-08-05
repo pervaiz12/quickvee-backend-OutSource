@@ -52,6 +52,7 @@ const Main = ({ visible }) => {
       {visible === "add-po" && <Layout visible={visible} />}
       {visible === "store" && <Layout visible={visible} />}
       {visible === "manager" && <Layout visible={visible} />}
+      {visible === "inventory-merge" && <Layout visible={visible} />}
 
       {visible === "info" && <Layout visible={visible} />}
       {visible === "setup" && <Layout visible={visible} />}
