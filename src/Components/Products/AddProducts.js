@@ -138,7 +138,7 @@ const AddProducts = () => {
   const [enbaledSubmit, setDisabledSubmit] = useState(false);
   const [singleVarientPageLoading, setSingleVarientPageLoading] =
     useState(false);
-    const [varientName, setVarientName] = useState('');
+  const [varientName, setVarientName] = useState("");
 
   // close alert
   const handleCloseAlertModal = () => {
@@ -149,7 +149,7 @@ const AddProducts = () => {
     setOpenEditModal((prev) => !prev);
     setModalType(modalType);
     setVarientIndex(varientId);
-    setVarientName(varientName ? varientName :'')
+    setVarientName(varientName ? varientName : "");
   };
 
   // clear all form input value
@@ -2947,7 +2947,6 @@ const AddProducts = () => {
                   alignItems: "center",
                   width: "100%",
                 }}
-
               >
                 <CircularProgress />
                 <p style={{ marginTop: "20px" }}>Fetching Data...</p>
@@ -2988,7 +2987,6 @@ const AddProducts = () => {
                     productData={productData}
                     // varientData={varientData}
                     isVarientEdit={isVarientEdit}
-                
                   />
                 </div>
                 <div

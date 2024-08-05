@@ -981,6 +981,34 @@ export const updateVariantMerging = createAsyncThunk(
   }
 );
 
+export const deleteMultipleProductAPI = createAsyncThunk(
+  "products/deleteMultipleProductAPI",
+  async (payload, { rejectWithValue }) => {
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/delete_multiple_products",
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response?.data;
+    } catch (error) {
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
+    }
+  }
+);
 const productsSlice = createSlice({
   name: "products",
   initialState,

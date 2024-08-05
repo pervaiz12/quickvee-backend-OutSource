@@ -5,6 +5,7 @@ import {
   fetchProductsData,
   emptyProduct,
   updateProductsType,
+  deleteMultipleProductAPI,
 } from "../../Redux/features/Product/ProductSlice";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import useDebounce from "../../hooks/useDebouncs";
@@ -12,6 +13,7 @@ import PasswordShow from "../../Common/passwordShow";
 import { CircularProgress } from "@mui/material";
 import { Suspense } from "react";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const FilterProduct = lazy(() => import("./FilterProduct"));
 const ProductTable = lazy(() => import("./ProductTable"));
@@ -26,7 +28,10 @@ const MainProducts = () => {
   const [selectedEmployee, setSelectedEmployee] = useState("Select");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedStatusValue, setSelectedStatusValue] = useState("All");
+  const [productByImages, setProductByImages] = useState("Select");
   const [productIdList, setProductIdList] = useState([]);
+
+  const [deleteloading, setDeleteloading] = useState(false);
 
   const [selectedListingType, setSelectedListingType] =
     useState("Select listing");
@@ -109,9 +114,45 @@ const MainProducts = () => {
   };
 
   const confirmDeleteCategory = async () => {
+    console.log(
+      "productIdList?.map((i) => i).toString()",
+      productIdList?.map((i) => i).toString()
+    );
+    setDeleteloading(true);
     if (deleteCategoryId) {
-      console.log("delete operation is run");
+      let timer = null;
+      const formData = new FormData();
+      formData.append("ids", productIdList?.map((i) => i).toString());
+      formData.append("login_type", userTypeData?.login_type);
+      formData.append("token_id", userTypeData?.token_id);
+      formData.append("token", userTypeData?.token);
+      formData.append(
+        "merchant_id",
+        LoginGetDashBoardRecordJson?.data?.merchant_id
+      );
+
+      try {
+        const res = await dispatch(deleteMultipleProductAPI(formData)).unwrap();
+        console.log("res", res);
+        if (res?.status) {
+          ToastifyAlert("Deleted Successfully", "success");
+          setDeleteCategoryId(null);
+          setDeleteModalOpen(false);
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            window.location.reload();
+          }, 600);
+        }
+      } catch (error) {
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
+      }
     }
+    setDeleteloading(false);
   };
 
   useEffect(() => {
@@ -240,6 +281,10 @@ const MainProducts = () => {
 
         setlistingTypesDropdownVisible(false);
         break;
+      case "image_listing":
+        dispatch(emptyProduct([]));
+        handleOptionClick([]);
+        console.log("option", option);
       default:
         break;
     }
@@ -272,6 +317,7 @@ const MainProducts = () => {
               setSearchId,
               productIdList,
               handleDeleteProduct,
+              productByImages,
             }}
           />
         </Suspense>
@@ -314,6 +360,7 @@ const MainProducts = () => {
           setDeleteModalOpen(false);
         }}
         onConfirm={confirmDeleteCategory}
+        deleteloading={deleteloading}
       />
     </>
   );
