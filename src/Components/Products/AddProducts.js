@@ -566,6 +566,7 @@ const AddProducts = () => {
         }
       });
     }
+    event.target.value = "";
   };
 
   // copy Bulk varient value from modal
