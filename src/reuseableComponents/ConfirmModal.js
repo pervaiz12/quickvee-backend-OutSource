@@ -19,6 +19,8 @@ const ConfirmModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
         return Copy;
       case "The existing setting of the selected Store 2 will be erased and your setting will be copied from Store 1 to the selected Store 2. Do you want to proceed?":
         return Storesetting;
+      case "Confirm Close Refund":
+        return Copy
       default:
         return Copy;
       

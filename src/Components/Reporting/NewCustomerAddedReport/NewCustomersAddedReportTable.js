@@ -1,4 +1,5 @@
 import {
+  capitalize,
   Grid,
   styled,
   Table,
@@ -54,8 +55,14 @@ export default function NewCustomersAddedReportTable() {
       !NewCustomersAddedReportReduxState.loading &&
       NewCustomersAddedReportReduxState?.NewCustomersAddedReportArr
     ) {
-        console.log("NewCustomersAddedReport",NewCustomersAddedReportReduxState?.NewCustomersAddedReportArr)
-      setDataArr(NewCustomersAddedReportReduxState?.NewCustomersAddedReportArr);
+      setDataArr(
+        NewCustomersAddedReportReduxState?.NewCustomersAddedReportArr.map(
+          (item) => ({
+            ...item,
+            fullName: item?.f_name + " " + item?.l_name,
+          })
+        )
+      );
     } else {
       setDataArr([]);
     }
@@ -64,10 +71,9 @@ export default function NewCustomersAddedReportTable() {
     NewCustomersAddedReportReduxState?.NewCustomersAddedReportArr,
   ]);
   const tableRow = [
-    { type: "str", name: "customer_name", label: "Customer Name" },
-    { type: "num", name: "total_credit_amount", label: "Total Issued" },
-    { type: "num", name: "total_debit_amount", label: "Total Redeemed" },
-    { type: "num", name: "available_balance", label: "Balance" },
+    { type: "str", name: "name", label: "Customer Name" },
+    { type: "str", name: "email", label: "Email Id" },
+    { type: "num", name: "phone", label: "Phone No." },
   ];
   const sortByItemName = (type, name) => {
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
@@ -83,61 +89,55 @@ export default function NewCustomersAddedReportTable() {
     <>
       <Grid container className="box_shadow_div">
         {NewCustomersAddedReportReduxState.loading ||
-          (NewCustomersAddedReportReduxState.status && !dataArr.length) ?
-          
-          (
-            <SkeletonTable columns={tableRow.map((item) => item.label)} />
-          ) : (
-        <>
-          <Grid container>
-            <Grid item xs={12}>
-              <TableContainer>
-                <StyledTable
-                  sx={{ minWidth: 500 }}
-                  aria-label="customized table"
-                >
-                  <TableHead>
-                    {tableRow.map((item, index) => (
-                      <StyledTableCell key={index}>
-                        <button
-                          className="flex items-center"
-                          onClick={() => sortByItemName(item.type, item.name)}
-                        >
-                          <p>{item.label}</p>
-                          <img src={sortIcon} alt="" className="pl-1" />
-                        </button>
-                      </StyledTableCell>
-                    ))}
-                  </TableHead>
-                  <TableBody>
-                  {dataArr.length > 0 &&
-                    dataArr?.map((item, index) => (
-                      <>
-                        <StyledTableRow key={index}>
-                          <StyledTableCell>
-                            <p>{item.name}</p>
-                          </StyledTableCell>
-                          {/* <StyledTableCell>
-                            <p>{priceFormate(item.total_credit_points)}</p>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <p>{priceFormate(item.total_debit_points)}</p>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <p>{priceFormate(item.available_lp)}</p>
-                          </StyledTableCell> */}
-                        </StyledTableRow>
-                      </>
-                    ))}
-                  </TableBody>
-                </StyledTable>
-                {!dataArr.length && <NoDataFound />}
-              </TableContainer>
+        (NewCustomersAddedReportReduxState.status && !dataArr.length) ? (
+          <SkeletonTable columns={tableRow.map((item) => item.label)} />
+        ) : (
+          <>
+            <Grid container>
+              <Grid item xs={12}>
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead>
+                      {tableRow.map((item, index) => (
+                        <StyledTableCell key={index}>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName(item.type, item.name)}
+                          >
+                            <p>{item.label}</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                      ))}
+                    </TableHead>
+                    <TableBody>
+                      {dataArr.length > 0 &&
+                        dataArr?.map((item, index) => (
+                          <>
+                            <StyledTableRow key={index}>
+                              <StyledTableCell>
+                                <p>{capitalize(item?.name)}</p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p>{item?.email}</p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p>{item?.phone}</p>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          </>
+                        ))}
+                    </TableBody>
+                  </StyledTable>
+                  {!dataArr.length && <NoDataFound />}
+                </TableContainer>
+              </Grid>
             </Grid>
-          </Grid>
-        </>
-
-         )} 
+          </>
+        )}
       </Grid>
     </>
   );
