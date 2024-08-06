@@ -56,9 +56,9 @@ const BulkInstantPo = ({
 
   const instantPoForm = useMemo(() => {
     if (modalType === "bulk-edit") {
-      return [...new Set(varientData)]?.map(() => ({
-        qty: "",
-        cost: "",
+      return [...new Set(varientData)]?.map((varient) => ({
+        qty:varient.quantity ?? "",
+        cost:varient.costperItem ?? "",
       }));
     }
     return [];
@@ -483,6 +483,7 @@ const BulkInstantPo = ({
                 {varientData?.map((varient, index) => {
                   return (
                     <div class="varient-container px-5">
+                      {console.log("bulkInstantPo", instancePoMultiple)}
                       <div class="varientform ">
                         <p className="varientName">{varient?.variant}</p>
                         <div class="form">
@@ -582,7 +583,7 @@ const BulkInstantPo = ({
                   return (
                     <div class="varient-container px-5">
                       <div class="varientform ">
-                        <Grid container sx={{  pt: 2.5 }}>
+                        <Grid container sx={{ pt: 2.5 }}>
                           <Grid item xs={12}>
                             <p className="heading">
                               {productData.title}{" "}

@@ -635,6 +635,11 @@ function App() {
             />
             <Route
               exact
+              path="/store-reporting/new-customers-added-report"
+              element={<Main visible={"new-customers-added-report"} />}
+            />
+            <Route
+              exact
               path="/store-reporting/employee-sales-per-category-report"
               element={<Main visible={"employee-sales-per-category-report"} />}
             />

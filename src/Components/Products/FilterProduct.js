@@ -28,6 +28,7 @@ const FilterProduct = ({
   searchId,
   productIdList,
   handleDeleteProduct,
+  productByImages,
 }) => {
   const { userTypeData } = useAuthDetails();
   const { loading } = useSelector((state) => state.productsListData);
@@ -86,6 +87,17 @@ const FilterProduct = ({
     {
       id: "4",
       title: "Disable All",
+    },
+  ];
+
+  const filterImageProducts = [
+    {
+      id: "1",
+      title: "Show Product By Images",
+    },
+    {
+      id: "2",
+      title: "Show Product By Without Images",
     },
   ];
 
@@ -233,6 +245,23 @@ const FilterProduct = ({
                 disabled={loading}
               />
             </Grid>
+
+            {/* <Grid item xs={12} sm={6} md={4}>
+              <label style={{ whiteSpace: "nowrap" }}>
+                Product Filter By Image
+              </label>
+              <SelectDropDown
+                sx={{ pt: 0.5 }}
+                heading={"Select"}
+                title={"title"}
+                listItem={filterImageProducts}
+                selectedOption={productByImages}
+                onClickHandler={handleOptionClick}
+                dropdownFor={"image_listing"}
+                disabled={loading}
+              />
+            </Grid> */}
+
             {userTypeData?.login_type === "superadmin" ? (
               <Grid item xs={12} sm={6} md={4}>
                 <button
