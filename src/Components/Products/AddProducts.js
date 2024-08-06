@@ -545,7 +545,10 @@ const AddProducts = () => {
               ...prevValue,
               ["files"]: [
                 ...prevValue["files"],
-                { file: img, base64: reader.result },
+                {
+                  file: changeSelectedImageName(img),
+                  base64: reader.result,
+                },
               ],
               ["uploadFiles"]: [
                 ...prevValue["uploadFiles"],
@@ -767,7 +770,6 @@ const AddProducts = () => {
         lastModified: img.lastModified,
       }
     );
-    console.log("file", file);
     return file;
   };
 
@@ -784,7 +786,10 @@ const AddProducts = () => {
               ...prevValue,
               ["files"]: [
                 ...prevValue["files"],
-                { file: img, base64: reader.result },
+                {
+                  file: changeSelectedImageName(img),
+                  base64: reader.result,
+                },
               ],
               ["uploadFiles"]: [
                 ...prevValue["uploadFiles"],
@@ -802,6 +807,7 @@ const AddProducts = () => {
         }
       });
     }
+    e.target.value = "";
   };
 
   const handleBlur = async (e, i, title) => {
