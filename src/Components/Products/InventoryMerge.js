@@ -212,6 +212,26 @@ const InventoryMerge = () => {
     event.preventDefault();
   };
 
+  function getRandomNumber(length) {
+    let randomNumber = "";
+    for (let i = 0; i < length; i++) {
+      randomNumber += Math.floor(Math.random() * 1000); // Append a random digit
+    }
+    return parseInt(randomNumber, 10); // Convert to integer
+  }
+
+  const changeSelectedImageName = (img) => {
+    const file = new File(
+      [img],
+      Date.now() + "_" + getRandomNumber(5) + "_" + "Img",
+      {
+        type: img.type,
+        lastModified: img.lastModified,
+      }
+    );
+    return file;
+  };
+
   // Function to handle image drop
   const handleDrop = (event) => {
     event.preventDefault();
@@ -227,11 +247,17 @@ const InventoryMerge = () => {
               ...prevValue,
               ["files"]: [
                 ...prevValue["files"],
-                { file: img, base64: reader.result },
+                {
+                  file: changeSelectedImageName(img),
+                  base64: reader.result,
+                },
               ],
               ["uploadFiles"]: [
                 ...prevValue["uploadFiles"],
-                { file: img, base64: reader.result },
+                {
+                  file: changeSelectedImageName(img),
+                  base64: reader.result,
+                },
               ],
             }));
           };
@@ -242,6 +268,7 @@ const InventoryMerge = () => {
         }
       });
     }
+    event.target.value = "";
   };
 
   const handleImageChange = (e) => {
@@ -257,11 +284,17 @@ const InventoryMerge = () => {
               ...prevValue,
               ["files"]: [
                 ...prevValue["files"],
-                { file: img, base64: reader.result },
+                {
+                  file: changeSelectedImageName(img),
+                  base64: reader.result,
+                },
               ],
               ["uploadFiles"]: [
                 ...prevValue["uploadFiles"],
-                { file: img, base64: reader.result },
+                {
+                  file: changeSelectedImageName(img),
+                  base64: reader.result,
+                },
               ],
             }));
           };
@@ -272,6 +305,7 @@ const InventoryMerge = () => {
         }
       });
     }
+    e.target.value = "";
   };
 
   const handleDeleteSelectedImage = (type, imageToDelete) => {
