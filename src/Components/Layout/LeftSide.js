@@ -1,4 +1,5 @@
 import React, { useEffect, lazy, Suspense } from "react";
+import ProfitSummaryMain from "../Reporting/ProfitSummary/ProfitSummaryMain";
 const DropCashMain = lazy(() => import("../Reporting/DropCash/DropCashMain"));
 const PayInMain = lazy(() => import("../Reporting/PayIn/PayInMain"));
 const MainEmployeeSalesPerCategory = lazy(
@@ -336,6 +337,8 @@ const LeftSide = ({ visible }) => {
         return <CouponReportMain />;
       case "drop-cash-report":
         return <DropCashMain />;
+      case "profit-summary-report":
+        return <ProfitSummaryMain />;
       case "pay-in-report":
         return <PayInMain />;
       case "sales-report":

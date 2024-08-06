@@ -817,12 +817,12 @@ const menuItems = [
         dropDownItems: [
           {
             id: 96,
-            text: "Drop Cash",
+            text: "Drop Cash Report",
             link: "/store-reporting/drop-cash-report",
           },
           {
             id: 97,
-            text: "Pay In",
+            text: "Pay In Report",
             link: "/store-reporting/pay-in-report",
           },
           {
@@ -859,6 +859,11 @@ const menuItems = [
             id: 103,
             text: "New Customers Added Report",
             link: "/store-reporting/new-customers-added-report",
+          },
+          {
+            id: 104,
+            text: "Profit Summary Report",
+            link: "/store-reporting/profit-summary-report",
           },
         ],
       },

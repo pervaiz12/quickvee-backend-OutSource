@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPayinReportData } from "../../../Redux/features/Reports/PayInReport/PayInReportSlice";
+import { fetchProfitSummaryReportData } from "../../../Redux/features/Reports/ProfitSummaryReport/ProfitSummaryReportSlice";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { Grid } from "@mui/material";
@@ -47,7 +48,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const PayInList = (props) => {
+const ProfitSummaryList = (props) => {
   const dispatch = useDispatch();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
@@ -63,9 +64,9 @@ const PayInList = (props) => {
   const PayInReportDataState = useSelector((state) => state.PayinReportList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
-    getayinReportData();
+    getProfitSummaryReportData();
   }, [props, dispatch]);
-  const getayinReportData = async () => {
+  const getProfitSummaryReportData = async () => {
     if (props && props.selectedDateRange) {
       try {
         const startDateData = props.selectedDateRange.start_date;
@@ -79,6 +80,7 @@ const PayInList = (props) => {
 
         if (data) {
           await dispatch(fetchPayinReportData(data)).unwrap();
+        //   await dispatch(fetchProfitSummaryReportData(data)).unwrap();
         }
       } catch (error) {
         console.log(error);
@@ -130,6 +132,15 @@ const PayInList = (props) => {
     { type: "str", name: "reason", label: "Reason" },
     { type: "num", name: "amount", label: "Amount" },
   ];
+
+//   const tableRow = [
+//     { type: "str", name: "created_at", label: "Category" },
+//     { type: "num", name: "reason", label: "Units Sold" },
+//     { type: "num", name: "amount", label: "Cost" },
+//     { type: "num", name: "amount", label: "Average Sale Price" },
+//     { type: "num", name: "amount", label: "Margin" },
+//     { type: "num", name: "amount", label: "Profit" },
+//   ];
 
 
   const sortByItemName = (type, name) => {
@@ -221,4 +232,4 @@ const PayInList = (props) => {
   );
 };
 
-export default PayInList;
+export default ProfitSummaryList;
