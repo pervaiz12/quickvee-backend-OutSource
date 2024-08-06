@@ -14,6 +14,7 @@ export default function SalesByHourMain() {
     TableLoader,
     sortByItemName,
     totalCost,
+    advdayCount,
   } = SalesByHoursLogic();
   return (
     <>
@@ -24,7 +25,10 @@ export default function SalesByHourMain() {
       </Grid>
       <Grid container>
         <Grid item xs={12}>
-          <DateRangeComponent onDateRangeChange={onDateRangeChange} />
+          <DateRangeComponent
+            onDateRangeChange={onDateRangeChange}
+            future_date={advdayCount}
+          />
         </Grid>
       </Grid>
       <Grid container>
