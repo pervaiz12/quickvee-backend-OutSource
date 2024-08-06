@@ -106,7 +106,7 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
                   <img
                     src={CrossIcon}
                     alt="icon"
-                    className="  quic-btn-cancle w-6 h-6"
+                    className="  quic-btn-cancle w-6 h-6 cursor-pointer"
                     onClick={() => handleClose()}
                   />
                 </div>

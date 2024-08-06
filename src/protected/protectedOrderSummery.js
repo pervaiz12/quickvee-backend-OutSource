@@ -15,7 +15,9 @@ export default function ProtectedOrderSummery() {
     authdecryptRecord !== ""
       ? JSON.parse(authdecryptRecord)
       : { status: false };
-  return AdminRocord?.status == true && AdminRocord?.data?.merchant_id ? (
+  return (AdminRocord?.status == true &&
+    (AdminRocord?.data?.merchant_id === "" ||
+    AdminRocord?.data?.merchant_id !== "")) ? (
     <Outlet />
   ) : (
     <Navigate to="/login" />

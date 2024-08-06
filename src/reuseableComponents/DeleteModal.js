@@ -3,6 +3,8 @@ import { Box, Modal } from "@mui/material";
 import DeleteIcon from "../Assests/Category/deleteIcon.svg";
 import Slide from "@mui/material/Slide";
 
+import CircularProgress from "@mui/material/CircularProgress";
+
 const DeleteModal = ({
   headerText,
   otherMSG,
@@ -51,9 +53,28 @@ const DeleteModal = ({
                 <button
                   disabled={deleteloading}
                   onClick={onConfirm}
-                  style={{ background: " #FF4040", color: "#fff" }}
+                  style={{
+                    background: " #FF4040",
+                    color: "#fff",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "9px",
+                  }}
+                  className="attributeUpdateBTN"
                 >
-                  Delete
+                  {deleteloading ? (
+                    <>
+                      <CircularProgress
+                        color={"inherit"}
+                        width={15}
+                        size={15}
+                      />
+                      Delete
+                    </>
+                  ) : (
+                    "Delete"
+                  )}
                 </button>
               </div>
             </div>

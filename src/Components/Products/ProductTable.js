@@ -460,7 +460,9 @@ const ProductTable = ({
                             {...provided.droppableProps}
                           >
                             <TableHead>
-                              {selectedListingType === "Variant listing" ? (
+                              {selectedListingType === "Variant listing" ||
+                              LoginGetDashBoardRecordJson?.login_type !==
+                                "superadmin" ? (
                                 ""
                               ) : (
                                 <StyledTableCell></StyledTableCell>
@@ -497,7 +499,6 @@ const ProductTable = ({
                                     getVarientName[1],
                                     product
                                   );
-                                  console.log("navigateData", navigateData);
                                   return (
                                     <Draggable
                                       key={product?.id}
@@ -511,7 +512,9 @@ const ProductTable = ({
                                           {...provided.dragHandleProps}
                                         >
                                           {selectedListingType ===
-                                          "Variant listing" ? (
+                                            "Variant listing" ||
+                                          LoginGetDashBoardRecordJson?.login_type !==
+                                            "superadmin" ? (
                                             ""
                                           ) : (
                                             <StyledTableCell>
