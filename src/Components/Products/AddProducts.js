@@ -2452,8 +2452,6 @@ const AddProducts = () => {
     }));
   };
 
-  console.log('file', productInfo);
-
   // varient form onchange validation function
   return (
     <div className="box ">

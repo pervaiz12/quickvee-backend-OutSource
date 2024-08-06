@@ -1,0 +1,48 @@
+@font-face {
+  font-family: CircularBold;
+  src: url("../Assests/Fonts/circular-bold.TTF");
+}
+
+@font-face {
+  font-family: CircularMedium;
+  src: url("../Assests/Fonts/circulur-medium.TTF");
+}
+
+@font-face {
+  font-family: CircularSTDBlack;
+  src: url("../Assests/Fonts/circulur-std-black.TTF");
+}
+
+@font-face {
+  font-family: CircularSTDBook;
+  src: url("../Assests/Fonts/circulur-std-book.TTF");
+}
+
+@font-face {
+  font-family: CircularSTDMedium;
+  src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
+}
+
+.mix-and-match-design .sub-title {
+  font-size: 14px;
+  color: #858585;
+  font-family: CircularSTDBook !important;
+}
+
+.deal-title {
+  font-size: 20px;
+  color: #000;
+  font-family: CircularBold !important;
+}
+
+.offer-desc {
+  font-size: 16px;
+  color: #0e9b4f;
+  font-family: CircularMedium !important;
+}
+
+.mix-and-match-design .label {
+  font-size: 16px;
+  color: #000;
+  font-family: CircularSTDMedium !important;
+}

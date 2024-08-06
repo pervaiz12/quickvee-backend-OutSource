@@ -1041,6 +1041,15 @@ const menuItems = [
   },
   {
     id: 9,
+    icon: <img src={CouponIcon} alt="Coupons" className="h-6 w-10 mt-4 mb-4" />,
+    activeIcon: (
+      <img src={CouIcon} alt="Coupons" className="h-6 w-10 mt-4 mb-4 " />
+    ),
+    text: "Mix N' Match Pricing",
+    link: "/mix-and-match",
+  },
+  {
+    id: 10,
     icon: (
       <img
         src={StoreSettingIcon}

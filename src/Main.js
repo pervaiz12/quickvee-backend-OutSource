@@ -39,6 +39,8 @@ const Main = ({ visible }) => {
       {visible === "coupons" && <Layout visible={visible} />}
       {visible === "add-coupons" && <Layout visible={visible} />}
       {visible === "coupons-edit-cop" && <Layout visible={visible} />}
+      {visible === "mix-and-match" && <Layout visible={visible} />}
+      {visible === "add-mix-and-match" && <Layout visible={visible} />}
       {visible === "vendors" && <Layout visible={visible} />}
       {visible === "add-vendors" && <Layout visible={visible} />}
       {visible === "timesheet" && <Layout visible={visible} />}
@@ -122,7 +124,7 @@ const Main = ({ visible }) => {
       {visible === "newsletter" && <IndexAllUsers visible={visible} />}
       {visible === "store-order" && <IndexAllUsers visible={visible} />}
       {visible === "refund-request" && <IndexAllUsers visible={visible} />}
-      
+
       {visible === "order-count" && <IndexAllUsers visible={visible} />}
       {/* {visible === "need_help" && <IndexAllUsers visible={visible} />} */}
       {visible === "need_help" && <Layout visible={visible} />}
