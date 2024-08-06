@@ -228,7 +228,7 @@ export default function RefundRequestTable({
                             <StyledTableCell>
                               <Link
                                 className="whitespace-nowrap text-[#0A64F9]"
-                                to={`/unapprove/refund-request/order-summary/${item.merchant_id}/${item?.order_id}`}
+                                to={`/order/store-reporting/order-summary/${item.merchant_id}/${item?.order_id}`}
                                 // onClick={() => handleSummeryPage(row.order_id)}
                                 target="_blank"
                               >
