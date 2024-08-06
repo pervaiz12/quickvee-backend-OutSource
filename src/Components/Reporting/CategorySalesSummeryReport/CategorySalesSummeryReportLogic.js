@@ -27,6 +27,7 @@ export default function CategorySalesSummeryReportLogic() {
   let data = { merchant_id, ...userTypeData };
   const [categoryAll, setCategoryAll] = useState([]);
   const [selectedLCategoryType, setselectedLCategoryType] = useState("All");
+  const [selectedCategoryId, setSelectedCategoryId] = useState("All");
   const [getCategorySalesReport, setCategorySalesReport] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
   const [TableLoader, setTableLoader] = useState("");
@@ -206,9 +207,9 @@ export default function CategorySalesSummeryReportLogic() {
   const onDateRangeChange = async (Date) => {
     const newPacket = {
       category_id:
-        selectedLCategoryType === "All"
-          ? selectedLCategoryType.toLocaleLowerCase()
-          : selectedLCategoryType,
+        selectedCategoryId === "All"
+          ? selectedCategoryId.toLocaleLowerCase()
+          : selectedCategoryId,
       ...Date,
       ...data,
     };
@@ -223,13 +224,17 @@ export default function CategorySalesSummeryReportLogic() {
   };
   //  drop down select drop down end---------
   const handleOptionClick = (option, dropdown) => {
+    console.log(option);
     switch (dropdown) {
       case "category":
         if (option === "All") {
           setselectedLCategoryType("All");
+          setSelectedCategoryId("All");
         } else {
           const category_id = option.id;
           setselectedLCategoryType(option.title);
+          setSelectedCategoryId(category_id);
+          // setselectedLCategoryType(option.title);
         }
         break;
       default:
