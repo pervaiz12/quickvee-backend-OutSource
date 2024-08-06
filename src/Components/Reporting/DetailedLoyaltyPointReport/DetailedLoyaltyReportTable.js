@@ -109,12 +109,12 @@ export default function DetailedLoyaltyReportTable({
   return (
     <>
       <Grid container className="box_shadow_div">
-        {/* {StoreCreditReportReduxState.loading ||
-          (StoreCreditReportReduxState.status && !dataArr.length) ?
+        {DetailedLoyaltyPointsReduxState.loading ||
+          (DetailedLoyaltyPointsReduxState.status && !dataArr.length) ?
           
           (
             <SkeletonTable columns={tableRow.map((item) => item.label)} />
-          ) : ( */}
+          ) : (
         <Grid container>
           <Grid item xs={12}>
             <TableContainer>
@@ -180,7 +180,7 @@ export default function DetailedLoyaltyReportTable({
             </TableContainer>
           </Grid>
         </Grid>
-        {/* )} */}
+         )} 
       </Grid>
     </>
   );

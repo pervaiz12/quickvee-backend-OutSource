@@ -114,6 +114,7 @@
   font-size: 13px;
   font-family: CircularSTDMedium;
   margin-right: 6px;
+  text-transform: capitalize;
 }
 
 .selected-item .item:last-child {

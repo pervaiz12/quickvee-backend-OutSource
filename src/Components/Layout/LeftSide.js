@@ -179,7 +179,10 @@ const DetailedLoyaltyPointReportMain = lazy(
       "../Reporting/DetailedLoyaltyPointReport/DetailedLoyaltyPointReportMain"
     )
 );
-
+const NewCustomersAddedReportMain = lazy(
+  () =>
+    import("../Reporting/NewCustomerAddedReport/NewCustomersAddedReportMain")
+);
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -361,6 +364,8 @@ const LeftSide = ({ visible }) => {
         return <MainEmployeeSalesPerCategory />;
       case "inventory-merge":
         return <InventoryMerge />;
+      case "new-customers-added-report":
+        return <NewCustomersAddedReportMain />;
       default:
         return <DashboardMain />;
     }

@@ -68,7 +68,7 @@ export default function RefundRequestMain() {
   }, [debouncedValue, currentPage, rowsPerPage,refundDropDownOptions]);
   useEffect(() => {
     getRefundRequestDataCount();
-  }, [debouncedValue, currentPage, rowsPerPage]);
+  }, [debouncedValue, currentPage, rowsPerPage,refundDropDownOptions]);
 
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
@@ -92,7 +92,7 @@ export default function RefundRequestMain() {
           >
             <Grid item>
               <div className="q-category-bottom-header">
-                <span>Unverified Merchant</span>
+                <span>Refund Request</span>
               </div>
             </Grid>
           </Grid>

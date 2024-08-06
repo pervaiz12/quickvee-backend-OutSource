@@ -72,12 +72,12 @@ export default function CategorySalesSummeryReportLogic() {
     try {
       await dispatch(CategoryAllData(data)).unwrap();
     } catch (error) {
-      // if (error.status == 401 || error.response.status === 401) {
-      //   getUnAutherisedTokenMessage();
-      //   handleCoockieExpire();
-      // } else if (error.status == "Network Error") {
-      //   getNetworkError();
-      // }
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     } finally {
       // setLoadingCategories(false);
     }

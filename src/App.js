@@ -168,6 +168,12 @@ function App() {
               element={<PaymentCalDetails visible={"order-summary"} />}
             />
           </Route>
+          {/* <Route element={<ProtectedOrderSummery visible="superadmin" />}>
+            <Route
+              path="/unapprove/refund-request/order-summary/:merchant_id/:order_id"
+              element={<PaymentCalDetails visible={"order-summary"} />}
+            />
+          </Route> */}
           <Route element={<ProtectedStoreRoute visible="manager" />}>
             <Route exact path="/store" element={<Main visible={"store"} />} />
 
@@ -641,6 +647,11 @@ function App() {
             />
             <Route
               exact
+              path="/store-reporting/new-customers-added-report"
+              element={<Main visible={"new-customers-added-report"} />}
+            />
+            <Route
+              exact
               path="/store-reporting/employee-sales-per-category-report"
               element={<Main visible={"employee-sales-per-category-report"} />}
             />
@@ -836,6 +847,7 @@ function App() {
               path="/users/view/unapprove/merchant-details"
               element={<Main visible={"merchant-details"} />}
             />
+            
           </Route>
 
           {/* -----------------=============superadmin===========------------------- */}

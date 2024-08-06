@@ -95,6 +95,7 @@ const ProductTable = ({
   const [productList, setproductsList] = useState([]);
   const [inventoryApproval, setInventoryApproval] = useState();
   const [checkboxState, setCheckboxState] = useState({});
+  const [deleteloading, setDeleteloading] = useState(false);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -261,6 +262,7 @@ const ProductTable = ({
   };
 
   const confirmDeleteCategory = async () => {
+    setDeleteloading(true);
     if (deleteCategoryId) {
       let timer = null;
       const formData = new FormData();
@@ -292,6 +294,7 @@ const ProductTable = ({
           getNetworkError();
         }
       }
+      setDeleteloading(false);
     }
   };
 
@@ -472,10 +475,11 @@ const ProductTable = ({
                               <StyledTableCell align={"center"}>
                                 Images
                               </StyledTableCell>
-                              { userTypeData?.login_type ===
-                                              "superadmin" && selectedListingType !==
-                                              "Variant listing" ? <StyledTableCell>Import Image</StyledTableCell> : null}
-                              
+                              {userTypeData?.login_type === "superadmin" &&
+                              selectedListingType !== "Variant listing" ? (
+                                <StyledTableCell>Import Image</StyledTableCell>
+                              ) : null}
+
                               {selectedListingType === "Variant listing" ? (
                                 ""
                               ) : (
@@ -784,20 +788,19 @@ const ProductTable = ({
                                               </div>
                                             </div>
                                           </StyledTableCell>
-                                          {
-                                             userTypeData?.login_type ===
-                                              "superadmin" && selectedListingType !==
-                                              "Variant listing" ? (
-                                                <>
+                                          {userTypeData?.login_type ===
+                                            "superadmin" &&
+                                          selectedListingType !==
+                                            "Variant listing" ? (
+                                            <>
                                               <StyledTableCell>
                                                 <ImportImageModal
                                                   productTitle={product.title}
                                                   productId={product.id}
                                                 />
                                               </StyledTableCell>
-                                                </>
-                                              ): null
-                                          }
+                                            </>
+                                          ) : null}
 
                                           {selectedListingType ===
                                           "Variant listing" ? (
@@ -847,6 +850,7 @@ const ProductTable = ({
             setDeleteModalOpen(false);
           }}
           onConfirm={confirmDeleteCategory}
+          deleteloading={deleteloading}
         />
       </div>
     </>

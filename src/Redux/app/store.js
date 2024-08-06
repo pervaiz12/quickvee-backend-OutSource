@@ -76,6 +76,7 @@ import EmployeeSalesPerCategorySlice from "../features/Reports/EmployeeSalesPerC
 import DetailedLoyaltyPointsReportSlice from "../features/Reports/DatailedLoyaltyPointsReport/DetailedLoyaltyPointsReportSlice";
 import GiftCardReportSlice from "../features/Reports/GiftCard/GiftCardReportSlice";
 import RefundRequestSlice from "../features/RefundRequest/RefundRequestSlice";
+import NewCustomersAddedReportSlice from "../features/Reports/NewCustomersAddedReport/NewCustomersAddedReportSlice";
 const store = configureStore({
   reducer: {
     VendorList: VendorListReducer,
@@ -171,6 +172,7 @@ const store = configureStore({
     storeCreditReportList: StoreCreditReportSlice,
     DetailedLoyaltyPointsReport: DetailedLoyaltyPointsReportSlice,
     RefundRequestList: RefundRequestSlice, 
+    NewCustomersAddedReport:NewCustomersAddedReportSlice,
   },
 
   //setting setup
