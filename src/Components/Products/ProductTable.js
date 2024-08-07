@@ -76,6 +76,7 @@ const ProductTable = ({
   handleProductUnCheck,
   handleProductCheck,
   productIdList,
+  productByImages,
 }) => {
   let listing_type = 0;
   const ProductsListDataState = useSelector((state) => state.productsListData);
@@ -234,6 +235,7 @@ const ProductTable = ({
       category_id: categoryId === "All" ? "all" : categoryId,
       show_status: selectedStatus,
       name: debouncedValue,
+      is_media_blank: productByImages === "All" ? "" : 1,
       listing_type: selectedListingTypeValue?.id
         ? selectedListingTypeValue?.id
         : 0,
@@ -247,10 +249,10 @@ const ProductTable = ({
       await dispatch(fetchProductsData(data1)).unwrap();
       // Handle response if needed
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
+      if (error?.status == 401 || error?.response?.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
-      } else if (error.status == "Network Error") {
+      } else if (error?.status == "Network Error") {
         getNetworkError();
       }
     }
