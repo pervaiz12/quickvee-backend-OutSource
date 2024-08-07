@@ -33,17 +33,20 @@ export default function SalesByHoursLogic() {
     getFutureDayCount();
   }, []);
   const getFutureDayCount = async () => {
-    console.log("1111");
     try {
-      console.log("heheheh", data1);
       let res = await dispatch(fetchStoreSettingOptionData(data1)).unwrap();
-      console.log(res);
       if (res?.status == true) {
         setAdvDayCount(
           !!res?.user_data?.advance_count ? res?.user_data?.advance_count : 0
         );
       }
-    } catch (error) {}
+    } catch (error) {
+      if (error?.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
+      console.log("error", error);
+    }
   };
   useEffect(() => {
     setTableLoader(getSalesByHoursList?.loading);
