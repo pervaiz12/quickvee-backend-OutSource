@@ -17,6 +17,11 @@ import sortIcon from "../../Assests/Category/SortingW.svg";
 import Pagination from "../Users/UnverifeDetails/Pagination";
 import { priceFormate } from "../../hooks/priceFormate";
 import { Link } from "react-router-dom";
+import ConfirmModal from "../../reuseableComponents/ConfirmModal";
+import axios from "axios";
+import { BASE_URL, REFUND_EMAIL_STATUS_CHANGE } from "../../Constants/Config";
+import { useAuthDetails } from "../../Common/cookiesHelper";
+import { ToastifyAlert } from '../../CommonComponents/ToastifyAlert';
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -52,12 +57,19 @@ export default function RefundRequestTable({
   setRowsPerPage,
   setCurrentPage,
   setTotalCount,
+  dataArr,
+  setDataArr,
+
 }) {
   const RefundRequestReduxState = useSelector(
     (state) => state.RefundRequestList
   );
-  const [dataArr, setDataArr] = useState([]);
+
   const [sortOrder, setSortOrder] = useState("asc");
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
 
   useEffect(() => {
     if (
@@ -85,6 +97,8 @@ export default function RefundRequestTable({
     { type: "date", name: "order_date_time", label: "Order Date And Time" },
     { type: "str", name: "merchant_id", label: "Merchat Id" },
     { type: "num", name: "refund_amt", label: "Refund Amount" },
+    { type: "", name: "", label: "Status" },
+
     { type: "str", name: "order_id", label: "Order Id" },
   ];
   const sortByItemName = (type, name) => {
@@ -97,6 +111,40 @@ export default function RefundRequestTable({
     setDataArr(sortedItems);
     setSortOrder(newOrder);
   };
+  const confirmfun = async (id, status) => {
+    const { token, ...otherData } = userTypeData;
+    try {
+      const data = {
+        status: status === 0 ? "1" : "0",
+        id: id,
+        ...otherData,
+      };
+      const response = await axios.post(
+        BASE_URL + REFUND_EMAIL_STATUS_CHANGE,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if(response.data.status ===true){
+        setDataArr(prevState => prevState.filter(item => item.id !== id))
+          setTotalCount((prevCount) => prevCount - 1); // Decrement total count
+        ToastifyAlert("Updated Successfully","success")
+      }
+      else if(response.data.status ===false){
+        ToastifyAlert(response.data.status.message,"error")
+      }
+    } catch (error) {}
+    setConfirmModalOpen(false);
+  };
+  const handleHeaderCheckboxChange = (id, status) => {
+    setSelectedItem({ id, status });
+    setConfirmModalOpen(true);
+  };
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -133,9 +181,14 @@ export default function RefundRequestTable({
                         <button
                           className="flex items-center"
                           onClick={() => sortByItemName(item.type, item.name)}
+                          disabled={item.name === ""}
                         >
                           <p>{item.label}</p>
-                          <img src={sortIcon} alt="" className="pl-1" />
+                          {item.name !== "" ? (
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          ) : (
+                            ""
+                          )}
                         </button>
                       </StyledTableCell>
                     ))}
@@ -158,9 +211,37 @@ export default function RefundRequestTable({
                               <p>${priceFormate(item.refund_amt)}</p>
                             </StyledTableCell>
                             <StyledTableCell>
+                              <div
+                                className="category-checkmark-div defaultCheckbox-div"
+                                style={{ width: "unset !important" }}
+                              >
+
+                                <label className="category-checkmark-label">
+                                  <input
+                                    type="checkbox"
+                                    id="selectAll"
+                                    checked={parseInt(item.status)}
+                                    onChange={() =>
+                                      handleHeaderCheckboxChange(
+                                        item.id,
+                                        parseInt(item.status)
+                                      )
+                                    }
+                                  />
+                                  <span
+                                    className="category-checkmark"
+                                    style={{
+                                      left: "1rem",
+                                      transform: "translate(0px, -10px)",
+                                    }}
+                                  ></span>
+                                </label>
+                              </div>{" "}
+                            </StyledTableCell>
+                            <StyledTableCell>
                               <Link
                                 className="whitespace-nowrap text-[#0A64F9]"
-                                to={`/unapprove/refund-request/order-summary/${item.merchant_id}/${item?.order_id}`}
+                                to={`/order/store-reporting/order-summary/${item.merchant_id}/${item?.order_id}`}
                                 // onClick={() => handleSummeryPage(row.order_id)}
                                 target="_blank"
                               >
@@ -192,6 +273,14 @@ export default function RefundRequestTable({
           </>
         )}
       </Grid>
+      {selectedItem && (
+        <ConfirmModal
+          headerText="Confirm Change Status"
+          open={confirmModalOpen}
+          onClose={() => setConfirmModalOpen(false)}
+          onConfirm={() => confirmfun(selectedItem.id, selectedItem.status)}
+        />
+      )}
     </>
   );
 }

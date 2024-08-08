@@ -179,7 +179,7 @@ const GeneratePUC = ({
                                     md={3}
                                     lg={2.4}
                                     sx={{ paddingTop: 0 }}
-                                    className="varient-form"
+                                    // className="varient-form"
                                   >
                                     <div className="">
                                       <label clas>{inp?.label}</label>

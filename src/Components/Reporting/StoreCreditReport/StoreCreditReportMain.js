@@ -56,14 +56,14 @@ export default function StoreCreditReportMain() {
           <Grid container sx={{ px: 2.5, pb: 2.5 }}>
             <Grid item xs={12}>
               <h1 style={{ marginBottom: 0 }} className="heading ">
-                Store Credit Report
+                Detailed Store Credit Report
               </h1>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <Grid container sx={{ px:0.5 }} spacing={2}>
+        <Grid container sx={{ px: 0.5 }} spacing={2}>
           <Grid item xs={12} sm={6} md={4}>
             <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
               <div className="font-normal  tracking-normal Admin_std">

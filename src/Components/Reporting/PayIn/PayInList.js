@@ -127,6 +127,7 @@ const PayInList = (props) => {
   };
   const tableRow = [
     { type: "date", name: "created_at", label: "Transaction Date" },
+    { type: "str", name: "reason", label: "Reason" },
     { type: "num", name: "amount", label: "Amount" },
   ];
 
@@ -179,6 +180,9 @@ const PayInList = (props) => {
                           </p>
                         </StyledTableCell>
                         <StyledTableCell>
+                          <p>{data.reason}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
                           <p className="report-title">
                             ${priceFormate(parseFloat( data.amount ?? 0 ).toFixed(2))}
                           </p>
@@ -192,6 +196,7 @@ const PayInList = (props) => {
                               </div>
                             </div>
                           </StyledTableCell>
+                          <StyledTableCell className="trBG_Color"></StyledTableCell>
                           <StyledTableCell  className="trBG_Color">
                             <div className="">
                               <div>

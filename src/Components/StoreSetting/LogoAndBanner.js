@@ -171,86 +171,95 @@ const LogoAndBanner = ({
                   </Grid>
                 </Grid>
               </Grid>
+              {/* </>
+          ) : (
+            ""
+          )} */}
+              <Grid item sx={{ mx: 2.5 }}>
+                <Grid container sx={{ mb: 1 }}>
+                  <Grid item xs={12}>
+                    <h1 className="info-menu">Receipt Logo</h1>
+                  </Grid>
+                </Grid>
+                <Grid container>
+                  <Grid item xs={12}>
+                    <div className="info-qrCodeDiv-image-div">
+                      {errors.qrReciptError == "" && infoRecord.receieptLogo ? (
+                        <div className="info-delete-qr cursor-pointer">
+                          <div
+                            className="verifiedTableIcon"
+                            onClick={() => handleDelete("receieptLogo")}
+                          >
+                            {" "}
+                            <img src={deleteIcon} />
+                          </div>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                      <div className="info-file-upload">
+                        {infoRecord.receieptLogo === "" ? (
+                          <>
+                            <label
+                              htmlFor="file-input4"
+                              className="file-input1"
+                            >
+                              <img
+                                src={infoImage}
+                                alt="Upload Image"
+                                className="info-image-icon"
+                              />
+                              <div className="info-image-logo-position">
+                                <p className="inforecord-email whitespace-nowrap">
+                                  Add Receipt Logo
+                                </p>
+                              </div>
+                            </label>
+                            <input
+                              id="file-input4"
+                              name="receieptLogo"
+                              style={{ display: "none" }}
+                              type="file"
+                              onChange={onChangeHandle}
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <label
+                              htmlFor="file-input4"
+                              className="file-input1 info-background"
+                              style={{
+                                backgroundImage: `url(${
+                                  !receieptLogoBool
+                                    ? BASE_URL +
+                                      "upload/" +
+                                      infoRecord.receieptLogo
+                                    : infoRecord.receieptLogo
+                                })`,
+                              }}
+                            ></label>
+                            <input
+                              id="file-input4"
+                              name="receieptLogo"
+                              style={{ display: "none" }}
+                              type="file"
+                              onChange={onChangeHandle}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    {errors.qrReciptError && (
+                      <div className="error">{errors.qrReciptError}</div>
+                    )}
+                  </Grid>
+                </Grid>
+              </Grid>
             </>
           ) : (
             ""
           )}
-          <Grid item sx={{ mx: 2.5 }}>
-            <Grid container sx={{ mb: 1 }}>
-              <Grid item xs={12}>
-                <h1 className="info-menu">Receipt Logo</h1>
-              </Grid>
-            </Grid>
-            <Grid container>
-              <Grid item xs={12}>
-                <div className="info-qrCodeDiv-image-div">
-                  {errors.qrReciptError == "" && infoRecord.receieptLogo ? (
-                    <div className="info-delete-qr cursor-pointer">
-                      <div
-                        className="verifiedTableIcon"
-                        onClick={() => handleDelete("receieptLogo")}
-                      >
-                        {" "}
-                        <img src={deleteIcon} />
-                      </div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                  <div className="info-file-upload">
-                    {infoRecord.receieptLogo === "" ? (
-                      <>
-                        <label htmlFor="file-input4" className="file-input1">
-                          <img
-                            src={infoImage}
-                            alt="Upload Image"
-                            className="info-image-icon"
-                          />
-                          <div className="info-image-logo-position">
-                            <p className="inforecord-email whitespace-nowrap">
-                              Add Receipt Logo
-                            </p>
-                          </div>
-                        </label>
-                        <input
-                          id="file-input4"
-                          name="receieptLogo"
-                          style={{ display: "none" }}
-                          type="file"
-                          onChange={onChangeHandle}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <label
-                          htmlFor="file-input4"
-                          className="file-input1 info-background"
-                          style={{
-                            backgroundImage: `url(${
-                              !receieptLogoBool
-                                ? BASE_URL + "upload/" + infoRecord.receieptLogo
-                                : infoRecord.receieptLogo
-                            })`,
-                          }}
-                        ></label>
-                        <input
-                          id="file-input4"
-                          name="receieptLogo"
-                          style={{ display: "none" }}
-                          type="file"
-                          onChange={onChangeHandle}
-                        />
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                {errors.qrReciptError && (
-                  <div className="error">{errors.qrReciptError}</div>
-                )}
-              </Grid>
-            </Grid>
-          </Grid>
         </Grid>
         <Grid container sx={{ mb: 1, mt: 2.5 }}>
           <Grid item xs={12}>

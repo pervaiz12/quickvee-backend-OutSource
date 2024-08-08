@@ -49,6 +49,13 @@ export default function NewCustomersAddedReportMain() {
     <>
       <Grid container sx={{ pt: 2.5 }}>
         <Grid item xs={12}>
+        <Grid container  className="box_shadow_div " sx={{ p:2.5 }}>
+            <Grid item xs={12}>
+              <h1 style={{ marginBottom: 0 }} className="heading ">
+                New Customers Added Report
+              </h1>
+            </Grid>
+          </Grid>
           <DateRangeComponent onDateRangeChange={onDateRangeChange} />
         </Grid>
       </Grid>

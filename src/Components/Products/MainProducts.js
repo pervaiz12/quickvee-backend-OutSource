@@ -104,10 +104,10 @@ const MainProducts = () => {
       await dispatch(fetchProductsData(data)).unwrap();
       // Handle response if needed
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
+      if (error?.status == 401 || error?.response?.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
-      } else if (error.status == "Network Error") {
+      } else if (error?.status == "Network Error") {
         getNetworkError();
       }
     }
@@ -133,8 +133,7 @@ const MainProducts = () => {
 
       try {
         const res = await dispatch(deleteMultipleProductAPI(formData)).unwrap();
-        console.log("res", res);
-        if (res?.status) {
+        if (res?.status === "success") {
           ToastifyAlert("Deleted Successfully", "success");
           setDeleteCategoryId(null);
           setDeleteModalOpen(false);
