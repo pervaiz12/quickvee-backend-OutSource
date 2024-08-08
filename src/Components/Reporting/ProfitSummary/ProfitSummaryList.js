@@ -105,10 +105,63 @@ const ProfitSummaryList = (props) => {
           })
         : [];
       setProfitSummaryReportData(uodatedList);
-      settotal(
+      setTotalUnit(
         ProfitSummaryReportDataState?.ProfitSummaryReportData?.length > 0
           ? ProfitSummaryReportDataState?.ProfitSummaryReportData?.reduce(
-              (total, report) => total + parseFloat(report.amount ?? 0),
+              (total, report) => total + parseFloat(report.units_sold ?? 0),
+              0
+            )
+          : 0
+      );
+      setTotalCost(
+        ProfitSummaryReportDataState?.ProfitSummaryReportData?.length > 0
+          ? ProfitSummaryReportDataState?.ProfitSummaryReportData?.reduce(
+              (total, report) => total + parseFloat(report.product_varient_cost === null ? priceFormate(report.product_cost) : priceFormate(report.product_varient_cost) ?? 0),
+              0
+            )
+          : 0
+      );
+      setTotalSelling(
+        ProfitSummaryReportDataState?.ProfitSummaryReportData?.length > 0
+          ? ProfitSummaryReportDataState?.ProfitSummaryReportData?.reduce(
+              (total, report) => total  + parseFloat((report.selling_price/report.units_sold)  ?? 0),
+              0
+            )
+          : 0
+      );
+
+      // setTotalMargin(
+      //   ProfitSummaryReportDataState?.ProfitSummaryReportData?.length > 0
+      //     ? ProfitSummaryReportDataState?.ProfitSummaryReportData?.reduce(
+      //         (total, report) => total  + parseFloat(((report.selling_price/report.units_sold) - report.product_varient_cost === null ? parseFloat(report.product_cost) : parseFloat(report.product_varient_cost) ) ?? 0),
+      //         0
+      //       )
+      //     : 0
+      // );
+
+      setTotalProfit(
+        ProfitSummaryReportDataState?.ProfitSummaryReportData?.length > 0
+          ? ProfitSummaryReportDataState?.ProfitSummaryReportData?.reduce(
+              (total, report) => {
+                const costPrice = parseFloat(report.product_varient_cost ?? report.product_cost ?? 0);
+                const sellingPricePerUnit = parseFloat(report.selling_price ?? 0) / parseFloat(report.units_sold);
+                return total + (sellingPricePerUnit - costPrice);
+              },
+              0
+            )
+          : 0
+      );
+
+      setTotalMargin(
+        ProfitSummaryReportDataState?.ProfitSummaryReportData?.length > 0
+          ? ProfitSummaryReportDataState?.ProfitSummaryReportData?.reduce(
+              (total, report) => {
+                const costPrice = parseFloat(report.product_varient_cost ?? report.product_cost ?? 0);
+                const sellingPricePerUnit = parseFloat(report.selling_price ?? 0) / parseFloat(report.units_sold);
+                const parmargin = (costPrice*100)/sellingPricePerUnit;
+                // const margin = ((sellingPricePerUnit-costPrice)/100);
+                return total + (100 - parmargin);
+              },
               0
             )
           : 0
@@ -131,7 +184,7 @@ const ProfitSummaryList = (props) => {
     { type: "str", name: "category_name", label: "Category" },
     { type: "num", name: "units_sold", label: "Units Sold" },
     { type: "num", name: "product_varient_cost", label: "Cost" },
-    { type: "num", name: "avg_sale_Price", label: "Average Sale Price" },
+    { type: "num", name: "selling_price", label: "Average Sale Price" },
     { type: "num", name: "amount", label: "Margin" },
     { type: "num", name: "amount", label: "Profit" },
   ];
@@ -147,10 +200,12 @@ const ProfitSummaryList = (props) => {
     setProfitSummaryReportData(sortedItems);
     setSortOrder(newOrder);
   };
-  console.log("xcb x",ProfitSummaryReportData)
 
-
-  const [total, settotal] = useState(0);
+  const [totalUnit, setTotalUnit] = useState(0);
+  const [totalCost, setTotalCost] = useState(0);
+  const [totalSelling, setTotalSelling] = useState(0);
+  const [totalMargin, setTotalMargin] = useState(0);
+  const [totalProfit, setTotalProfit] = useState(0);
 
   return (
     <>
@@ -178,30 +233,40 @@ const ProfitSummaryList = (props) => {
                 {ProfitSummaryReportData.length > 0 ? (
                         <>
                   {ProfitSummaryReportData.length > 0 &&
-                    ProfitSummaryReportData.map((data, index) => (
+                    ProfitSummaryReportData.map((data, index) => {
+                      const costPrice = data.product_varient_cost === null ? parseFloat(data.product_cost) : parseFloat(data.product_varient_cost);
+                      const sellingPrice = parseFloat(data.selling_price)/data.units_sold;
+                      const profit = sellingPrice - costPrice;
+                      const parmargin = (costPrice*100)/sellingPrice;
+                      const netmargin = 100 - parmargin;
+                      return(
                       <StyledTableRow>
                         <StyledTableCell>
-                          <p>{data.category_name}</p>
+                          <div>
+                            <p>{data.product_name}</p>
+                            <p>{data.category_name}</p>
+                          </div>
                         </StyledTableCell>
                         <StyledTableCell>
                           <p>{data.units_sold}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          {data.product_varient_cost === null ? data.product_cost : data.product_varient_cost}
+                          ${data.product_varient_cost === null ? priceFormate(data.product_cost) : priceFormate(data.product_varient_cost)}
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p>{data.margin}</p>
+                          <p>${priceFormate(parseFloat(sellingPrice).toFixed(2))}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p>{data.profit}</p>
+                        {priceFormate(parseFloat(netmargin).toFixed(2))}%
                         </StyledTableCell>
                         <StyledTableCell>
                           <p className="report-title">
-                            ${priceFormate(parseFloat( data.amount ?? 0 ).toFixed(2))}
+                            ${priceFormate(parseFloat(profit).toFixed(2))}
                           </p>
                         </StyledTableCell>
                       </StyledTableRow>
-                    ))}
+                      )
+                    })}
                     <StyledTableCell className="trBG_Color">
                             <div className="">
                               <div>
@@ -209,15 +274,47 @@ const ProfitSummaryList = (props) => {
                               </div>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell className="trBG_Color"></StyledTableCell>
-                          <StyledTableCell className="trBG_Color"></StyledTableCell>
-                          <StyledTableCell className="trBG_Color"></StyledTableCell>
-                          <StyledTableCell className="trBG_Color"></StyledTableCell>
+                          <StyledTableCell className="trBG_Color">
+                            <div className="">
+                              <div>
+                                <p className="report-title totalReport">
+                                  {priceFormate(totalUnit)}
+                                  </p>
+                              </div>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell className="trBG_Color">
+                          <div className="">
+                              <div>
+                                <p className="report-title totalReport">
+                                ${priceFormate(totalCost.toFixed(2))}
+                                </p>
+                                </div>
+                              </div>
+                            </StyledTableCell>
+                          <StyledTableCell className="trBG_Color">
+                          <div className="">
+                              <div>
+                                <p className="report-title totalReport">
+                                ${priceFormate(totalSelling.toFixed(2))}
+                                </p>
+                              </div>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell className="trBG_Color">
+                          <div className="">
+                              <div>
+                                <p className="report-title totalReport">
+                                  {priceFormate(parseFloat(totalMargin).toFixed(2))}%
+                                </p>
+                              </div>
+                            </div>
+                          </StyledTableCell>
                           <StyledTableCell  className="trBG_Color">
                             <div className="">
                               <div>
                                 <p className="report-title totalReport">
-                                  ${priceFormate(total.toFixed(2))}
+                                  ${priceFormate(totalProfit.toFixed(2))}
                                 </p>
                               </div>
                             </div>
