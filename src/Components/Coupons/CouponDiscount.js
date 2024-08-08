@@ -443,11 +443,16 @@ const CouponDiscount = ({ seVisible, setCouponId }) => {
                             <Grid item>
                               <p className="q_date_details">
                                 $
-                                {isNaN(parseFloat(coupons.maximum_discount))
-                                  ? "0.00"
-                                  : parseFloat(
-                                      coupons.maximum_discount
-                                    ).toFixed(2)}
+                                {coupons.flag === "1" 
+                                  ? parseFloat(coupons.discount).toFixed(2) 
+                                  : (coupons.flag === "0" 
+                                    ? (isNaN(parseFloat(coupons.maximum_discount)) 
+                                        ? "0.00" 
+                                        : parseFloat(coupons.maximum_discount).toFixed(2)
+                                      )
+                                    : "0.00"
+                                  )
+                                }
                               </p>
                             </Grid>
                           </Grid>
