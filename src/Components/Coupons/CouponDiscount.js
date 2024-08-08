@@ -122,7 +122,6 @@ const CouponDiscount = ({ seVisible, setCouponId }) => {
     [dispatch]
   );
 
-
   const [deleteCouponId, setDeleteCouponId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
@@ -181,134 +180,133 @@ const CouponDiscount = ({ seVisible, setCouponId }) => {
           <Grid container spacing={3} sx={{ p: 2.5 }}>
             {AllCouponDataState.loading ? (
               <>
-                {
-                  [1, 2, 3, 4].map((coupons, index) => (
-                    <Grid item xs={12} sm={6}>
-                      <Grid
-                        container
-                        key={index}
-                        className={`q_copuon_header w-full`}
-                      >
-                        <Grid item xs={12}>
-                          <Grid
-                            container
-                            direction="row"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            sx={{ p: 1 }}
-                          >
-                            <Grid item>
-                              <div
-                                style={{ padding: 0 }}
-                                className="q_coupon_code"
-                              >
-                                <p>
-                                  <Skeleton />
-                                </p>
-                              </div>
-                            </Grid>
-                            <Grid item>
-                              <Grid container spacing={1}>
-                                <Grid item>
-                                  <div
-                                    style={{ padding: 0 }}
-                                    className="q_coupon_code"
-                                  >
-                                    <p>
-                                      <Skeleton />
-                                    </p>
-                                  </div>
-                                </Grid>
-                                <Grid item>
-                                  <div
-                                    style={{ padding: 0 }}
-                                    className="q_coupon_code"
-                                  >
-                                    <p>
-                                      <Skeleton />
-                                    </p>
-                                  </div>
-                                </Grid>
+                {[1, 2, 3, 4].map((coupons, index) => (
+                  <Grid item xs={12} sm={6}>
+                    <Grid
+                      container
+                      key={index}
+                      className={`q_copuon_header w-full`}
+                    >
+                      <Grid item xs={12}>
+                        <Grid
+                          container
+                          direction="row"
+                          justifyContent="space-between"
+                          alignItems="center"
+                          sx={{ p: 1 }}
+                        >
+                          <Grid item>
+                            <div
+                              style={{ padding: 0 }}
+                              className="q_coupon_code"
+                            >
+                              <p>
+                                <Skeleton />
+                              </p>
+                            </div>
+                          </Grid>
+                          <Grid item>
+                            <Grid container spacing={1}>
+                              <Grid item>
+                                <div
+                                  style={{ padding: 0 }}
+                                  className="q_coupon_code"
+                                >
+                                  <p>
+                                    <Skeleton />
+                                  </p>
+                                </div>
+                              </Grid>
+                              <Grid item>
+                                <div
+                                  style={{ padding: 0 }}
+                                  className="q_coupon_code"
+                                >
+                                  <p>
+                                    <Skeleton />
+                                  </p>
+                                </div>
                               </Grid>
                             </Grid>
                           </Grid>
-                          <Grid container sx={{ px: 1 }}>
-                            <Grid item xs={12}>
-                              <div
-                                style={{ paddingLeft: "0 !important" }}
-                                className="q_discount_coupon_Code"
-                              >
-                                <div className="">
-                                  <Skeleton />
-                                </div>
+                        </Grid>
+                        <Grid container sx={{ px: 1 }}>
+                          <Grid item xs={12}>
+                            <div
+                              style={{ paddingLeft: "0 !important" }}
+                              className="q_discount_coupon_Code"
+                            >
+                              <div className="">
+                                <Skeleton />
                               </div>
-                            </Grid>
+                            </div>
                           </Grid>
-                          <Grid
-                            container
-                            direction="row"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            sx={{ p: 1 }}
-                          >
-                            <Grid item>
-                              <div
-                                style={{ padding: 0 }}
-                                className="q_coupon_deatails_validtimes"
-                              >
-                                <p>
-                                  {" "}
-                                  <Skeleton />
-                                </p>
-                              </div>
-                            </Grid>
-                            <Grid
-                              item
+                        </Grid>
+                        <Grid
+                          container
+                          direction="row"
+                          justifyContent="space-between"
+                          alignItems="center"
+                          sx={{ p: 1 }}
+                        >
+                          <Grid item>
+                            <div
                               style={{ padding: 0 }}
                               className="q_coupon_deatails_validtimes"
-                            >
-                              <p className="q_date_details">
-                                <Skeleton />
-                              </p>
-                            </Grid>
-                          </Grid>
-
-                          <Grid
-                            container
-                            direction="row"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            sx={{ px: 1 }}
-                          >
-                            <Grid
-                              item
-                              sx={{ p: 0 }}
-                              className="q_coupon_discountCode"
                             >
                               <p>
                                 {" "}
                                 <Skeleton />
                               </p>
-                            </Grid>
-                            <Grid item>
-                              <Skeleton />
-                            </Grid>
+                            </div>
                           </Grid>
-                          <Grid container>
-                            <Grid item xs={12}>
-                              <div className="q_coupon_status_btn">
-                                <p>
-                                  <Skeleton />
-                                </p>
+                          <Grid
+                            item
+                            style={{ padding: 0 }}
+                            className="q_coupon_deatails_validtimes"
+                          >
+                            <p className="q_date_details">
+                              <Skeleton />
+                            </p>
+                          </Grid>
+                        </Grid>
 
+                        <Grid
+                          container
+                          direction="row"
+                          justifyContent="space-between"
+                          alignItems="center"
+                          sx={{ px: 1 }}
+                        >
+                          <Grid
+                            item
+                            sx={{ p: 0 }}
+                            className="q_coupon_discountCode"
+                          >
+                            <p>
+                              {" "}
+                              <Skeleton />
+                            </p>
+                          </Grid>
+                          <Grid item>
+                            <Skeleton />
+                          </Grid>
+                        </Grid>
+                        <Grid container>
+                          <Grid item xs={12}>
+                            <div className="q_coupon_status_btn">
+                              <p>
                                 <Skeleton />
-                              </div>
-                            </Grid>
+                              </p>
+
+                              <Skeleton />
+                            </div>
                           </Grid>
                         </Grid>
                       </Grid>
                     </Grid>
-                  ))}
+                  </Grid>
+                ))}
               </>
             ) : (
               <>
@@ -445,11 +443,16 @@ const CouponDiscount = ({ seVisible, setCouponId }) => {
                             <Grid item>
                               <p className="q_date_details">
                                 $
-                                {priceFormate(
-                                  parseFloat(coupons.maximum_discount).toFixed(
-                                    2
+                                {coupons.flag === "1" 
+                                  ? parseFloat(coupons.discount).toFixed(2) 
+                                  : (coupons.flag === "0" 
+                                    ? (isNaN(parseFloat(coupons.maximum_discount)) 
+                                        ? "0.00" 
+                                        : parseFloat(coupons.maximum_discount).toFixed(2)
+                                      )
+                                    : "0.00"
                                   )
-                                ) || "0.00"}
+                                }
                               </p>
                             </Grid>
                           </Grid>
@@ -489,7 +492,9 @@ const CouponDiscount = ({ seVisible, setCouponId }) => {
               </>
             )}
           </Grid>
-          {!Object.values(couponList).length  && !AllCouponDataState.loading && <NoDataFound table={true} />}
+          {!Object.values(couponList).length && !AllCouponDataState.loading && (
+            <NoDataFound table={true} />
+          )}
         </Grid>
       </Grid>
       <div>

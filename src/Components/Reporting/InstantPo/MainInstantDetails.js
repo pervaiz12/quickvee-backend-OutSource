@@ -85,7 +85,7 @@ const MainInstantDetails = ({ data }) => {
             parseInt(item.current_qty, 10) + parseInt(item.qty, 10);
 
           const calculatedTotal =
-            parseInt(item.qty, 10) * parseFloat(item.price);
+            parseFloat(item.qty, 10) * parseFloat(item.price,10);
 
           return {
             ...item,
@@ -93,6 +93,7 @@ const MainInstantDetails = ({ data }) => {
             calculatedTotal: calculatedTotal.toFixed(2),
           };
         });
+      console.log("AfterAdjustQtyAddedList", AfterAdjustQtyAddedList);
       setinstantactivity(AfterAdjustQtyAddedList);
     } else {
       setinstantactivity([]);
@@ -118,7 +119,6 @@ const MainInstantDetails = ({ data }) => {
     setinstantactivity(sortedItems);
     setSortOrder(newOrder);
   };
-  console.log("instantactivityDataState.loading ",instantactivityDataState.loading,"instantactivityDataState.status",instantactivityDataState.status )
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -217,12 +217,12 @@ const MainInstantDetails = ({ data }) => {
                       ? instantactivity.map((instantactivity, index) => {
                           const AfterAdjustQty =
                             parseInt(instantactivity.current_qty, 10) +
-                            parseInt(instantactivity.qty, 10);
+                            parseInt(instantactivity.qty);
                           const calculatedTotal =
-                            parseInt(instantactivity.qty, 10) *
+                            parseInt(instantactivity.qty) *
                             parseFloat(instantactivity.price);
                           return (
-                            <StyledTableRow>
+                            <StyledTableRow key={index}>
                               <StyledTableCell>
                                 <div>
                                   <p>{instantactivity.title}</p>
@@ -255,7 +255,6 @@ const MainInstantDetails = ({ data }) => {
                                         hour: "2-digit",
                                         minute: "2-digit",
                                         second: "2-digit",
-                                        hour12: true,
                                       })}
                                     </p>
                                   </div>
@@ -294,12 +293,10 @@ const MainInstantDetails = ({ data }) => {
                               <StyledTableCell>
                                 <p>
                                   $
-                                  {Math.abs(
-                                    priceFormate(
-                                      isNaN(instantactivity.calculatedTotal)
-                                        ? 0
-                                        : instantactivity.calculatedTotal
-                                    )
+                                  {priceFormate(
+                                    isNaN(instantactivity.calculatedTotal)
+                                      ? 0
+                                      : instantactivity.calculatedTotal
                                   )}
                                 </p>
                               </StyledTableCell>
