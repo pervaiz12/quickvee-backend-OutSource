@@ -22,6 +22,7 @@ const SearchableDropdown = ({
   pageUrl,
   productTitle,
   modalType,
+  usingFor,
 }) => {
   const location = useLocation();
   const { checkLength } = Validation();
@@ -217,6 +218,7 @@ const SearchableDropdown = ({
             ) : (
               <img
                 src={DownArrow}
+                alt=""
                 className={
                   showOptions
                     ? "down-arrow-image rotate-dropdpown"
@@ -232,7 +234,12 @@ const SearchableDropdown = ({
             {showOptions
               ? changeFilterableList()?.map((opt) => {
                   const isInSelectedOptions = selectedOption?.some(
-                    (selected) => selected?.id === opt?.id
+                    (selected) =>
+                      usingFor === "variantProducts" &&
+                      selected.isvarient === "1"
+                        ? selected?.id === opt?.id &&
+                          selected.var_id === opt.var_id
+                        : selected?.id === opt?.id
                   );
                   if (typeof opt === "string") {
                     return <p>{opt}</p>;
@@ -245,7 +252,7 @@ const SearchableDropdown = ({
                         key={opt?.id}
                         onClick={() =>
                           isInSelectedOptions
-                            ? handleDeleteSelectedOption(opt?.id, keyName)
+                            ? handleDeleteSelectedOption(opt?.id, keyName, opt)
                             : handleSelectProductOptions(opt, keyName)
                         }
                       >

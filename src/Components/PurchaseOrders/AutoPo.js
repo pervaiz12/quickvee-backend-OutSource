@@ -213,7 +213,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
         show_status: "all",
         listing_type: 1,
         offset: 0,
-        limit: 100000,
+        limit: 300,
         name: inputValue,
         page: 0,
         ...userTypeData,

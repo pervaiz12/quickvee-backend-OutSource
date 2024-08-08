@@ -34,6 +34,10 @@ module.exports = Object.freeze({
   //Importdata API Calls
   IMPORT_DATA: "Import_data_api/import",
 
+  // Mix and Match Pricing
+  ADD_MIX_MAX_PRICING_DEAL: "React_max_purchase_api/add_mix_match_pricing",
+  MIX_MAX_PRICING_DEALS_LIST: "React_max_purchase_api/mix_match_pricing_list",
+
   //Loyalty Program
   LOYALTY_PROGRAM_LIST: "LoyaltyProgramReactAPI/loyalty_program_list",
   GET_LOYATY_DATA_COUNT: "LoyaltyProgramReactAPI/loyalty_program_count",
@@ -364,8 +368,8 @@ module.exports = Object.freeze({
   GET_REFUND_EMAILS_COUNT: "Order_list_api/get_refund_emails_count",
   CATEGORY_SALES_SUMMERY_REPORT: "ReportingReactapi/category_sale_summary",
   SALES_BY_HOURS_REPORT: "ReportingReactapi/sale_per_hour",
-  TRANSFER_INVENTORY : "Product_api_react/transfer_inventory",
-  NEW_CUSTOMER_ADDED_REPORT:"ReportingReactapi/new_customer_added_report",
+  TRANSFER_INVENTORY: "Product_api_react/transfer_inventory",
+  NEW_CUSTOMER_ADDED_REPORT: "ReportingReactapi/new_customer_added_report",
 });
 
 // All api calls are initialized in this component for this application

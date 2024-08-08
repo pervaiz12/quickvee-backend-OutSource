@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import DeletIcon from "../../Assests/Dashboard/delete.svg";
 import Edit from "../../Assests/Dashboard/edit.svg";
@@ -6,6 +6,10 @@ import { Link } from "react-router-dom";
 import Switch from "@mui/material/Switch";
 import { Grid } from "@mui/material";
 import Skeleton from "react-loading-skeleton";
+import { useDispatch } from "react-redux";
+import { mixAndMatchPricingDealsList } from "../../Redux/features/MixAndMatch/mixAndMatchSlice";
+import { useSelector } from "react-redux";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const LoadingDeals = () => {
   return (
@@ -125,6 +129,25 @@ const LoadingDeals = () => {
 };
 
 const MainMixAndMatch = () => {
+  const dispatch = useDispatch();
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+
+  const { loading, mixAndMatchDeals } = useSelector(
+    (state) => state.mixAndMatchList
+  );
+
+  useEffect(() => {
+    const data = {
+      ...userTypeData,
+      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+    };
+    dispatch(mixAndMatchPricingDealsList(data));
+  }, []);
+
+  useEffect(() => {
+    console.log("mixAndMatchDeals: ", mixAndMatchDeals);
+  }, [mixAndMatchDeals]);
+
   return (
     <>
       <div className="q-category-main-page">
@@ -151,99 +174,103 @@ const MainMixAndMatch = () => {
               </Grid>
             </Grid>
             <Grid container spacing={3} sx={{ p: 2.5 }}>
-              {false ? (
+              {loading ? (
                 <LoadingDeals />
               ) : (
                 <>
-                  {[1, 2, 3, 4].map((coupons, index) => (
-                    <Grid item xs={12} sm={6}>
-                      <Grid
-                        container
-                        key={index}
-                        className={`q_copuon_header w-full ${
-                          index % 2 ? "active" : ""
-                        }`}
-                      >
+                  {mixAndMatchDeals &&
+                    mixAndMatchDeals.map((deal, index) => (
+                      <Grid key={deal.id} item xs={12} sm={6}>
                         <Grid
-                          item
-                          xs={12}
-                          sx={{ px: 1 }}
-                          className="mix-and-match-design"
+                          container
+                          className={`q_copuon_header w-full ${
+                            index % 2 ? "active" : ""
+                          }`}
                         >
                           <Grid
-                            container
-                            direction="row"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            sx={{ pt: 1 }}
+                            item
+                            xs={12}
+                            sx={{ px: 1 }}
+                            className="mix-and-match-design"
                           >
-                            <Grid item>
-                              <p className="deal-title">Test Deal</p>
-                            </Grid>
-                            <Grid item>
-                              <Grid container spacing={1}>
-                                <Grid item>
-                                  <Link to={`/mix-and-match`}>
-                                    <span>
-                                      <img
-                                        src={Edit}
-                                        alt=""
-                                        className="h-8 w-8  cursor-pointer"
-                                      />
-                                    </span>
-                                  </Link>
-                                </Grid>
-                                <Grid item>
-                                  <img
-                                    src={DeletIcon}
-                                    alt="delet"
-                                    className="h-8 w-8 delet-icon"
-                                    //   onClick={() =>
-                                    //     handleDeleteCoupon(coupons.id)
-                                    //   }
-                                  />
-                                </Grid>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                          <Grid container sx={{ pb: 1 }}>
-                            <Grid item xs={12}>
-                              <p className="offer-desc mb-2">
-                                Buy 5 get $10.00 off Each
-                              </p>
-                            </Grid>
-                          </Grid>
-                          <Grid container>
                             <Grid
-                              item
-                              xs={12}
-                              display="flex"
+                              container
                               direction="row"
                               justifyContent="space-between"
                               alignItems="center"
+                              sx={{ pt: 1 }}
                             >
-                              <p className="label">Enable/Disable</p>
-                              <Switch
-                                checked={false}
-                                // onChange={(e) =>
+                              <Grid item>
+                                <p className="deal-title">{deal.deal_name}</p>
+                              </Grid>
+                              <Grid item>
+                                <Grid container spacing={1}>
+                                  <Grid item>
+                                    <Link to={`/mix-and-match`}>
+                                      <span>
+                                        <img
+                                          src={Edit}
+                                          alt=""
+                                          className="h-8 w-8 cursor-pointer"
+                                        />
+                                      </span>
+                                    </Link>
+                                  </Grid>
+                                  <Grid item>
+                                    <img
+                                      src={DeletIcon}
+                                      alt="delete icon"
+                                      className="h-8 w-8 delet-icon"
+                                      //   onClick={() =>
+                                      //     handleDeleteCoupon(coupons.id)
+                                      //   }
+                                    />
+                                  </Grid>
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                            <Grid container sx={{ pb: 1 }}>
+                              <Grid item xs={12}>
+                                <p className="offer-desc mb-2">
+                                  Buy {deal.min_qty} get
+                                  {`${deal.is_percent === "1" ? "$" : ""}`}
+                                  {deal.is_percent}
+                                  {`${deal.is_percent === "1" ? "" : "%"}`}
+                                  off Each
+                                </p>
+                              </Grid>
+                            </Grid>
+                            <Grid container>
+                              <Grid
+                                item
+                                xs={12}
+                                display="flex"
+                                direction="row"
+                                justifyContent="space-between"
+                                alignItems="center"
+                              >
+                                <p className="label">Enable/Disable</p>
+                                <Switch
+                                  checked={false}
+                                  // onChange={(e) =>
 
-                                // }
-                                // disabled={+coupons?.flag === 0 && +coupons?.discount === 100}
-                                sx={{
-                                  "& .MuiSwitch-switchBase.Mui-checked": {
-                                    color: "#0A64F9", // Change color when switch is checked
-                                  },
-                                  "& .MuiSwitch-track": {
-                                    backgroundColor: "#0A64F9", // Change background color of the track
-                                  },
-                                }}
-                              />
+                                  // }
+                                  // disabled={+coupons?.flag === 0 && +coupons?.discount === 100}
+                                  sx={{
+                                    "& .MuiSwitch-switchBase.Mui-checked": {
+                                      color: "#0A64F9", // Change color when switch is checked
+                                    },
+                                    "& .MuiSwitch-track": {
+                                      backgroundColor: "#0A64F9", // Change background color of the track
+                                    },
+                                  }}
+                                />
+                              </Grid>
                             </Grid>
                           </Grid>
                         </Grid>
                       </Grid>
-                    </Grid>
-                  ))}
+                    ))}
                 </>
               )}
             </Grid>
