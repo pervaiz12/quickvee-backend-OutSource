@@ -443,9 +443,7 @@ const CouponDiscount = ({ seVisible, setCouponId }) => {
                             <Grid item>
                               <p className="q_date_details">
                                 $
-                                {coupons.maximum_discount === null ||
-                                coupons.maximum_discount === undefined ||
-                                coupons.maximum_discount === ""
+                                {isNaN(parseFloat(coupons.maximum_discount))
                                   ? "0.00"
                                   : parseFloat(
                                       coupons.maximum_discount
