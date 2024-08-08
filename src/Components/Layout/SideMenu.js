@@ -875,17 +875,17 @@ const menuItems = [
       //   text: "Discount Per Sales Person",
       //   link: "/store-reporting/discount-per-sales-report",
       // },
-      {
-        id: 6,
-        text: "New Reports",
-        dropDownItems: [
-          {
-            id: 104,
-            text: "Profit Summary Report",
-            link: "/store-reporting/profit-summary-report",
-          },
-        ],
-      },
+      // {
+      //   id: 6,
+      //   text: "New Reports",
+      //   dropDownItems: [
+      //     {
+      //       id: 104,
+      //       text: "Profit Summary Report",
+      //       link: "/store-reporting/profit-summary-report",
+      //     },
+      //   ],
+      // },
     ],
   },
   {
