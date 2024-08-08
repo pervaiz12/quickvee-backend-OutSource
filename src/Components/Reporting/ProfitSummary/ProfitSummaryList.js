@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchPayinReportData } from "../../../Redux/features/Reports/PayInReport/PayInReportSlice";
+
 import { fetchProfitSummaryReportData } from "../../../Redux/features/Reports/ProfitSummaryReport/ProfitSummaryReportSlice";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
@@ -59,9 +59,10 @@ const ProfitSummaryList = (props) => {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
-  const [PayinReportData, setPayinReportData] = useState([]);
+  const [ProfitSummaryReportData, setProfitSummaryReportData] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
-  const PayInReportDataState = useSelector((state) => state.PayinReportList);
+  const ProfitSummaryReportDataState = useSelector((state) => state.ProfitSummaryReportList);
+  console.log("ProfitSummaryReportDataState",ProfitSummaryReportDataState)
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
     getProfitSummaryReportData();
@@ -79,8 +80,7 @@ const ProfitSummaryList = (props) => {
         };
 
         if (data) {
-          await dispatch(fetchPayinReportData(data)).unwrap();
-        //   await dispatch(fetchProfitSummaryReportData(data)).unwrap();
+          await dispatch(fetchProfitSummaryReportData(data)).unwrap();
         }
       } catch (error) {
         console.log(error);
@@ -94,20 +94,20 @@ const ProfitSummaryList = (props) => {
 
   useEffect(() => {
     if (
-      !PayInReportDataState.loading &&
-      PayInReportDataState.PayinReportData
+      !ProfitSummaryReportDataState.loading &&
+      ProfitSummaryReportDataState.ProfitSummaryReportData
     ) {
-      const uodatedList = Array.isArray(PayInReportDataState?.PayinReportData)
-        ? PayInReportDataState?.PayinReportData?.map((item) => {
+      const uodatedList = Array.isArray(ProfitSummaryReportDataState?.ProfitSummaryReportData)
+        ? ProfitSummaryReportDataState?.ProfitSummaryReportData?.map((item) => {
             return {
               ...item,
             };
           })
         : [];
-      setPayinReportData(uodatedList);
+      setProfitSummaryReportData(uodatedList);
       settotal(
-        PayInReportDataState?.PayinReportData?.length > 0
-          ? PayInReportDataState?.PayinReportData?.reduce(
+        ProfitSummaryReportDataState?.ProfitSummaryReportData?.length > 0
+          ? ProfitSummaryReportDataState?.ProfitSummaryReportData?.reduce(
               (total, report) => total + parseFloat(report.amount ?? 0),
               0
             )
@@ -115,9 +115,9 @@ const ProfitSummaryList = (props) => {
       );
 
     } else {
-      setPayinReportData([]);
+      setProfitSummaryReportData([]);
     }
-  }, [PayInReportDataState.loading, PayInReportDataState.PayinReportData]);
+  }, [ProfitSummaryReportDataState.loading, ProfitSummaryReportDataState.ProfitSummaryReportData]);
 
   const formatDateTime = (dateTimeString) => {
     const date = new Date(dateTimeString);
@@ -128,31 +128,26 @@ const ProfitSummaryList = (props) => {
     return `${formattedDate} ${formattedTime}`;
   };
   const tableRow = [
-    { type: "date", name: "created_at", label: "Transaction Date" },
-    { type: "str", name: "reason", label: "Reason" },
-    { type: "num", name: "amount", label: "Amount" },
+    { type: "str", name: "category_name", label: "Category" },
+    { type: "num", name: "units_sold", label: "Units Sold" },
+    { type: "num", name: "product_varient_cost", label: "Cost" },
+    { type: "num", name: "avg_sale_Price", label: "Average Sale Price" },
+    { type: "num", name: "amount", label: "Margin" },
+    { type: "num", name: "amount", label: "Profit" },
   ];
-
-//   const tableRow = [
-//     { type: "str", name: "created_at", label: "Category" },
-//     { type: "num", name: "reason", label: "Units Sold" },
-//     { type: "num", name: "amount", label: "Cost" },
-//     { type: "num", name: "amount", label: "Average Sale Price" },
-//     { type: "num", name: "amount", label: "Margin" },
-//     { type: "num", name: "amount", label: "Profit" },
-//   ];
 
 
   const sortByItemName = (type, name) => {
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
-      PayinReportData,
+      ProfitSummaryReportData,
       type,
       name,
       sortOrder
     );
-    setPayinReportData(sortedItems);
+    setProfitSummaryReportData(sortedItems);
     setSortOrder(newOrder);
   };
+  console.log("xcb x",ProfitSummaryReportData)
 
 
   const [total, settotal] = useState(0);
@@ -161,7 +156,7 @@ const ProfitSummaryList = (props) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          {PayInReportDataState.loading ? (
+          {ProfitSummaryReportDataState.loading ? (
             <SkeletonTable columns={tableRow.map((item) => item.label)} />
           ) : (
             <TableContainer>
@@ -180,18 +175,25 @@ const ProfitSummaryList = (props) => {
                   ))}
                 </TableHead>
                 <TableBody>
-                {PayinReportData.length > 0 ? (
+                {ProfitSummaryReportData.length > 0 ? (
                         <>
-                  {PayinReportData.length > 0 &&
-                    PayinReportData.map((data, index) => (
+                  {ProfitSummaryReportData.length > 0 &&
+                    ProfitSummaryReportData.map((data, index) => (
                       <StyledTableRow>
                         <StyledTableCell>
-                          <p className="report-title">
-                            {formatDateTime(data.created_at)}
-                          </p>
+                          <p>{data.category_name}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p>{data.reason}</p>
+                          <p>{data.units_sold}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {data.product_varient_cost === null ? data.product_cost : data.product_varient_cost}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{data.margin}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{data.profit}</p>
                         </StyledTableCell>
                         <StyledTableCell>
                           <p className="report-title">
@@ -208,6 +210,9 @@ const ProfitSummaryList = (props) => {
                             </div>
                           </StyledTableCell>
                           <StyledTableCell className="trBG_Color"></StyledTableCell>
+                          <StyledTableCell className="trBG_Color"></StyledTableCell>
+                          <StyledTableCell className="trBG_Color"></StyledTableCell>
+                          <StyledTableCell className="trBG_Color"></StyledTableCell>
                           <StyledTableCell  className="trBG_Color">
                             <div className="">
                               <div>
@@ -223,7 +228,7 @@ const ProfitSummaryList = (props) => {
                       )}
                 </TableBody>
               </StyledTable>
-              {!PayinReportData.length  && <NoDataFound />}
+              {!ProfitSummaryReportData.length  && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>

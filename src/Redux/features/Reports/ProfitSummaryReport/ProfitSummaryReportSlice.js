@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { BASE_URL, PAY_IN_REPORT } from "../../../../Constants/Config";
+import { BASE_URL, PROFIT_SUMMARY_REPORT } from "../../../../Constants/Config";
 
 const initialState = {
   loading: false,
@@ -16,7 +16,7 @@ export const fetchProfitSummaryReportData = createAsyncThunk(
     try {
       const { token, ...dataNew } = data;
       const response = await axios.post(
-        BASE_URL + PAY_IN_REPORT,
+        BASE_URL + PROFIT_SUMMARY_REPORT,
         dataNew,
         {
           headers: {
@@ -29,7 +29,7 @@ export const fetchProfitSummaryReportData = createAsyncThunk(
       if (response.data.status === true) {
         // console.log(response.data
         //     )
-        return response.data.emp_data;
+        return response.data.profit_data;
       }
     } catch (error) {
       // throw new Error(error.response.data.message);
