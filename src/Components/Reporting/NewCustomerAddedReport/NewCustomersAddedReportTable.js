@@ -16,6 +16,7 @@ import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import { priceFormate } from "../../../hooks/priceFormate";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -72,8 +73,10 @@ export default function NewCustomersAddedReportTable() {
   ]);
   const tableRow = [
     { type: "str", name: "name", label: "Customer Name" },
-    { type: "str", name: "email", label: "Email Id" },
+    { type: "str", name: "email", label: "Email" },
     { type: "num", name: "phone", label: "Phone No." },
+    { type: "num", name: "total_loyalty_pts", label: "Loyalty Points" },
+    { type: "num", name: "total_store_credit", label: "Store Credits" },
   ];
   const sortByItemName = (type, name) => {
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
@@ -126,6 +129,12 @@ export default function NewCustomersAddedReportTable() {
                               </StyledTableCell>
                               <StyledTableCell>
                                 <p>{item?.phone}</p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p>{priceFormate(item?.total_loyalty_pts)}</p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p>{priceFormate(item?.total_store_credit)}</p>
                               </StyledTableCell>
                             </StyledTableRow>
                           </>

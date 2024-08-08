@@ -21,6 +21,7 @@ import ConfirmModal from "../../reuseableComponents/ConfirmModal";
 import axios from "axios";
 import { BASE_URL, REFUND_EMAIL_STATUS_CHANGE } from "../../Constants/Config";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import { ToastifyAlert } from '../../CommonComponents/ToastifyAlert';
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -56,11 +57,14 @@ export default function RefundRequestTable({
   setRowsPerPage,
   setCurrentPage,
   setTotalCount,
+  dataArr,
+  setDataArr,
+
 }) {
   const RefundRequestReduxState = useSelector(
     (state) => state.RefundRequestList
   );
-  const [dataArr, setDataArr] = useState([]);
+
   const [sortOrder, setSortOrder] = useState("asc");
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -125,6 +129,14 @@ export default function RefundRequestTable({
           },
         }
       );
+      if(response.data.status ===true){
+        setDataArr(prevState => prevState.filter(item => item.id !== id))
+          setTotalCount((prevCount) => prevCount - 1); // Decrement total count
+        ToastifyAlert("Updated Successfully","success")
+      }
+      else if(response.data.status ===false){
+        ToastifyAlert(response.data.status.message,"error")
+      }
     } catch (error) {}
     setConfirmModalOpen(false);
   };
@@ -203,6 +215,7 @@ export default function RefundRequestTable({
                                 className="category-checkmark-div defaultCheckbox-div"
                                 style={{ width: "unset !important" }}
                               >
+
                                 <label className="category-checkmark-label">
                                   <input
                                     type="checkbox"
@@ -228,7 +241,7 @@ export default function RefundRequestTable({
                             <StyledTableCell>
                               <Link
                                 className="whitespace-nowrap text-[#0A64F9]"
-                                to={`/unapprove/refund-request/order-summary/${item.merchant_id}/${item?.order_id}`}
+                                to={`/order/store-reporting/order-summary/${item.merchant_id}/${item?.order_id}`}
                                 // onClick={() => handleSummeryPage(row.order_id)}
                                 target="_blank"
                               >

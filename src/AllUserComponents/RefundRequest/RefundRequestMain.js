@@ -30,7 +30,7 @@ export default function RefundRequestMain() {
   const [searchRecord, setSearchRecord] = useState("");
   const [refundDropDownOptions, setRefundDropDownOptions] =
     useState("Active Refund");
-    
+    const [dataArr, setDataArr] = useState([]);
   const debouncedValue = useDebounce(searchRecord);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const getRefundRequestTableData = async () => {
@@ -130,6 +130,8 @@ export default function RefundRequestMain() {
         paginate={paginate}
         setRowsPerPage={setRowsPerPage}
         setCurrentPage={setCurrentPage}
+        dataArr={dataArr}
+        setDataArr={setDataArr}
       />
     </>
   );
