@@ -139,6 +139,7 @@ module.exports = Object.freeze({
   TOP_SALLER_REPORT: "ReportingReactapi/top_seller_10",
   INSTANT_ACTIVITY_REPORT: "ReportingReactapi/instant_po_activity_report",
 
+
   //Employee List
   LIST_ALL_EMPLOYEE: "ReportingReactapi/employee_list",
 
