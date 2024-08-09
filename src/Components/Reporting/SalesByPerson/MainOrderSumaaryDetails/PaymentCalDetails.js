@@ -110,6 +110,7 @@ export default function PaymentCalDetails() {
 
       setRefund(refund);
       setNonrefund(non_refund);
+      console.log("OrderSummeryDetails",OrderSummeryDetails)
       if (OrderSummeryDetails.orderSummeryDetails.id_card_detail) {
         const originalDateString =
           OrderSummeryDetails.orderSummeryDetails.id_card_detail.i_card_ex_date;
@@ -127,15 +128,20 @@ export default function PaymentCalDetails() {
           setDateFormat("");
           DateOfBirthAccessor("");
         }
+      }
+      console.log(OrderSummeryDetails?.orderSummeryDetails?.order_detail?.coupon_code)
+      if(!!OrderSummeryDetails?.orderSummeryDetails?.order_detail?.coupon_code)
+      {
 
         CouponData(
-          OrderSummeryDetails.orderSummeryDetails.order_detail.coupon_code
-        );
-        setPaymentMethod(
-          OrderSummeryDetails.orderSummeryDetails.order_detail.payment_id
+          OrderSummeryDetails?.orderSummeryDetails?.order_detail?.coupon_code
         );
       }
-    }
+        setPaymentMethod(
+          OrderSummeryDetails?.orderSummeryDetails?.order_detail?.payment_id
+        );
+
+    } 
   }, [
     OrderSummeryDetails,
     OrderSummeryDetails.loading,
@@ -153,12 +159,8 @@ export default function PaymentCalDetails() {
   // -------------------------------------------------
   function CouponData(data) {
     let cuopondetails = JSON.parse(data);
-    console.log(cuopondetails);
     setCouponDetails(cuopondetails);
   }
-  useEffect(() => {
-
-  }, []);
 
   const [testData, setTestData] = useState(false);
   const handleClick = () => {
@@ -443,6 +445,21 @@ export default function PaymentCalDetails() {
                             ).toFixed(2)}
                         </span>
                       </p>
+                      {
+                        orderSummeryData.order_detail?.cash_discounting > 0 ?
+                      <p>
+                        NCA
+                        <span>
+                          $
+                          {orderSummeryData &&
+                            orderSummeryData.order_detail &&
+                            parseFloat(
+                              orderSummeryData.order_detail?.cash_discounting
+                            ).toFixed(2)}
+                        </span>
+                      </p>
+                      :""
+                      }
                       {orderSummeryData?.order_detail?.del_fee ||
                         parseFloat(orderSummeryData?.order_detail?.del_fee) >
                         0 ? (
@@ -460,6 +477,24 @@ export default function PaymentCalDetails() {
                           </span>
                         </p>
                       )}
+                      
+                      {
+                       !!orderSummeryData.order_detail?.discount && +orderSummeryData.order_detail?.discount > 0  ? (
+<>
+<p>
+                        Discount
+                        <span>
+                          $
+                          {orderSummeryData &&
+                            orderSummeryData.order_detail?.discount &&
+                            parseFloat(
+                              orderSummeryData.order_detail?.discount
+                            ).toFixed(2)}
+                        </span>
+                      </p>
+</>
+                        ):(
+                      <>
                       {couponDetails.coupon_code !== "" &&
                         !!couponDetails.coupon_code_amt ? (
                         <p>
@@ -474,6 +509,30 @@ export default function PaymentCalDetails() {
                       ) : (
                         ""
                       )}
+</>
+                        )
+                      }
+
+
+                  {orderSummeryData.order_detail?.loyalty_point_spent !== "" &&
+                        +orderSummeryData.order_detail?.loyalty_point_spent > 0 ? (
+                        <p>
+                          Points Applied ()
+                          <span>
+                            $
+                            {parseFloat( orderSummeryData.order_detail?.loyalty_point_spent).toFixed(
+                              2
+                            )}
+                          </span>
+                        </p>
+                      ) : (
+                        ""
+                      )}
+
+
+
+
+                   
                       {orderSummeryData &&
                         orderSummeryData.order_detail &&
                         orderSummeryData.order_detail.con_fee &&
@@ -489,7 +548,10 @@ export default function PaymentCalDetails() {
                             </span>
                           </p>
                         )}
-                      <p>
+                      {
+                        +orderSummeryData?.order_detail?.tax > 0 ? (
+                          <>
+                          <p>
                         Sales Tax (
                         {orderSummeryData &&
                           orderSummeryData.order_detail &&
@@ -505,6 +567,11 @@ export default function PaymentCalDetails() {
                             ).toFixed(2)}
                         </span>
                       </p>
+                          </>
+                        ):(
+                         ""
+                        )
+                      }
                       {orderSummeryData?.order_detail?.tip &&
                         parseFloat(orderSummeryData?.order_detail?.tip) > 0 ? (
                         <p>
@@ -703,13 +770,16 @@ export default function PaymentCalDetails() {
                               ) : (
                                 ""
                               )}
-                              {couponDetails.loyalty_point_earned > 0 ? (
+                              {
+                                console.log("loyality point",couponDetails)
+                              }
+                              {couponDetails?.loyalty_point_earned > 0 ? (
                                 <p className="yellowclr">
                                   {" "}
                                   Points Awarded{" "}
                                   <span>
                                     {parseFloat(
-                                      couponDetails.loyalty_point_earned
+                                      couponDetails?.loyalty_point_earned
                                     ).toFixed(2)}
                                   </span>
                                 </p>
@@ -835,7 +905,7 @@ export default function PaymentCalDetails() {
                   <h1 className="orderSummery_head">Customer Details</h1>
                   {orderSummeryData &&
                     orderSummeryData.order_detail &&
-                    orderSummeryData.order_detail.order_method.toLowerCase() ===
+                    orderSummeryData.order_detail?.order_method.toLowerCase() ===
                     "pickup" && (
                       <div className="orderSummeryCustomerDetailsInner">
                         <h5>
