@@ -1,0 +1,424 @@
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
+import BasicTextFields from "../../reuseableComponents/TextInputField";
+import Grid from "@mui/material/Grid";
+import CircularProgress from "@mui/material/CircularProgress";
+import SearchableDropdown from "../../CommonComponents/SearchableDropdown";
+import { useAuthDetails } from "../../Common/cookiesHelper";
+import { useDispatch } from "react-redux";
+import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
+import PasswordShow from "../../Common/passwordShow";
+import { useSelector } from "react-redux";
+import { disableZeroOnFirstIndex } from "../../Constants/utils";
+import {
+  mixAndMatchPricingDealsList,
+  updateMixAndMatchpricingDeal,
+} from "../../Redux/features/MixAndMatch/mixAndMatchSlice";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+
+const UpdateMixAndMatchDeal = () => {
+  const { dealId } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
+  const { mixAndMatchDeals } = useSelector((state) => state.mixAndMatchList);
+  const { productsData } = useSelector((state) => state.productsListData);
+
+  const [productOptions, setProductOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [updatedDeal, setUpdatedDeal] = useState({
+    title: "",
+    description: "",
+    products: [],
+    minQty: "",
+    discount: "",
+    isPercent: "0",
+  });
+
+  const [error, setError] = useState({
+    title: "",
+    products: "",
+    minQty: "",
+    discount: "",
+  });
+
+  // fetching products data
+  useEffect(() => {
+    const filterCategoryOnDropDown = async () => {
+      let data = {
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        format: "json",
+        category_id: "all",
+        show_status: "all",
+        name: "",
+        listing_type: 1,
+        offset: 0,
+        limit: 100,
+        page: 0,
+        ...userTypeData,
+      };
+
+      try {
+        await dispatch(fetchProductsData(data)).unwrap();
+      } catch (error) {
+        if (error.status === 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status === "Network Error") {
+          getNetworkError();
+        }
+      }
+    };
+    filterCategoryOnDropDown();
+  }, []);
+
+  // setting default data
+  useEffect(() => {
+    if (mixAndMatchDeals && mixAndMatchDeals.length > 0) {
+      const deal = mixAndMatchDeals[0];
+
+      const products = productsData.filter((product) =>
+        deal.is_percent === "0"
+          ? parseFloat(product.price) >= deal.discount
+          : product
+      );
+      setProductOptions(products);
+
+      const items = JSON.parse(deal.items_id);
+      const keys = Object.keys(items);
+      const values = Object.values(items).flat();
+
+      const a = productsData.filter((item) => keys.includes(item.id));
+      const b = a.filter((item) => values.includes(item.var_id));
+
+      const dealData = {
+        title: deal.deal_name || "",
+        description: deal.description || "",
+        products: b, //JSON.parse(deal.items_id) ||
+        minQty: deal.min_qty || "",
+        discount: deal.discount || "",
+        isPercent: deal.is_percent || "0",
+        isEnable: deal.is_enable || "0",
+      };
+      // console.log("deal data: ", dealData);
+      setUpdatedDeal(dealData);
+    }
+  }, [mixAndMatchDeals, productsData]);
+
+  // fetching details of the Deal
+  const getSingleDeal = async () => {
+    try {
+      const data = {
+        ...userTypeData,
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        mix_id: dealId,
+      };
+      await dispatch(mixAndMatchPricingDealsList(data)).unwrap();
+    } catch (error) {
+      if (error.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
+    }
+  };
+
+  useEffect(() => {
+    getSingleDeal();
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    // console.log("name: ", name, " value: ", value);
+    setUpdatedDeal((prev) => ({ ...prev, [name]: value }));
+
+    // setting product options depending on the Discount Amount
+    if (name === "discount" && productsData && productsData.length > 0) {
+      const temp = productsData.filter((product) =>
+        updatedDeal.isPercent === "0"
+          ? parseFloat(product.price) >= value
+          : product
+      );
+      setProductOptions(temp);
+      setUpdatedDeal((prev) => ({ ...prev, products: [] }));
+    }
+  };
+
+  const handleTabChange = (type) => {
+    setUpdatedDeal((prev) => ({
+      ...prev,
+      isPercent: type === "amount" ? "0" : "1",
+      discount: "",
+    }));
+  };
+
+  const handleSelectProductOptions = (value, name) => {
+    setUpdatedDeal((prev) => ({
+      ...prev,
+      [name]: [...prev[name], value],
+    }));
+  };
+
+  const handleDeleteSelectedOption = (id, name, opt) => {
+    const filterOptionItems = updatedDeal[name].filter((item) =>
+      item.isvarient === "1" ? item.var_id !== opt.var_id : item?.id !== id
+    );
+
+    setUpdatedDeal((prev) => ({
+      ...prev,
+      [name]: filterOptionItems,
+    }));
+  };
+
+  const handleUpdateError = (updatedErrorValue) => {
+    setError((prev) => ({
+      ...prev,
+      ...updatedErrorValue,
+    }));
+  };
+
+  const updateDeal = async (e) => {
+    try {
+      e.preventDefault();
+      setLoading(true);
+      // console.log("updated deal: ", updatedDeal);
+
+      const { title, products, minQty, discount, isPercent, description } =
+        updatedDeal;
+
+      const bool = [title, minQty, discount].every((item) =>
+        Boolean(item.trim())
+      );
+
+      if (bool && products.length > 0) {
+        const items = {};
+        products.forEach((item) => {
+          if (item.isvarient === "1") {
+            if (items[item.id]) {
+              items[item.id] = [...items[item.id], item.var_id];
+            } else {
+              items[item.id] = [item.var_id];
+            }
+          } else {
+            items[item.id] = "";
+          }
+        });
+
+        const data = {
+          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+          deal_name: title,
+          min_qty: minQty,
+          description,
+          discount,
+          is_percent: isPercent,
+          items_id: JSON.stringify(items),
+          is_enable: updatedDeal?.isEnable || "0",
+          mix_id: dealId,
+          ...userTypeData,
+        };
+
+        // console.log("data: ", data);
+
+        const result = await dispatch(
+          updateMixAndMatchpricingDeal(data)
+        ).unwrap();
+        // console.log("result: ", result);
+        if (result.status) {
+          ToastifyAlert(result.message, "success");
+          navigate("/mix-and-match");
+        } else {
+          ToastifyAlert(result.message, "error");
+        }
+      } else {
+        setError((prev) => ({
+          ...prev,
+          title: !title ? "Title is required!" : "",
+          products: products.length <= 0 ? "Products are required!" : "",
+          minQty: !minQty ? "Minimum Quantity is required!" : "",
+          discount: !discount ? "Discount is required" : "",
+        }));
+      }
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="box">
+      <div className="box_shadow_div">
+        <div className="q-add-categories-section">
+          <SwitchToBackButton linkTo={"/mix-and-match"} title={"Update Deal"} />
+          <form onSubmit={updateDeal}>
+            <div className="q-add-categories-section-middle-form">
+              <div className="q-add-coupon-single-input mb-4">
+                <label htmlFor="coupon_name">Deal Name</label>
+                <div className="input_area" style={{ marginBottom: "0px" }}>
+                  <BasicTextFields
+                    type={"text"}
+                    value={updatedDeal.title}
+                    name="title"
+                    onChangeFun={handleInputChange}
+                  />
+                </div>
+                {error.title && <p className="error-message">{error.title}</p>}
+              </div>
+
+              <div className="q-add-coupon-single-input mb-6">
+                <label htmlFor="description">Description</label>
+                <textarea
+                  className="mt-1"
+                  id="description"
+                  name="description"
+                  rows="4"
+                  cols="50"
+                  value={updatedDeal.description}
+                  onChange={handleInputChange}
+                ></textarea>
+              </div>
+
+              <Grid container spacing={2}>
+                <Grid item md={5} xs={12}>
+                  <div className="q_coupon_minium input_area">
+                    <label htmlFor="minorder_amt">Minimum Quantity</label>
+                    <BasicTextFields
+                      type={"text"}
+                      value={updatedDeal.minQty}
+                      onChangeFun={(e) => {
+                        if (e.target.value >= 0 && !isNaN(e.target.value)) {
+                          const disable = disableZeroOnFirstIndex(
+                            e.target.value
+                          );
+                          if (disable) return;
+                          handleInputChange(e);
+                        }
+                      }}
+                      placeholder="Enter Minimum Quantity"
+                      name="minQty"
+                    />
+                    {error.minQty && (
+                      <p className="error-message">{error.minQty}</p>
+                    )}
+                  </div>
+                </Grid>
+                <Grid item md={7} xs={12}>
+                  <div className="q_coupon_minium  dicount_per_amo">
+                    <Grid container>
+                      <Grid item xs={5}>
+                        <div className="q_coupon_minium input_area">
+                          <label htmlFor="discount_amt">
+                            Discount Per Item (
+                            {updatedDeal.isPercent === "1" ? "%" : "$"})
+                          </label>
+                          <BasicTextFields
+                            type={"text"}
+                            value={updatedDeal.discount}
+                            onChangeFun={(e) => {
+                              if (
+                                e.target.value >= 0 &&
+                                !isNaN(e.target.value)
+                              ) {
+                                const disable = disableZeroOnFirstIndex(
+                                  e.target.value
+                                );
+                                if (disable) return;
+                                handleInputChange(e);
+                              }
+                            }}
+                            placeholder="Enter Discount Amount"
+                            name="discount"
+                          />
+
+                          {error.discount && (
+                            <p className="error-message">{error.discount}</p>
+                          )}
+                        </div>
+                      </Grid>
+
+                      <Grid item xs={7}>
+                        <div className="AMT_PER_button">
+                          <Grid container>
+                            <Grid item xs={6}>
+                              <div
+                                className={`cursor-pointer amt_btn text-center   ${
+                                  updatedDeal.isPercent === "0"
+                                    ? "bg-[#0A64F9] text-white radius-4"
+                                    : ""
+                                }`}
+                                onClick={() => handleTabChange("amount")}
+                              >
+                                Amount ($)
+                              </div>
+                            </Grid>
+                            <Grid item xs={6}>
+                              <div
+                                className={`cursor-pointer amt_btn text-center  ${
+                                  updatedDeal.isPercent === "1"
+                                    ? "bg-[#0A64F9] text-white radius-4"
+                                    : ""
+                                }`}
+                                style={{ whiteSpace: "nowrap" }}
+                                onClick={() => handleTabChange("percentage")}
+                              >
+                                Percentage (%)
+                              </div>
+                            </Grid>
+                          </Grid>
+                        </div>
+                      </Grid>
+                    </Grid>
+                  </div>
+                </Grid>
+                <Grid item xs={12}>
+                  <div className="q-add-categories-single-input">
+                    <SearchableDropdown
+                      title="Products"
+                      keyName="products"
+                      name="title"
+                      optionList={productOptions}
+                      handleSelectProductOptions={handleSelectProductOptions}
+                      handleDeleteSelectedOption={handleDeleteSelectedOption}
+                      selectedOption={updatedDeal?.products}
+                      error={error}
+                      handleUpdateError={handleUpdateError}
+                      placeholder="Search Products"
+                      usingFor="variantProducts"
+                    />
+                  </div>
+                </Grid>
+              </Grid>
+            </div>
+
+            <div className="q-add-categories-section-middle-footer">
+              <button className="quic-btn quic-btn-save" disabled={loading}>
+                {" "}
+                {loading ? (
+                  <>
+                    <CircularProgress color={"inherit"} width={15} size={15} />{" "}
+                    Update
+                  </>
+                ) : (
+                  "Update"
+                )}
+              </button>
+              <Link to={`/mix-and-match`}>
+                <button className="quic-btn quic-btn-cancle">Cancel</button>
+              </Link>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UpdateMixAndMatchDeal;

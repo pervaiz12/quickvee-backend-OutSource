@@ -9,10 +9,10 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import { useDispatch } from "react-redux";
 import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import PasswordShow from "../../Common/passwordShow";
-import { useSelector } from "react-redux";
 import { disableZeroOnFirstIndex } from "../../Constants/utils";
 import { addNewDeal } from "../../Redux/features/MixAndMatch/mixAndMatchSlice";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import useDebounce from "../../hooks/useDebouncs";
 
 const AddMixAndMatchDeal = () => {
   const navigate = useNavigate();
@@ -20,14 +20,11 @@ const AddMixAndMatchDeal = () => {
   const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
     PasswordShow();
   const dispatch = useDispatch();
-  const { productsData } = useSelector((state) => state.productsListData);
 
   const [productOptions, setProductOptions] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setProductOptions(productsData);
-  }, [productsData]);
+  const [productName, setProductName] = useState("");
+  const debouncedValue = useDebounce(productName);
 
   const [dealInfo, setDealInfo] = useState({
     title: "",
@@ -75,16 +72,15 @@ const AddMixAndMatchDeal = () => {
     setDealInfo((prev) => ({ ...prev, [name]: value }));
 
     // setting product options depending on the Discount Amount
-    if (name === "discount" && productsData && productsData.length > 0) {
-      const temp = productsData.filter((product) =>
-        dealInfo.isPercent === "0"
-          ? parseFloat(product.price) >= value
-          : product
-      );
-      // console.log("temp: ", temp);
-      setDealInfo((prev) => ({ ...prev, products: [] }));
-      setProductOptions(temp);
-    }
+    // if (name === "discount" && productOptions && productOptions.length > 0) {
+    //   const temp = productOptions.filter((product) =>
+    //     dealInfo.isPercent === "0"
+    //       ? parseFloat(product.price) >= value
+    //       : product
+    //   );
+    //   setDealInfo((prev) => ({ ...prev, products: [] }));
+    //   setProductOptions(temp);
+    // }
   };
 
   const handleTabChange = (type) => {
@@ -96,13 +92,14 @@ const AddMixAndMatchDeal = () => {
   };
 
   useEffect(() => {
-    const filterCategoryOnDropDown = async () => {
+    // console.log("debouncedValue: ", debouncedValue);
+    const fetchProducts = async () => {
       let data = {
         merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
         format: "json",
         category_id: "all",
         show_status: "all",
-        name: "",
+        name: debouncedValue,
         listing_type: 1,
         offset: 0,
         limit: 100,
@@ -111,7 +108,18 @@ const AddMixAndMatchDeal = () => {
       };
 
       try {
-        await dispatch(fetchProductsData(data)).unwrap();
+        const products = await dispatch(fetchProductsData(data)).unwrap();
+        if (products && products.length > 0) {
+          const temp = products.filter((product) =>
+            dealInfo.isPercent === "0"
+              ? parseFloat(product.price) >=
+                (parseFloat(dealInfo.discount) || 0)
+              : product
+          );
+          // console.log("temp: ", temp);
+          // console.log("products: ", products);
+          setProductOptions(() => temp);
+        }
       } catch (error) {
         if (error.status === 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
@@ -121,14 +129,15 @@ const AddMixAndMatchDeal = () => {
         }
       }
     };
-    filterCategoryOnDropDown();
-  }, []);
+    fetchProducts();
+  }, [debouncedValue]);
 
   const handleAddNewDeal = async (e) => {
     try {
       e.preventDefault();
       setLoading(true);
-      const { title, products, minQty, discount, isPercent } = dealInfo;
+      const { title, products, minQty, discount, isPercent, description } =
+        dealInfo;
 
       const bool = [title, minQty, discount].every((item) =>
         Boolean(item.trim())
@@ -156,6 +165,7 @@ const AddMixAndMatchDeal = () => {
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
           deal_name: title,
           min_qty: minQty,
+          description,
           discount,
           is_percent: isPercent,
           items_id: JSON.stringify(items),
@@ -164,15 +174,12 @@ const AddMixAndMatchDeal = () => {
           ...userTypeData,
         };
 
-        // console.log("data: ", data);
-        // console.log("userTypeData: ", userTypeData);
-        // return;
         const result = await dispatch(addNewDeal(data)).unwrap();
-        // console.log("result: ", result);
         if (result) {
           ToastifyAlert("Added Successfully", "success");
-          // handleClear();
           navigate("/mix-and-match");
+        } else {
+          ToastifyAlert("Something went wrong!", "success");
         }
       } else {
         setError((prev) => ({
@@ -337,6 +344,7 @@ const AddMixAndMatchDeal = () => {
                         handleUpdateError={handleUpdateError}
                         placeholder="Search Products"
                         usingFor="variantProducts"
+                        setProductName={setProductName}
                       />
                     </div>
                   </Grid>

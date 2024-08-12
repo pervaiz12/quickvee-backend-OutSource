@@ -23,6 +23,8 @@ import VenIcon from "../../Assests/Dashboard/venderb.svg";
 import VenIconActive from "../../Assests/Dashboard/vendery.svg";
 import DataIconActive from "../../Assests/Dashboard/importy.svg";
 import CouIcon from "../../Assests/Dashboard/coupony.svg";
+import MixMatchIcon from "../../Assests/Dashboard/mix-match-icon.svg";
+import MixMatchIcon1 from "../../Assests/Dashboard/mix-match-icon-1.svg";
 import PurIcon from "../../Assests/Dashboard/purchaseY.svg";
 import SettingIcon from "../../Assests/Dashboard/settingY.svg";
 import ResportIcons from "../../Assests/Dashboard/reports.svg";
@@ -1070,9 +1072,19 @@ const menuItems = [
   },
   {
     id: 9,
-    icon: <img src={CouponIcon} alt="Coupons" className="h-6 w-10 mt-4 mb-4" />,
+    icon: (
+      <img
+        src={MixMatchIcon}
+        alt="mix-match-icon"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
     activeIcon: (
-      <img src={CouIcon} alt="Coupons" className="h-6 w-10 mt-4 mb-4 " />
+      <img
+        src={MixMatchIcon1}
+        alt="mix-match-icon-1"
+        className="h-6 w-10 mt-4 mb-4 "
+      />
     ),
     text: "Mix N' Match Pricing",
     link: "/mix-and-match",

@@ -339,6 +339,11 @@ function App() {
               path="/mix-and-match/add"
               element={<Main visible={"add-mix-and-match"} />}
             />
+            <Route
+              exact
+              path="/mix-and-match/update/:dealId"
+              element={<Main visible={"update-mix-and-match"} />}
+            />
 
             <Route
               exact
@@ -847,7 +852,6 @@ function App() {
               path="/users/view/unapprove/merchant-details"
               element={<Main visible={"merchant-details"} />}
             />
-            
           </Route>
 
           {/* -----------------=============superadmin===========------------------- */}

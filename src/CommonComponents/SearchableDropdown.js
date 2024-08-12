@@ -23,6 +23,7 @@ const SearchableDropdown = ({
   productTitle,
   modalType,
   usingFor,
+  setProductName,
 }) => {
   const location = useLocation();
   const { checkLength } = Validation();
@@ -35,6 +36,10 @@ const SearchableDropdown = ({
   const handleFilterOptions = (e) => {
     const { value } = e?.target;
     setFilterValue(value);
+    setProductName(value); // for deven
+
+    if (usingFor === "variantProducts") return;
+
     const filterList = optionList?.filter((item) => {
       return item?.[name]?.toLowerCase()?.includes(value?.toLowerCase());
     });
@@ -183,13 +188,23 @@ const SearchableDropdown = ({
               {selectedOption?.length
                 ? selectedOption?.map((option) => {
                     return (
-                      <div className="item" key={option?.id}>
+                      <div
+                        className="item"
+                        key={
+                          option.isvarient === "1" ? option.var_id : option?.id
+                        }
+                      >
                         <span>{option?.[name]}</span>
                         <img
                           src={CloseIcon}
+                          alt=""
                           className="cancel-image"
                           onClick={() =>
-                            handleDeleteSelectedOption(option?.id, keyName)
+                            handleDeleteSelectedOption(
+                              option?.id,
+                              keyName,
+                              option
+                            )
                           }
                         />
                       </div>
@@ -249,7 +264,7 @@ const SearchableDropdown = ({
                         className={
                           isInSelectedOptions ? "item active-item" : "item"
                         }
-                        key={opt?.id}
+                        key={opt.isvarient === "1" ? opt.var_id : opt?.id}
                         onClick={() =>
                           isInSelectedOptions
                             ? handleDeleteSelectedOption(opt?.id, keyName, opt)

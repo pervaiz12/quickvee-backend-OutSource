@@ -41,6 +41,7 @@ const Main = ({ visible }) => {
       {visible === "coupons-edit-cop" && <Layout visible={visible} />}
       {visible === "mix-and-match" && <Layout visible={visible} />}
       {visible === "add-mix-and-match" && <Layout visible={visible} />}
+      {visible === "update-mix-and-match" && <Layout visible={visible} />}
       {visible === "vendors" && <Layout visible={visible} />}
       {visible === "add-vendors" && <Layout visible={visible} />}
       {visible === "timesheet" && <Layout visible={visible} />}
@@ -118,10 +119,7 @@ const Main = ({ visible }) => {
       {visible === "detailed-loyalty-points-report" && (
         <Layout visible={visible} />
       )}
-      {visible === "new-customers-added-report" && (
-        <Layout visible={visible} />
-      )}
-      
+      {visible === "new-customers-added-report" && <Layout visible={visible} />}
 
       {/* multip user layout */}
       {visible === "multimerchant" && <IndexAllUsers />}
