@@ -63,9 +63,9 @@ const PayInList = (props) => {
   const PayInReportDataState = useSelector((state) => state.PayinReportList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
-    getCouponReportData();
+    getayinReportData();
   }, [props, dispatch]);
-  const getCouponReportData = async () => {
+  const getayinReportData = async () => {
     if (props && props.selectedDateRange) {
       try {
         const startDateData = props.selectedDateRange.start_date;

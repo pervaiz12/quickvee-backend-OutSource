@@ -630,9 +630,9 @@ const menuItems = [
         text: "Sales Reports",
         dropDownItems: [
           {
-            id: 61,
-            text: "Sales Summary",
-            link: "/store-reporting/sales-report",
+            id: 98,
+            text: "Category Sales Summery Report",
+            link: "/store-reporting/category-sales-summery-report",
           },
           {
             id: 62,
@@ -644,17 +644,40 @@ const menuItems = [
             text: "Detailed Category Sale",
             link: "/store-reporting/Details-category",
           },
-
-          { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
           {
             id: 64,
             text: "Detailed Sales Person Report",
             link: "/store-reporting/report-sales-person",
           },
           {
-            id: 69,
-            text: "Top Sellers",
-            link: "/store-reporting/overall-top",
+            id: 100,
+            text: "Detailed Store Credit Report",
+            link: "/store-reporting/store-credit-report",
+          },
+          {
+            id: 96,
+            text: "Drop Cash Report",
+            link: "/store-reporting/drop-cash-report",
+          },
+          {
+            id: 102,
+            text: "Gift Card Report",
+            link: "/store-reporting/gift-card-report",
+          },
+          {
+            id: 77,
+            text: "Item Sales",
+            link: "/store-reporting/item-sales",
+          },
+          {
+            id: 79,
+            text: "Order Type",
+            link: "/store-reporting/order-type",
+          },
+          {
+            id: 97,
+            text: "Pay In Report",
+            link: "/store-reporting/pay-in-report",
           },
           {
             id: 78,
@@ -666,7 +689,21 @@ const menuItems = [
             text: "Product Profitability Report",
             link: "/store-reporting/item-sale-profit-report",
           },
-          { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
+          {
+            id: 99,
+            text: "Sales by Hour Report",
+            link: "/store-reporting/sales-by-hour-report",
+          },
+          {
+            id: 61,
+            text: "Sales Summary",
+            link: "/store-reporting/sales-report",
+          },
+          {
+            id: 69,
+            text: "Top Sellers",
+            link: "/store-reporting/overall-top",
+          },
 
           // {
           //   id: 78,
@@ -734,6 +771,33 @@ const menuItems = [
             id: 89,
             text: "Discount Per Sales Person",
             link: "/store-reporting/discount-per-sales-report",
+          },
+        ],
+      },
+      {
+        id: 1723011716338,
+        text: "Customer Reports",
+        dropDownItems: [
+          {
+            id: 103,
+            text: "New Customers Added Report",
+            link: "/store-reporting/new-customers-added-report",
+          },
+          {
+            id: 101,
+            text: "Detailed Loyalty Points Report",
+            link: "/store-reporting/detailed-loyalty-points-report",
+          },
+        ],
+      },
+      {
+        id: 1723011930198,
+        text: "Employee Reports",
+        dropDownItems: [
+          {
+            id: 102,
+            text: "Employee Sales Per Category",
+            link: "/store-reporting/employee-sales-per-category-report",
           },
         ],
       },
@@ -811,57 +875,17 @@ const menuItems = [
       //   text: "Discount Per Sales Person",
       //   link: "/store-reporting/discount-per-sales-report",
       // },
-      {
-        id: 6,
-        text: "New Reports",
-        dropDownItems: [
-          {
-            id: 96,
-            text: "Drop Cash",
-            link: "/store-reporting/drop-cash-report",
-          },
-          {
-            id: 97,
-            text: "Pay In",
-            link: "/store-reporting/pay-in-report",
-          },
-          {
-            id: 98,
-            text: "Category Sales Summery Report",
-            link: "/store-reporting/category-sales-summery-report",
-          },
-          {
-            id: 99,
-            text: "Sales by Hour Report",
-            link: "/store-reporting/sales-by-hour-report",
-          },
-          {
-            id: 102,
-            text: "Employee Sales Per Category",
-            link: "/store-reporting/employee-sales-per-category-report",
-          },
-          {
-            id: 100,
-            text: "Store Credit Report",
-            link: "/store-reporting/store-credit-report",
-          },
-          {
-            id: 101,
-            text: "Detailed Loyalty Points Report",
-            link: "/store-reporting/detailed-loyalty-points-report",
-          },
-          {
-            id: 102,
-            text: "Gift Card Report",
-            link: "/store-reporting/gift-card-report",
-          },
-          {
-            id: 103,
-            text: "New Customers Added Report",
-            link: "/store-reporting/new-customers-added-report",
-          },
-        ],
-      },
+      // {
+      //   id: 6,
+      //   text: "New Reports",
+      //   dropDownItems: [
+      //     {
+      //       id: 104,
+      //       text: "Profit Summary Report",
+      //       link: "/store-reporting/profit-summary-report",
+      //     },
+      //   ],
+      // },
     ],
   },
   {

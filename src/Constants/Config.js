@@ -135,6 +135,7 @@ module.exports = Object.freeze({
   TOP_SALLER_REPORT: "ReportingReactapi/top_seller_10",
   INSTANT_ACTIVITY_REPORT: "ReportingReactapi/instant_po_activity_report",
 
+
   //Employee List
   LIST_ALL_EMPLOYEE: "ReportingReactapi/employee_list",
 
@@ -366,6 +367,7 @@ module.exports = Object.freeze({
   SALES_BY_HOURS_REPORT: "ReportingReactapi/sale_per_hour",
   TRANSFER_INVENTORY : "Product_api_react/transfer_inventory",
   NEW_CUSTOMER_ADDED_REPORT:"ReportingReactapi/new_customer_added_report",
+  REFUND_EMAIL_STATUS_CHANGE:"Order_list_api/refund_email_status_change",
 });
 
 // All api calls are initialized in this component for this application

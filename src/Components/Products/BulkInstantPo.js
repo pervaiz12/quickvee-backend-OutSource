@@ -28,11 +28,12 @@ const BulkInstantPo = ({
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const { getUnAutherisedTokenMessage } = PasswordShow();
   const [instantPoSingle, setInstantPoSingle] = useState({
-    qty:
-      varientData?.length > 0
-        ? varientData?.find((varient) => varient?.variant === varientName)
-            ?.quantity
-        : productData?.quantity,
+    // qty:
+    //   varientData?.length > 0
+    //     ? varientData?.find((varient) => varient?.variant === varientName)
+    //         ?.quantity
+    //     : productData?.quantity,
+    qty:"",
     cost:
       varientData?.length > 0
         ? varientData.find((varient) => varient?.variant === varientName)
@@ -57,7 +58,8 @@ const BulkInstantPo = ({
   const instantPoForm = useMemo(() => {
     if (modalType === "bulk-edit") {
       return [...new Set(varientData)]?.map((varient) => ({
-        qty:varient.quantity ?? "",
+        // qty:varient.quantity ?? "",
+        qty:"",
         cost:varient.costperItem ?? "",
       }));
     }
