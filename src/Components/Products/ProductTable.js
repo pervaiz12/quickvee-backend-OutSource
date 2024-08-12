@@ -452,395 +452,364 @@ const ProductTable = ({
                       )
                     }
                   >
-                    <DragDropContext onDragEnd={null}>
+                    {/* <DragDropContext onDragEnd={null}>
                       <Droppable droppableId="productTable">
-                        {(provided) => (
-                          <StyledTable
-                            sx={{ minWidth: 500 }}
-                            aria-label="customized table"
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                          >
-                            <TableHead>
-                              {selectedListingType === "Variant listing" ||
-                              LoginGetDashBoardRecordJson?.login_type !==
-                                "superadmin" ? (
-                                ""
-                              ) : (
-                                <StyledTableCell></StyledTableCell>
-                              )}
-                              <StyledTableCell>Sort</StyledTableCell>
-                              <StyledTableCell>Title</StyledTableCell>
-                              <StyledTableCell>Category</StyledTableCell>
-                              <StyledTableCell>
-                                Enable online ordering?
-                              </StyledTableCell>
-                              <StyledTableCell>Product Status</StyledTableCell>
-                              <StyledTableCell align={"center"}>
-                                Images
-                              </StyledTableCell>
-                              {userTypeData?.login_type === "superadmin" &&
-                              selectedListingType !== "Variant listing" ? (
-                                <StyledTableCell>Import Image</StyledTableCell>
-                              ) : null}
+                        {(provided) => ( */}
+                    <StyledTable
+                      sx={{ minWidth: 500 }}
+                      aria-label="customized table"
+                      // ref={provided.innerRef}
+                      // {...provided.droppableProps}
+                    >
+                      <TableHead>
+                        {selectedListingType === "Variant listing" ||
+                        LoginGetDashBoardRecordJson?.login_type !==
+                          "superadmin" ? (
+                          ""
+                        ) : (
+                          <StyledTableCell></StyledTableCell>
+                        )}
+                        <StyledTableCell>Sort</StyledTableCell>
+                        <StyledTableCell>Title</StyledTableCell>
+                        <StyledTableCell>Category</StyledTableCell>
+                        <StyledTableCell>
+                          Enable online ordering?
+                        </StyledTableCell>
+                        <StyledTableCell>Product Status</StyledTableCell>
+                        <StyledTableCell align={"center"}>
+                          Images
+                        </StyledTableCell>
+                        {userTypeData?.login_type === "superadmin" &&
+                        selectedListingType !== "Variant listing" ? (
+                          <StyledTableCell>Import Image</StyledTableCell>
+                        ) : null}
 
-                              {selectedListingType === "Variant listing" ? (
-                                ""
-                              ) : (
-                                <StyledTableCell>Delete</StyledTableCell>
-                              )}
-                            </TableHead>
+                        {selectedListingType === "Variant listing" ? (
+                          ""
+                        ) : (
+                          <StyledTableCell>Delete</StyledTableCell>
+                        )}
+                      </TableHead>
 
-                            <TableBody>
-                              {productList?.length >= 1 &&
-                                productList.map((product, index) => {
-                                  const getVarientName =
-                                    product?.title?.split(/~~?/) || [];
-                                  const navigateData = handleNavigate(
-                                    product.id,
-                                    getVarientName[1],
-                                    product
-                                  );
-                                  return (
-                                    <Draggable
-                                      key={product?.id}
-                                      draggableId={product?.id.toString()}
-                                      index={index}
+                      <TableBody>
+                        {productList?.length >= 1 &&
+                          productList.map((product, index) => {
+                            const getVarientName =
+                              product?.title?.split(/~~?/) || [];
+                            const navigateData = handleNavigate(
+                              product.id,
+                              getVarientName[1],
+                              product
+                            );
+                            return (
+                              // <Draggable
+                              //   key={product?.id}
+                              //   draggableId={product?.id.toString()}
+                              //   index={index}
+                              // >
+                              //   {(provided) => (
+                              <StyledTableRow
+                                key={product?.id}
+                                // ref={provided.innerRef}
+                                // {...provided.draggableProps}
+                                // {...provided.dragHandleProps}
+                              >
+                                {selectedListingType === "Variant listing" ||
+                                LoginGetDashBoardRecordJson?.login_type !==
+                                  "superadmin" ? (
+                                  ""
+                                ) : (
+                                  <StyledTableCell>
+                                    <label
+                                      className="q_resigter_setting_section"
+                                      style={{
+                                        color: "#000",
+                                        fontSize: "14px",
+                                        padding: "0px",
+                                      }}
                                     >
-                                      {(provided) => (
-                                        <StyledTableRow
-                                          ref={provided.innerRef}
-                                          {...provided.draggableProps}
-                                          {...provided.dragHandleProps}
-                                        >
-                                          {selectedListingType ===
-                                            "Variant listing" ||
-                                          LoginGetDashBoardRecordJson?.login_type !==
-                                            "superadmin" ? (
-                                            ""
-                                          ) : (
-                                            <StyledTableCell>
-                                              <label
-                                                className="q_resigter_setting_section"
-                                                style={{
-                                                  color: "#000",
-                                                  fontSize: "14px",
-                                                  padding: "0px",
-                                                }}
-                                              >
-                                                <input
-                                                  type="checkbox"
-                                                  id={product.id}
-                                                  checked={productIdList?.includes(
-                                                    product?.id
-                                                  )}
-                                                  onChange={() => {
-                                                    productIdList?.includes(
-                                                      product?.id
-                                                    )
-                                                      ? handleProductUnCheck(
-                                                          product?.id
-                                                        )
-                                                      : handleProductCheck(
-                                                          product?.id
-                                                        );
-                                                  }}
-                                                />
-                                                <span className="checkmark"></span>
-                                              </label>
-                                            </StyledTableCell>
-                                          )}
-                                          <StyledTableCell>
-                                            <img
-                                              src={SortIcon}
-                                              alt=""
-                                              className=""
+                                      <input
+                                        type="checkbox"
+                                        id={product.id}
+                                        checked={productIdList?.includes(
+                                          product?.id
+                                        )}
+                                        onChange={() => {
+                                          productIdList?.includes(product?.id)
+                                            ? handleProductUnCheck(product?.id)
+                                            : handleProductCheck(product?.id);
+                                        }}
+                                      />
+                                      <span className="checkmark"></span>
+                                    </label>
+                                  </StyledTableCell>
+                                )}
+                                <StyledTableCell>
+                                  <img src={SortIcon} alt="" className="" />
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <p
+                                    className="categories-title text-[#0A64F9]"
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    <Link
+                                      // target="_blank"
+                                      to={navigateData?.link}
+                                    >
+                                      {product.title}
+                                    </Link>
+                                  </p>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <p className="categories-title">
+                                    {product?.category_name
+                                      ? `${(product?.category_name).slice(
+                                          0,
+                                          30
+                                        )} ${
+                                          product?.category_name.length > 30
+                                            ? "..."
+                                            : ""
+                                        }`
+                                      : ""}
+                                  </p>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <div className="categories-title">
+                                    <div className="flex flex-wrap gap-3 ">
+                                      <label
+                                        className="q_resigter_setting_section"
+                                        style={{
+                                          color: "#000",
+                                          fontSize: "14px",
+                                        }}
+                                      >
+                                        Delivery
+                                        <input
+                                          type="checkbox"
+                                          id={product.id}
+                                          name="delivery_check"
+                                          checked={
+                                            product.show_type == 0 ||
+                                            product.show_type == 2
+                                              ? true
+                                              : false
+                                          }
+                                          value={product.show_type}
+                                          onChange={(event) => {
+                                            Avail_Online(
+                                              event,
+                                              product?.show_type
+                                            );
+                                          }}
+                                        />
+                                        <span className="checkmark"></span>
+                                      </label>
+                                      <label
+                                        className="q_resigter_setting_section"
+                                        style={{
+                                          color: "#000",
+                                          fontSize: "14px",
+                                        }}
+                                      >
+                                        Pickup
+                                        <input
+                                          type="checkbox"
+                                          id={product.id}
+                                          name="pickup_check"
+                                          checked={
+                                            product.show_type == 0 ||
+                                            product.show_type == 1
+                                              ? true
+                                              : false
+                                          }
+                                          value={product.show_type}
+                                          onChange={(event) => {
+                                            Avail_Online(
+                                              event,
+                                              product?.show_type
+                                            );
+                                          }}
+                                        />
+                                        <span className="checkmark"></span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <p className="categories-title">
+                                    {userTypeData?.login_type ===
+                                      "superadmin" &&
+                                    // inventoryApproval &&
+                                    product?.show_status === "0" ? (
+                                      <div className="categories-title">
+                                        <div className="flex flex-wrap gap-3 ">
+                                          <label
+                                            className="q_resigter_setting_section"
+                                            style={{
+                                              color: "#000",
+                                              fontSize: "14px",
+                                            }}
+                                          >
+                                            Approve
+                                            <input
+                                              type="checkbox"
+                                              id={product.id}
+                                              name="approved"
+                                              checked={
+                                                checkboxState[product.id]
+                                                  ?.approved || false
+                                              }
+                                              value={product.show_status}
+                                              onChange={(event) => {
+                                                update_status(event, 1);
+                                              }}
                                             />
-                                          </StyledTableCell>
-                                          <StyledTableCell>
-                                            <p
-                                              className="categories-title text-[#0A64F9]"
-                                              style={{ cursor: "pointer" }}
-                                            >
-                                              <Link
-                                                // target="_blank"
-                                                to={navigateData?.link}
-                                              >
-                                                {product.title}
-                                              </Link>
-                                            </p>
-                                          </StyledTableCell>
-                                          <StyledTableCell>
-                                            <p className="categories-title">
-                                              {product?.category_name
-                                                ? `${(product?.category_name).slice(
-                                                    0,
-                                                    30
-                                                  )} ${
-                                                    product?.category_name
-                                                      .length > 30
-                                                      ? "..."
-                                                      : ""
-                                                  }`
-                                                : ""}
-                                            </p>
-                                          </StyledTableCell>
-                                          <StyledTableCell>
-                                            <div className="categories-title">
-                                              <div className="flex flex-wrap gap-3 ">
-                                                <label
-                                                  className="q_resigter_setting_section"
+                                            <span className="checkmark"></span>
+                                          </label>
+                                          <label
+                                            className="q_resigter_setting_section"
+                                            style={{
+                                              color: "#000",
+                                              fontSize: "14px",
+                                            }}
+                                          >
+                                            Reject
+                                            <input
+                                              type="checkbox"
+                                              id={product.id}
+                                              name="reject"
+                                              checked={
+                                                checkboxState[product.id]
+                                                  ?.rejected || false
+                                              }
+                                              value={product.show_status}
+                                              onChange={(event) => {
+                                                update_status(event, 2);
+                                              }}
+                                            />
+                                            <span className="checkmark"></span>
+                                          </label>
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <span
+                                        style={{
+                                          color: checkStatus(
+                                            product.show_status.toString()
+                                          )?.color,
+                                        }}
+                                      >
+                                        {
+                                          checkStatus(
+                                            product.show_status.toString()
+                                          )?.text
+                                        }
+                                      </span>
+                                    )}
+                                  </p>
+                                </StyledTableCell>
+
+                                <StyledTableCell align={"center"}>
+                                  <div className="categories-items">
+                                    <div className="flex items-center space-x-2 text-base"></div>
+                                    <div className="mt-3 flex -space-x-9 overflow-hidden">
+                                      {product?.media
+                                        ?.split(",")
+                                        .slice(0, 4)
+                                        .map((item, index) => (
+                                          <>
+                                            <div className="relative">
+                                              <img
+                                                key={index}
+                                                className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
+                                                src={
+                                                  BASE_URL +
+                                                  `upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
+                                                  item
+                                                }
+                                                onError={(e) => {
+                                                  e.target.onerror = null; // prevents looping
+                                                  e.target.src = `${BASE_URL}upload/products/MaskGroup4542.png`;
+                                                }}
+                                                alt=""
+                                              />
+                                              {index === 3 &&
+                                              product?.media.split(",")
+                                                ?.length > 4 ? (
+                                                <div
+                                                  className="flex justify-center items-center
+                                                          absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full"
                                                   style={{
-                                                    color: "#000",
-                                                    fontSize: "14px",
+                                                    backgroundColor:
+                                                      "rgb(0 0 0 / 48%)",
+                                                    height: "100%",
+                                                    width: "100%",
                                                   }}
                                                 >
-                                                  Delivery
-                                                  <input
-                                                    type="checkbox"
-                                                    id={product.id}
-                                                    name="delivery_check"
-                                                    checked={
-                                                      product.show_type == 0 ||
-                                                      product.show_type == 2
-                                                        ? true
-                                                        : false
-                                                    }
-                                                    value={product.show_type}
-                                                    onChange={(event) => {
-                                                      Avail_Online(
-                                                        event,
-                                                        product?.show_type
-                                                      );
-                                                    }}
-                                                  />
-                                                  <span className="checkmark"></span>
-                                                </label>
-                                                <label
-                                                  className="q_resigter_setting_section"
-                                                  style={{
-                                                    color: "#000",
-                                                    fontSize: "14px",
-                                                  }}
-                                                >
-                                                  Pickup
-                                                  <input
-                                                    type="checkbox"
-                                                    id={product.id}
-                                                    name="pickup_check"
-                                                    checked={
-                                                      product.show_type == 0 ||
-                                                      product.show_type == 1
-                                                        ? true
-                                                        : false
-                                                    }
-                                                    value={product.show_type}
-                                                    onChange={(event) => {
-                                                      Avail_Online(
-                                                        event,
-                                                        product?.show_type
-                                                      );
-                                                    }}
-                                                  />
-                                                  <span className="checkmark"></span>
-                                                </label>
-                                              </div>
-                                            </div>
-                                          </StyledTableCell>
-                                          <StyledTableCell>
-                                            <p className="categories-title">
-                                              {userTypeData?.login_type ===
-                                                "superadmin" &&
-                                              // inventoryApproval &&
-                                              product?.show_status === "0" ? (
-                                                <div className="categories-title">
-                                                  <div className="flex flex-wrap gap-3 ">
-                                                    <label
-                                                      className="q_resigter_setting_section"
-                                                      style={{
-                                                        color: "#000",
-                                                        fontSize: "14px",
-                                                      }}
-                                                    >
-                                                      Approve
-                                                      <input
-                                                        type="checkbox"
-                                                        id={product.id}
-                                                        name="approved"
-                                                        checked={
-                                                          checkboxState[
-                                                            product.id
-                                                          ]?.approved || false
-                                                        }
-                                                        value={
-                                                          product.show_status
-                                                        }
-                                                        onChange={(event) => {
-                                                          update_status(
-                                                            event,
-                                                            1
-                                                          );
-                                                        }}
-                                                      />
-                                                      <span className="checkmark"></span>
-                                                    </label>
-                                                    <label
-                                                      className="q_resigter_setting_section"
-                                                      style={{
-                                                        color: "#000",
-                                                        fontSize: "14px",
-                                                      }}
-                                                    >
-                                                      Reject
-                                                      <input
-                                                        type="checkbox"
-                                                        id={product.id}
-                                                        name="reject"
-                                                        checked={
-                                                          checkboxState[
-                                                            product.id
-                                                          ]?.rejected || false
-                                                        }
-                                                        value={
-                                                          product.show_status
-                                                        }
-                                                        onChange={(event) => {
-                                                          update_status(
-                                                            event,
-                                                            2
-                                                          );
-                                                        }}
-                                                      />
-                                                      <span className="checkmark"></span>
-                                                    </label>
+                                                  <div>
+                                                    <p className="text-white text-[10px]">
+                                                      +
+                                                      {product?.media.split(",")
+                                                        .length - 4}
+                                                    </p>
+                                                    <p className="text-white text-[10px]">
+                                                      Images
+                                                    </p>
                                                   </div>
                                                 </div>
                                               ) : (
-                                                <span
-                                                  style={{
-                                                    color: checkStatus(
-                                                      product.show_status.toString()
-                                                    )?.color,
-                                                  }}
-                                                >
-                                                  {
-                                                    checkStatus(
-                                                      product.show_status.toString()
-                                                    )?.text
-                                                  }
-                                                </span>
+                                                ""
                                               )}
-                                            </p>
-                                          </StyledTableCell>
-
-                                          <StyledTableCell align={"center"}>
-                                            <div className="categories-items">
-                                              <div className="flex items-center space-x-2 text-base"></div>
-                                              <div className="mt-3 flex -space-x-9 overflow-hidden">
-                                                {product?.media
-                                                  ?.split(",")
-                                                  .slice(0, 4)
-                                                  .map((item, index) => (
-                                                    <>
-                                                      <div className="relative">
-                                                        <img
-                                                          key={index}
-                                                          className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
-                                                          src={
-                                                            BASE_URL +
-                                                            `upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
-                                                            item
-                                                          }
-                                                          onError={(e) => {
-                                                            e.target.onerror =
-                                                              null; // prevents looping
-                                                            e.target.src = `${BASE_URL}upload/products/MaskGroup4542.png`;
-                                                          }}
-                                                          alt=""
-                                                        />
-                                                        {index === 3 &&
-                                                        product?.media.split(
-                                                          ","
-                                                        )?.length > 4 ? (
-                                                          <div
-                                                            className="flex justify-center items-center
-                                                          absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full"
-                                                            style={{
-                                                              backgroundColor:
-                                                                "rgb(0 0 0 / 48%)",
-                                                              height: "100%",
-                                                              width: "100%",
-                                                            }}
-                                                          >
-                                                            <div>
-                                                              <p className="text-white text-[10px]">
-                                                                +
-                                                                {product?.media.split(
-                                                                  ","
-                                                                ).length - 4}
-                                                              </p>
-                                                              <p className="text-white text-[10px]">
-                                                                Images
-                                                              </p>
-                                                            </div>
-                                                          </div>
-                                                        ) : (
-                                                          ""
-                                                        )}
-                                                      </div>
-                                                    </>
-                                                  ))}
-                                              </div>
                                             </div>
-                                          </StyledTableCell>
-                                          {userTypeData?.login_type ===
-                                            "superadmin" &&
-                                          selectedListingType !==
-                                            "Variant listing" ? (
-                                            <>
-                                              <StyledTableCell>
-                                                <ImportImageModal
-                                                  productTitle={product.title}
-                                                  productId={product.id}
-                                                />
-                                              </StyledTableCell>
-                                            </>
-                                          ) : null}
+                                          </>
+                                        ))}
+                                    </div>
+                                  </div>
+                                </StyledTableCell>
+                                {userTypeData?.login_type === "superadmin" &&
+                                selectedListingType !== "Variant listing" ? (
+                                  <>
+                                    <StyledTableCell>
+                                      <ImportImageModal
+                                        productTitle={product.title}
+                                        productId={product.id}
+                                      />
+                                    </StyledTableCell>
+                                  </>
+                                ) : null}
 
-                                          {selectedListingType ===
-                                          "Variant listing" ? (
-                                            ""
-                                          ) : (
-                                            <StyledTableCell>
-                                              {" "}
-                                              <p
-                                                className="w-10"
-                                                style={{ cursor: "pointer" }}
-                                              >
-                                                <img
-                                                  src={DeleteIcon}
-                                                  alt=" "
-                                                  className="w-8 h-8"
-                                                  onClick={() =>
-                                                    handleDeleteProduct(
-                                                      product?.id
-                                                    )
-                                                  }
-                                                />
-                                              </p>
-                                            </StyledTableCell>
-                                          )}
-                                        </StyledTableRow>
-                                      )}
-                                    </Draggable>
-                                  );
-                                })}
-                              {provided.placeholder}
-                            </TableBody>
-                          </StyledTable>
-                        )}
-                      </Droppable>
-                    </DragDropContext>
+                                {selectedListingType === "Variant listing" ? (
+                                  ""
+                                ) : (
+                                  <StyledTableCell>
+                                    {" "}
+                                    <p
+                                      className="w-10"
+                                      style={{ cursor: "pointer" }}
+                                    >
+                                      <img
+                                        src={DeleteIcon}
+                                        alt=" "
+                                        className="w-8 h-8"
+                                        onClick={() =>
+                                          handleDeleteProduct(product?.id)
+                                        }
+                                      />
+                                    </p>
+                                  </StyledTableCell>
+                                )}
+                              </StyledTableRow>
+                              //   )}
+                              // </Draggable>
+                            );
+                          })}
+                        {/* {provided.placeholder} */}
+                      </TableBody>
+                    </StyledTable>
+                    {/* )} */}
+                    {/* </Droppable> */}
+                    {/* </DragDropContext> */}
                   </InfiniteScroll>
                 </TableContainer>
                 {/* </div> */}
