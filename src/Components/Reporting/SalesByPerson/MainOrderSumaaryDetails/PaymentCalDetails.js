@@ -316,14 +316,33 @@ export default function PaymentCalDetails() {
                                         $
                                         {result?.is_refunded === "1"
                                           ? parseFloat(
-                                            result?.refund_qty *
-                                            result?.price
+                                            (result?.refund_qty *
+                                            result?.price) - result?.discount_amt
                                           ).toFixed(2)
                                           : parseFloat(
-                                            result?.qty * result?.price
+                                            (result?.qty * result?.price) - result?.discount_amt
                                           ).toFixed(2)}
                                       </span>
                                     </div>
+                                    {  +result?.discount_amt > 0 ? (
+                                        <>
+                                          <div className="OrderSummeryProductRBottomL itemDiscountContainer">
+                                              <h4>Item dicount</h4>
+                                          </div>
+                                          <div className="OrderSummeryProductRBottomR itemDiscountContainer discoutCONTAMT">
+                                            <h4>
+                                              -${result?.is_refunded === "1"
+                                                ? parseFloat(
+                                                  result?.refund_qty *
+                                                  result?.discount_amt
+                                                ).toFixed(2)
+                                                : parseFloat(
+                                                  result?.qty * result?.discount_amt
+                                                ).toFixed(2)}
+                                            </h4>
+                                          </div>
+                                        </>
+                                      ) : ("") }
                                   </div>
                                 </div>
                               </div>
@@ -392,10 +411,29 @@ export default function PaymentCalDetails() {
                                                 result?.qty * result?.price,
                                               ).toFixed(2)} */}
                                         {parseFloat(
-                                          result?.refund_qty * result?.price
+                                          result?.refund_qty * result?.price - result?.discount_amt
                                         ).toFixed(2)}
                                       </span>
                                     </div>
+                                    {  +result?.discount_amt > 0 ? (
+                                        <>
+                                          <div className="OrderSummeryProductRBottomL itemDiscountContainer">
+                                              <h4>Item dicount</h4>
+                                          </div>
+                                          <div className="OrderSummeryProductRBottomR itemDiscountContainer discoutCONTAMT">
+                                            <h4>
+                                              -${result?.is_refunded === "1"
+                                                ? parseFloat(
+                                                  result?.refund_qty *
+                                                  result?.discount_amt
+                                                ).toFixed(2)
+                                                : parseFloat(
+                                                  result?.qty * result?.discount_amt
+                                                ).toFixed(2)}
+                                            </h4>
+                                          </div>
+                                        </>
+                                      ) : ("") }
                                   </div>
                                 </div>
                                 {/* <div className="OrderSummeryProductRBottomM">
