@@ -469,7 +469,7 @@ const ProductTable = ({
                         ) : (
                           <StyledTableCell></StyledTableCell>
                         )}
-                        <StyledTableCell>Sort</StyledTableCell>
+                        {/* <StyledTableCell>Sort</StyledTableCell> */}
                         <StyledTableCell>Title</StyledTableCell>
                         <StyledTableCell>Category</StyledTableCell>
                         <StyledTableCell>
@@ -544,9 +544,9 @@ const ProductTable = ({
                                     </label>
                                   </StyledTableCell>
                                 )}
-                                <StyledTableCell>
+                                {/* <StyledTableCell>
                                   <img src={SortIcon} alt="" className="" />
-                                </StyledTableCell>
+                                </StyledTableCell> */}
                                 <StyledTableCell>
                                   <p
                                     className="categories-title text-[#0A64F9]"
