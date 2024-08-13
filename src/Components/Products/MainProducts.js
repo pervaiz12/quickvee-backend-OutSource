@@ -10,10 +10,11 @@ import {
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import useDebounce from "../../hooks/useDebouncs";
 import PasswordShow from "../../Common/passwordShow";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import { Suspense } from "react";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import "../../Styles/ProductPage.css";
 
 const FilterProduct = lazy(() => import("./FilterProduct"));
 const ProductTable = lazy(() => import("./ProductTable"));
@@ -28,7 +29,7 @@ const MainProducts = () => {
   const [selectedEmployee, setSelectedEmployee] = useState("Select");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedStatusValue, setSelectedStatusValue] = useState("All");
-  const [productByImages, setProductByImages] = useState("Select");
+  const [productByImages, setProductByImages] = useState("All");
   const [productIdList, setProductIdList] = useState([]);
 
   const [deleteloading, setDeleteloading] = useState(false);
@@ -89,6 +90,7 @@ const MainProducts = () => {
       category_id: categoryId === "All" ? "all" : categoryId,
       show_status: selectedStatus,
       name: debouncedValue,
+      is_media_blank: productByImages === "All" ? "" : 1,
       listing_type: selectedListingTypeValue?.id
         ? selectedListingTypeValue?.id
         : 0,
@@ -100,6 +102,7 @@ const MainProducts = () => {
 
     dispatch(emptyProduct([]));
     handleOptionClick([]);
+    setProductIdList([]);
     try {
       await dispatch(fetchProductsData(data)).unwrap();
       // Handle response if needed
@@ -114,10 +117,6 @@ const MainProducts = () => {
   };
 
   const confirmDeleteCategory = async () => {
-    console.log(
-      "productIdList?.map((i) => i).toString()",
-      productIdList?.map((i) => i).toString()
-    );
     setDeleteloading(true);
     if (deleteCategoryId) {
       let timer = null;
@@ -163,6 +162,7 @@ const MainProducts = () => {
     selectedStatus,
     selectedListingTypeValue,
     categoryId,
+    productByImages,
   ]);
 
   const handlefocus = (e) => {};
@@ -188,10 +188,12 @@ const MainProducts = () => {
       case "del_pic":
         setSelectedEmployee(option.title);
         setdel_picDropdownVisible(false);
+
         if (window.confirm("Are you sure you want to update?")) {
           dispatch(emptyProduct([]));
           setSearchId("");
           handleOptionClick([]);
+          setProductIdList([]);
           let type_date = {
             merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
             id: option.id,
@@ -210,6 +212,7 @@ const MainProducts = () => {
                       category_id: categoryId === "All" ? "all" : categoryId,
                       show_status: selectedStatus,
                       name: searchId,
+                      is_media_blank: productByImages === "All" ? "" : 1,
                       listing_type: selectedListingTypeValue,
                       offset: 0,
                       limit: 10,
@@ -262,6 +265,7 @@ const MainProducts = () => {
         setSelectedStatusValue(option.title);
         setTransactionDropdownVisible(false);
         dispatch(emptyProduct([]));
+        setProductIdList([]);
 
         setlistingTypesDropdownVisible(false);
         break;
@@ -277,13 +281,17 @@ const MainProducts = () => {
         }
         setSelectedListingTypeValue(option);
         setSearchId("");
+        setProductIdList([]);
 
         setlistingTypesDropdownVisible(false);
         break;
       case "image_listing":
         dispatch(emptyProduct([]));
         handleOptionClick([]);
-        console.log("option", option);
+        setProductIdList([]);
+        setSearchId("");
+        setProductByImages(option?.title);
+        setlistingTypesDropdownVisible(false);
       default:
         break;
     }
@@ -291,76 +299,92 @@ const MainProducts = () => {
 
   return (
     <>
-      <div className="q-attributes-main-page">
-        <Suspense fallback={<div></div>}>
-          <FilterProduct
-            {...{
-              handleOptionClick,
-              toggleDropdown,
-              selectedEmployee,
-              del_picDropdownVisible,
-              setdel_picDropdownVisible,
-              selectedStatus,
-              setTransactionDropdownVisible,
-              transactionDropdownVisible,
-              selectedListingType,
-              setSelectedListingType,
-              selectedListingTypeValue,
-              listingTypesDropdownVisible,
-              setlistingTypesDropdownVisible,
-              handleCategoryChange,
-              selectedStatusValue,
-              handleSearch,
-              searchId,
-              handlefocus,
-              setSearchId,
-              productIdList,
-              handleDeleteProduct,
-              productByImages,
-            }}
-          />
-        </Suspense>
-      </div>
-      {userTypeData?.login_type !== "superadmin" &&
-      inventory_approval === "1" ? (
+      <div className="product-layout">
         <div className="q-attributes-main-page">
-          <ProductContent />
+          <Suspense fallback={<div></div>}>
+            <FilterProduct
+              {...{
+                handleOptionClick,
+                toggleDropdown,
+                selectedEmployee,
+                del_picDropdownVisible,
+                setdel_picDropdownVisible,
+                selectedStatus,
+                setTransactionDropdownVisible,
+                transactionDropdownVisible,
+                selectedListingType,
+                setSelectedListingType,
+                selectedListingTypeValue,
+                listingTypesDropdownVisible,
+                setlistingTypesDropdownVisible,
+                handleCategoryChange,
+                selectedStatusValue,
+                handleSearch,
+                searchId,
+                handlefocus,
+                setSearchId,
+                productByImages,
+              }}
+            />
+          </Suspense>
         </div>
+        {userTypeData?.login_type !== "superadmin" &&
+        inventory_approval === "1" ? (
+          <div className="q-attributes-main-page">
+            <ProductContent />
+          </div>
+        ) : (
+          ""
+        )}
+        <div className="q-attributes-main-page">
+          <Suspense fallback={<div></div>}>
+            <ProductTable
+              {...{
+                selectedListingType,
+                debouncedValue,
+                offset,
+                setoffset,
+                limit,
+                setlimit,
+                categoryId,
+                selectedListingTypeValue,
+                selectedStatus,
+                selectedStatusValue,
+                searchId,
+                setSearchId,
+                handleProductUnCheck,
+                handleProductCheck,
+                productIdList,
+                productByImages,
+              }}
+            />
+          </Suspense>
+        </div>
+
+        <DeleteModal
+          headerText="Products"
+          open={deleteModalOpen}
+          onClose={() => {
+            setDeleteModalOpen(false);
+          }}
+          onConfirm={confirmDeleteCategory}
+          deleteloading={deleteloading}
+        />
+      </div>
+
+      {productIdList?.length ? (
+        <Grid item xs={12} sm={6} md={4} className="Sticky-multiple-delete">
+          <button
+            style={{ height: "40px", padding: "0px 0px" }}
+            className="quic-btn quic-btn-draft  w-full"
+            onClick={handleDeleteProduct}
+          >
+            Delete Selected Product
+          </button>
+        </Grid>
       ) : (
         ""
       )}
-      <div className="q-attributes-main-page">
-        <Suspense fallback={<div></div>}>
-          <ProductTable
-            {...{
-              selectedListingType,
-              debouncedValue,
-              offset,
-              setoffset,
-              limit,
-              setlimit,
-              categoryId,
-              selectedListingTypeValue,
-              selectedStatus,
-              selectedStatusValue,
-              searchId,
-              setSearchId,
-              handleProductUnCheck,
-              handleProductCheck,
-              productIdList,
-            }}
-          />
-        </Suspense>
-      </div>
-      <DeleteModal
-        headerText="Products"
-        open={deleteModalOpen}
-        onClose={() => {
-          setDeleteModalOpen(false);
-        }}
-        onConfirm={confirmDeleteCategory}
-        deleteloading={deleteloading}
-      />
     </>
   );
 };

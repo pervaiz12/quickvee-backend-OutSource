@@ -26,8 +26,6 @@ const FilterProduct = ({
   handleCategoryChange,
   handleSearch,
   searchId,
-  productIdList,
-  handleDeleteProduct,
   productByImages,
 }) => {
   const { userTypeData } = useAuthDetails();
@@ -87,6 +85,17 @@ const FilterProduct = ({
     {
       id: "4",
       title: "Disable All",
+    },
+  ];
+
+  const productFilterByList = [
+    {
+      id: "1",
+      title: "All",
+    },
+    {
+      id: "2",
+      title: "Without Image",
     },
   ];
 
@@ -246,21 +255,19 @@ const FilterProduct = ({
               />
             </Grid>
 
-            {/* <Grid item xs={12} sm={6} md={4}>
-              <label style={{ whiteSpace: "nowrap" }}>
-                Product Filter By Image
-              </label>
+            <Grid item xs={12} sm={6} md={4}>
+              <label style={{ whiteSpace: "nowrap" }}>Filter By Image</label>
               <SelectDropDown
                 sx={{ pt: 0.5 }}
-                heading={"Select"}
+                // heading={"All"}
                 title={"title"}
-                listItem={filterImageProducts}
+                listItem={productFilterByList}
                 selectedOption={productByImages}
                 onClickHandler={handleOptionClick}
                 dropdownFor={"image_listing"}
                 disabled={loading}
               />
-            </Grid> */}
+            </Grid>
 
             {userTypeData?.login_type === "superadmin" ? (
               <Grid item xs={12} sm={6} md={4}>
@@ -270,20 +277,6 @@ const FilterProduct = ({
                   onClick={() => setShowModal(true)}
                 >
                   Mass Inventory Update
-                </button>
-              </Grid>
-            ) : (
-              ""
-            )}
-
-            {productIdList?.length ? (
-              <Grid item xs={12} sm={6} md={4}>
-                <button
-                  style={{ height: "40px", padding: "0px 0px" }}
-                  className="quic-btn quic-btn-draft attributeUpdateBTN w-full"
-                  onClick={handleDeleteProduct}
-                >
-                  Delete Selected Product
                 </button>
               </Grid>
             ) : (

@@ -202,19 +202,19 @@ export default function ImportImageModal({ productTitle, productId }) {
       },
     }),
   };
-//   const onLongPress = () => {
-//     console.log('longpress is triggered');
-// };
+  //   const onLongPress = () => {
+  //     console.log('longpress is triggered');
+  // };
 
-// const onClick = () => {
-//     console.log('click is triggered')
-// }
+  // const onClick = () => {
+  //     console.log('click is triggered')
+  // }
 
-// const defaultOptions = {
-//     shouldPreventDefault: true,
-//     delay: 500,
-// };
-// const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
+  // const defaultOptions = {
+  //     shouldPreventDefault: true,
+  //     delay: 500,
+  // };
+  // const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
 
   return (
     <>
@@ -222,8 +222,8 @@ export default function ImportImageModal({ productTitle, productId }) {
         className="cursor-pointer"
         onClick={handleOpen}
         src={ImportImage}
-        height={"50px"}
-        width={"50px"}
+        height={"32px"}
+        width={"32px"}
       />
       <Modal
         open={open}
@@ -266,7 +266,7 @@ export default function ImportImageModal({ productTitle, productId }) {
                   }))}
                 onChange={handleOptionClick}
                 styles={customStyles}
-                placeholder={'Select Store...'}
+                placeholder={"Select Store..."}
               />
             </Grid>
           </Grid>
