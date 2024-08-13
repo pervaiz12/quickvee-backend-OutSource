@@ -327,7 +327,8 @@ export default function ImportImageModal({ productTitle, productId }) {
                               />
                             </Grid>
                           </Grid>
-                          <Grid container>
+                          {product.media.length > 0 ? (
+                            <Grid container>
                             <Grid item xs={12}>
                               <Grid
                                 container
@@ -364,6 +365,8 @@ export default function ImportImageModal({ productTitle, productId }) {
                               </Grid>
                             </Grid>
                           </Grid>
+                          ):(<><p>No Data Found</p></>)}
+                          
                           <Divider orientation="vertical" flexItem />
                         </Grid>
                       </React.Fragment>

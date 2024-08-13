@@ -7,8 +7,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         
-        width="660"
-        height="100.9"
+        // width="660"
+        // height="100.9"
         viewBox="0 0 660 100.9"
       >
         <defs>
@@ -354,8 +354,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
         data-name="d s accpted"
         xmlns="http://www.w3.org/2000/svg"
         
-        width="480"
-        height="100.9"
+        // width="480"
+        // height="100.9"
         viewBox="0 0 480 100.9"
       >
         <defs>
@@ -623,8 +623,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         
-        width="660"
-        height="104.808"
+        // width="660"
+        // height="104.808"
         viewBox="0 0 660 104.808"
       >
         <defs>
@@ -992,8 +992,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
         data-name="d s packed"
         xmlns="http://www.w3.org/2000/svg"
         
-        width="480"
-        height="104.805"
+        // width="480"
+        // height="104.805"
         viewBox="0 0 480 104.805"
       >
         <defs>
@@ -1274,8 +1274,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         
-        width="660"
-        height="104.87"
+        // width="660"
+        // height="104.87"
         viewBox="0 0 660 104.87"
       >
         <defs>
@@ -1647,8 +1647,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
         data-name="d s ready"
         xmlns="http://www.w3.org/2000/svg"
         
-        width="480"
-        height="104.8"
+        // width="480"
+        // height="104.8"
         viewBox="0 0 480 104.8"
       >
         <defs>
@@ -1934,8 +1934,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         
-        width="665.4"
-        height="107.16"
+        // width="665.4"
+        // height="107.16"
         viewBox="0 0 665.4 107.16"
       >
         <defs>
@@ -2302,8 +2302,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
         data-name="d s completed"
         xmlns="http://www.w3.org/2000/svg"
         
-        width="479.1"
-        height="107.1"
+        // width="479.1"
+        // height="107.1"
         viewBox="0 0 479.1 107.1"
       >
         <defs>
@@ -2588,8 +2588,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         
-        width="661.072"
-        height="103.144"
+        // width="661.072"
+        // height="103.144"
         viewBox="0 0 661.072 103.144"
       >
         <defs>
@@ -2893,8 +2893,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
         data-name="d s canelled"
         xmlns="http://www.w3.org/2000/svg"
         
-        width="479.2"
-        height="103.2"
+        // width="479.2"
+        // height="103.2"
         viewBox="0 0 479.2 103.2"
       >
         <defs>
@@ -3143,8 +3143,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         
-        width="659"
-        height="103.144"
+        // width="659"
+        // height="103.144"
         viewBox="0 0 659 103.144"
       >
         <defs>
@@ -3451,8 +3451,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         
-        width="659"
-        height="103.144"
+        // width="659"
+        // height="103.144"
         viewBox="0 0 659 103.144"
       >
         <defs>
@@ -3757,8 +3757,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
     (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="660"
-        height="104.9"
+        // width="660"
+        // height="104.9"
         viewBox="0 0 660 104.9"
       >
         <g
@@ -4111,8 +4111,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
         id="d_s_shipped_1"
         data-name="d s shipped 1"
         xmlns="http://www.w3.org/2000/svg"
-        width="480"
-        height="104.9"
+        // width="480"
+        // height="104.9"
         viewBox="0 0 480 104.9"
       >
         <g id="Group_4699" data-name="Group 4699" opacity="0.5">
@@ -4381,8 +4381,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
   const deliveryAccept = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="660"
-      height="100.9"
+      // width="660"
+      // height="100.9"
       viewBox="0 0 660 100.9"
     >
       <g id="d_s_accpted" transform="translate(-6259 -1443)">
@@ -4698,8 +4698,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
   const deliveryPacking = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="660"
-      height="105.05"
+      // width="660"
+      // height="105.05"
       viewBox="0 0 660 105.05"
     >
       <g
@@ -5035,8 +5035,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
   const deliveryShipped = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="660"
-      height="104.9"
+      // width="660"
+      // height="104.9"
       viewBox="0 0 660 104.9"
     >
       <g
@@ -5378,8 +5378,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
   const deliveryCompleted = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="659"
-      height="103.144"
+      // width="659"
+      // height="103.144"
       viewBox="0 0 659 103.144"
     >
       <g
@@ -5719,8 +5719,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
   const deliveryCanceled = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="661.072"
-      height="103.144"
+      // width="661.072"
+      // height="103.144"
       viewBox="0 0 661.072 103.144"
     >
       <g id="p_s_canelled" transform="translate(-19340 -3420)">
@@ -5998,8 +5998,8 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
   const deliveryRefunded = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="659"
-      height="103.144"
+      // width="659"
+      // height="103.144"
       viewBox="0 0 659 103.144"
     >
       <g id="d_s_refund" transform="translate(-19340 -3420)">

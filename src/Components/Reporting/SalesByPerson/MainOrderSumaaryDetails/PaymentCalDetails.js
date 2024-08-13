@@ -5,6 +5,7 @@ import "../../../../Styles/summery.css";
 import imageLogo from "../../../../Assests/NewImage/imageLogo.svg";
 import imageAddress from "../../../../Assests/NewImage/Address.svg";
 import imagePhone from "../../../../Assests/NewImage/Phone.svg";
+import emailLogo from "../../../../Assests/Dashboard/email.svg";
 import { useLocation } from "react-router-dom";
 import Miles from "../../../../Assests/NewImage/Miles.svg";
 import Phone1 from "../../../../Assests/NewImage/Phone1.svg";
@@ -213,9 +214,32 @@ export default function PaymentCalDetails() {
 
   const setPositionLoader = {
     position: "absolute",
-    top: "45%",
-    left: "45%",
-    transform: "translate(-45%, -45%)",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+  };
+
+
+  const getPaymentMethod = (orderSummeryData) => {
+    const groupedPayments = orderSummeryData?.split_payments?.reduce(
+      (acc, payment) => {
+        const { pay_type, pay_amount } = payment;
+        if (!acc[pay_type]) {
+          acc[pay_type] = 0;
+        }
+        acc[pay_type] += parseFloat(pay_amount);
+        return acc;
+      },
+      {}
+    );
+
+    const result = Object.keys(groupedPayments).map((key) => ({
+      pay_type: key,
+      total_amount: groupedPayments[key].toFixed(2),
+    }));
+
+    console.log(result);
+    return result;
   };
   return (
     <>
@@ -517,16 +541,27 @@ export default function PaymentCalDetails() {
                       )}
                       
                       {
-                       !!orderSummeryData.order_detail?.discount && +orderSummeryData.order_detail?.discount > 0  ? (
+                      //  !!orderSummeryData.order_detail?.discount && +orderSummeryData.order_detail?.discount > 0
+                       !!couponDetails?.coupon_code && couponDetails?.coupon_code_amt > 0 ? (
+                        // couponDetails?.coupon_code_amt + couponDetails?.loyalty_point_amt_spent > 0 ? (
 <>
 <p>
-                        Discount
+                        {couponDetails?.coupon_code === "Discount" ?(
+                            <>
+                            {couponDetails?.coupon_code}
+                            </>
+                          ):(
+                            <>
+                             Coupon ({couponDetails?.coupon_code})
+                            </>
+                          )
+                        }
                         <span>
-                          $
-                          {orderSummeryData &&
-                            orderSummeryData.order_detail?.discount &&
+                          - $
+                          {couponDetails &&
+                            couponDetails?.coupon_code_amt &&
                             parseFloat(
-                              orderSummeryData.order_detail?.discount
+                              couponDetails?.coupon_code_amt
                             ).toFixed(2)}
                         </span>
                       </p>
@@ -748,20 +783,39 @@ export default function PaymentCalDetails() {
                               ) : (
                                 ""
                               )}
-                              {couponDetails.store_credit_amt_spent > 0 ? (
+                              {couponDetails.gift_card_amount > 0 ? (
                                 <p className="">
-                                  Paid via Store Credit{" "}
+                                  Gift Card (
+                                  {parseFloat(
+                                    couponDetails?.gift_card_number
+                                  ).toFixed(2)}
+                                  )
                                   <span>
-                                    $
+                                    - $
                                     {parseFloat(
-                                      couponDetails.store_credit_amt_spent
+                                      couponDetails?.gift_card_amount
                                     ).toFixed(2)}
                                   </span>
                                 </p>
                               ) : (
                                 ""
                               )}
-                              {orderSummeryData &&
+                              {
+                                orderSummeryData.split_payments?.length > 0 ?(
+                                  <>
+                                  { getPaymentMethod(orderSummeryData)?.map((op) => {
+                                      return (
+                                        <>
+                                          <p  style={{ textTransform: 'capitalize'}}>{op?.pay_type}
+                                          <span> ${op?.total_amount}</span>
+                                          </p>
+                                        </>
+                                      );
+                                    })}
+                                  </>
+                                ):(
+                                  <>
+                                 {orderSummeryData &&
                                 orderSummeryData.order_detail ? (
                                 <p className="">
                                   {paymentMethod &&
@@ -808,9 +862,25 @@ export default function PaymentCalDetails() {
                               ) : (
                                 ""
                               )}
-                              {
-                                console.log("loyality point",couponDetails)
+                                  </>
+                                )
                               }
+
+                              {couponDetails.store_credit_amt_spent > 0 ? (
+                                <p className="">
+                                  Paid via Store Credit{" "}
+                                  <span>
+                                    $
+                                    {parseFloat(
+                                      couponDetails.store_credit_amt_spent
+                                    ).toFixed(2)}
+                                  </span>
+                                </p>
+                              ) : (
+                                ""
+                              )}
+                              
+
                               {couponDetails?.loyalty_point_earned > 0 ? (
                                 <p className="yellowclr">
                                   {" "}
@@ -939,12 +1009,15 @@ export default function PaymentCalDetails() {
                     ""
                   )}
                 </div>
-                <div className="orderSummeryCustomerDetailsArea">
-                  <h1 className="orderSummery_head">Customer Details</h1>
+                {/* <div className="orderSummeryCustomerDetailsArea">
+                  <h1 className="orderSummery_head">Customer Details</h1> */}
                   {orderSummeryData &&
                     orderSummeryData.order_detail &&
                     orderSummeryData.order_detail?.order_method.toLowerCase() ===
-                    "pickup" && (
+                    "pickup" && !!orderSummeryData.order_detail?.billing_name && !!orderSummeryData.order_detail?.customer_phone
+                    && !!orderSummeryData.order_detail?.customer_email &&  (
+                      <div className="orderSummeryCustomerDetailsArea">
+                        <h1 className="orderSummery_head">Customer Details</h1>
                       <div className="orderSummeryCustomerDetailsInner">
                         <h5>
                           {orderSummeryData &&
@@ -953,7 +1026,7 @@ export default function PaymentCalDetails() {
                         </h5>
                         <p className="flex items-center">
                           {orderSummeryData.order_detail &&
-                            !!orderSummeryData.order_detail.delivery_phn ? (
+                            !!orderSummeryData.order_detail.customer_phone ? (
                             <div className="pe-1">
                               <img src={imagePhone} alt="Pickup phone" />
                             </div>
@@ -963,17 +1036,36 @@ export default function PaymentCalDetails() {
                           <div>
                             {orderSummeryData &&
                               orderSummeryData.order_detail &&
-                              orderSummeryData.order_detail.delivery_phn}
+                              orderSummeryData.order_detail.customer_phone}
                           </div>
 
 
                         </p>
+                        <p className="flex items-center">
+                        {orderSummeryData.order_detail &&
+                            !!orderSummeryData.order_detail.customer_email ? (
+                            <div className="pe-1">
+                              <img src={emailLogo} alt="Email" />
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                          <div>
+                            {orderSummeryData &&
+                              orderSummeryData.order_detail &&
+                              orderSummeryData.order_detail.customer_email}
+                          </div>
+                        </p>
+                      </div>
                       </div>
                     )}
                   {orderSummeryData &&
                     orderSummeryData.order_detail &&
                     orderSummeryData.order_detail.order_method.toLowerCase() ===
-                    "delivery" && (
+                    "delivery" && !!orderSummeryData.order_detail?.deliver_name && !!orderSummeryData.order_detail?.delivery_addr
+                    && !!orderSummeryData.order_detail?.delivery_phn && (
+                      <div className="orderSummeryCustomerDetailsArea">
+                  <h1 className="orderSummery_head">Customer Details</h1>
                       <div className="orderSummeryCustomerDetailsInner">
                         <h5>
                           {orderSummeryData &&
@@ -1006,8 +1098,9 @@ export default function PaymentCalDetails() {
                             orderSummeryData.order_detail.delivery_phn}
                         </p>
                       </div>
+                      </div>
                     )}
-                </div>
+                {/* </div> */}
                 <div className="orderSummeryIdentification">
                   <h1 className="orderSummery_head">Identification Card</h1>
                   <div className="orderSummeryRightTopC">
