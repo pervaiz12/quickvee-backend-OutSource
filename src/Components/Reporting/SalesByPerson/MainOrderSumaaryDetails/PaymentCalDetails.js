@@ -241,6 +241,29 @@ export default function PaymentCalDetails() {
     console.log(result);
     return result;
   };
+
+  const getPaymentMethodEBT = (orderSummeryData) => {
+    
+    const groupedPayments = orderSummeryData?.split_payments?.reduce(
+      (acc, payment) => {
+        const { card_type, pay_amount } = payment;
+        if (!acc[card_type]) {
+          acc[card_type] = 0;
+        }
+        acc[card_type] += parseFloat(pay_amount);
+        return acc;
+      },
+      {}
+    );
+
+    const result = Object.keys(groupedPayments).map((key) => ({
+      card_type: key,
+      total_amount: groupedPayments[key].toFixed(2),
+    }));
+
+    console.log(result);
+    return result;
+  };
   return (
     <>
 
@@ -697,6 +720,11 @@ export default function PaymentCalDetails() {
                                   couponDetails.loyalty_point_amt_spent
                                 );
                               }
+                              if (couponDetails.gift_card_amount > 0) {
+                                grandTotal += parseFloat(
+                                  couponDetails.gift_card_amount
+                                );
+                              }
                               // Adjust for refund if applicable
                               if (
                                 orderSummeryData.order_detail.is_refunded ===
@@ -785,11 +813,12 @@ export default function PaymentCalDetails() {
                               )}
                               {couponDetails.gift_card_amount > 0 ? (
                                 <p className="">
-                                  Gift Card (
+                                  Gift Card Applied
+                                   {/* (
                                   {parseFloat(
                                     couponDetails?.gift_card_number
                                   ).toFixed(2)}
-                                  )
+                                  ) */}
                                   <span>
                                     - $
                                     {parseFloat(
@@ -803,10 +832,22 @@ export default function PaymentCalDetails() {
                               {
                                 orderSummeryData.split_payments?.length > 0 ?(
                                   <>
-                                  { getPaymentMethod(orderSummeryData)?.map((op) => {
+                                   { getPaymentMethod(orderSummeryData)?.map((op) => {
                                       return (
                                         <>
                                           <p  style={{ textTransform: 'capitalize'}}>{op?.pay_type}
+                                          <span> ${op?.total_amount}</span>
+                                          </p>
+                                        </>
+                                      );
+                                    })}
+                                    { getPaymentMethodEBT(orderSummeryData)?.map((op) => {
+                                      const formattedCardType = op?.card_type
+                                      ?.replace('CashEbt/', 'Cash EBT')
+                                      ?.replace('FoodEbt/', 'Food EBT');
+                                      return (
+                                        <>
+                                          <p  style={{ textTransform: 'capitalize'}}>{formattedCardType}
                                           <span> ${op?.total_amount}</span>
                                           </p>
                                         </>
