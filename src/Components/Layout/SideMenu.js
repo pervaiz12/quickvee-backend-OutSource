@@ -878,7 +878,13 @@ const menuItems = [
       // {
       //   id: 6,
       //   text: "New Reports",
-      //   dropDownItems: [],
+      //   dropDownItems: [
+      //     {
+      //       id: 104,
+      //       text: "Profit Summary Report",
+      //       link: "/store-reporting/profit-summary-report",
+      //     },
+      //   ],
       // },
     ],
   },

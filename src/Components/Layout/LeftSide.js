@@ -336,6 +336,7 @@ const LeftSide = ({ visible }) => {
         return <CouponReportMain />;
       case "drop-cash-report":
         return <DropCashMain />;
+
       case "pay-in-report":
         return <PayInMain />;
       case "sales-report":
