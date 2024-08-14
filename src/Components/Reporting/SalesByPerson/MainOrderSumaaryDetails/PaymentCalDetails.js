@@ -732,6 +732,16 @@ export default function PaymentCalDetails() {
                                   couponDetails.gift_card_amount
                                 );
                               }
+                              if (+orderSummeryData.order_detail?.cash_back_amt > 0) {
+                                grandTotal += parseFloat(
+                                  orderSummeryData.order_detail?.cash_back_amt
+                                );
+                              }
+                              if (+orderSummeryData.order_detail?.cash_back_fee > 0) {
+                                grandTotal += parseFloat(
+                                  orderSummeryData.order_detail?.cash_back_fee
+                                );
+                              }
                               // Adjust for refund if applicable
                               if (
                                 orderSummeryData.order_detail.is_refunded ===
@@ -941,6 +951,33 @@ export default function PaymentCalDetails() {
                               ) : (
                                 ""
                               )}
+
+                              {+orderSummeryData.order_detail?.cash_back_amt > 0 ? (
+                                <p className="">
+                                  {" "}
+                                  Cashback Amount{" "}
+                                  <span>
+                                    ${parseFloat(
+                                      orderSummeryData.order_detail?.cash_back_amt
+                                    ).toFixed(2)}
+                                  </span>
+                                </p>
+                              ) : (
+                                ""
+                              )}
+                              {+orderSummeryData.order_detail.cash_back_fee > 0 ? (
+                                <p className="">
+                                  {" "}
+                                  Cashback Fee{" "}
+                                  <span>
+                                    ${parseFloat(
+                                      orderSummeryData.order_detail.cash_back_fee
+                                    ).toFixed(2)}
+                                  </span>
+                                </p>
+                              ) : (
+                                ""
+                              )}
                             </AccordionDetails>
                           </Accordion>
                         )}
@@ -1061,8 +1098,7 @@ export default function PaymentCalDetails() {
                   {orderSummeryData &&
                     orderSummeryData.order_detail &&
                     orderSummeryData.order_detail?.order_method.toLowerCase() ===
-                    "pickup" && !!orderSummeryData.order_detail?.billing_name && !!orderSummeryData.order_detail?.customer_phone
-                    && !!orderSummeryData.order_detail?.customer_email &&  (
+                    "pickup" &&  (
                       <div className="orderSummeryCustomerDetailsArea">
                         <h1 className="orderSummery_head">Customer Details</h1>
                       <div className="orderSummeryCustomerDetailsInner">
@@ -1073,7 +1109,7 @@ export default function PaymentCalDetails() {
                         </h5>
                         <p className="flex items-center">
                           {orderSummeryData.order_detail &&
-                            !!orderSummeryData.order_detail.customer_phone ? (
+                            !!orderSummeryData.order_detail.customer_phone || !!orderSummeryData.order_detail.delivery_phn ? (
                             <div className="pe-1">
                               <img src={imagePhone} alt="Pickup phone" />
                             </div>
@@ -1081,16 +1117,13 @@ export default function PaymentCalDetails() {
                             ""
                           )}
                           <div>
-                            {orderSummeryData &&
-                              orderSummeryData.order_detail &&
-                              orderSummeryData.order_detail.customer_phone}
+                              {orderSummeryData.order_detail.customer_phone ||
+                              orderSummeryData.order_detail.delivery_phn}
                           </div>
-
-
                         </p>
                         <p className="flex items-center">
                         {orderSummeryData.order_detail &&
-                            !!orderSummeryData.order_detail.customer_email ? (
+                            !!orderSummeryData.order_detail.customer_email || !!orderSummeryData.order_detail.email ? (
                             <div className="pe-1">
                               <img src={emailLogo} alt="Email" />
                             </div>
@@ -1098,10 +1131,10 @@ export default function PaymentCalDetails() {
                             ""
                           )}
                           <div>
-                            {orderSummeryData &&
-                              orderSummeryData.order_detail &&
-                              orderSummeryData.order_detail.customer_email}
+                              {orderSummeryData.order_detail.customer_email ||
+                              orderSummeryData.order_detail.email}
                           </div>
+
                         </p>
                       </div>
                       </div>
@@ -1109,8 +1142,7 @@ export default function PaymentCalDetails() {
                   {orderSummeryData &&
                     orderSummeryData.order_detail &&
                     orderSummeryData.order_detail.order_method.toLowerCase() ===
-                    "delivery" && !!orderSummeryData.order_detail?.deliver_name && !!orderSummeryData.order_detail?.delivery_addr
-                    && !!orderSummeryData.order_detail?.delivery_phn && (
+                    "delivery"  && (
                       <div className="orderSummeryCustomerDetailsArea">
                   <h1 className="orderSummery_head">Customer Details</h1>
                       <div className="orderSummeryCustomerDetailsInner">
