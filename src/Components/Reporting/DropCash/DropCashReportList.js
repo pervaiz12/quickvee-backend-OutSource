@@ -17,6 +17,7 @@ import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "../../../Common/passwordShow";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -61,6 +62,7 @@ const DropCashReportList = (props) => {
   const [DropCashReportData, setDropCashReportData] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
   const DropCashReportDataState = useSelector((state) => state.DropCashReportList);
+  const showNoData = useDelayedNodata(DropCashReportData)
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
     getCouponReportData();
@@ -208,7 +210,7 @@ const DropCashReportList = (props) => {
                       )}
                 </TableBody>
               </StyledTable>
-              {!DropCashReportData.length  && <NoDataFound />}
+              {  showNoData &&  !DropCashReportData.length  && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>
