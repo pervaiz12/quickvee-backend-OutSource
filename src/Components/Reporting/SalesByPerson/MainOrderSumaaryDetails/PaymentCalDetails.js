@@ -223,45 +223,52 @@ export default function PaymentCalDetails() {
   const getPaymentMethod = (orderSummeryData) => {
     const groupedPayments = orderSummeryData?.split_payments?.reduce(
       (acc, payment) => {
-        const { pay_type, pay_amount } = payment;
-        if (!acc[pay_type]) {
-          acc[pay_type] = 0;
+        const { pay_type, pay_amount, card_type } = payment;
+        if (!card_type) {
+          if (!acc[pay_type]) {
+            acc[pay_type] = 0;
+          }
+          acc[pay_type] += parseFloat(pay_amount);
         }
-        acc[pay_type] += parseFloat(pay_amount);
         return acc;
       },
       {}
     );
-
-    const result = Object.keys(groupedPayments).map((key) => ({
+  
+    return Object.keys(groupedPayments).map((key) => ({
       pay_type: key,
       total_amount: groupedPayments[key].toFixed(2),
     }));
-
-    console.log(result);
-    return result;
   };
 
   const getPaymentMethodEBT = (orderSummeryData) => {
-    
     const groupedPayments = orderSummeryData?.split_payments?.reduce(
       (acc, payment) => {
-        const { card_type, pay_amount } = payment;
-        if (!acc[card_type]) {
-          acc[card_type] = 0;
+        let { card_type, pay_amount } = payment;
+        if (card_type) {
+         
+          // card_type === "Debit/" || card_type === "Credit/"
+          if ( card_type.startsWith("Debit/") || card_type.startsWith("Credit/") )  {
+            card_type = "Credit Card";
+          }
+          if (!acc[card_type]) {
+            acc[card_type] = 0;
+          }
+          acc[card_type] += parseFloat(pay_amount);
         }
-        acc[card_type] += parseFloat(pay_amount);
         return acc;
       },
       {}
     );
-
-    const result = Object.keys(groupedPayments).map((key) => ({
-      card_type: key,
-      total_amount: groupedPayments[key].toFixed(2),
-    }));
-
-    console.log(result);
+  
+    // Filter out empty or undefined card types
+    const result = Object.keys(groupedPayments)
+      .filter((key) => key) // Ensure card_type is not empty
+      .map((key) => ({
+        card_type: key,
+        total_amount: groupedPayments[key].toFixed(2),
+      }));
+  
     return result;
   };
   return (
@@ -859,46 +866,45 @@ export default function PaymentCalDetails() {
                                  {orderSummeryData &&
                                 orderSummeryData.order_detail ? (
                                 <p className="">
-                                  {paymentMethod &&
+                                  {/* {paymentMethod &&
                                     paymentMethod.toLowerCase() === "cash"
                                     ? "Paid via Cash"
-                                    : "Paid via Card"}
-                                  <span>
-                                    {(() => {
-                                      let payment = parseFloat(
-                                        orderSummeryData.order_detail.amt
-                                      );
-                                      // if (couponDetails.loyalty_point_spent > 0) {
-                                      //   payment += parseFloat(
-                                      //     couponDetails.loyalty_point_amt_spent,
-                                      //   );
-                                      // }
-                                      // if (
-                                      //   orderSummeryData.order_detail
-                                      //     .is_refunded === '1' ||
-                                      //   orderSummeryData.order_detail
-                                      //     .is_refunded === '2'
-                                      // ) {
-                                      //   payment -= parseFloat(
-                                      //     orderSummeryData.order_detail
-                                      //       .refund_amount,
-                                      //   );
-                                      // }
-                                      // if (couponDetails.loyalty_point_spent > 0) {
-                                      //   payment -= parseFloat(
-                                      //     couponDetails.loyalty_point_amt_spent,
-                                      //   );
-                                      // }
-                                      if (
-                                        couponDetails.store_credit_amt_spent > 0
-                                      ) {
-                                        payment -= parseFloat(
-                                          couponDetails.store_credit_amt_spent
-                                        );
+                                    : "Paid via Card"} */}
+                                  {/* <span> */}
+                                  {(() => {
+                                    const { card_type } = orderSummeryData.order_detail;
+                                    let paymentMethodDisplay = 'Paid via Card'; // Default message
+
+                                    // Check if card_type exists and adjust display text
+                                    if (card_type) {
+                                      if (card_type.startsWith('CashEbt/')) {
+                                        paymentMethodDisplay = 'Cash EBT';
+                                      } else if (card_type.startsWith('FoodEbt/')) {
+                                        paymentMethodDisplay = 'Food EBT';
                                       }
-                                      return `$${payment.toFixed(2)}`;
-                                    })()}
-                                  </span>
+                                    } else if (paymentMethod && paymentMethod.toLowerCase() === 'cash') {
+                                      paymentMethodDisplay = 'Paid via Cash';
+                                    }
+
+                                    return (
+                                      <>
+                                        {paymentMethodDisplay}
+                                        <span>
+                                          {(() => {
+                                            let payment = parseFloat(orderSummeryData.order_detail.amt);
+
+                                            // Adjust payment based on store credit
+                                            if (couponDetails.store_credit_amt_spent > 0) {
+                                              payment -= parseFloat(couponDetails.store_credit_amt_spent);
+                                            }
+
+                                            // Format and return payment amount
+                                            return `$${payment.toFixed(2)}`;
+                                          })()}
+                                        </span>
+                                      </>
+                                    );
+                                  })()}
                                 </p>
                               ) : (
                                 ""
