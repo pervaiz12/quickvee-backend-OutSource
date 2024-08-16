@@ -183,7 +183,6 @@ const AddCoupon = ({ seVisible }) => {
     });
   };
 
-
   const handleStartDateChange = (newDate) => {
     if (!newDate || !newDate.isValid()) {
       // showModal("Buss");
@@ -501,6 +500,8 @@ const AddCoupon = ({ seVisible }) => {
   };
 
   const handleMinAmountChange = (e) => {
+    if (isNaN(e.nativeEvent.data)) return;
+
     if (!isNaN(e.target.value)) {
       const { value } = e.target;
       const formattedValue = CurrencyInputHelperFun(value);

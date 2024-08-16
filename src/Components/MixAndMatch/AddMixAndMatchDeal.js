@@ -13,6 +13,7 @@ import { disableZeroOnFirstIndex } from "../../Constants/utils";
 import { addNewDeal } from "../../Redux/features/MixAndMatch/mixAndMatchSlice";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import useDebounce from "../../hooks/useDebouncs";
+import CurrencyInputHelperFun from "../../helperFunctions/CurrencyInputHelperFun";
 
 const AddMixAndMatchDeal = () => {
   const navigate = useNavigate();
@@ -66,21 +67,26 @@ const AddMixAndMatchDeal = () => {
     }));
   };
 
+  const handleInputNumber = (e) => {
+    if (isNaN(e.nativeEvent.data)) return;
+    const { value, name } = e.target;
+
+    if (!isNaN(e.target.value)) {
+      if (name === "minQty") {
+        setDealInfo((prev) => ({ ...prev, minQty: value }));
+      } else {
+        const formattedValue = CurrencyInputHelperFun(value);
+
+        if (parseFloat(formattedValue) > 99.99 && dealInfo.isPercent === "1")
+          return;
+        setDealInfo((prev) => ({ ...prev, [name]: formattedValue }));
+      }
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // console.log("name: ", name, " value: ", value);
     setDealInfo((prev) => ({ ...prev, [name]: value }));
-
-    // setting product options depending on the Discount Amount
-    // if (name === "discount" && productOptions && productOptions.length > 0) {
-    //   const temp = productOptions.filter((product) =>
-    //     dealInfo.isPercent === "0"
-    //       ? parseFloat(product.price) >= value
-    //       : product
-    //   );
-    //   setDealInfo((prev) => ({ ...prev, products: [] }));
-    //   setProductOptions(temp);
-    // }
   };
 
   const handleTabChange = (type) => {
@@ -243,17 +249,9 @@ const AddMixAndMatchDeal = () => {
                     <div className="q_coupon_minium input_area">
                       <label htmlFor="minorder_amt">Minimum Quantity</label>
                       <BasicTextFields
-                        type={"text"}
+                        type={"number"}
                         value={dealInfo.minQty}
-                        onChangeFun={(e) => {
-                          if (e.target.value >= 0 && !isNaN(e.target.value)) {
-                            const disable = disableZeroOnFirstIndex(
-                              e.target.value
-                            );
-                            if (disable) return;
-                            handleInputChange(e);
-                          }
-                        }}
+                        onChangeFun={handleInputNumber}
                         placeholder="Enter Minimum Quantity"
                         name="minQty"
                       />
@@ -272,20 +270,9 @@ const AddMixAndMatchDeal = () => {
                               {dealInfo.isPercent === "1" ? "%" : "$"})
                             </label>
                             <BasicTextFields
-                              type={"text"}
+                              type={"number"}
                               value={dealInfo.discount}
-                              onChangeFun={(e) => {
-                                if (
-                                  e.target.value >= 0 &&
-                                  !isNaN(e.target.value)
-                                ) {
-                                  const disable = disableZeroOnFirstIndex(
-                                    e.target.value
-                                  );
-                                  if (disable) return;
-                                  handleInputChange(e);
-                                }
-                              }}
+                              onChangeFun={handleInputNumber}
                               placeholder="Enter Discount Amount"
                               name="discount"
                             />
