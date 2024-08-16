@@ -117,7 +117,7 @@ export default function StoreCreditReportTable({
       {
         <Grid container className="box_shadow_div">
           {StoreCreditReportReduxState.loading ||
-          (StoreCreditReportReduxState.status && !dataArr.length) ? (
+          ((StoreCreditReportReduxState.status && !searchRecord.length) && !dataArr.length) ? (
             <SkeletonTable columns={tableRow.map((item) => item.label)} />
           ) : (
             <Grid container>
