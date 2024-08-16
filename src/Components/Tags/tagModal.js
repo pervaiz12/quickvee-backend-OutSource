@@ -56,6 +56,7 @@ export default function TagModal(props) {
               onKeyPressFun={props.handleKeyPress}
               onChangeFun={props.onChangeGetData}
               handlePaste={props.handlePaste}
+              maxLength={35}
             />
             <span className="input-error">{props.errors?.tagError}</span>
           </div>

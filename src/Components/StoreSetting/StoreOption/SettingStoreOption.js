@@ -123,6 +123,9 @@ export default function SettingStoreOption() {
     if (checkBoxList?.includes(name)) {
       if (name === "orderNumebrEnabled") {
         updateData[name] = checked;
+        if (userTypeData?.login_type === "superadmin") {
+          setVoidOrder(!VoidOrder);
+        }
         // updateData["resetOrderNumberTime"] = "00.00";
       } else if (name === "resetOrderNumberTime") {
         setStartTime("");
@@ -381,6 +384,12 @@ export default function SettingStoreOption() {
 
   const handleVoidOrder = (e) => {
     setVoidOrder(!VoidOrder);
+    if (userTypeData?.login_type === "superadmin") {
+      setOrderState((prev) => ({
+        ...prev,
+        orderNumebrEnabled: !prev.orderNumebrEnabled,
+      }));
+    }
   };
 
   // const handleKeyPress = (event) => {
@@ -932,8 +941,6 @@ export default function SettingStoreOption() {
                 </Grid>
               </Grid>
             </Grid>
-            
-
           </>
         )}
       </div>

@@ -2218,13 +2218,13 @@ const AddProducts = () => {
       isvarient: +isMultipleVarient,
 
       optionarray: isMultipleVarient
-        ? varientLength[0]?.varientName?.value.trim() ?? ""
+        ? varientLength[0]?.varientName?.value?.trim() ?? ""
         : "",
       optionarray1: isMultipleVarient
-        ? varientLength[1]?.varientName?.value.trim() ?? ""
+        ? varientLength[1]?.varientName?.value?.trim() ?? ""
         : "",
       optionarray2: isMultipleVarient
-        ? varientLength[2]?.varientName?.value.trim() ?? ""
+        ? varientLength[2]?.varientName?.value?.trim() ?? ""
         : "",
       optionvalue: isMultipleVarient
         ? varientLength[0]?.varientAttributeList

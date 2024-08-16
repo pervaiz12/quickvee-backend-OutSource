@@ -5,8 +5,6 @@ import "../../Styles/ProductPage.css";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import { Grid } from "@mui/material";
 
-
-
 const BulkVarientEdit = ({
   formData,
   handleCopyAllVarientValue,
@@ -231,12 +229,21 @@ const BulkVarientEdit = ({
         <div className="box">
           <div className="variant-attributes-container">
             {/* Your existing JSX for variant attributes */}
-            <div style={{padding:"0"}} className="q-add-categories-section-middle-footer  ">
-              <p style={{fontFamily:"CircularSTDBook"}} className="bulk-edit-note">
+            <div
+              style={{ padding: "0" }}
+              className="q-add-categories-section-middle-footer  "
+            >
+              <p
+                style={{ fontFamily: "CircularSTDBook" }}
+                className="bulk-edit-note"
+              >
                 <span className="note">Note: </span>
                 By clicking on update, it will update values of all Variants
               </p>
-              <div style={{padding:"0"}} className="q-category-bottom-header">
+              <div
+                style={{ padding: "0" }}
+                className="q-category-bottom-header"
+              >
                 <button
                   className="quic-btn quic-btn-update"
                   style={{

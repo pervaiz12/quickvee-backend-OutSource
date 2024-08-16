@@ -142,7 +142,7 @@
     /* border: 1px solid red; */
     /* padding-top: 30px; */
     margin-top: 30px;
-   
+    min-height: 90vh;
 }
 /* ----------- main section  ------------------*/
 /* ----------- main mid section -------------- */
