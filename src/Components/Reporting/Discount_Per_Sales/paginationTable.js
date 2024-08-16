@@ -17,6 +17,7 @@ import SortIconW from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -64,7 +65,7 @@ const isJsonObject = (data) => {
 export default function DashboardTables(props) {
   const navigate = useNavigate();
   const [totalRecord, setTotalRecord] = React.useState("");
-
+  const showNoData = useDelayedNodata(Object.keys(props.EmployeeFilterData))
   useEffect(() => {
     console.log(props.EmployeeFilterData);
     if (props.EmployeeFilterData) {
@@ -133,6 +134,7 @@ export default function DashboardTables(props) {
             Object.entries(props.EmployeeFilterData).map(
               ([key, result], index) => {
                 if (Array.isArray(result)) {
+                  
                   return (
                     <>
                       <Grid container className="box_shadow_div">
@@ -352,7 +354,7 @@ export default function DashboardTables(props) {
               }
             )
           ) : (
-            <NoDataFound />
+            showNoData && <NoDataFound />
           )}
         </TableContainer>
       )}

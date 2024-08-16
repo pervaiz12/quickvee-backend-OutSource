@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import { priceFormate } from "../../../hooks/priceFormate";
 import Skeleton from "react-loading-skeleton";
 import { useSelector } from "react-redux";
+import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
 export default function StoreCreditReportMain() {
   const {
@@ -22,6 +24,8 @@ export default function StoreCreditReportMain() {
   const [totalValueIssued, setTotalValueIssued] = useState(0);
   const [totalValueRedeemed, setTotalValueRedeemed] = useState(0);
   const [outStandingsBalance, setOutStandingsBalance] = useState(0);
+  const [dataArr, setDataArr] = useState([]);
+  const [searchRecord,setSearchRecord] = useState("")
   const dispatch = useDispatch();
   const StoreCreditReportReduxState = useSelector(
     (state) => state.storeCreditReportList
@@ -49,15 +53,23 @@ export default function StoreCreditReportMain() {
       }
     }
   };
+  function handleSearchInputChange(value){
+    setSearchRecord(value)
+  }
   return (
     <>
-      <Grid container sx={{ pt: 2.5, mt: 3.6 }} className="box_shadow_div ">
+      <Grid container sx={{ pt: 2.5 }} className="box_shadow_div ">
         <Grid item xs={12}>
-          <Grid container sx={{ px: 2.5, pb: 2.5 }}>
+          <CustomHeader>Detailed Store Credit Report</CustomHeader>
+
+          <Grid container sx={{ px: 2.5, pt: 1, pb: 2.5 }}>
             <Grid item xs={12}>
-              <h1 style={{ marginBottom: 0 }} className="heading ">
-                Detailed Store Credit Report
-              </h1>
+              <h1 className="heading">Filter By</h1>
+              <InputTextSearch
+                placeholder={"Search for a Gift Card Number"}
+                value={searchRecord}
+                handleChange={handleSearchInputChange}
+              />
             </Grid>
           </Grid>
         </Grid>
@@ -116,6 +128,9 @@ export default function StoreCreditReportMain() {
           setTotalValueIssued,
           setTotalValueRedeemed,
           setOutStandingsBalance,
+          dataArr,
+          setDataArr,
+          searchRecord,
         }}
       />
     </>

@@ -17,6 +17,7 @@ import PasswordShow from "../../../Common/passwordShow";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -53,6 +54,7 @@ const Employeedetails = (props) => {
     PasswordShow();
   const dispatch = useDispatch();
   const [allEmpWorkingHrsData, setallEmpWorkingHrsData] = useState("");
+  const showNoData = useDelayedNodata(Object.keys(allEmpWorkingHrsData));
   const AllEmpWorkingHrsDataState = useSelector(
     (state) => state.EmpWorkinghrsList
   );
@@ -268,9 +270,7 @@ const Employeedetails = (props) => {
                                 <StyledTableCell></StyledTableCell>
                                 <StyledTableCell></StyledTableCell>
                                 <StyledTableCell>
-                                  <p className=" totalReport">
-                                    Total
-                                  </p>
+                                  <p className=" totalReport">Total</p>
                                 </StyledTableCell>
                                 <StyledTableCell>
                                   <p className=" totalReport">
@@ -324,10 +324,10 @@ const Employeedetails = (props) => {
           </>
         )}
       </div>
-      <Grid sx={{mt:3.5}}>
-      {!Object.keys(allEmpWorkingHrsData).length && !AllEmpWorkingHrsDataState.loading && <NoDataFound />}
-      </Grid> 
-      
+      <Grid sx={{ mt: 3.5 }}>
+        {showNoData && !Object.keys(allEmpWorkingHrsData).length &&
+          !AllEmpWorkingHrsDataState.loading  &&  <NoDataFound />}
+      </Grid>
     </>
   );
 };

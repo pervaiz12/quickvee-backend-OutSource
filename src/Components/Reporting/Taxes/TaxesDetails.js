@@ -14,6 +14,7 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import PasswordShow from "../../../Common/passwordShow";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -48,7 +49,7 @@ const TaxesDetails = ({ data }) => {
   const dispatch = useDispatch();
 
   const [taxesreport, settaxesreport] = useState([]);
-
+  const showNoData = useDelayedNodata(Object.keys(taxesreport))
   const taxesreportDataState = useSelector((state) => state.taxesreport);
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
@@ -151,7 +152,7 @@ const TaxesDetails = ({ data }) => {
                   )}
                 </TableBody>
               </StyledTable>
-              {!(taxesreport.data1 || taxesreport.data2)  && (
+              {showNoData &&  !(taxesreport.data1 || taxesreport.data2)  && (
                   <NoDataFound />
                 )}
             </TableContainer>

@@ -1101,14 +1101,14 @@ const productsSlice = createSlice({
       // console.log("product ids: ", productIds);
 
       // Append new items to the productsData array if they are not already present
-      action.payload.forEach((product) => {
+      action?.payload?.forEach((product) => {
         if (!productIds.has(product.title)) {
           state.productsData.push(product);
           productIds.add(product.title);
         }
       });
       state.offset += 10;
-      state.hasMore = action.payload.length > 0;
+      state.hasMore = action?.payload?.length > 0;
       state.error = "";
     });
     builder.addCase(fetchProductsData.rejected, (state, action) => {
