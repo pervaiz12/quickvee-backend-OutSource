@@ -64,6 +64,10 @@ export default function InfoFunction() {
     password: "",
     confirmPassword: "",
   });
+  const [qrValue, setQRValue] = useState("0");
+  const [logoValue, setLogoValue] = useState("0");
+  const [receiptValue, setReceiptValue] = useState("0");
+  // const [BannerValue, setBannerValue] = useState("0");
 
   const [passwordError, setPasswordError] = useState({
     password: "",
@@ -695,6 +699,7 @@ export default function InfoFunction() {
         if (selectedFile) {
           const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
           if (allowedTypes.includes(selectedFile.type)) {
+            setLogoValue("0");
             const reader = new FileReader();
             reader.onloadend = () => {
               setInfoRecord((prevState) => ({
@@ -708,6 +713,7 @@ export default function InfoFunction() {
             reader.readAsDataURL(selectedFile);
             setImageBoolean(true);
           } else {
+            setLogoValue("1");
             // setErrors((prev) => ({ ...prev, imageErrors: "Invalid image" }));
             errorMessage.imageErrors = "Invalid Logo";
             setInfoRecord((prevState) => ({
@@ -771,6 +777,7 @@ export default function InfoFunction() {
       if (selectedFile) {
         const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
         if (allowedTypes.includes(selectedFile.type)) {
+          setQRValue("0");
           const reader = new FileReader();
           reader.onloadend = () => {
             setInfoRecord((prevState) => ({
@@ -786,7 +793,9 @@ export default function InfoFunction() {
           // }
           // errorMessage.qrCodeError = "";
         } else {
-          errorMessage.qrCodeError = "Invalid QrCode";
+          console.log(selectedFile);
+          setQRValue("1");
+          errorMessage.qrCodeError = "Invalid QR Code";
           setInfoRecord((prevState) => ({
             ...prevState,
             qrCode: "",
@@ -811,6 +820,7 @@ export default function InfoFunction() {
       if (selectedFile) {
         const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
         if (allowedTypes.includes(selectedFile.type)) {
+          setReceiptValue("0");
           const reader = new FileReader();
           reader.onloadend = () => {
             setInfoRecord((prevState) => ({
@@ -826,7 +836,8 @@ export default function InfoFunction() {
           // }
           // errorMessage.receieptLogoError = "";
         } else {
-          errorMessage.qrReciptError = "Invalid ReceiptLogo";
+          setReceiptValue("1");
+          errorMessage.qrReciptError = "Invalid Receipt Logo";
           setInfoRecord((prevState) => ({
             ...prevState,
             receieptLogo: "",
@@ -1146,5 +1157,8 @@ export default function InfoFunction() {
     handleClose,
     handleKeyPressNew,
     login_type,
+    qrValue,
+    logoValue,
+    receiptValue,
   };
 }
