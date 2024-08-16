@@ -57,9 +57,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 const AddNewStocktake = ({
   setVisible,
-  
+
   getSingleStocktakeData,
-  
 }) => {
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
@@ -184,7 +183,6 @@ const AddNewStocktake = ({
       }))
       .filter((prod) => {
         const productFound = stocktake_items?.find((product) => {
-          
           const a =
             (product?.variant &&
               product.variant_id === prod.variantId &&
@@ -252,7 +250,6 @@ const AddNewStocktake = ({
   };
 
   const handleDeleteProduct = (index) => {
-    
     setDeleteCategoryId(index);
     setDeleteModalOpen(true);
   };
@@ -312,9 +309,9 @@ const AddNewStocktake = ({
         ...deletedSingleStocktakeState,
         formData,
       ]);
-      
+
       const newList = stocktake_items.filter((_, i) => i !== deleteCategoryId);
-     
+
       setProductList(newList);
       setSingleStocktakeState({
         ...singleStocktakeState,
@@ -323,16 +320,12 @@ const AddNewStocktake = ({
         total_discrepancy: total_discrepancy,
         total_discrepancy_cost: total_discrepancy_cost,
       });
-     
-      ToastifyAlert("Deleted Successfully", "success");
-     
-    } else {
-      
 
+      ToastifyAlert("Deleted Successfully", "success");
+    } else {
       const newList = stocktake_items.filter((_, i) => i !== deleteCategoryId);
       setProductList(newList);
     }
-    
 
     setDeleteCategoryId(null);
     setDeleteModalOpen(false);
@@ -340,7 +333,8 @@ const AddNewStocktake = ({
 
   const handleNewQtyChange = (e, index) => {
     const { value } = e.target;
-    const isValidQty = value === "" || value === "0" || /^[1-9]\d*$/.test(value);
+    const isValidQty =
+      value === "" || value === "0" || /^[1-9]\d*$/.test(value);
     if (!isValidQty) {
       setErrorMessages((prevErrors) => {
         const updatedErrors = [...prevErrors];
@@ -350,14 +344,14 @@ const AddNewStocktake = ({
         };
         return updatedErrors;
       });
-      return
+      return;
     }
     setProductList((prevList) => {
       const updatedList = [...prevList];
       const currentQty = updatedList[index].current_qty;
       const newQty = value;
       const unitPrice = updatedList[index]?.price;
-      const parsedCurrentQty =parseInt(currentQty);
+      const parsedCurrentQty = parseInt(currentQty);
       const discrepancy = newQty
         ? parseInt(newQty) - parseInt(parsedCurrentQty)
         : 0;
@@ -385,9 +379,7 @@ const AddNewStocktake = ({
     });
   };
   const handleOnChangeSelectDropDown = async (productId, variantId, index) => {
-    
     try {
-      
       const { token, ...otherData } = userTypeData;
       const formData = {
         merchant_id: merchant_id,
@@ -441,7 +433,6 @@ const AddNewStocktake = ({
               price: product?.price || "",
               new_qty: "",
               discrepancy: "0",
-              
             };
 
             return updatedList;
@@ -565,7 +556,7 @@ const AddNewStocktake = ({
         };
 
         setLoader(true);
-        
+
         const response = await axios.post(
           BASE_URL + CREATE_UPDATE_STOCKTAKE,
           { ...stocktakeData, ...otherUserData },
@@ -587,7 +578,7 @@ const AddNewStocktake = ({
         console.error("Error creating stocktake:", error);
         setLoader(false);
       }
-      
+
       navigate(-1);
     }
   };
@@ -633,7 +624,7 @@ const AddNewStocktake = ({
       ...provided,
       borderColor: state.isFocused ? "black" : provided.borderColor,
       boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
-      height: 40, 
+      height: 40,
       minHeight: 40,
       "&:hover": {
         borderColor: "black" ? "black" : provided["&:hover"].borderColor,
@@ -646,7 +637,6 @@ const AddNewStocktake = ({
         outline: "none",
       },
     }),
-    
   };
 
   const handleKeyPress = (e) => {
@@ -654,7 +644,7 @@ const AddNewStocktake = ({
       e.preventDefault();
     }
   };
-  
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -666,10 +656,7 @@ const AddNewStocktake = ({
                   onClick={handleCancelBtn}
                   className="text-center items-center"
                 >
-                  <img
-                    src={AddSvg}
-                  
-                  />
+                  <img src={AddSvg} />
                   <span>
                     {singleStocktakeState ? "Update" : "New"} Stocktake
                   </span>
@@ -764,11 +751,7 @@ const AddNewStocktake = ({
                           </StyledTableCell>
 
                           <StyledTableCell sx={{ verticalAlign: "top" }}>
-                            {
-                            
-                            stocktake_items.length === 1 
-                            
-                                ? null : (
+                            {stocktake_items.length === 1 ? null : (
                               <img
                                 src={DeleteIcon}
                                 onClick={() => handleDeleteProduct(index)}
@@ -807,10 +790,8 @@ const AddNewStocktake = ({
                 <button
                   className="quic-btn quic-btn-save w-32"
                   onClick={handleAddProduct}
-                  
                 >
                   Add
-                  
                 </button>
               </Grid>
             </Grid>
@@ -855,8 +836,6 @@ const AddNewStocktake = ({
                   ) : (
                     "Create"
                   )}
-
-                  
                 </button>
               </Grid>
             </Grid>
