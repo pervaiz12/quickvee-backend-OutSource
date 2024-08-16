@@ -289,30 +289,42 @@ export default function PaymentCalDetails() {
           <div className="mainSection">
             <div className="MidMainSection">
               <div className="LeftMidMainSection">
-                <div className="left-font-header">
-                  <h1 className="orderSummery_head">Order Status</h1>
-                  <div className="container">
-                    <div className="row justify-content-center ">
-                      <div className="col-12 order-status-svg">
-                        <OrderSummery_pickup_delivery_status
-                          orderSummeryData={orderSummeryData}
-                        />
+                {
+                  orderSummeryData &&
+                  orderSummeryData.order_detail &&
+                  orderSummeryData.order_detail.is_online === "0" ? (
+                      ""
+                  ):(
+                     <div className="left-font-header">
+                      <h1 className="orderSummery_head">Order Status</h1>
+                      <div className="container">
+                        <div className="row justify-content-center ">
+                          <div className="col-12 order-status-svg">
+                            <OrderSummery_pickup_delivery_status
+                              orderSummeryData={orderSummeryData}
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div className="deliverySection">
-                  {nonrefund && nonrefund.length > 0 && (
-                    <>
-                      <h1 className="orderSummery_head">
-                        {orderSummeryData &&
+                  )
+                }
+                 <h1 className="orderSummery_head">
+                        {/* {orderSummeryData &&
                           orderSummeryData.order_detail &&
                           orderSummeryData.order_detail.order_method.toLowerCase() ===
                           "pickup"
                           ? "Pickup"
-                          : "Delivery"}
+                          : "Delivery"} */}
+                          {orderSummeryData &&
+                            orderSummeryData.order_detail &&
+                            orderSummeryData.order_detail.is_online === "0"
+                              ? "In-Store Order"
+                              : orderSummeryData.order_detail?.order_method.toLowerCase() === "pickup"
+                                ? "Pickup"
+                                : "Delivery"}
                         {orderSummeryData.future_order_data &&
-                          orderSummeryData.future_order_data !== "NOW" ? (
+                          orderSummeryData?.future_order_data !== "NOW" ? (
                           <>
                             <div
                               style={{ marginTop: "0px" }}
@@ -320,12 +332,15 @@ export default function PaymentCalDetails() {
                             >
                               <p>
                                 Future Order -{" "}
-                                {formatDate(orderSummeryData.future_order_data)}
+                                {formatDate(orderSummeryData?.future_order_data)}
                               </p>
                             </div>
                           </>
                         ) : null}
                       </h1>
+                <div className="deliverySection">
+                  {nonrefund && nonrefund.length > 0 && (
+                    <>
                       <div className="OrderSummeryProductArea">
                         {nonrefund?.length
                           ? nonrefund?.map((result) => {
@@ -1098,7 +1113,11 @@ export default function PaymentCalDetails() {
                   {orderSummeryData &&
                     orderSummeryData.order_detail &&
                     orderSummeryData.order_detail?.order_method.toLowerCase() ===
-                    "pickup" &&  (
+                    "pickup" && (orderSummeryData.order_detail.billing_name ||
+                      orderSummeryData.order_detail.customer_phone ||
+                      orderSummeryData.order_detail.delivery_phn ||
+                      orderSummeryData.order_detail.customer_email ||
+                      orderSummeryData.order_detail.email) &&  (
                       <div className="orderSummeryCustomerDetailsArea">
                         <h1 className="orderSummery_head">Customer Details</h1>
                       <div className="orderSummeryCustomerDetailsInner">
@@ -1180,91 +1199,102 @@ export default function PaymentCalDetails() {
                       </div>
                     )}
                 {/* </div> */}
-                <div className="orderSummeryIdentification">
-                  <h1 className="orderSummery_head">Identification Card</h1>
-                  <div className="orderSummeryRightTopC">
-                    {orderSummeryData.id_card_detail &&
-                      orderSummeryData.id_card_detail.i_card_number ? (
-                      <p>
-                        ID Number
-                        <span>
-                          {orderSummeryData &&
-                            orderSummeryData.id_card_detail &&
-                            orderSummeryData.id_card_detail.i_card_number}
-                        </span>
-                      </p>
-                    ) : (
+
+                {
+                  orderSummeryData &&
+                  orderSummeryData.order_detail &&
+                  orderSummeryData.order_detail.is_online === "0" ? (
                       ""
-                    )}
-                    {orderSummeryData.id_card_detail && dateFormat ? (
-                      <p>
-                        Expiration Date
-                        <span>
-                          {orderSummeryData &&
-                            orderSummeryData.id_card_detail &&
-                            dateFormat}
-                        </span>
-                      </p>
-                    ) : (
-                      ""
-                    )}
-                    {/* {console.log('dobhhh', orderSummeryData.id_card_detail)} */}
-                    {/* {orderSummeryData &&
-                orderSummeryData.id_card_detail &&
-                dateOfBirth ? (
-                  <p className="orderSumeryText">
-                    Date Of Birth{' '}
-                    <span>
-                      {orderSummeryData &&
-                      orderSummeryData.id_card_detail &&
-                      dateOfBirth !== '31 Dec 1969'
-                        ? // Render the content if dateOfBirth is not "31 Dec 1969"
-                          dateOfBirth
-                        : // Render null if dateOfBirth is "31 Dec 1969"
-                          null}
-                    </span>
-                  </p>
-                ) : (
-                  ''
-                )} */}
-                    {orderSummeryData &&
-                      orderSummeryData.id_card_detail &&
-                      dateOfBirth &&
-                      dateOfBirth !== "31 Dec 1969" && ( // Add a condition here to check if dateOfBirth is not '31 Dec 1969'
-                        <p className="orderSumeryText">
-                          Date Of Birth <span>{dateOfBirth}</span>
-                        </p>
-                      )}
-                  </div>
-                  <div className="ordersummaryR_div_file">
-                    <label className="photo_area">
-                      <div
-                        id="img_container"
-                        data-toggle="modal"
-                        data-target="#id_cart_popup_front_side"
-                        onClick={handleClickOpen}
-                      >
-                        {/* {console.log('orderSummeryData: ', orderSummeryData)} */}
-                        {/* `https://sandbox.quickvee.com/upload/customer/id_proof/${orderSummeryData.id_card_detail.i_card_front_img}` */}
-                        <img
-                          src={
-                            orderSummeryData &&
+                  ):(
+                    <div className="orderSummeryIdentification">
+                    <h1 className="orderSummery_head">Identification Card</h1>
+                    <div className="orderSummeryRightTopC">
+                      {orderSummeryData.id_card_detail &&
+                        orderSummeryData.id_card_detail.i_card_number ? (
+                        <p>
+                          ID Number
+                          <span>
+                            {orderSummeryData &&
                               orderSummeryData.id_card_detail &&
-                              orderSummeryData.id_card_detail.image_url
-                              ? orderSummeryData.id_card_detail?.image_url
-                              : ""
-                          }
-                          alt=""
-                          className="id-cart-image"
-                        ></img>
+                              orderSummeryData.id_card_detail.i_card_number}
+                          </span>
+                        </p>
+                      ) : (
+                        ""
+                      )}
+                      {orderSummeryData.id_card_detail && dateFormat ? (
+                        <p>
+                          Expiration Date
+                          <span>
+                            {orderSummeryData &&
+                              orderSummeryData.id_card_detail &&
+                              dateFormat}
+                          </span>
+                        </p>
+                      ) : (
+                        ""
+                      )}
+                      {/* {console.log('dobhhh', orderSummeryData.id_card_detail)} */}
+                      {/* {orderSummeryData &&
+                  orderSummeryData.id_card_detail &&
+                  dateOfBirth ? (
+                    <p className="orderSumeryText">
+                      Date Of Birth{' '}
+                      <span>
+                        {orderSummeryData &&
+                        orderSummeryData.id_card_detail &&
+                        dateOfBirth !== '31 Dec 1969'
+                          ? // Render the content if dateOfBirth is not "31 Dec 1969"
+                            dateOfBirth
+                          : // Render null if dateOfBirth is "31 Dec 1969"
+                            null}
+                      </span>
+                    </p>
+                  ) : (
+                    ''
+                  )} */}
+                      {orderSummeryData &&
+                        orderSummeryData.id_card_detail &&
+                        dateOfBirth &&
+                        dateOfBirth !== "31 Dec 1969" && ( // Add a condition here to check if dateOfBirth is not '31 Dec 1969'
+                          <p className="orderSumeryText">
+                            Date Of Birth <span>{dateOfBirth}</span>
+                          </p>
+                        )}
+                    </div>
+                    <div className="ordersummaryR_div_file">
+                      <label className="photo_area">
+                        <div
+                          id="img_container"
+                          data-toggle="modal"
+                          data-target="#id_cart_popup_front_side"
+                          onClick={handleClickOpen}
+                        >
+                          {/* {console.log('orderSummeryData: ', orderSummeryData)} */}
+                          {/* `https://sandbox.quickvee.com/upload/customer/id_proof/${orderSummeryData.id_card_detail.i_card_front_img}` */}
+                          <img
+                            src={
+                              orderSummeryData &&
+                                orderSummeryData.id_card_detail &&
+                                orderSummeryData.id_card_detail.image_url
+                                ? orderSummeryData.id_card_detail?.image_url
+                                : ""
+                            }
+                            alt=""
+                            className="id-cart-image"
+                          ></img>
+                        </div>
+                      </label>
+                      <div className="photo_area_text">
+                        <span>Front Side</span>
+                        <div className="custom-file"></div>
                       </div>
-                    </label>
-                    <div className="photo_area_text">
-                      <span>Front Side</span>
-                      <div className="custom-file"></div>
                     </div>
                   </div>
-                </div>
+                  )
+                }
+
+               
                 <br></br>
                 <br></br>
                 {/* <div className='order-summery-right-header'>
