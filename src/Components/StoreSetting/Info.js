@@ -37,6 +37,9 @@ const Info = () => {
     stateList,
     onDropDownChangeHandle,
     login_type,
+    qrValue,
+    logoValue,
+    receiptValue,
   } = InfoFunction();
   let data = {
     id: user_id,
@@ -68,6 +71,9 @@ const Info = () => {
             qrCodeBoolean={qrCodeBoolean}
             receieptLogoBool={receieptLogoBool}
             login_type={login_type}
+            qrValue={qrValue}
+            logoValue={logoValue}
+            receiptValue={receiptValue}
           />
           <form>
             <AddressForm

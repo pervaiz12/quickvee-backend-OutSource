@@ -12,6 +12,9 @@ const LogoAndBanner = ({
   errors,
   receieptLogoBool,
   login_type,
+  qrValue,
+  logoValue,
+  receiptValue,
 }) => {
   return (
     <Grid container sx={{ p: 2.5 }} className="box_shadow_div">
@@ -65,9 +68,11 @@ const LogoAndBanner = ({
                           className="file-input1 info-background"
                           style={{
                             backgroundImage: `url(${
-                              !imageBoolean
-                                ? BASE_URL + "upload/" + infoRecord.image
-                                : infoRecord.image
+                              logoValue !== "1"
+                                ? !imageBoolean
+                                  ? BASE_URL + "upload/" + infoRecord.image
+                                  : infoRecord.image
+                                : ""
                             })`,
                           }}
                         ></label>
@@ -145,11 +150,13 @@ const LogoAndBanner = ({
                               className="file-input1 info-background"
                               style={{
                                 backgroundImage: `url(${
-                                  !qrCodeBoolean
-                                    ? BASE_URL +
-                                      "upload/qr_code/" +
-                                      infoRecord.qrCode
-                                    : infoRecord.qrCode
+                                  qrValue !== "1"
+                                    ? !qrCodeBoolean
+                                      ? BASE_URL +
+                                        "upload/qr_code/" +
+                                        infoRecord.qrCode
+                                      : infoRecord.qrCode
+                                    : ""
                                 })`,
                               }}
                             ></label>
@@ -230,11 +237,13 @@ const LogoAndBanner = ({
                               className="file-input1 info-background"
                               style={{
                                 backgroundImage: `url(${
-                                  !receieptLogoBool
-                                    ? BASE_URL +
-                                      "upload/" +
-                                      infoRecord.receieptLogo
-                                    : infoRecord.receieptLogo
+                                  receiptValue !== "1"
+                                    ? !receieptLogoBool
+                                      ? BASE_URL +
+                                        "upload/" +
+                                        infoRecord.receieptLogo
+                                      : infoRecord.receieptLogo
+                                    : ""
                                 })`,
                               }}
                             ></label>
