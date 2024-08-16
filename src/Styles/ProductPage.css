@@ -744,6 +744,8 @@
   opacity: 1;
   font-size: 14px;
   font-family: CircularSTDBook !important;
+  margin-left: 8px;
+  font-size: 16px;
 }
 
 .varient-select-section {
@@ -945,6 +947,7 @@
   padding: 7px;
   box-sizing: border-box;
   outline: 0;
+  text-transform: capitalize;
 }
 
 .inventory-input-area input:nth-child(n + 1) {
@@ -974,4 +977,9 @@
 
 .product-layout {
   position: relative;
+}
+
+.delete-inventory-text {
+  font-size: 16px;
+  color: #ccc;
 }

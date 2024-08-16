@@ -185,6 +185,7 @@ const CreatableDropdown = ({
               onFocus={handleFocus}
               onChange={handleFilterOptions}
               autoComplete={false}
+              maxLength={35}
               disabled={
                 selectedOption?.length === 2 && keyName === "frequentlyBought"
               }

@@ -287,7 +287,7 @@ export default function InfoFunction() {
     let isValidate = true;
 
     if (!infoRecord.image) {
-      errorMessage.imageErrors = "Image is required";
+      errorMessage.imageErrors = "Logo is required";
       isValidate = false;
       console.log("1");
     }
@@ -709,7 +709,7 @@ export default function InfoFunction() {
             setImageBoolean(true);
           } else {
             // setErrors((prev) => ({ ...prev, imageErrors: "Invalid image" }));
-            errorMessage.imageErrors = "Invalid image";
+            errorMessage.imageErrors = "Invalid Logo";
             setInfoRecord((prevState) => ({
               ...prevState,
               image: "", // Set qrCode to an empty string
@@ -786,7 +786,7 @@ export default function InfoFunction() {
           // }
           // errorMessage.qrCodeError = "";
         } else {
-          errorMessage.qrCodeError = "Invalid image";
+          errorMessage.qrCodeError = "Invalid QrCode";
           setInfoRecord((prevState) => ({
             ...prevState,
             qrCode: "",
@@ -826,7 +826,7 @@ export default function InfoFunction() {
           // }
           // errorMessage.receieptLogoError = "";
         } else {
-          errorMessage.qrReciptError = "Invalid image";
+          errorMessage.qrReciptError = "Invalid ReceiptLogo";
           setInfoRecord((prevState) => ({
             ...prevState,
             receieptLogo: "",
@@ -1008,7 +1008,7 @@ export default function InfoFunction() {
             setHideSuccess(true);
             handleSuccessMessage();
           } else {
-            ToastifyAlert(response.data.msg, "error");
+            ToastifyAlert("No Changes Found", "error");
           }
           // let data = {
           //   id: user_id,
