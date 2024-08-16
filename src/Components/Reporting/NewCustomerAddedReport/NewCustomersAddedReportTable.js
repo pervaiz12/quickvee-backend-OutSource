@@ -17,6 +17,7 @@ import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItems
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import { priceFormate } from "../../../hooks/priceFormate";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -50,6 +51,7 @@ export default function NewCustomersAddedReportTable() {
     (state) => state.NewCustomersAddedReport
   );
   const [dataArr, setDataArr] = useState([]);
+  const showNoData = useDelayedNodata(dataArr)
   const [sortOrder, setSortOrder] = useState("asc");
   useEffect(() => {
     if (
@@ -141,7 +143,7 @@ export default function NewCustomersAddedReportTable() {
                         ))}
                     </TableBody>
                   </StyledTable>
-                  {!dataArr.length && <NoDataFound />}
+                  {showNoData && !dataArr.length && <NoDataFound />}
                 </TableContainer>
               </Grid>
             </Grid>

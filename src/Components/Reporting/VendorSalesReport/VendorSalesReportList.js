@@ -18,6 +18,7 @@ import SortIconW from "../../../Assests/Category/SortingW.svg";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -52,6 +53,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const VendorSalesReportList = (props) => {
   const dispatch = useDispatch();
   const [allVendorData, setallVendorData] = useState("");
+  const showNoData = useDelayedNodata(Object.keys(allVendorData))
   const AllVendorDataState = useSelector((state) => state.VendorSalesList);
   const [sortOrder, setSortOrder] = useState("asc");
   const {
@@ -257,7 +259,7 @@ const VendorSalesReportList = (props) => {
             </>
           ) : (
             <Grid sx={{ mt: 3.5 }}>
-              <NoDataFound />
+               {showNoData && <NoDataFound />}
             </Grid>
           )}
         </>
