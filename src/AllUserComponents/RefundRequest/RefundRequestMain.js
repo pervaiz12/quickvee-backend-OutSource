@@ -132,6 +132,11 @@ export default function RefundRequestMain() {
         setCurrentPage={setCurrentPage}
         dataArr={dataArr}
         setDataArr={setDataArr}
+        debouncedValue={debouncedValue}
+        setOption={setOption}
+        refundDropDownOptions={refundDropDownOptions}
+        getUnAutherisedTokenMessage={getUnAutherisedTokenMessage}
+        handleCoockieExpire={handleCoockieExpire}
       />
     </>
   );
