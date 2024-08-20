@@ -935,21 +935,23 @@ const AddProducts = () => {
           inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
       }
     } else if (name === "qty") {
-      // Remove all characters that are not digits, minus sign, or decimal point
-      let cleanedValue = value.replace(/[^0-9.-]/g, "");
+      // Remove all characters that are not digits or minus sign
+      let cleanedValue = value.replace(/[^0-9-]/g, "");
 
-      // Ensure only one minus sign at the start and only one decimal point
+      // Ensure only one minus sign at the start
       if (cleanedValue.indexOf("-") > 0 || cleanedValue.split("-").length > 2) {
         cleanedValue = cleanedValue.replace(/-/g, ""); // Remove all minus signs
       }
       if (cleanedValue.indexOf("-") === -1 && value[0] === "-") {
         cleanedValue = "-" + cleanedValue; // Add a single minus sign at the start if needed
       }
-      let validNumberRegex = /^-?\d*(\.\d+)?$/;
-      if (validNumberRegex.test(cleanedValue)) {
-        fieldValue = cleanedValue;
+
+      // Ensure the value is a valid number without a decimal point and not empty
+      let validNumberRegex = /^-?\d*$/;
+      if (cleanedValue === "" || validNumberRegex.test(cleanedValue)) {
+        fieldValue = cleanedValue; // Allow empty or valid numeric input
       } else {
-        fieldValue = inputStr;
+        fieldValue = ""; // Set to empty string for invalid input
       }
     }
 
@@ -1333,21 +1335,23 @@ const AddProducts = () => {
           inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
       }
     } else if (name === "qty") {
-      // Remove all characters that are not digits, minus sign, or decimal point
-      let cleanedValue = value.replace(/[^0-9.-]/g, "");
+      // Remove all characters that are not digits or minus sign
+      let cleanedValue = value.replace(/[^0-9-]/g, "");
 
-      // Ensure only one minus sign at the start and only one decimal point
+      // Ensure only one minus sign at the start
       if (cleanedValue.indexOf("-") > 0 || cleanedValue.split("-").length > 2) {
         cleanedValue = cleanedValue.replace(/-/g, ""); // Remove all minus signs
       }
       if (cleanedValue.indexOf("-") === -1 && value[0] === "-") {
         cleanedValue = "-" + cleanedValue; // Add a single minus sign at the start if needed
       }
-      let validNumberRegex = /^-?\d*(\.\d+)?$/;
-      if (validNumberRegex.test(cleanedValue)) {
-        fieldValue = cleanedValue;
+
+      // Ensure the value is a valid number without a decimal point and not empty
+      let validNumberRegex = /^-?\d*$/;
+      if (cleanedValue === "" || validNumberRegex.test(cleanedValue)) {
+        fieldValue = cleanedValue; // Allow empty or valid numeric input
       } else {
-        fieldValue = inputStr;
+        fieldValue = ""; // Set to empty string for invalid input
       }
     } else if (name === "customCode") {
       fieldValue = value;

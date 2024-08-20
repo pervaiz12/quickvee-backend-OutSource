@@ -205,7 +205,7 @@ const GeneratePUC = ({
                                             inp?.name === "qty" &&
                                             formValue?.[index]?.[title]?.[
                                               inp?.name
-                                            ].includes("-")
+                                            ]?.includes("-")
                                               ? 7
                                               : setInputMaxLength(inp?.name)
                                           }
