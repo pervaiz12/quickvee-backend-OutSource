@@ -17,6 +17,7 @@ import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItems
 import SortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -52,6 +53,7 @@ const TopSallerList = ({ data }) => {
   const dispatch = useDispatch();
 
   const [topsaller, settopsaller] = useState([]);
+  const showNoData = useDelayedNodata(topsaller)
   const topsallerDataState = useSelector((state) => state.topsaller);
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
@@ -93,91 +95,6 @@ const TopSallerList = ({ data }) => {
     settopsaller(sortedItems);
     setSortOrder(newOrder);
   };
-  // const renderDataTable = () => {
-  //   if (topsaller.status === "Failed" && topsaller.msg === "No. Data found.") {
-  //     return (
-  //       <>
-  //         <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
-  //           <Grid item xs={12}>
-  //             <p>No. Data found.</p>
-  //           </Grid>
-  //         </Grid>
-  //       </>
-  //     );
-  //   } else if (topsaller && topsaller.length >= 1) {
-  //     return (
-  //       <>
-  //         <Grid container className="box_shadow_div">
-  //           <Grid item xs={12}>
-  //             <TableContainer>
-  //               <StyledTable>
-  //                 <TableHead>
-  //                   <StyledTableCell>
-  //                     <button
-  //                       className="flex items-center"
-  //                       onClick={() => sortByItemName("str", "real_name")}
-  //                     >
-  //                       <p>Item Name</p>
-  //                       <img src={SortIcon} alt="" className="pl-1" />
-  //                     </button>
-  //                   </StyledTableCell>
-  //                   <StyledTableCell>
-  //                     <button
-  //                       className="flex items-center"
-  //                       onClick={() => sortByItemName("str", "categoryss")}
-  //                     >
-  //                       <p>Category</p>
-  //                       <img src={SortIcon} alt="" className="pl-1" />
-  //                     </button>
-  //                   </StyledTableCell>
-  //                   <StyledTableCell>
-  //                     <button
-  //                       className="flex items-center"
-  //                       onClick={() => sortByItemName("str", "variant")}
-  //                     >
-  //                       <p>Varient Name</p>
-  //                       <img src={SortIcon} alt="" className="pl-1" />
-  //                     </button>
-  //                   </StyledTableCell>
-  //                   <StyledTableCell>
-  //                     <button
-  //                       className="flex items-center"
-  //                       onClick={() => sortByItemName("num", "total_sold")}
-  //                     >
-  //                       <p>Quantity Sold</p>
-  //                       <img src={SortIcon} alt="" className="pl-1" />
-  //                     </button>
-  //                   </StyledTableCell>
-  //                 </TableHead>
-
-  //                 <TableBody>
-  //                   {topsaller.map((topsaller, index) => (
-  //                     <StyledTableRow>
-  //                       <StyledTableCell>
-  //                         <p className="report-title ">{topsaller.real_name}</p>
-  //                       </StyledTableCell>
-  //                       <StyledTableCell>
-  //                         <p className="report-title">{topsaller.categoryss}</p>
-  //                       </StyledTableCell>
-  //                       <StyledTableCell>
-  //                         <p className="report-title">{topsaller.variant}</p>
-  //                       </StyledTableCell>
-  //                       <StyledTableCell>
-  //                         <p className="report-title">
-  //                           {priceFormate(topsaller.total_sold)}
-  //                         </p>
-  //                       </StyledTableCell>
-  //                     </StyledTableRow>
-  //                   ))}
-  //                 </TableBody>
-  //               </StyledTable>
-  //             </TableContainer>
-  //           </Grid>
-  //         </Grid>
-  //       </>
-  //     );
-  //   }
-  // };
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -261,7 +178,7 @@ const TopSallerList = ({ data }) => {
                     : ""}
                 </TableBody>
               </StyledTable>
-              {!topsaller.length && <NoDataFound />}
+              {showNoData && !topsaller.length && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>

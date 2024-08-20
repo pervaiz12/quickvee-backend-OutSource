@@ -15,6 +15,7 @@ import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
 import { Grid } from "@mui/material";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -62,6 +63,7 @@ let columns = [
   "Profit",
 ];
 export default function Pagination(props) {
+  const showNoData = useDelayedNodata(props.searchProduct)
   const categoryName = (str) => {
     const temp = str?.split(",");
     return temp?.join(", ");
@@ -161,11 +163,12 @@ export default function Pagination(props) {
               ""
             )
           ) : (
-            <Grid container>
-              <Grid item sx={{ p: 2.5 }}>
-                <p>No Data Available</p>
-              </Grid>
-            </Grid>
+            // <Grid container>
+            //   <Grid item sx={{ p: 2.5 }}>
+            //     <p>No Data Available</p>
+            //   </Grid>
+            // </Grid>
+            showNoData && <NoDataFound />
           )}
         </TableContainer>
       )}

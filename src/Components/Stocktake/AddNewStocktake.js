@@ -93,7 +93,7 @@ const AddNewStocktake = ({
       price: "",
     },
   ]);
-
+  console.log("costperItem:product.costperItem || ,",stocktake_items  )
   const location = useLocation();
 
   const { id } = useParams();
@@ -350,7 +350,7 @@ const AddNewStocktake = ({
       const updatedList = [...prevList];
       const currentQty = updatedList[index].current_qty;
       const newQty = value;
-      const unitPrice = updatedList[index]?.price;
+      const unitPrice = updatedList[index]?.costperItem;
       const parsedCurrentQty = parseInt(currentQty);
       const discrepancy = newQty
         ? parseInt(newQty) - parseInt(parsedCurrentQty)
@@ -417,7 +417,7 @@ const AddNewStocktake = ({
           const sortedProduct = selectedProducts.find(
             (prod) => prod.var_id === product.id
           );
-          console.log("Updated product", product);
+          console.log("Updated product 1", product);
           setProductList((prevList) => {
             const updatedList = [...prevList];
             updatedList[index] = {
@@ -431,6 +431,7 @@ const AddNewStocktake = ({
               current_qty: product?.quantity || "", //
               stocktake_item_id: "0" || "",
               price: product?.price || "",
+              costperItem:product?.costperItem || "",
               new_qty: "",
               discrepancy: "0",
             };
@@ -443,7 +444,7 @@ const AddNewStocktake = ({
           obj.newPrice =
             parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
           obj.finalQty = Number(product.quantity) ?? 0;
-          console.log("Updated product", product);
+          console.log("Updated product 2", product);
           setProductList((prevList) => {
             const updatedList = [...prevList];
             updatedList[index] = {
@@ -455,6 +456,7 @@ const AddNewStocktake = ({
               current_qty: product.quantity || "", //
               stocktake_item_id: "0" || "",
               price: product?.price || "",
+              costperItem:product?.costperItem || "",
               new_qty: "",
               discrepancy: "0",
             };

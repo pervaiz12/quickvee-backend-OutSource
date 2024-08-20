@@ -22,6 +22,7 @@ import PasswordShow from "../../../Common/passwordShow";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 // ==================== TABLE STYLE ADDED ===================================================
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -66,6 +67,7 @@ const EmployeeSalesPerCategoryReport = (props) => {
 
   const dispatch = useDispatch();
   const [allEmployeeSalesPerCategoryData, setallEmployeeSalesPerCategoryData] = useState("");
+  const showNoData = useDelayedNodata(Object.keys(allEmployeeSalesPerCategoryData))
   const AllEmployeeSalesPerCategoryDataState = useSelector(
     (state) => state.EmployeeSalesPerCategoryList
   );
@@ -329,8 +331,8 @@ const EmployeeSalesPerCategoryReport = (props) => {
           </>
         ))
       ) : (
-        <Grid sx={{pt:2.5}}>
-          <NoDataFound />
+        <Grid sx={{pt:3}}>
+         {showNoData && <NoDataFound />} 
         </Grid>
         
       )}

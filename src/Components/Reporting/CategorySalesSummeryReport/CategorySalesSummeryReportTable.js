@@ -19,6 +19,7 @@ import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItems
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 // ==================== TABLE STYLE ADDED ===================================================
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -54,11 +55,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 // ==================== END TABLE STYLE ADDED ===================================================
 
 const CategorySalesSummeryReportTable = (props) => {
-  //   const [sortOrder, setSortOrder] = useState("asc");
-  //   const dispatch = useDispatch();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
   // ===============
+  const showNoData = useDelayedNodata(props.getCategorySalesReport)
   const calculatePrice = (dailyreport) => {
     const { variant_cpi, product_cpi, total_sale_qty } = dailyreport;
 
@@ -102,63 +102,6 @@ const CategorySalesSummeryReportTable = (props) => {
       </StyledTableRow>
     ));
   };
-  // ===============
-
-  // ====================== STATE DECLARED ==================================
-  //   const [dailyreport, setdailyreport] = useState([]);
-  //   const [total, settotal] = useState(0);
-  // ====================== END STATE DECLARED ==================================
-  //   const dailyreportDataState = useSelector((state) => state.dailyreport);
-  //   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-
-  // ==================== USEEFFECT ===========================================
-  //   useEffect(() => {
-  //     getAllDailyReport();
-  //   }, [dispatch, data]);
-  //   const getAllDailyReport = async () => {
-  //     try {
-  //       let newData = { ...data, ...userTypeData, merchant_id };
-  //       await dispatch(fetchdailyreportData(newData)).unwrap();
-  //     } catch (error) {
-  //       if (error.status == 401 || error.response.status === 401) {
-  //         getUnAutherisedTokenMessage();
-  //         handleCoockieExpire();
-  //       } else if (error.status == "Network Error") {
-  //         getNetworkError();
-  //       }
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     if (!dailyreportDataState.loading && dailyreportDataState.dailyreportData) {
-  //       setdailyreport(dailyreportDataState.dailyreportData);
-  //       settotal(
-  //         dailyreportDataState.dailyreportData.length > 0
-  //           ? dailyreportDataState.dailyreportData.reduce(
-  //               (total, report) => total + parseFloat(report.amt),
-  //               0
-  //             )
-  //           : 0
-  //       );
-  //     }
-  //   }, [
-  //     dailyreportDataState,
-  //     dailyreportDataState.loading,
-  //     dailyreportDataState.dailyreportData,
-  //   ]);
-
-  // ==================== END USEEFFECT ===========================================
-
-  //   const sortByItemName = (type, name) => {
-  //     const { sortedItems, newOrder, sortIcon } = SortTableItemsHelperFun(
-  //       dailyreport,
-  //       type,
-  //       name,
-  //       sortOrder
-  //     );
-  //     setdailyreport(sortedItems);
-  //     setSortOrder(newOrder);
-  //   };         <SkeletonTable columns={props?.rowSkelton} />
 
   const formatDate = (dateString) => {
     const options = { day: "2-digit", month: "short", year: "numeric" };
@@ -238,75 +181,7 @@ const CategorySalesSummeryReportTable = (props) => {
                     <TableBody>
                       {Array.isArray(props.getCategorySalesReport) &&
                       props.getCategorySalesReport.length > 0 ? (
-                        <>
-                          {renderSalesReport(props.getCategorySalesReport)}
-                          {/* {props.getCategorySalesReport?.map(
-                            (dailyreport, index) => (
-                              <StyledTableRow key={index}>
-                                <StyledTableCell>
-                                  <p className="report-sort">
-                                    {!!dailyreport?.category_name
-                                      ? dailyreport?.category_name
-                                      : "Deleted"}
-                                  </p>
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                  <p className="report-title">
-                                    {!!dailyreport?.total_sale_qty
-                                      ? dailyreport?.total_sale_qty
-                                      : 0}
-                                  </p>
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                  {`$${priceFormate(
-                                    Number(
-                                      !!dailyreport?.total_sale_price
-                                        ? dailyreport?.total_sale_price.toLocaleString(
-                                            "en-US",
-                                            { useGrouping: false }
-                                          )
-                                        : 0.0
-                                    ).toFixed(2)
-                                  )}`}
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                  {`$${priceFormate(
-                                    Number(
-                                      !!dailyreport?.variant_cpi
-                                        ? !!dailyreport?.total_sale_qty
-                                          ? (
-                                              dailyreport?.total_sale_qty *
-                                              dailyreport?.variant_cpi
-                                            ).toFixed(2)
-                                          : dailyreport?.variant_cpi ==
-                                                (null || undefined) &&
-                                              dailyreport?.product_cpi ==
-                                                (null || undefined)
-                                            ? "0.0"
-                                            : dailyreport?.variant_cpi ==
-                                                  (null || undefined) &&
-                                                !!dailyreport?.product_cpi
-                                              ? (
-                                                  dailyreport?.product_cpi *
-                                                  dailyreport?.total_sale_qty
-                                                ).toFixed(2)
-                                              : !!dailyreport?.variant_cpi &&
-                                                  !!dailyreport?.product_cpi
-                                                ? (
-                                                    dailyreport?.total_sale_qty *
-                                                    dailyreport?.variant_cpi
-                                                  ).toFixed(2)
-                                                : "0.0"
-                                        : "0.0"
-                                    ).toLocaleString("en-US", {
-                                      useGrouping: false,
-                                    })
-                                  )}`}
-                                </StyledTableCell>
-                              </StyledTableRow>
-                            )
-                          )} */}
-                        </>
+                        <>{renderSalesReport(props.getCategorySalesReport)}</>
                       ) : (
                         ""
                       )}
@@ -340,7 +215,7 @@ const CategorySalesSummeryReportTable = (props) => {
                 </TableContainer>
                 {Array.isArray(props.getCategorySalesReport) &&
                 props.getCategorySalesReport.length <= 0 ? (
-                  <NoDataFound />
+                  showNoData && !props.TableLoader && <NoDataFound />
                 ) : (
                   ""
                 )}

@@ -20,6 +20,7 @@ import PasswordShow from "../../../Common/passwordShow";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 // ==================== TABLE STYLE ADDED ===================================================
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -70,9 +71,10 @@ const SalesPersonReport = (props) => {
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
-
+ 
   const dispatch = useDispatch();
   const [allSalesByPersonData, setallSalesByPersonData] = useState("");
+  const showNoData = useDelayedNodata( Object.entries(allSalesByPersonData))
   const AllSalesByPersonDataState = useSelector(
     (state) => state.SalesByPersonList
   );
@@ -291,7 +293,7 @@ const SalesPersonReport = (props) => {
         ))
       ) : (
         <Grid sx={{pt:2.5}}>
-          <NoDataFound />
+          {showNoData && <NoDataFound />}
         </Grid>
         
       )}

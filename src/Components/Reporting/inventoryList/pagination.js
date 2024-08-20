@@ -15,6 +15,7 @@ import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
 import { Grid } from "@mui/material";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -44,6 +45,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 export default function Pagination(props) {
+  const showNoData = useDelayedNodata(props.searchProduct);
   let columns = ["Title", "Category", "Quantity", "Price"];
   const renderLoader = () => {
     return (
@@ -113,26 +115,24 @@ export default function Pagination(props) {
                 </StyledTableCell>
               </TableHead>
               <TableBody>
-                {props.searchProduct.length > 0 ? (
-                  props.searchProduct?.map((result, index) => (
-                    <StyledTableRow key={index}>
-                      <StyledTableCell>
-                        <p>{result?.title}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{result?.category_name}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{result?.quantity}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{`$${priceFormate(result?.price)}`}</p>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))
-                ) : (
-                  ""
-                )}
+                {props.searchProduct.length > 0
+                  ? props.searchProduct?.map((result, index) => (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell>
+                          <p>{result?.title}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{result?.category_name}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{result?.quantity}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{`$${priceFormate(result?.price)}`}</p>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))
+                  : ""}
               </TableBody>
             </StyledTable>
           </TableContainer>
@@ -154,7 +154,7 @@ export default function Pagination(props) {
               ""
             )
           ) : (
-           <NoDataFound  />
+            showNoData && <NoDataFound />
           )}
         </>
       )}
