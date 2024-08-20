@@ -101,7 +101,7 @@ const StocktakeList = ({ setVisible }) => {
     ) {
       setTotalCount(StocktakeListReducerState.stocktakeListCount);
     }
-  }, [StocktakeListReducerState,StocktakeListReducerState.stocktakeListCount]);
+  }, [StocktakeListReducerState, StocktakeListReducerState.stocktakeListCount]);
 
   useEffect(() => {
     if (
@@ -376,7 +376,8 @@ const StocktakeList = ({ setVisible }) => {
           </Grid>
         </Grid>
       </Grid>
-      {!StocktakeListReducerState?.StocktakeList?.length && <NoDataFound />}
+      {!StocktakeListReducerState.loading &&
+        !StocktakeListReducerState?.StocktakeList?.length && <NoDataFound />}
     </>
   );
 };
