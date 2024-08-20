@@ -904,7 +904,7 @@ export default function PaymentCalDetails() {
                   <h1 className="orderSummery_head">Identification Card</h1>
                   <div className="orderSummeryRightTopC">
                     {orderSummeryData.id_card_detail &&
-                      orderSummeryData.id_card_detail.i_card_number ? (
+                      orderSummeryData.id_card_detail.i_card_number  ? (
                       <p>
                         ID Number
                         <span>

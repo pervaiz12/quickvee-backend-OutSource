@@ -22,6 +22,7 @@ import axios from "axios";
 import { BASE_URL, REFUND_EMAIL_STATUS_CHANGE } from "../../Constants/Config";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from '../../CommonComponents/ToastifyAlert';
+import NoDataFound from "../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -144,7 +145,6 @@ export default function RefundRequestTable({
     setSelectedItem({ id, status });
     setConfirmModalOpen(true);
   };
-
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -253,6 +253,7 @@ export default function RefundRequestTable({
                       ))}
                   </TableBody>
                 </StyledTable>
+                {!dataArr.length && <NoDataFound />}
               </TableContainer>
               <Grid container sx={{ padding: 2.5 }}>
                 <Grid item xs={12}>
