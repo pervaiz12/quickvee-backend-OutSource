@@ -66,7 +66,7 @@ export default function StoreCreditReportMain() {
             <Grid item xs={12}>
               <h1 className="heading">Filter By</h1>
               <InputTextSearch
-                placeholder={"Search for a Gift Card Number"}
+                placeholder={"Search by Customer Name"}
                 value={searchRecord}
                 handleChange={handleSearchInputChange}
               />

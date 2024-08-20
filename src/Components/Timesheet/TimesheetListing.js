@@ -860,11 +860,33 @@ const TimesheetListing = ({ data }) => {
   // };
 
   const formatDate = (dateString) => {
-    const options = { day: "2-digit", month: "short", year: "numeric" };
-    const formattedDate = new Date(dateString).toLocaleDateString(
-      "en-US",
-      options
-    );
+    // const options = { day: "2-digit", month: "short", year: "numeric" };
+    // console.log("dateString",dateString)
+    // const formattedDate = new Date(dateString).toLocaleDateString(
+    //   "en-US",
+    //   options
+    // );
+
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const [year, month, day] = dateString.split("-");
+    const date = new Date(year, month - 1, day);
+    const formattedDate = `${months[date.getMonth()]} ${String(
+      date.getDate()
+    ).padStart(2, "0")}, ${date.getFullYear()}`;
+    
     return formattedDate;
   };
   const formDateOUtDate = (dateString) => {
