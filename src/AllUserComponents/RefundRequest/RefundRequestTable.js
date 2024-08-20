@@ -23,7 +23,7 @@ import { BASE_URL, REFUND_EMAIL_STATUS_CHANGE } from "../../Constants/Config";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from '../../CommonComponents/ToastifyAlert';
 import NoDataFound from "../../reuseableComponents/NoDataFound";
-import { fetchRefundRequestArr } from "../../Redux/features/RefundRequest/RefundRequestSlice";
+import { fetchRefundRequestArr,fetchRefundRequestArrCount } from "../../Redux/features/RefundRequest/RefundRequestSlice";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -150,6 +150,7 @@ export default function RefundRequestTable({
             };
             if (data) {
               await dispatch(fetchRefundRequestArr(data)).unwrap();
+              await dispatch(fetchRefundRequestArrCount(data)).unwrap();
             }
           } catch (error) {
             console.log(error);
