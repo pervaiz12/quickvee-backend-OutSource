@@ -1203,7 +1203,8 @@ export default function PaymentCalDetails() {
 
                     <div className="orderSummeryIdentification">
                     {orderSummeryData?.id_card_detail &&
-                    (orderSummeryData.id_card_detail.i_card_number ||
+                    ( (orderSummeryData.id_card_detail.i_card_number &&
+                      orderSummeryData.id_card_detail.i_card_number !== "verify_non_id_person") ||
                       dateFormat ||
                       (dateOfBirth && dateOfBirth !== "31 Dec 1969")) && (
                         <>

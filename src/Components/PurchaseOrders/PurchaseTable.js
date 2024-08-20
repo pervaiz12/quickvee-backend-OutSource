@@ -511,7 +511,7 @@ const PurchaseTable = ({ seVisible }) => {
           </Grid>
         </div>
       </div>
-      {!allPurchaseData?.length && <NoDataFound />}
+      {!AllpurchaseDataState.loading && !allPurchaseData?.length && <NoDataFound />}
     </>
   );
 };
