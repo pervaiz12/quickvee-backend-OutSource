@@ -74,7 +74,7 @@ export default function StoreCreditReportTable({
     ) {
       const filteredData =
         StoreCreditReportReduxState.StoreCreditReportArr.filter((item) =>
-          item.customer_name.toLowerCase().includes(searchRecord.toLowerCase())
+          item?.customer_name?.toLowerCase()?.includes(searchRecord?.toLowerCase())
         );
       setTotalValueIssued(
         filteredData.reduce(
