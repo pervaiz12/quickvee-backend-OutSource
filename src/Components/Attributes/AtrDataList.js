@@ -161,7 +161,10 @@ const AtrDataList = ({ seVisible }) => {
   };
 
   const handleOpen = () => setShowModal(true);
-  const handleClose = () => setShowModal(false);
+  const handleClose = () => {
+    setNewAttribute("")
+    setShowModal(false);
+  }
 
   const myStyles = {
     width: "60%",

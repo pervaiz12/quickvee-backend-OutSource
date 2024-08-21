@@ -18,6 +18,7 @@ import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItems
 import PasswordShow from "../../../Common/passwordShow";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
 import useDelayedNodata from "../../../hooks/useDelayedNoData";
+import { dateFormate } from "../../../hooks/dateFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -167,7 +168,7 @@ const CouponReportList = (props) => {
                       <StyledTableRow>
                         <StyledTableCell>
                           <p className="report-title">
-                            {formatDate(couponData.date)}
+                            {dateFormate(couponData.date)}
                           </p>
                         </StyledTableCell>
                         <StyledTableCell>
