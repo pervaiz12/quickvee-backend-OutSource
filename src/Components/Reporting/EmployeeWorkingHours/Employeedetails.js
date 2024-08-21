@@ -13,6 +13,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
 import { priceFormate } from "../../../hooks/priceFormate";
+import { dateFormate } from "../../../hooks/dateFormate";
 import PasswordShow from "../../../Common/passwordShow";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
@@ -127,7 +128,7 @@ const Employeedetails = (props) => {
     }
     return totalbreakdata.reduce(
       (total, workData) =>
-        total + convertSecondsToHours(parseFloat(workData.total_seconds_break)),
+        total + convertSecondsToHours(parseFloat(workData.total_seconds_break ?? 0)),
       0
     );
   };
@@ -212,7 +213,7 @@ const Employeedetails = (props) => {
                                   <>
                                     <StyledTableRow>
                                       <StyledTableCell>
-                                        <p>{formatDate(workData.work_date)}</p>
+                                        <p>{dateFormate(workData.work_date)}</p>
                                       </StyledTableCell>
                                       <StyledTableCell>
                                         <p>{workData.first_check_in_time}</p>

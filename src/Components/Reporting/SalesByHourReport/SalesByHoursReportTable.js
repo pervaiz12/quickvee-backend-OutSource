@@ -137,14 +137,14 @@ const SalesByHoursReportTable = (props) => {
                             {props.SalesHoursData?.map((dailyreport, index) => (
                               <StyledTableRow key={index}>
                                 <StyledTableCell>
-                                  <p className="report-sort">
+                                  <p>
                                     {!!dailyreport?.interval_start
                                       ? dailyreport?.interval_start
                                       : ""}
                                   </p>
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                  <p className="report-sort">
+                                  <p>
                                     {!!dailyreport?.interval_end
                                       ? dailyreport?.interval_end
                                       : ""}
