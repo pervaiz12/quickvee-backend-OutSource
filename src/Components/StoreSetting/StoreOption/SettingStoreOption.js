@@ -123,7 +123,9 @@ export default function SettingStoreOption() {
     if (checkBoxList?.includes(name)) {
       if (name === "orderNumebrEnabled") {
         updateData[name] = checked;
-        setVoidOrder(!VoidOrder);
+        setVoidOrder((prev) => {
+          return !checked && !prev;
+        });
         // updateData["resetOrderNumberTime"] = "00.00";
       } else if (name === "resetOrderNumberTime") {
         setStartTime("");
@@ -384,9 +386,7 @@ export default function SettingStoreOption() {
     setVoidOrder(!VoidOrder);
     setOrderState((prev) => ({
       ...prev,
-      orderNumebrEnabled: prev.orderNumebrEnabled
-        ? !prev.orderNumebrEnabled
-        : prev.orderNumebrEnabled,
+      orderNumebrEnabled: !VoidOrder ? false : true,
     }));
   };
 
