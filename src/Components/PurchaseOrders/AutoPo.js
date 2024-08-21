@@ -486,8 +486,8 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
           formData.append("login_type", userTypeData.login_type);
 
           const response = await axios.post(
-            // BASE_URL + SAVE_PO, 
-           "https://www.quickvee.net/Zoho_po/save_po",
+            BASE_URL + SAVE_PO,
+          //  "https://www.quickvee.net/Zoho_po/save_po",
             formData, {
             headers: {
               "Content-Type": "multipart/form-data",
