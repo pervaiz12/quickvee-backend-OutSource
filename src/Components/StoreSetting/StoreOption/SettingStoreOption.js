@@ -124,7 +124,7 @@ export default function SettingStoreOption() {
       if (name === "orderNumebrEnabled") {
         updateData[name] = checked;
         setVoidOrder((prev) => {
-          return !checked && !prev;
+          return checked === true ? false : prev;
         });
         // updateData["resetOrderNumberTime"] = "00.00";
       } else if (name === "resetOrderNumberTime") {
@@ -383,11 +383,17 @@ export default function SettingStoreOption() {
   };
 
   const handleVoidOrder = (e) => {
-    setVoidOrder(!VoidOrder);
-    setOrderState((prev) => ({
-      ...prev,
-      orderNumebrEnabled: !VoidOrder ? false : true,
-    }));
+    setVoidOrder((prevVoidOrder) => {
+      const newVoidOrder = !prevVoidOrder;
+
+      // Now you can safely update the order state using the new value
+      setOrderState((prev) => ({
+        ...prev,
+        orderNumebrEnabled: newVoidOrder ? false : prev.orderNumebrEnabled,
+      }));
+
+      return newVoidOrder;
+    });
   };
 
   // const handleKeyPress = (event) => {
