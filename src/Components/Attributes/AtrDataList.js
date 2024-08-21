@@ -163,6 +163,7 @@ const AtrDataList = ({ seVisible }) => {
   const handleOpen = () => setShowModal(true);
   const handleClose = () => {
     setNewAttribute("")
+    setErrorMessage("");
     setShowModal(false);
   }
 
