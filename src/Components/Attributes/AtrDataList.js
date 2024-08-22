@@ -95,7 +95,7 @@ const AtrDataList = ({ seVisible }) => {
     if (space.test(value)) {
       if (regex.test(value) || value === "") {
         setNewAttribute(value);
-        const nameExists = allattributes.some((item) => item.title === value);
+        const nameExists = allattributes.some((item) => item.title.toLowerCase() === value.toLowerCase());
         if (nameExists) {
           setErrorMessage("Attribute name already exists");
           setNameExists(true);
@@ -161,7 +161,11 @@ const AtrDataList = ({ seVisible }) => {
   };
 
   const handleOpen = () => setShowModal(true);
-  const handleClose = () => setShowModal(false);
+  const handleClose = () => {
+    setNewAttribute("")
+    setErrorMessage("");
+    setShowModal(false);
+  }
 
   const myStyles = {
     width: "60%",

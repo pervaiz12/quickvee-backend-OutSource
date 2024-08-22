@@ -17,6 +17,7 @@ import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -47,6 +48,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const TipReportList = (props) => {
+
   const dispatch = useDispatch();
   const {
     LoginGetDashBoardRecordJson,
@@ -55,6 +57,7 @@ const TipReportList = (props) => {
     GetSessionLogin,
   } = useAuthDetails();
   const [tipReportData, setTipReportData] = useState([]);
+  const showNoData = useDelayedNodata(tipReportData)
   const [sortOrder, setSortOrder] = useState("asc");
   const tipReportDataState = useSelector((state) => state.TipReportList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
@@ -211,7 +214,7 @@ const TipReportList = (props) => {
                 )}
               </TableBody>
               </StyledTable>
-              {!tipReportData.length && <NoDataFound />}
+              {showNoData && !tipReportData.length && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>

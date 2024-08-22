@@ -37,6 +37,7 @@ import PasswordShow from "../../Common/passwordShow";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import NoDataFound from "../../reuseableComponents/NoDataFound";
+import { dateFormate } from "../../hooks/dateFormate";
 
 const TimesheetListing = ({ data }) => {
   const dispatch = useDispatch();
@@ -1005,7 +1006,7 @@ const TimesheetListing = ({ data }) => {
                         }
                       >
                         <p className="q-catereport-item">
-                          {formatDate(entry.attendance_date)}
+                          {dateFormate(entry.attendance_date)}
                         </p>
                         <p className="q-catereport-item">
                           {entry.wages_per_hr && entry.wages_per_hr > 0
