@@ -641,7 +641,7 @@ const menuItems = [
           },
           {
             id: 98,
-            text: "Category Sales Summery Report",
+            text: "Category Sales Summary Report",
             link: "/store-reporting/category-sales-summery-report",
           },
           {

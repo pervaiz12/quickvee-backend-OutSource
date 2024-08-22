@@ -387,9 +387,9 @@ const InstoreTableViewData = (props, searchId) => {
                                   <p className="text-[#818181]">
                                     {data.merchant_time || ""}
                                   </p>
-                                  <p className="text-[#818181]">
+                                  {/* <p className="text-[#818181]">
                                     {data.order_method || ""}
-                                  </p>
+                                  </p> */}
                                 </StyledTableCell>
                                 <StyledTableCell>
                                   <p> {"$" + data.amt || ""}</p>
