@@ -157,6 +157,8 @@ export default function InventoryTransferModel({
       [name]: errorMsg,
     }));
   };
+  const [msgAPI,setmsgAPi] = useState("");
+
   const handleSubmit = async () => {
     const validationErrors = {};
 
@@ -191,13 +193,16 @@ export default function InventoryTransferModel({
         });
         if (response.data.status === true) {
           ToastifyAlert("Updated Successfully", "success");
+          setmsgAPi("")
           await fetchProductDataById();
           handleCloseEditModal();
-        } else if (response.data.status === false) {
+        } else if (response.data.status === false && response.data.message === "Product not found in selected Store ") {
+          setmsgAPi("Product not found in the selected store.")
           // ToastifyAlert(response.data.message, "error");
         }
       } catch (error) {
         console.error("Error during submission:", error);
+        setmsgAPi("")
       } finally {
         setLoading(false);
       }
@@ -313,6 +318,11 @@ export default function InventoryTransferModel({
                 minRows={5}
                 placeholder="Description..."
               />
+            {msgAPI && (
+                <p className="error-message">
+                  {msgAPI}
+                </p>
+            )}
             </Grid>
           </Grid>
           <Grid container sx={{ px: 3 }}>
