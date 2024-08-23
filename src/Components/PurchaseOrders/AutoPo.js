@@ -72,8 +72,8 @@ const customStyles = {
     borderColor:
       state.isFocused || state.isHovered ? "black" : provided.borderColor,
     boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
-    height: 40, 
-      minHeight: 40,
+    height: 40,
+    minHeight: 40,
     "&:hover": {
       borderColor: "black",
     },
@@ -152,9 +152,9 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
     setSelectedProducts(updatedProducts);
   };
 
-  useEffect(() => {
-    productOptions(" ");
-  }, [selectedProducts.length]);
+  // useEffect(() => {
+  //   productOptions(" ");
+  // }, [selectedProducts.length]);
 
   // check each product has required data
   const validateProducts = () => {
@@ -452,7 +452,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
             total_pricing: prod.finalPrice.toString(), // Number(prod.newQty) * parseFloat(prod.newPrice),
             upc: prod.upc,
             note: prod.notes,
-            title: prod.title
+            title: prod.title,
           }));
 
           const orderItemsObject = orderItems?.reduce((acc, curr, index) => {
@@ -487,13 +487,15 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
 
           const response = await axios.post(
             BASE_URL + SAVE_PO,
-          //  "https://www.quickvee.net/Zoho_po/save_po",
-            formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`, // Use data?.token directly
-            },
-          });
+            //  "https://www.quickvee.net/Zoho_po/save_po",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`, // Use data?.token directly
+              },
+            }
+          );
 
           // console.log("response: ", response);
           if (response.data.status) {

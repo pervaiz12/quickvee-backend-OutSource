@@ -93,7 +93,7 @@ const AddNewStocktake = ({
       price: "",
     },
   ]);
-  console.log("costperItem:product.costperItem || ,",stocktake_items  )
+  console.log("costperItem:product.costperItem || ,", stocktake_items);
   const location = useLocation();
 
   const { id } = useParams();
@@ -154,9 +154,9 @@ const AddNewStocktake = ({
     }
   }, [singleStocktakeState]);
 
-  useEffect(() => {
-    loadOptions(" ");
-  }, []);
+  // useEffect(() => {
+  //   // loadOptions(" ");
+  // }, []);
 
   const loadOptions = async (inputValue) => {
     let name_data = {
@@ -431,7 +431,7 @@ const AddNewStocktake = ({
               current_qty: product?.quantity || "", //
               stocktake_item_id: "0" || "",
               price: product?.price || "",
-              costperItem:product?.costperItem || "",
+              costperItem: product?.costperItem || "",
               new_qty: "",
               discrepancy: "0",
             };
@@ -456,7 +456,7 @@ const AddNewStocktake = ({
               current_qty: product.quantity || "", //
               stocktake_item_id: "0" || "",
               price: product?.price || "",
-              costperItem:product?.costperItem || "",
+              costperItem: product?.costperItem || "",
               new_qty: "",
               discrepancy: "0",
             };

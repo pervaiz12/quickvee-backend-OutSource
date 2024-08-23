@@ -442,7 +442,7 @@ const ProductTable = ({
                     scrollableTarget="scrollableDiv"
                     endMessage={
                       loading ? (
-                        <h3 className="all-product-list">Loading...</h3>
+                        <h3 className="all-product-list">{renderLoader()}</h3>
                       ) : !productList?.length ? (
                         <h3 className="all-product-list">
                           {!productList?.length && <NoDataFound table={true} />}
