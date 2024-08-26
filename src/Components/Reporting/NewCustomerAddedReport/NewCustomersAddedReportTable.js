@@ -124,7 +124,7 @@ export default function NewCustomersAddedReportTable() {
                           <>
                             <StyledTableRow key={index}>
                               <StyledTableCell>
-                                <p>{capitalize(item?.name)}</p>
+                                <p className="capitalize">{(item?.name)}</p>
                               </StyledTableCell>
                               <StyledTableCell>
                                 <p>{item?.email}</p>

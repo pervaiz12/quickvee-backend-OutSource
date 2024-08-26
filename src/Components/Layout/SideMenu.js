@@ -630,8 +630,18 @@ const menuItems = [
         text: "Sales Reports",
         dropDownItems: [
           {
+            id: 61,
+            text: "Sales Summary",
+            link: "/store-reporting/sales-report",
+          },
+          {
+            id: 77,
+            text: "Item Sales",
+            link: "/store-reporting/item-sales",
+          },
+          {
             id: 98,
-            text: "Category Sales Summery Report",
+            text: "Category Sales Summary Report",
             link: "/store-reporting/category-sales-summery-report",
           },
           {
@@ -664,11 +674,7 @@ const menuItems = [
             text: "Gift Card Report",
             link: "/store-reporting/gift-card-report",
           },
-          {
-            id: 77,
-            text: "Item Sales",
-            link: "/store-reporting/item-sales",
-          },
+          
           {
             id: 79,
             text: "Order Type",
@@ -694,11 +700,7 @@ const menuItems = [
             text: "Sales by Hour Report",
             link: "/store-reporting/sales-by-hour-report",
           },
-          {
-            id: 61,
-            text: "Sales Summary",
-            link: "/store-reporting/sales-report",
-          },
+          
           {
             id: 69,
             text: "Top Sellers",

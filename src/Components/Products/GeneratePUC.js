@@ -200,9 +200,15 @@ const GeneratePUC = ({
                                           onBlur={(e) =>
                                             handleBlur(e, index, title)
                                           }
-                                          maxLength={setInputMaxLength(
-                                            inp?.name
-                                          )}
+                                          maxLength={
+                                            setInputMaxLength(inp?.name) &&
+                                            inp?.name === "qty" &&
+                                            formValue?.[index]?.[title]?.[
+                                              inp?.name
+                                            ]?.includes("-")
+                                              ? 7
+                                              : setInputMaxLength(inp?.name)
+                                          }
                                           disabled={disabledInput(
                                             inp,
                                             formValue?.[index]?.[title]
@@ -474,7 +480,7 @@ const GeneratePUC = ({
 
           {!isMultipleVarient ? (
             <div className="qvrow px-5">
-              <div className="mx-4 my-4">{varientTitle?.[0]}</div>
+              {/* <div className="mx-4 my-4">{varientTitle?.[0]}</div> */}
 
               <Grid container spacing={2}>
                 {formData?.length
@@ -492,7 +498,13 @@ const GeneratePUC = ({
                                 placeholder={inp?.placeholder}
                                 onChange={(e) => handleOnChange(e, 0)}
                                 onBlur={(e) => handleBlur(e, 0)}
-                                maxLength={setInputMaxLength(inp?.name)}
+                                maxLength={
+                                  setInputMaxLength(inp?.name) &&
+                                  inp?.name === "qty" &&
+                                  formValue?.[0]?.[inp?.name]?.includes("-")
+                                    ? 7
+                                    : setInputMaxLength(inp?.name)
+                                }
                                 disabled={disabledInput(inp, formValue?.[0])}
                               />
                               {!!formValue?.[0]?.["comparePriceError"] &&

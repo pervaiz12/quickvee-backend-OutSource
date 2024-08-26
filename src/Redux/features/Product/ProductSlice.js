@@ -35,7 +35,7 @@ const initialState = {
   fetchCategoryListLoading: false,
   fetchTaxListLoading: false,
 };
-let cancelTokenSource;
+// let cancelTokenSource;
 // Generate pening , fulfilled and rejected action type
 export const fetchAllProducts = createAsyncThunk(
   "products/fetchAllProducts",
@@ -66,20 +66,20 @@ export const fetchProductsData = createAsyncThunk(
   "products/fetchProductsData",
   async (data, { rejectWithValue }) => {
     // Cancel the previous request if it exists
-    if (cancelTokenSource) {
-      cancelTokenSource.cancel("Previous request canceled");
-    }
+    // if (cancelTokenSource) {
+    //   cancelTokenSource.cancel("Previous request canceled");
+    // }
 
-    // Create a new cancel token
-    cancelTokenSource = axios.CancelToken.source();
+    // // Create a new cancel token
+    // cancelTokenSource = axios.CancelToken.source();
     try {
       const { token, ...dataNew } = data;
       const response = await axios.post(BASE_URL + PRODUCTS_LIST, dataNew, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
-        },
-        cancelToken: cancelTokenSource.token,
+        }
+        // cancelToken: cancelTokenSource.token,
       });
       // console.log("api products: ", response.data);
 
@@ -88,16 +88,16 @@ export const fetchProductsData = createAsyncThunk(
       }
     } catch (error) {
       // throw new Error("Internal Server Error");
-      if (axios.isCancel(error)) {
-        console.log("Request canceled:", error.message);
-      } else {
+      // if (axios.isCancel(error)) {
+      //   console.log("Request canceled:", error.message);
+      // } else {
         const customError = {
           message: error.message,
           status: error.response ? error.response.status : "Network Error",
           data: error.response ? error.response.data : null,
         };
         return rejectWithValue(customError);
-      }
+      // }
     }
   }
 );

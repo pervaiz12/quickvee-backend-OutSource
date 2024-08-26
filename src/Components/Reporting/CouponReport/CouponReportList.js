@@ -17,6 +17,8 @@ import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "../../../Common/passwordShow";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
+import { dateFormate } from "../../../hooks/dateFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -59,6 +61,7 @@ const CouponReportList = (props) => {
     GetSessionLogin,
   } = useAuthDetails();
   const [CouponReportData, setCouponReportData] = useState([]);
+  const showNoData = useDelayedNodata(CouponReportData)
   const [sortOrder, setSortOrder] = useState("asc");
   const CouponReportDataState = useSelector((state) => state.CouponReportList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
@@ -165,7 +168,7 @@ const CouponReportList = (props) => {
                       <StyledTableRow>
                         <StyledTableCell>
                           <p className="report-title">
-                            {formatDate(couponData.date)}
+                            {dateFormate(couponData.date)}
                           </p>
                         </StyledTableCell>
                         <StyledTableCell>
@@ -180,7 +183,7 @@ const CouponReportList = (props) => {
                     ))}
                 </TableBody>
               </StyledTable>
-              {!CouponReportData.length && <NoDataFound />}
+              {showNoData && !CouponReportData.length && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>

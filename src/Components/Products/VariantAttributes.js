@@ -197,33 +197,10 @@ const VariantAttributes = ({
     let filterValue;
     // if value comes from createble varient
     if (Array.isArray(value)) {
-      filterValue = value
-        ?.filter((item) => {
-          let checkApostrophe = !(
-            item?.label?.split("").filter((p) => p === "'")?.length > 1
-          );
-
-          let checkDoubleQuotes = !item?.label?.includes(`"`);
-          if (!checkApostrophe) {
-            alert("Only one apostrophe is allowed in selected values.");
-          } else if (!checkDoubleQuotes) {
-            alert("No Double quotes allowed in selected values.");
-          }
-
-          return (
-            !(item?.label?.split("").filter((p) => p === "'")?.length > 1) &&
-            !item?.label?.includes(`"`) &&
-            !item?.label?.includes(`,`) &&
-            !item?.label?.includes(`~`) &&
-            !item?.label?.includes(`-`) &&
-            !item?.label?.includes(`<`) &&
-            !item?.label?.includes(`>`) &&
-            !item?.label?.includes(`/`) &&
-            !item?.label?.includes(`\\`) &&
-            !item?.label?.includes(`;`)
-          );
-        })
-        .map((item) => ({ ...item, label: item?.label?.trim() }));
+      filterValue = value.map((item) => ({
+        ...item,
+        label: item?.label?.trim(),
+      }));
     } else {
       filterValue = value;
     }
@@ -336,6 +313,42 @@ const VariantAttributes = ({
         outline: "none",
       },
     }),
+  };
+
+  const handleInputChange = (newValue) => {
+    // Check for forbidden characters
+    if (newValue.includes("/")) {
+      alert("The '/' character is not allowed.");
+      return newValue.replace(/\//g, "");
+    } else if (newValue.includes("\\")) {
+      alert("The '\\' character is not allowed.");
+      return newValue.replace(/\\/g, "");
+    } else if (newValue.includes('"')) {
+      alert('Double quotes (") are not allowed.');
+      return newValue.replace(/"/g, "");
+    } else if (newValue.split("").filter((p) => p === "'").length > 1) {
+      alert("Only one apostrophe is allowed.");
+      return newValue;
+    } else if (newValue.includes(",")) {
+      alert("The ',' character is not allowed.");
+      return newValue.replace(/,/g, "");
+    } else if (newValue.includes("~")) {
+      alert("The '~' character is not allowed.");
+      return newValue.replace(/~/g, "");
+    } else if (newValue.includes("-")) {
+      alert("The '-' character is not allowed.");
+      return newValue.replace(/-/g, "");
+    } else if (newValue.includes("<")) {
+      alert("The '<' character is not allowed.");
+      return newValue.replace(/</g, "");
+    } else if (newValue.includes(">")) {
+      alert("The '>' character is not allowed.");
+      return newValue.replace(/>/g, "");
+    } else if (newValue.includes(";")) {
+      alert("The ';' character is not allowed.");
+      return newValue.replace(/;/g, "");
+    }
+    return newValue;
   };
 
   return (
@@ -473,6 +486,7 @@ const VariantAttributes = ({
                                       inputValue.trim().toLowerCase()
                                   )
                                 }
+                                onInputChange={handleInputChange}
                                 className="createable"
                                 backspaceRemovesValue={false}
                               />

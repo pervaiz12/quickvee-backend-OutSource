@@ -10,7 +10,7 @@ import {
   TableRow,
   TableBody,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import sortIcon from "../../Assests/Category/SortingW.svg";
@@ -22,6 +22,8 @@ import axios from "axios";
 import { BASE_URL, REFUND_EMAIL_STATUS_CHANGE } from "../../Constants/Config";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from '../../CommonComponents/ToastifyAlert';
+import NoDataFound from "../../reuseableComponents/NoDataFound";
+import { fetchRefundRequestArr,fetchRefundRequestArrCount } from "../../Redux/features/RefundRequest/RefundRequestSlice";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -59,12 +61,18 @@ export default function RefundRequestTable({
   setTotalCount,
   dataArr,
   setDataArr,
+  debouncedValue,
+  setOption,
+  refundDropDownOptions,
+  getUnAutherisedTokenMessage,
+  handleCoockieExpire
+
 
 }) {
   const RefundRequestReduxState = useSelector(
     (state) => state.RefundRequestList
   );
-
+  const dispatch = useDispatch()
   const [sortOrder, setSortOrder] = useState("asc");
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -131,7 +139,26 @@ export default function RefundRequestTable({
       );
       if(response.data.status ===true){
         setDataArr(prevState => prevState.filter(item => item.id !== id))
-          setTotalCount((prevCount) => prevCount - 1); // Decrement total count
+          // setTotalCount((prevCount) => prevCount - 1); // Decrement total count
+          try {
+            let data = {
+              perpage: rowsPerPage,
+              page: currentPage,
+              search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+              is_close: setOption(refundDropDownOptions),
+              ...userTypeData,
+            };
+            if (data) {
+              await dispatch(fetchRefundRequestArr(data)).unwrap();
+              await dispatch(fetchRefundRequestArrCount(data)).unwrap();
+            }
+          } catch (error) {
+            console.log(error);
+            if (error.status == 401) {
+              getUnAutherisedTokenMessage();
+              handleCoockieExpire();
+            }
+          }
         ToastifyAlert("Updated Successfully","success")
       }
       else if(response.data.status ===false){
@@ -144,7 +171,6 @@ export default function RefundRequestTable({
     setSelectedItem({ id, status });
     setConfirmModalOpen(true);
   };
-
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -253,6 +279,7 @@ export default function RefundRequestTable({
                       ))}
                   </TableBody>
                 </StyledTable>
+                {!dataArr.length && <NoDataFound />}
               </TableContainer>
               <Grid container sx={{ padding: 2.5 }}>
                 <Grid item xs={12}>

@@ -70,7 +70,7 @@ export const fetchRefundRequestArrCount = createAsyncThunk(
       } else {
         return {
           count: 0,
-          status: false,
+          // status: false,
           error: res.data.message || "Failed to fetch refund requests count",
         };
       }
@@ -112,8 +112,8 @@ const RefundRequestSlice = createSlice({
       .addCase(fetchRefundRequestArrCount.fulfilled, (state, action) => {
         state.loading = false;
         state.RefundRequestCount = action.payload.count;
-        state.status = action.payload.status;
-        state.error = action.payload.error || "";
+        // state.status = action.payload.status;
+        // state.error = action.payload.error || "";
       })
       .addCase(fetchRefundRequestArrCount.rejected, (state, action) => {
         state.loading = false;

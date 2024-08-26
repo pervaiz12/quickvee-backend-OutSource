@@ -22,7 +22,7 @@ export default function CategorySalesSummeryReportLogic() {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
-  const title = "Category Sales Summery Report";
+  const title = "Category Sales Summary Report";
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   let data = { merchant_id, ...userTypeData };
   const [categoryAll, setCategoryAll] = useState([]);
