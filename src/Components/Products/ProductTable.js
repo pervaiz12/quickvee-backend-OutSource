@@ -78,6 +78,11 @@ const ProductTable = ({
   productIdList,
   productByImages,
 }) => {
+  const searchCategory = new URLSearchParams(window.location.search);
+  const categoryUrl = searchCategory.get("category");
+  const statusUrl = searchCategory.get("status");
+  const listingUrl = searchCategory.get("listingType");
+  const imageUrl = searchCategory.get("filterBy");
   let listing_type = 0;
   const ProductsListDataState = useSelector((state) => state.productsListData);
 
@@ -232,13 +237,11 @@ const ProductTable = ({
     let data1 = {
       merchant_id,
       format: "json",
-      category_id: categoryId === "All" ? "all" : categoryId,
-      show_status: selectedStatus,
+      category_id: categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
+      show_status: statusUrl === 0 || statusUrl ? statusUrl : "all",
       name: debouncedValue,
-      is_media_blank: productByImages === "All" ? "" : 1,
-      listing_type: selectedListingTypeValue?.id
-        ? selectedListingTypeValue?.id
-        : 0,
+      is_media_blank: imageUrl === "all" ? "" : imageUrl,
+      listing_type: listingUrl === 0 || listingUrl ? listingUrl : "0",
       offset,
       limit: 10,
       page: 0,
@@ -471,6 +474,7 @@ const ProductTable = ({
                         )}
                         {/* <StyledTableCell>Sort</StyledTableCell> */}
                         <StyledTableCell>Title</StyledTableCell>
+                        <StyledTableCell>Number of Variants</StyledTableCell>
                         <StyledTableCell>Category</StyledTableCell>
                         <StyledTableCell>
                           Enable online ordering?
@@ -559,6 +563,18 @@ const ProductTable = ({
                                       {product.title}
                                     </Link>
                                   </p>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  {+product?.isvarient === 1 ? (
+                                    <p
+                                      className="categories-title"
+                                      style={{ cursor: "pointer" }}
+                                    >
+                                      {product?.no_of_var}
+                                    </p>
+                                  ) : (
+                                    ""
+                                  )}
                                 </StyledTableCell>
                                 <StyledTableCell>
                                   <p className="categories-title">
