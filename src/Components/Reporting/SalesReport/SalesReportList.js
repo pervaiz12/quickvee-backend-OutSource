@@ -11,7 +11,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { Grid } from "@mui/material";
+import { Grid, Tooltip, tooltipClasses } from "@mui/material";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import PasswordShow from "../../../Common/passwordShow";
 
@@ -19,6 +19,7 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import { LuInfo } from "react-icons/lu";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -47,6 +48,24 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: "none",
   },
   // hide last border
+}));
+
+const BootstrapTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: '#f5f5f9',
+    '&::before': {
+      border: '1px solid #dadde9',
+    },
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 300,
+    fontSize: theme.typography.pxToRem(16),
+    border: '1px solid #dadde9',
+  },
 }));
 
 const SalesReportList = (props) => {
@@ -159,6 +178,11 @@ const SalesReportList = (props) => {
     parseFloat(SalesReportData.cash_collected) -
     parseFloat(SalesReportData.cash_back_amt);
 
+  const NetTaxableSale = parseFloat(SalesReportData.taxable_net_sale) || 0;
+  const NonNetTaxableSale = parseFloat(SalesReportData.non_taxable_net_sale) || 0;
+  const TaxesCreditFee = parseFloat(SalesReportData?.taxes_desc?.CreditFee).toFixed(2) || 0;
+  const TaxesSaleTax = parseFloat(SalesReportData?.taxes_desc?.["Sale Tax"]).toFixed(2) || 0;
+
   const SalesSummeryList = [
     {
       name: "Gross Sale",
@@ -179,6 +203,14 @@ const SalesReportList = (props) => {
     {
       name: "Refunds",
       amount: refunds,
+    },
+    {
+      name: "Taxable Net Sale",
+      amount: NetTaxableSale,
+    },
+    {
+      name: "Non Taxable Net Sale",
+      amount: NonNetTaxableSale,
     },
     {
       name: "Net Sales",
@@ -359,9 +391,21 @@ const SalesReportList = (props) => {
                                   : "",
                             }}
                           >
-                            <p>
+                            <p style={{display:"flex",alignItems:"center"}}>
                               $
                               {priceFormate(parseFloat(item.amount).toFixed(2))}
+                              {
+                                item.name === "Taxes" && (
+                                  <>
+                                    <BootstrapTooltip title={<ul className="">
+                                      <li>Credit Fee ${priceFormate(TaxesCreditFee)}</li>
+                                      <li>Sale Tax ${priceFormate(TaxesSaleTax)}</li>
+                                      </ul>} placement="right">
+                                    <span className=" ml-2 cursor-pointer"> <LuInfo /></span>
+                                  </BootstrapTooltip>
+                                  </>
+                                )
+                              }
                             </p>
                           </StyledTableCell>
                         </StyledTableRow>
