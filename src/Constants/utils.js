@@ -69,3 +69,22 @@ export const disableZeroOnFirstIndex = (value) => {
 
   return bool;
 };
+
+export const handleInputNumber = (e, setDealInfo, dealInfo) => {
+  const { value, name } = e.target;
+
+  if (name === "minQty") {
+    const qty = parseFloat(value) ? parseFloat(value) : 0;
+    setDealInfo((prev) => ({ ...prev, minQty: qty }));
+  }
+
+  if (name === "discount") {
+    const formattedValue = CurrencyInputHelperFun(value);
+
+    if (parseFloat(formattedValue) > 99.99 && dealInfo.isPercent === "1") {
+      return;
+    }
+
+    setDealInfo((prev) => ({ ...prev, [name]: formattedValue }));
+  }
+};

@@ -9,11 +9,10 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import { useDispatch } from "react-redux";
 import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import PasswordShow from "../../Common/passwordShow";
-import { disableZeroOnFirstIndex } from "../../Constants/utils";
+import { handleInputNumber } from "../../Constants/utils";
 import { addNewDeal } from "../../Redux/features/MixAndMatch/mixAndMatchSlice";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import useDebounce from "../../hooks/useDebouncs";
-import CurrencyInputHelperFun from "../../helperFunctions/CurrencyInputHelperFun";
 
 const AddMixAndMatchDeal = () => {
   const navigate = useNavigate();
@@ -31,8 +30,8 @@ const AddMixAndMatchDeal = () => {
     title: "",
     description: "",
     products: [],
-    minQty: "",
-    discount: "",
+    minQty: "0",
+    discount: "0.00",
     isPercent: "0",
   });
 
@@ -67,23 +66,6 @@ const AddMixAndMatchDeal = () => {
     }));
   };
 
-  const handleInputNumber = (e) => {
-    if (isNaN(e.nativeEvent.data)) return;
-    const { value, name } = e.target;
-
-    if (!isNaN(e.target.value)) {
-      if (name === "minQty") {
-        setDealInfo((prev) => ({ ...prev, minQty: value }));
-      } else {
-        const formattedValue = CurrencyInputHelperFun(value);
-
-        if (parseFloat(formattedValue) > 99.99 && dealInfo.isPercent === "1")
-          return;
-        setDealInfo((prev) => ({ ...prev, [name]: formattedValue }));
-      }
-    }
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setDealInfo((prev) => ({ ...prev, [name]: value }));
@@ -98,7 +80,6 @@ const AddMixAndMatchDeal = () => {
   };
 
   useEffect(() => {
-    // console.log("debouncedValue: ", debouncedValue);
     const fetchProducts = async () => {
       let data = {
         merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
@@ -122,8 +103,6 @@ const AddMixAndMatchDeal = () => {
                 (parseFloat(dealInfo.discount) || 0)
               : product
           );
-          // console.log("temp: ", temp);
-          // console.log("products: ", products);
           setProductOptions(() => temp);
         }
       } catch (error) {
@@ -249,9 +228,11 @@ const AddMixAndMatchDeal = () => {
                     <div className="q_coupon_minium input_area">
                       <label htmlFor="minorder_amt">Minimum Quantity</label>
                       <BasicTextFields
-                        type={"number"}
+                        type={"text"}
                         value={dealInfo.minQty}
-                        onChangeFun={handleInputNumber}
+                        onChangeFun={(e) =>
+                          handleInputNumber(e, setDealInfo, dealInfo)
+                        }
                         placeholder="Enter Minimum Quantity"
                         name="minQty"
                       />
@@ -270,9 +251,11 @@ const AddMixAndMatchDeal = () => {
                               {dealInfo.isPercent === "1" ? "%" : "$"})
                             </label>
                             <BasicTextFields
-                              type={"number"}
+                              type={"text"}
                               value={dealInfo.discount}
-                              onChangeFun={handleInputNumber}
+                              onChangeFun={(e) => {
+                                handleInputNumber(e, setDealInfo, dealInfo);
+                              }}
                               placeholder="Enter Discount Amount"
                               name="discount"
                             />

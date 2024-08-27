@@ -11,12 +11,18 @@ import { useDispatch } from "react-redux";
 import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import PasswordShow from "../../Common/passwordShow";
 import { useSelector } from "react-redux";
-import { disableZeroOnFirstIndex } from "../../Constants/utils";
+import { handleInputNumber } from "../../Constants/utils";
 import {
   mixAndMatchPricingDealsList,
   updateMixAndMatchpricingDeal,
 } from "../../Redux/features/MixAndMatch/mixAndMatchSlice";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import CurrencyInputHelperFun from "../../helperFunctions/CurrencyInputHelperFun";
+import axios from "axios";
+import {
+  ALL_PRODUCTS_WITH_VARIANTS_LIST,
+  BASE_URL,
+} from "../../Constants/Config";
 
 const UpdateMixAndMatchDeal = () => {
   const { dealId } = useParams();
@@ -63,7 +69,23 @@ const UpdateMixAndMatchDeal = () => {
       };
 
       try {
-        await dispatch(fetchProductsData(data)).unwrap();
+        const body = {
+          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+          ...userTypeData,
+        };
+        console.log("body: ", body);
+        const result = await axios.post(
+          BASE_URL + ALL_PRODUCTS_WITH_VARIANTS_LIST,
+          body,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${userTypeData.token}`,
+            },
+          }
+        );
+        console.log("result: ", result);
+        // await dispatch(fetchProductsData(data)).unwrap();
       } catch (error) {
         if (error.status === 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
@@ -98,9 +120,9 @@ const UpdateMixAndMatchDeal = () => {
       const dealData = {
         title: deal.deal_name || "",
         description: deal.description || "",
-        products: b, //JSON.parse(deal.items_id) ||
-        minQty: deal.min_qty || "",
-        discount: deal.discount || "",
+        products: b,
+        minQty: deal.min_qty || "0",
+        discount: deal.discount || "0.00",
         isPercent: deal.is_percent || "0",
         isEnable: deal.is_enable || "0",
       };
@@ -137,9 +159,10 @@ const UpdateMixAndMatchDeal = () => {
 
     // setting product options depending on the Discount Amount
     if (name === "discount" && productsData && productsData.length > 0) {
+      const formattedValue = CurrencyInputHelperFun(value);
       const temp = productsData.filter((product) =>
         updatedDeal.isPercent === "0"
-          ? parseFloat(product.price) >= value
+          ? parseFloat(product.price) >= parseFloat(formattedValue)
           : product
       );
       setProductOptions(temp);
@@ -293,15 +316,9 @@ const UpdateMixAndMatchDeal = () => {
                     <BasicTextFields
                       type={"text"}
                       value={updatedDeal.minQty}
-                      onChangeFun={(e) => {
-                        if (e.target.value >= 0 && !isNaN(e.target.value)) {
-                          const disable = disableZeroOnFirstIndex(
-                            e.target.value
-                          );
-                          if (disable) return;
-                          handleInputChange(e);
-                        }
-                      }}
+                      onChangeFun={(e) =>
+                        handleInputNumber(e, setUpdatedDeal, updatedDeal)
+                      }
                       placeholder="Enter Minimum Quantity"
                       name="minQty"
                     />
@@ -322,18 +339,9 @@ const UpdateMixAndMatchDeal = () => {
                           <BasicTextFields
                             type={"text"}
                             value={updatedDeal.discount}
-                            onChangeFun={(e) => {
-                              if (
-                                e.target.value >= 0 &&
-                                !isNaN(e.target.value)
-                              ) {
-                                const disable = disableZeroOnFirstIndex(
-                                  e.target.value
-                                );
-                                if (disable) return;
-                                handleInputChange(e);
-                              }
-                            }}
+                            onChangeFun={(e) =>
+                              handleInputNumber(e, setUpdatedDeal, updatedDeal)
+                            }
                             placeholder="Enter Discount Amount"
                             name="discount"
                           />
