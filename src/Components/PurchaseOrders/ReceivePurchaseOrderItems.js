@@ -219,68 +219,78 @@ const ReceivePurchaseOrderItems = () => {
         (item) => item.isChecked && Number(item.pending_qty) > 0
       );
       if (bool) {
-        const { token } = userTypeData;
+        const obj = purchaseOrder?.order_items.reduce((acc, item) => {
+          if (item.toReceiveQtyError) {
+            acc["toReceiveQtyError"] = item.toReceiveQtyError || [];
+          }
+          return acc;
+        }, {});
+        const toReceiveQtyError =
+          obj["toReceiveQtyError"] == undefined ? "" : obj["toReceiveQtyError"];
+        if (toReceiveQtyError == "") {
+          const { token } = userTypeData;
 
-        const purchaseOrderItems =
-          purchaseOrder?.order_items &&
-          purchaseOrder?.order_items?.map((item) =>
-            Number(item.pending_qty) > 0 && item.isChecked
-              ? {
-                  ...item,
-                  pending_qty:
-                    item.recieved_status === "2" ? "0" : item.newPendingQty,
-                  recieved_qty:
-                    item.recieved_status === "2" ? "0" : item.newReceivedQty,
-                  // recieved_qty: item.toReceiveQty,
-                }
-              : { ...item, recieved_qty: "0" }
+          const purchaseOrderItems =
+            purchaseOrder?.order_items &&
+            purchaseOrder?.order_items?.map((item) =>
+              Number(item.pending_qty) > 0 && item.isChecked
+                ? {
+                    ...item,
+                    pending_qty:
+                      item.recieved_status === "2" ? "0" : item.newPendingQty,
+                    recieved_qty:
+                      item.recieved_status === "2" ? "0" : item.newReceivedQty,
+                    // recieved_qty: item.toReceiveQty,
+                  }
+                : { ...item, recieved_qty: "0" }
+            );
+
+          const items = purchaseOrderItems
+            .filter((item) => item.isChecked)
+            .map(({ id, ...item }) => ({
+              ...item,
+              po_item_id: id,
+            }));
+
+          const formData = new FormData();
+          formData.append(
+            "merchant_id",
+            LoginGetDashBoardRecordJson?.data?.merchant_id
+          );
+          formData.append("po_id", id);
+          formData.append("token_id", userTypeData.token_id);
+          formData.append("login_type", userTypeData.login_type);
+          formData.append("po_items", JSON.stringify(items));
+
+          const response = await axios.post(
+            BASE_URL + RECEIVE_PURCHASE_ORDER_ITEMS,
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`, // Use data?.token directly
+              },
+            }
           );
 
-        const items = purchaseOrderItems
-          .filter((item) => item.isChecked)
-          .map(({ id, ...item }) => ({
-            ...item,
-            po_item_id: id,
-          }));
-
-        const formData = new FormData();
-        formData.append(
-          "merchant_id",
-          LoginGetDashBoardRecordJson?.data?.merchant_id
-        );
-        formData.append("po_id", id);
-        formData.append("token_id", userTypeData.token_id);
-        formData.append("login_type", userTypeData.login_type);
-        formData.append("po_items", JSON.stringify(items));
-
-        const response = await axios.post(
-          BASE_URL + RECEIVE_PURCHASE_ORDER_ITEMS,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`, // Use data?.token directly
-            },
+          if (response.data.status) {
+            ToastifyAlert(response.data.message, "success");
+            // setIsUpdated((prev) => !prev);
+            navigate("/purchase-data");
+          } else {
+            ToastifyAlert(response.data.message, "error");
           }
-        );
-
-        if (response.data.status) {
-          ToastifyAlert(response.data.message, "success");
-          // setIsUpdated((prev) => !prev);
-          navigate("/purchase-data");
-        } else {
-          ToastifyAlert(response.data.message, "error");
         }
       } else {
         ToastifyAlert("Please Select an Item to Receive", "error");
       }
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
-        getUnAutherisedTokenMessage();
-        handleCoockieExpire();
-      } else if (error.status == "Network Error") {
-        getNetworkError();
-      }
+      // if (error?.status == 401 || error.response.status === 401) {
+      //   getUnAutherisedTokenMessage();
+      //   handleCoockieExpire();
+      // } else if (error.status == "Network Error") {
+      //   getNetworkError();
+      // }
     } finally {
       setLoaders((prev) => ({ ...prev, receive: false }));
     }
@@ -342,12 +352,19 @@ const ReceivePurchaseOrderItems = () => {
     return data;
   }, [LoginGetDashBoardRecordJson, puchaseOrderDetail]);
 
+  const handleQuantity = (e) => {
+    const charCode = e.which ? e.which : e.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <div className="box">
       <div className="box_shadow_div">
         <SwitchToBackButton
           linkTo={"/purchase-data"}
-          title={"Update Purchase Order"}
+          title={`Update Purchase Order  (PO${id})`}
         />
         {/* <div className="q-add-categories-section-header">
           <Link to="/purchase-data" style={{ display: "flex" }}>
@@ -528,7 +545,10 @@ const ReceivePurchaseOrderItems = () => {
                                       item.id === data.id
                                         ? {
                                             ...item,
-                                            toReceiveQtyError: "",
+                                            toReceiveQtyError:
+                                              e.target.value == ""
+                                                ? "Receive Quantity is required"
+                                                : "",
                                             toReceiveQty: e.target.value,
                                             newPendingQty: e.target.value
                                               ? (Number(item.pending_qty) ||
@@ -565,6 +585,7 @@ const ReceivePurchaseOrderItems = () => {
                             variant="outlined"
                             size="small"
                             disabled={Number(data.pending_qty) <= 0}
+                            onKeyPress={handleQuantity}
                           />
                           {data?.toReceiveQtyError && (
                             <p className="error-message">

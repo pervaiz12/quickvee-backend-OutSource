@@ -152,11 +152,10 @@ const AddPo = ({ seVisible }) => {
     <>
       <div className="box">
         <div className="box_shadow_div">
-          <SwitchToBackButton 
+          <SwitchToBackButton
             linkTo={"/purchase-data"}
             title={"Create Purchase Order"}
           />
-        
 
           <div style={{ padding: "20px" }}>
             <Grid container spacing={2}>
@@ -300,6 +299,7 @@ const AddPo = ({ seVisible }) => {
       <AutoPo
         purchaseInfo={purchaseInfo}
         setPurchaseInfoErrors={setPurchaseInfoErrors}
+        purchaseInfoErrors={purchaseInfoErrors}
       />
     </>
   );
