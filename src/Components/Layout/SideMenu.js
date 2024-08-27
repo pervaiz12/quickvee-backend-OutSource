@@ -695,11 +695,11 @@ const menuItems = [
             text: "Product Profitability Report",
             link: "/store-reporting/item-sale-profit-report",
           },
-          {
-            id: 99,
-            text: "Sales by Hour Report",
-            link: "/store-reporting/sales-by-hour-report",
-          },
+          // {
+          //   id: 99,
+          //   text: "Sales by Hour Report",
+          //   link: "/store-reporting/sales-by-hour-report",
+          // },
           
           {
             id: 69,

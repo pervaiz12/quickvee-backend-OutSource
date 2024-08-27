@@ -28,6 +28,7 @@ import { priceFormate } from "../../hooks/priceFormate";
 import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "./../../Common/passwordShow";
 import NoDataFound from "../../reuseableComponents/NoDataFound";
+import { dateFormateMonthName } from "../../hooks/dateFormate";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -423,13 +424,7 @@ const PurchaseTable = ({ seVisible }) => {
                                   <p className="purchaseData">
                                     {purchaseData.stock_date === "0000-00-00"
                                       ? "-"
-                                      : new Date(
-                                          purchaseData.stock_date
-                                        ).toLocaleDateString("en-US", {
-                                          year: "numeric",
-                                          month: "long",
-                                          day: "numeric",
-                                        })}
+                                      : dateFormateMonthName(purchaseData.stock_date) }
                                   </p>
                                 </div>
                               </StyledTableCell>
