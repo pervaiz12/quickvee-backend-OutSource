@@ -54,7 +54,7 @@ export default function Items_sales_profit_Logic() {
             sellingPrice: (
               parseFloat(item?.price) * parseFloat(item?.total_qty)
             ).toFixed(2),
-            profitMargin: selling_price === 0 ? "0.00%" : profit_per.toFixed(2),
+            profitMargin: selling_price === 0 ? "0.00" : profit_per.toFixed(2),
             profitAmmount: (
               (parseFloat(item?.price) - parseFloat(item?.cost_price)) *
               parseFloat(item?.total_qty)

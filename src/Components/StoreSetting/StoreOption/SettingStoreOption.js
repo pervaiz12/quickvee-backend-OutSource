@@ -123,6 +123,9 @@ export default function SettingStoreOption() {
     if (checkBoxList?.includes(name)) {
       if (name === "orderNumebrEnabled") {
         updateData[name] = checked;
+        setVoidOrder((prev) => {
+          return checked === true ? false : prev;
+        });
         // updateData["resetOrderNumberTime"] = "00.00";
       } else if (name === "resetOrderNumberTime") {
         setStartTime("");
@@ -380,7 +383,17 @@ export default function SettingStoreOption() {
   };
 
   const handleVoidOrder = (e) => {
-    setVoidOrder(!VoidOrder);
+    setVoidOrder((prevVoidOrder) => {
+      const newVoidOrder = !prevVoidOrder;
+
+      // Now you can safely update the order state using the new value
+      setOrderState((prev) => ({
+        ...prev,
+        orderNumebrEnabled: newVoidOrder ? false : prev.orderNumebrEnabled,
+      }));
+
+      return newVoidOrder;
+    });
   };
 
   // const handleKeyPress = (event) => {
@@ -861,46 +874,42 @@ export default function SettingStoreOption() {
                     </Grid>
                   </Grid>
                 </Grid>
-
-                <Grid
-                  container
-                  sx={{ p: 2, mb: 14 }}
-                  className="box_shadow_div"
-                >
-                  <Grid item xs={12}>
-                    <Grid
-                      container
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                      sx={{ pb: 1.5 }}
-                    >
-                      <Grid item>
-                        <h2 className="store-setting-h1">
-                          <span className="StoreSetting_heading-menu">
-                            {" "}
-                            Void Orders
-                          </span>
-                        </h2>
-                      </Grid>
-                      <Grid item>
-                        <span className="store-setting-switch">
-                          <Switch
-                            {...label}
-                            checked={VoidOrder}
-                            // checked={orderState?.enabledGuestCheckout}
-                            name="enabledGuestCheckout"
-                            onChange={handleVoidOrder}
-                          />
-                        </span>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
               </>
             ) : (
               ""
             )}
+
+            <Grid container sx={{ p: 2, mb: 14 }} className="box_shadow_div">
+              <Grid item xs={12}>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ pb: 1.5 }}
+                >
+                  <Grid item>
+                    <h2 className="store-setting-h1">
+                      <span className="StoreSetting_heading-menu">
+                        {" "}
+                        Void Orders
+                      </span>
+                    </h2>
+                  </Grid>
+                  <Grid item>
+                    <span className="store-setting-switch">
+                      <Switch
+                        {...label}
+                        checked={VoidOrder}
+                        // checked={orderState?.enabledGuestCheckout}
+                        name="enabledGuestCheckout"
+                        onChange={handleVoidOrder}
+                      />
+                    </span>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
             <Grid className="fixed-bottom">
               <Grid
                 container
@@ -932,8 +941,6 @@ export default function SettingStoreOption() {
                 </Grid>
               </Grid>
             </Grid>
-            
-
           </>
         )}
       </div>

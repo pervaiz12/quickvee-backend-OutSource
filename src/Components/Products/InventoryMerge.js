@@ -576,35 +576,20 @@ const InventoryMerge = () => {
       const prevStateMap = new Map(prevState.map((item) => [item.id, item]));
 
       const searchTitle = productInfo?.title?.trim()?.toLowerCase();
+      const searchRegex = new RegExp(searchTitle, "i");
 
       // Map over the new data and merge with the previous state where necessary
       const updatedState = newData?.map((item) => {
         // If the item exists in the previous state, preserve the name
-        let newTitle = item.title?.toLowerCase() || "";
+        let newTitle = item.title || "";
 
-        const titleNameUpdate = newTitle
-          .toLowerCase()
-          .replace(searchTitle, "")
-          .trim();
-
-        // Capitalize the first letter of each word in titleName
-        const formattedTitleNameUpdate = newTitle.replace(/\b\w/g, (char) =>
-          char.toUpperCase()
-        );
+        const titleNameUpdate = newTitle.replace(searchRegex, "").trim();
 
         if (prevStateMap.has(item.id)) {
           let prevTitle = prevStateMap.get(item.id).title;
 
           // Remove the search title from the previous title
-          const titleName = prevTitle
-            .toLowerCase()
-            .replace(searchTitle, "")
-            .trim();
-
-          // Capitalize the first letter of each word in titleName
-          const formattedTitleName = titleName.replace(/\b\w/g, (char) =>
-            char.toUpperCase()
-          );
+          const titleName = prevTitle.replace(searchRegex, "").trim();
 
           return {
             ...item,
@@ -664,6 +649,10 @@ const InventoryMerge = () => {
         "Title contains invalid characters",
         (value) => !disallowedCharactersRegex.test(value)
       ),
+    selectProducts: yup
+      .array()
+      .min(1)
+      .required("at least one item needs to be here"),
     category: yup.array().min(1, "Select Category").required("Select Category"),
     productField: formValueSchema,
   });
@@ -1018,8 +1007,11 @@ const InventoryMerge = () => {
                   onChange={(e) => toggleDeletedOption(e)}
                   className="checkbox-input"
                   style={{ marginRight: "10px" }}
+                  disabled
                 />
-                <span>Delete Selected Product</span>
+                <span className="delete-inventory-text">
+                  Delete Selected Product
+                </span>
               </div>
             </div>
 
@@ -1093,23 +1085,22 @@ const InventoryMerge = () => {
                         ?.trim()
                         .toLowerCase();
                       let prevTitle = opt?.title;
+                      const searchRegex = new RegExp(searchTitle, "i");
 
                       // Remove the search title from the previous title
                       const titleName = prevTitle
-                        .toLowerCase()
-                        .replace(searchTitle, "")
+                        .replace(searchRegex, "")
                         .replace(/^\s+/, "");
 
-                      // Capitalize the first letter of each word in titleName
-                      const formattedTitleName =
-                        titleName.charAt(0).toUpperCase() + titleName.slice(1);
+                      console.log("input titleName", titleName);
 
+                      // Capitalize the first letter of each word in titleName
                       return (
                         <div className="inventory-input-area">
                           <input
                             type="text"
                             placeholder=""
-                            value={formattedTitleName}
+                            value={titleName}
                             onChange={(e) => handleChangeProductTitle(e, index)}
                           />
                           {error[`productField[${index}].${`title`}`] ? (

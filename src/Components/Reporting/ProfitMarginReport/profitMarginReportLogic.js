@@ -17,7 +17,7 @@ export default function ProfitMarginReportLogic() {
     useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
-  const [inventory, setInventory] = useState();
+  const [inventory, setInventory] = useState("");
   const [category, setCategory] = useState([]);
   const [searchProduct, setsearchProduct] = useState([]); // invenotry list display
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -26,7 +26,7 @@ export default function ProfitMarginReportLogic() {
   const [limit, setLimit] = useState(10);
   const [listingType, setListingType] = useState(1);
   const [message, setMessage] = useState(""); // message display
-  const [endOfDataList, setEndOfDataList] = useState(false); 
+  const [endOfDataList, setEndOfDataList] = useState(false);
   const [laodMoreData, setLoadMoreData] = useState(false); //load button hide and show
 
   const [loader, setLoader] = useState(false);
@@ -34,11 +34,13 @@ export default function ProfitMarginReportLogic() {
 
   // =======================
   const handleSearchProduct = useRef(
-    debounce(async (value) => {
+    debounce(async (value, id) => {
       try {
         const { token, ...newData } = userTypeData;
+
         let packet = {
           ...newData,
+          // cat_id: id,
           name: value,
           merchant_id,
           offset: 0,
@@ -46,6 +48,7 @@ export default function ProfitMarginReportLogic() {
           format: "json",
           listing_type: listingType,
         };
+        // console.log("packet", packet);
 
         setLoader(true);
         let response = await axios.post(BASE_URL + INVENTORY_LIST, packet, {
@@ -54,6 +57,11 @@ export default function ProfitMarginReportLogic() {
             Authorization: `Bearer ${userTypeData?.token}`,
           },
         });
+        if (response?.data.length > 0) {
+          setEndOfDataList(true);
+        } else {
+          setEndOfDataList(false);
+        }
         setLoadMoreData(false);
         if (response?.data.length > 0) {
           setLoader(false);
@@ -78,7 +86,7 @@ export default function ProfitMarginReportLogic() {
 
   const handleChangeInventory = (e) => {
     setInventory(e.target.value);
-    handleSearchProduct.current(e.target.value);
+    handleSearchProduct.current(e.target.value, selectCategoryId);
   };
   useEffect(() => {
     getAllCategoryList();
@@ -110,6 +118,7 @@ export default function ProfitMarginReportLogic() {
   };
   // category click button function-----------------------
   const handleOptionClick = async (data) => {
+    setInventory("");
     try {
       setLoader(true);
       setSelectedCategory(
@@ -137,7 +146,7 @@ export default function ProfitMarginReportLogic() {
       if (response?.data.length) {
         setLoader(false);
         setsearchProduct(response?.data);
-        if (id == "all" ) {
+        if (id == "all") {
           setEndOfDataList(false);
           setOffset(10);
         } else {
@@ -175,7 +184,7 @@ export default function ProfitMarginReportLogic() {
         ...userTypeData,
       };
       const { token, ...newData } = packet;
-   
+
       let response = await axios.post(BASE_URL + INVENTORY_LIST, newData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -192,7 +201,6 @@ export default function ProfitMarginReportLogic() {
           setOffset(offset + 10);
         } else {
           setOffset(0);
-         
         }
       } else {
         setLoader(false);

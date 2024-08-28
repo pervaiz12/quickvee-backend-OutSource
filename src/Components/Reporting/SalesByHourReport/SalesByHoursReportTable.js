@@ -19,6 +19,7 @@ import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItems
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 // ==================== TABLE STYLE ADDED ===================================================
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -62,8 +63,9 @@ const SalesByHoursReportTable = (props) => {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
-  <SkeletonTable columns={props?.rowSkelton} />;
 
+  // <SkeletonTable columns={props?.rowSkelton} />;
+  const showNoData = useDelayedNodata(props.SalesHoursData)
   const formatDate = (dateString) => {
     const options = { day: "2-digit", month: "short", year: "numeric" };
     const formattedDate = new Date(dateString).toLocaleDateString(
@@ -135,14 +137,14 @@ const SalesByHoursReportTable = (props) => {
                             {props.SalesHoursData?.map((dailyreport, index) => (
                               <StyledTableRow key={index}>
                                 <StyledTableCell>
-                                  <p className="report-sort">
+                                  <p>
                                     {!!dailyreport?.interval_start
                                       ? dailyreport?.interval_start
                                       : ""}
                                   </p>
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                  <p className="report-sort">
+                                  <p>
                                     {!!dailyreport?.interval_end
                                       ? dailyreport?.interval_end
                                       : ""}
@@ -214,7 +216,7 @@ const SalesByHoursReportTable = (props) => {
                   </TableContainer>
                 )}
 
-                {Array.isArray(props.SalesHoursData) &&
+                {showNoData && Array.isArray(props.SalesHoursData) &&
                 props.SalesHoursData.length <= 0 ? (
                   <NoDataFound />
                 ) : (

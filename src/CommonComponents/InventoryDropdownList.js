@@ -273,7 +273,9 @@ const InventoryDropdownList = ({
         )}
       </div>
       {error?.[keyName] ? (
-        <span className="error-alert">{error[keyName]}</span>
+        <span className="error-alert mt-2">
+          {keyName === "selectProducts" ? "Select Product" : error[keyName]}
+        </span>
       ) : (
         ""
       )}

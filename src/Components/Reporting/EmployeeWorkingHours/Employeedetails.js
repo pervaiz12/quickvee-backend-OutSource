@@ -13,10 +13,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
 import { priceFormate } from "../../../hooks/priceFormate";
+import { dateFormate } from "../../../hooks/dateFormate";
 import PasswordShow from "../../../Common/passwordShow";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -53,6 +55,7 @@ const Employeedetails = (props) => {
     PasswordShow();
   const dispatch = useDispatch();
   const [allEmpWorkingHrsData, setallEmpWorkingHrsData] = useState("");
+  const showNoData = useDelayedNodata(Object.keys(allEmpWorkingHrsData));
   const AllEmpWorkingHrsDataState = useSelector(
     (state) => state.EmpWorkinghrsList
   );
@@ -125,7 +128,7 @@ const Employeedetails = (props) => {
     }
     return totalbreakdata.reduce(
       (total, workData) =>
-        total + convertSecondsToHours(parseFloat(workData.total_seconds_break)),
+        total + convertSecondsToHours(parseFloat(workData.total_seconds_break ?? 0)),
       0
     );
   };
@@ -210,7 +213,7 @@ const Employeedetails = (props) => {
                                   <>
                                     <StyledTableRow>
                                       <StyledTableCell>
-                                        <p>{formatDate(workData.work_date)}</p>
+                                        <p>{dateFormate(workData.work_date)}</p>
                                       </StyledTableCell>
                                       <StyledTableCell>
                                         <p>{workData.first_check_in_time}</p>
@@ -268,9 +271,7 @@ const Employeedetails = (props) => {
                                 <StyledTableCell></StyledTableCell>
                                 <StyledTableCell></StyledTableCell>
                                 <StyledTableCell>
-                                  <p className=" totalReport">
-                                    Total
-                                  </p>
+                                  <p className=" totalReport">Total</p>
                                 </StyledTableCell>
                                 <StyledTableCell>
                                   <p className=" totalReport">
@@ -324,10 +325,10 @@ const Employeedetails = (props) => {
           </>
         )}
       </div>
-      <Grid sx={{mt:3.5}}>
-      {!Object.keys(allEmpWorkingHrsData).length && !AllEmpWorkingHrsDataState.loading && <NoDataFound />}
-      </Grid> 
-      
+      <Grid sx={{ mt: 3.5 }}>
+        {showNoData && !Object.keys(allEmpWorkingHrsData).length &&
+          !AllEmpWorkingHrsDataState.loading  &&  <NoDataFound />}
+      </Grid>
     </>
   );
 };

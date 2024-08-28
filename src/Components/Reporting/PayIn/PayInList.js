@@ -17,6 +17,7 @@ import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "../../../Common/passwordShow";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -59,6 +60,7 @@ const PayInList = (props) => {
     GetSessionLogin,
   } = useAuthDetails();
   const [PayinReportData, setPayinReportData] = useState([]);
+  const showNoData = useDelayedNodata(PayinReportData)
   const [sortOrder, setSortOrder] = useState("asc");
   const PayInReportDataState = useSelector((state) => state.PayinReportList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
@@ -126,6 +128,7 @@ const PayInList = (props) => {
     return `${formattedDate} ${formattedTime}`;
   };
   const tableRow = [
+    { type: "str", name: "f_name", label: "Employee Name" },
     { type: "date", name: "created_at", label: "Transaction Date" },
     { type: "str", name: "reason", label: "Reason" },
     { type: "num", name: "amount", label: "Amount" },
@@ -175,6 +178,9 @@ const PayInList = (props) => {
                     PayinReportData.map((data, index) => (
                       <StyledTableRow>
                         <StyledTableCell>
+                          <p>{data.f_name ?? ""} {data.l_name ?? ""}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
                           <p className="report-title">
                             {formatDateTime(data.created_at)}
                           </p>
@@ -197,6 +203,7 @@ const PayInList = (props) => {
                             </div>
                           </StyledTableCell>
                           <StyledTableCell className="trBG_Color"></StyledTableCell>
+                          <StyledTableCell className="trBG_Color"></StyledTableCell>
                           <StyledTableCell  className="trBG_Color">
                             <div className="">
                               <div>
@@ -212,7 +219,7 @@ const PayInList = (props) => {
                       )}
                 </TableBody>
               </StyledTable>
-              {!PayinReportData.length  && <NoDataFound />}
+              {showNoData && !PayinReportData.length  && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>

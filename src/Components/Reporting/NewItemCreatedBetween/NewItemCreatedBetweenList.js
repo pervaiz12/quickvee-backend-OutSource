@@ -213,7 +213,7 @@ const NewItemCreatedBetweenList = (props) => {
                             <p>{ItemData.item_name}</p>
                           </StyledTableCell>
                           <StyledTableCell>
-                            <p>${priceFormate(ItemData.price)}</p>
+                            <p>${priceFormate(ItemData.price ?? "0.00")}</p>
                           </StyledTableCell>
                         </StyledTableRow>
                       ))

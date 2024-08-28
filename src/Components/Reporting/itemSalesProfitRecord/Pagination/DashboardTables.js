@@ -15,6 +15,7 @@ import { priceFormate } from "../../../../hooks/priceFormate";
 import { SkeletonTable } from "../../../../reuseableComponents/SkeletonTable";
 import sortIcon from "../../../../Assests/Category/SortingW.svg";
 import NoDataFound from "../../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../../hooks/useDelayedNoData";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -49,6 +50,7 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 export default function DashboardTables(props) {
+  const showNoData = useDelayedNodata(props.getItemRecord)
   const navigate = useNavigate();
   const [totalCost, setTotalCost] = useState({
     soldQty: 0,
@@ -195,7 +197,7 @@ export default function DashboardTables(props) {
               )}
             </TableBody>
           </StyledTable>
-          {!props.getItemRecord.length && <NoDataFound />}
+          {showNoData && !props.getItemRecord.length && <NoDataFound />}
         </TableContainer>
       )}
     </TableContainer>

@@ -452,6 +452,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
             total_pricing: prod.finalPrice.toString(), // Number(prod.newQty) * parseFloat(prod.newPrice),
             upc: prod.upc,
             note: prod.notes,
+            title: prod.title
           }));
 
           const orderItemsObject = orderItems?.reduce((acc, curr, index) => {
@@ -484,7 +485,10 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
           formData.append("token_id", userTypeData.token_id);
           formData.append("login_type", userTypeData.login_type);
 
-          const response = await axios.post(BASE_URL + SAVE_PO, formData, {
+          const response = await axios.post(
+            BASE_URL + SAVE_PO,
+          //  "https://www.quickvee.net/Zoho_po/save_po",
+            formData, {
             headers: {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ${token}`, // Use data?.token directly

@@ -50,9 +50,10 @@ export default function StoreCreditReportTable({
   setTotalValueIssued,
   setTotalValueRedeemed,
   setOutStandingsBalance,
+  dataArr,
+  setDataArr,
+  searchRecord,
 }) {
-  const [dataArr, setDataArr] = useState([]);
-
   const [sortOrder, setSortOrder] = useState("asc");
   // console.log(dataArr);
   const tableRow = [
@@ -71,29 +72,34 @@ export default function StoreCreditReportTable({
       !StoreCreditReportReduxState.loading &&
       StoreCreditReportReduxState.StoreCreditReportArr
     ) {
+      const filteredData =
+        StoreCreditReportReduxState.StoreCreditReportArr.filter((item) =>
+          item?.customer_name?.toLowerCase()?.includes(searchRecord?.toLowerCase())
+        );
       setTotalValueIssued(
-        StoreCreditReportReduxState.StoreCreditReportArr.reduce(
+        filteredData.reduce(
           (acc, curr) => acc + parseFloat(curr.total_credit_amount),
           0
         )
       );
       setTotalValueRedeemed(
-        StoreCreditReportReduxState.StoreCreditReportArr.reduce(
+        filteredData.reduce(
           (acc, curr) => acc + parseFloat(curr.total_debit_amount),
           0
         )
       );
       setOutStandingsBalance(
-        StoreCreditReportReduxState.StoreCreditReportArr.reduce(
+        filteredData.reduce(
           (acc, curr) => acc + parseFloat(curr.available_balance),
           0
         )
       );
-      setDataArr(StoreCreditReportReduxState.StoreCreditReportArr);
+      setDataArr(filteredData);
     }
   }, [
     StoreCreditReportReduxState,
     StoreCreditReportReduxState.StoreCreditReportArr,
+    searchRecord,
   ]);
   const sortByItemName = (type, name) => {
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
@@ -111,7 +117,7 @@ export default function StoreCreditReportTable({
       {
         <Grid container className="box_shadow_div">
           {StoreCreditReportReduxState.loading ||
-          (StoreCreditReportReduxState.status && !dataArr.length) ? (
+          ((StoreCreditReportReduxState.status && !searchRecord.length) && !dataArr.length) ? (
             <SkeletonTable columns={tableRow.map((item) => item.label)} />
           ) : (
             <Grid container>

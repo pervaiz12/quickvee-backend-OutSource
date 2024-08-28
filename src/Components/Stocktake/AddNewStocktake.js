@@ -70,7 +70,6 @@ const AddNewStocktake = ({
   const [singleStocktakeState, setSingleStocktakeState] = useState();
   const [deletedSingleStocktakeState, setDeletedSingleStocktakeState] =
     useState([]);
-  console.log("deletedSingleStocktakeState", deletedSingleStocktakeState);
   const [gotDatafromPo, setDataFromPo] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -93,7 +92,6 @@ const AddNewStocktake = ({
       price: "",
     },
   ]);
-
   const location = useLocation();
 
   const { id } = useParams();
@@ -156,8 +154,8 @@ const AddNewStocktake = ({
 
   useEffect(() => {
     loadOptions(" ");
-  }, []);
-
+  }, [stocktake_items]);
+  console.log("stocktake_items",stocktake_items)
   const loadOptions = async (inputValue) => {
     let name_data = {
       merchant_id: merchant_id,
@@ -174,6 +172,7 @@ const AddNewStocktake = ({
     const res = await dispatch(fetchProductsData(name_data));
     setSelectedProducts(res.payload);
     // console.log(res.payload);
+
     const data = res.payload
       ?.map((prod) => ({
         label: prod.title,
@@ -182,18 +181,27 @@ const AddNewStocktake = ({
         prodId: prod.id,
       }))
       .filter((prod) => {
+       
         const productFound = stocktake_items?.find((product) => {
           const a =
             (product?.variant &&
-              product.variant_id === prod.variantId &&
-              product.variant_id === prod.value) ||
-            (!product.variant && product.product_id === prod.value);
+              product.variant_id == prod.variantId &&
+              product.variant_id == prod.value) ||
+            (!product.variant && product.product_id == prod.value);
           return a;
+          
         });
+
+        // (product) =>
+        //   (product.id &&
+        //     product.product_id &&
+        //     product.id === prod.variantId &&
+        //     product.product_id === prod.value) ||
+        //   (product.id && !product.product_id && product.id === prod.value)
 
         return !productFound;
       });
-
+      console.log("data option data",data)
     return data;
   };
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
@@ -246,12 +254,14 @@ const AddNewStocktake = ({
         },
       ]);
       setErrorMessages([]);
+     
     }
   };
 
   const handleDeleteProduct = (index) => {
     setDeleteCategoryId(index);
     setDeleteModalOpen(true);
+    
   };
 
   const confirmDeleteCategory = async () => {
@@ -263,8 +273,8 @@ const AddNewStocktake = ({
     ) {
       // If singleStocktakeState or stocktake_item array is empty, filter the stocktake_items array and update the state
       const newList = stocktake_items.filter((_, i) => i !== deleteCategoryId);
-      setProductList(newList);
-
+      const newList1 = newList.filter((product) => product.product_name !== "");
+      setProductList(newList1);
       // Close the delete modal
       setDeleteModalOpen(false);
       return;
@@ -326,9 +336,9 @@ const AddNewStocktake = ({
       const newList = stocktake_items.filter((_, i) => i !== deleteCategoryId);
       setProductList(newList);
     }
-
     setDeleteCategoryId(null);
     setDeleteModalOpen(false);
+    
   };
 
   const handleNewQtyChange = (e, index) => {
@@ -350,7 +360,7 @@ const AddNewStocktake = ({
       const updatedList = [...prevList];
       const currentQty = updatedList[index].current_qty;
       const newQty = value;
-      const unitPrice = updatedList[index]?.price;
+      const unitPrice = updatedList[index]?.costperItem;
       const parsedCurrentQty = parseInt(currentQty);
       const discrepancy = newQty
         ? parseInt(newQty) - parseInt(parsedCurrentQty)
@@ -417,7 +427,6 @@ const AddNewStocktake = ({
           const sortedProduct = selectedProducts.find(
             (prod) => prod.var_id === product.id
           );
-          console.log("Updated product", product);
           setProductList((prevList) => {
             const updatedList = [...prevList];
             updatedList[index] = {
@@ -431,6 +440,7 @@ const AddNewStocktake = ({
               current_qty: product?.quantity || "", //
               stocktake_item_id: "0" || "",
               price: product?.price || "",
+              costperItem: product?.costperItem || "",
               new_qty: "",
               discrepancy: "0",
             };
@@ -443,7 +453,6 @@ const AddNewStocktake = ({
           obj.newPrice =
             parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
           obj.finalQty = Number(product.quantity) ?? 0;
-          console.log("Updated product", product);
           setProductList((prevList) => {
             const updatedList = [...prevList];
             updatedList[index] = {
@@ -455,6 +464,7 @@ const AddNewStocktake = ({
               current_qty: product.quantity || "", //
               stocktake_item_id: "0" || "",
               price: product?.price || "",
+              costperItem: product?.costperItem || "",
               new_qty: "",
               discrepancy: "0",
             };
@@ -481,7 +491,6 @@ const AddNewStocktake = ({
       return updatedErrors;
     });
   };
-  console.log("Product", stocktake_items);
   const handleCreateStocktake = async (stocktakeStatus) => {
     setStocktakeStaus(stocktakeStatus);
     if (stocktake_items.length === 0) {
@@ -520,7 +529,6 @@ const AddNewStocktake = ({
           (sum, item) => sum + Number(item.discrepancy || 0),
           0
         );
-        console.log("total_discrepancy", total_discrepancy);
         const padToTwoDigits = (num) => num.toString().padStart(2, "0");
         const formatDateTime = (date) => {
           const year = date.getFullYear();
@@ -535,7 +543,6 @@ const AddNewStocktake = ({
         const numberParseTofloat = stocktake_items.map((item) => {
           return { ...item, discrepancy: parseFloat(item.discrepancy) };
         });
-        console.log("numberParseTofloat", numberParseTofloat);
         const updatedStocktakeItem = numberParseTofloat?.reduce(
           (acc, curr, index) => {
             acc[index] = curr;
@@ -543,7 +550,6 @@ const AddNewStocktake = ({
           },
           {}
         );
-        console.log("total_discrepancy inside");
         const stocktakeData = {
           merchant_id: merchant_id, //
           total_qty,
@@ -695,25 +701,33 @@ const AddNewStocktake = ({
                                 ?.product_id === product.product_id ? (
                                 product?.product_name
                               ) : (
-                                <AsyncSelect
-                                  loadOptions={loadOptions}
-                                  defaultOptions
-                                  styles={customStyles}
-                                  menuPortalTarget={document.body}
-                                  onChange={(option) => {
-                                    handleOnChangeSelectDropDown(
-                                      option.prodId,
-                                      option.variantId,
-                                      index
-                                    );
-                                  }}
-                                  value={{
-                                    label: product && product?.product_name,
-                                    value:
-                                      (product && product?.var_id) ||
-                                      product?.id,
-                                  }}
-                                />
+                                <>
+                       
+                                  <AsyncSelect
+                                    isDisabled={stocktake_items.some(
+                                      (item) =>
+                                        item.product_name !== "" &&
+                                        index !== stocktake_items.length - 1
+                                    )}
+                                    loadOptions={loadOptions}
+                                    defaultOptions
+                                    styles={customStyles}
+                                    menuPortalTarget={document.body}
+                                    onChange={(option) => {
+                                      handleOnChangeSelectDropDown(
+                                        option.prodId,
+                                        option.variantId,
+                                        index
+                                      );
+                                    }}
+                                    value={{
+                                      label: product && product?.product_name,
+                                      value:
+                                        (product && product?.var_id) ||
+                                        product?.id,
+                                    }}
+                                  />
+                                </>
                               )}
                               {errorMessages[index]?.product_name && (
                                 <div className="error-message-stocktake">

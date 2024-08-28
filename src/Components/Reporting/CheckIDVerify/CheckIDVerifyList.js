@@ -18,6 +18,7 @@ import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItems
 import { Link } from "react-router-dom";
 import PasswordShow from "../../../Common/passwordShow";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 const orderEnv = (type) => {
   if (type === "Online Order") {
     return "Online";
@@ -70,7 +71,8 @@ const CheckIDVerifyList = (props) => {
   } = useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
-  const [allCheckIDVerifyData, setallCheckIDVerifyData] = useState("");
+  const [allCheckIDVerifyData, setallCheckIDVerifyData] = useState([]);
+  const showNoData = useDelayedNodata(allCheckIDVerifyData)
   const AllCheckIDVerifyDataState = useSelector(
     (state) => state.CheckIDVerifyList
   );
@@ -111,7 +113,7 @@ const CheckIDVerifyList = (props) => {
     ) {
       setallCheckIDVerifyData(AllCheckIDVerifyDataState.CheckIDVerifyData);
     } else {
-      setallCheckIDVerifyData("");
+      setallCheckIDVerifyData([]);
     }
   }, [
     AllCheckIDVerifyDataState,
@@ -212,7 +214,7 @@ const CheckIDVerifyList = (props) => {
                 </TableBody>
               </StyledTable>
             </TableContainer>
-            {!allCheckIDVerifyData.length >= 1 && (
+             {showNoData && !allCheckIDVerifyData.length  && (
               <NoDataFound />
             )}
           </>

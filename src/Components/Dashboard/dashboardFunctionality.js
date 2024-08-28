@@ -128,7 +128,7 @@ export default function DashboardFunctionality() {
       }
     };
     fetchData();
-    const interval = setInterval(fetchData, 5000);
+    const interval = setInterval(fetchData, 60000);
     return () => {
       clearInterval(interval);
       source.cancel("Operation canceled due to merchant_id change.");

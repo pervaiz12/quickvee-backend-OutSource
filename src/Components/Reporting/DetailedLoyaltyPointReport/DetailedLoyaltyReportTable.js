@@ -139,6 +139,7 @@ export default function DetailedLoyaltyReportTable({
                         <StyledTableRow key={index}>
                           <StyledTableCell>
                             <p>{item.customer_name}</p>
+                            { item.customer_email && ( <p className="text-[#818181] ">{item.customer_email ?? ""}</p>) }
                           </StyledTableCell>
                           <StyledTableCell>
                             <p>{priceFormate(item.total_credit_points)}</p>

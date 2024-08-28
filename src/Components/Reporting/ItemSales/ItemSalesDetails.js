@@ -17,6 +17,7 @@ import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "../../../Common/passwordShow";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -55,6 +56,7 @@ const ItemSalesDetails = (props) => {
     PasswordShow();
   const [sortOrder, setSortOrder] = useState("asc");
   const [allItemSalesData, setallItemSalesData] = useState([]);
+  const showNoData = useDelayedNodata(allItemSalesData);
   const [apiStatus, setapiStatus] = useState(false);
   const AllItemSalesDataState = useSelector(
     (state) => state.ItemSalesReportList
@@ -97,16 +99,12 @@ const ItemSalesDetails = (props) => {
     ) {
       setallItemSalesData(AllItemSalesDataState.ItemSalesData[0]);
       setapiStatus(AllItemSalesDataState.ItemSalesData[3]);
-
     } else {
       setallItemSalesData([]);
       // setapiStatus(false);
       !AllItemSalesDataState?.ItemSalesData && setapiStatus(false);
     }
-  }, [
-    AllItemSalesDataState,
-    AllItemSalesDataState.ItemSalesData,
-  ]);
+  }, [AllItemSalesDataState, AllItemSalesDataState.ItemSalesData]);
   const tableRow = [
     { type: "str", name: "categoryss", label: "Category" },
     { type: "str", name: "name", label: "Name" },
@@ -129,8 +127,7 @@ const ItemSalesDetails = (props) => {
     setallItemSalesData(sortedItems);
     setSortOrder(newOrder);
   };
-  console.log(AllItemSalesDataState.ItemSalesData)
-  console.log("AllItemSalesDataState.loading",AllItemSalesDataState.loading,"apiStatus",apiStatus,"!allItemSalesData.length",!allItemSalesData.length )
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -138,7 +135,8 @@ const ItemSalesDetails = (props) => {
           <div className="q-attributes-bottom-header">
             <span>Item Sales Report</span>
           </div>
-          {AllItemSalesDataState.loading || apiStatus && !allItemSalesData.length ? (
+          {AllItemSalesDataState.loading ||
+          (apiStatus && !allItemSalesData.length) ? (
             <SkeletonTable columns={tableRow.map((item) => item.label)} />
           ) : (
             <TableContainer>
@@ -195,7 +193,7 @@ const ItemSalesDetails = (props) => {
                     ))}
                 </TableBody>
               </StyledTable>
-              {!allItemSalesData.length >= 1 && <NoDataFound />}
+              {showNoData && !allItemSalesData.length >= 1 && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>

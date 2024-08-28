@@ -18,6 +18,7 @@ import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import PasswordShow from "../../../Common/passwordShow";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -50,6 +51,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const MainInstantDetails = ({ data }) => {
   const dispatch = useDispatch();
   const [instantactivity, setinstantactivity] = useState([]);
+  const showNoData = useDelayedNodata(instantactivity)
   const instantactivityDataState = useSelector(
     (state) => state.instantactivity
   );
@@ -306,7 +308,7 @@ const MainInstantDetails = ({ data }) => {
                       : ""}
                   </TableBody>
                 </StyledTable>
-                {!instantactivity.length && <NoDataFound />}
+                {showNoData && !instantactivity.length && <NoDataFound />}
               </TableContainer>
             </>
           )}

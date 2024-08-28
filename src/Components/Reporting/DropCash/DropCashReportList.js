@@ -17,6 +17,7 @@ import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "../../../Common/passwordShow";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -61,6 +62,7 @@ const DropCashReportList = (props) => {
   const [DropCashReportData, setDropCashReportData] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
   const DropCashReportDataState = useSelector((state) => state.DropCashReportList);
+  const showNoData = useDelayedNodata(DropCashReportData)
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
     getCouponReportData();
@@ -126,6 +128,7 @@ const DropCashReportList = (props) => {
     return `${formattedDate} ${formattedTime}`;
   };
   const tableRow = [
+    { type: "str", name: "f_name", label: "Employee Name" },
     { type: "date", name: "created_at", label: "Transaction Date" },
     { type: "str", name: "reason", label: "Reason" },
     { type: "num", name: "amount", label: "Amount" },
@@ -170,6 +173,9 @@ const DropCashReportList = (props) => {
                     DropCashReportData.map((data, index) => (
                       <StyledTableRow>
                         <StyledTableCell>
+                          <p>{data.f_name ?? ""} {data.l_name ?? ""}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
                           <p className="report-title">
                             {formatDateTime(data.created_at)}
                           </p>
@@ -193,6 +199,7 @@ const DropCashReportList = (props) => {
                             </div>
                           </StyledTableCell>
                           <StyledTableCell className="trBG_Color"></StyledTableCell>
+                          <StyledTableCell className="trBG_Color"></StyledTableCell>
                           <StyledTableCell  className="trBG_Color">
                             <div className="">
                               <div>
@@ -208,7 +215,7 @@ const DropCashReportList = (props) => {
                       )}
                 </TableBody>
               </StyledTable>
-              {!DropCashReportData.length  && <NoDataFound />}
+              {  showNoData &&  !DropCashReportData.length  && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>

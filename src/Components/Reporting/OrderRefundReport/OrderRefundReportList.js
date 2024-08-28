@@ -19,6 +19,7 @@ import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import useDelayedNodata from "../../../hooks/useDelayedNoData";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -59,6 +60,7 @@ const OrderRefundReportList = (props) => {
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
   const [allOrderData, setOrderData] = useState([]);
+  const showNoData = useDelayedNodata(allOrderData)
   const AllOrderRefundData = useSelector((state) => state.OrderRefundList);
   
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
@@ -291,7 +293,7 @@ const OrderRefundReportList = (props) => {
                   </TableBody>
                 </StyledTable>
               </TableContainer>
-              {!allOrderData.length && (
+              {showNoData && !allOrderData.length && (
                 <NoDataFound />
               )}
             </>

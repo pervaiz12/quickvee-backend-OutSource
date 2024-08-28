@@ -913,6 +913,7 @@ const AddProducts = () => {
 
     /// convert input value format 0.00
     let fieldValue;
+    let inputStr;
     if (!notAllowDecimalValue.includes(name)) {
       fieldValue = value
         // Remove extra dots and ensure only one dot exists at most
@@ -920,7 +921,7 @@ const AddProducts = () => {
         .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
         .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
 
-      let inputStr = fieldValue.replace(/\D/g, "");
+      inputStr = fieldValue.replace(/\D/g, "");
       inputStr = inputStr.replace(/^0+/, "");
 
       if (inputStr.length == "") {
@@ -933,7 +934,27 @@ const AddProducts = () => {
         fieldValue =
           inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
       }
+    } else if (name === "qty") {
+      // Remove all characters that are not digits or minus sign
+      let cleanedValue = value.replace(/[^0-9-]/g, "");
+
+      // Ensure only one minus sign at the start
+      if (cleanedValue.indexOf("-") > 0 || cleanedValue.split("-").length > 2) {
+        cleanedValue = cleanedValue.replace(/-/g, ""); // Remove all minus signs
+      }
+      if (cleanedValue.indexOf("-") === -1 && value[0] === "-") {
+        cleanedValue = "-" + cleanedValue; // Add a single minus sign at the start if needed
+      }
+
+      // Ensure the value is a valid number without a decimal point and not empty
+      let validNumberRegex = /^-?\d*$/;
+      if (cleanedValue === "" || validNumberRegex.test(cleanedValue)) {
+        fieldValue = cleanedValue; // Allow empty or valid numeric input
+      } else {
+        fieldValue = ""; // Set to empty string for invalid input
+      }
     }
+
     // allowed alphanumeric value in upcCode field but not allowed decimal value
     else if (name === "upcCode") {
       fieldValue = value
@@ -1292,6 +1313,7 @@ const AddProducts = () => {
 
     /// convert input value format 0.00
     let fieldValue;
+    let inputStr;
     if (!notAllowDecimalValue.includes(name)) {
       fieldValue = value
         // Remove extra dots and ensure only one dot exists at most
@@ -1299,7 +1321,7 @@ const AddProducts = () => {
         .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
         .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
 
-      let inputStr = fieldValue.replace(/\D/g, "");
+      inputStr = fieldValue.replace(/\D/g, "");
       inputStr = inputStr.replace(/^0+/, "");
 
       if (inputStr.length == "") {
@@ -1311,6 +1333,25 @@ const AddProducts = () => {
       } else {
         fieldValue =
           inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
+      }
+    } else if (name === "qty") {
+      // Remove all characters that are not digits or minus sign
+      let cleanedValue = value.replace(/[^0-9-]/g, "");
+
+      // Ensure only one minus sign at the start
+      if (cleanedValue.indexOf("-") > 0 || cleanedValue.split("-").length > 2) {
+        cleanedValue = cleanedValue.replace(/-/g, ""); // Remove all minus signs
+      }
+      if (cleanedValue.indexOf("-") === -1 && value[0] === "-") {
+        cleanedValue = "-" + cleanedValue; // Add a single minus sign at the start if needed
+      }
+
+      // Ensure the value is a valid number without a decimal point and not empty
+      let validNumberRegex = /^-?\d*$/;
+      if (cleanedValue === "" || validNumberRegex.test(cleanedValue)) {
+        fieldValue = cleanedValue; // Allow empty or valid numeric input
+      } else {
+        fieldValue = ""; // Set to empty string for invalid input
       }
     } else if (name === "customCode") {
       fieldValue = value;
@@ -2218,13 +2259,13 @@ const AddProducts = () => {
       isvarient: +isMultipleVarient,
 
       optionarray: isMultipleVarient
-        ? varientLength[0]?.varientName?.value.trim() ?? ""
+        ? varientLength[0]?.varientName?.value?.trim() ?? ""
         : "",
       optionarray1: isMultipleVarient
-        ? varientLength[1]?.varientName?.value.trim() ?? ""
+        ? varientLength[1]?.varientName?.value?.trim() ?? ""
         : "",
       optionarray2: isMultipleVarient
-        ? varientLength[2]?.varientName?.value.trim() ?? ""
+        ? varientLength[2]?.varientName?.value?.trim() ?? ""
         : "",
       optionvalue: isMultipleVarient
         ? varientLength[0]?.varientAttributeList
@@ -2655,7 +2696,11 @@ const AddProducts = () => {
 
                 <div className="q-add-categories-single-input  mt-3 px-5">
                   <CreatableDropdown
-                    title="Brand"
+                    title={
+                      <>
+                        Brand <i>(You can only select 1 item)</i>
+                      </>
+                    }
                     keyName="brands"
                     name="title"
                     optionList={speciality?.brands}
