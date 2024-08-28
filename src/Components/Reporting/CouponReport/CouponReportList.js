@@ -18,7 +18,7 @@ import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItems
 import PasswordShow from "../../../Common/passwordShow";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
 import useDelayedNodata from "../../../hooks/useDelayedNoData";
-import { dateFormate } from "../../../hooks/dateFormate";
+import { formatDate } from "../../../Constants/utils";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -61,7 +61,7 @@ const CouponReportList = (props) => {
     GetSessionLogin,
   } = useAuthDetails();
   const [CouponReportData, setCouponReportData] = useState([]);
-  const showNoData = useDelayedNodata(CouponReportData)
+  const showNoData = useDelayedNodata(CouponReportData);
   const [sortOrder, setSortOrder] = useState("asc");
   const CouponReportDataState = useSelector((state) => state.CouponReportList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
@@ -115,14 +115,6 @@ const CouponReportList = (props) => {
     }
   }, [CouponReportDataState.loading, CouponReportDataState.CouponReportData]);
 
-  const formatDate = (dateString) => {
-    const options = { day: "2-digit", month: "short", year: "numeric" };
-    const formattedDate = new Date(dateString).toLocaleDateString(
-      "en-US",
-      options
-    );
-    return formattedDate;
-  };
   const tableRow = [
     { type: "date", name: "date", label: "Date" },
     { type: "str", name: "couponName", label: "Coupon Name" },
@@ -138,7 +130,7 @@ const CouponReportList = (props) => {
     setCouponReportData(sortedItems);
     setSortOrder(newOrder);
   };
-  console.log("CouponReportDataState.loading",CouponReportDataState.loading,"CouponReportDataState.status,",CouponReportDataState.status)
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -168,7 +160,7 @@ const CouponReportList = (props) => {
                       <StyledTableRow>
                         <StyledTableCell>
                           <p className="report-title">
-                            {dateFormate(couponData.date)}
+                            {formatDate(couponData.date)}
                           </p>
                         </StyledTableCell>
                         <StyledTableCell>

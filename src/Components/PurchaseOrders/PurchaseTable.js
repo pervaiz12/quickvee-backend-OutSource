@@ -28,7 +28,7 @@ import { priceFormate } from "../../hooks/priceFormate";
 import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "./../../Common/passwordShow";
 import NoDataFound from "../../reuseableComponents/NoDataFound";
-import { dateFormateMonthName } from "../../hooks/dateFormate";
+import { formatDate } from "../../Constants/utils";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -293,10 +293,6 @@ const PurchaseTable = ({ seVisible }) => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {/* {console.log(
-                          "purchaseData: ",
-                          AllpurchaseDataState.purchaseData
-                        )} */}
                         {allPurchaseData &&
                           allPurchaseData.length > 0 &&
                           allPurchaseData.map((purchaseData, index) => (
@@ -424,40 +420,25 @@ const PurchaseTable = ({ seVisible }) => {
                                   <p className="purchaseData">
                                     {purchaseData.stock_date === "0000-00-00"
                                       ? "-"
-                                      : dateFormateMonthName(purchaseData.stock_date) }
+                                      : formatDate(purchaseData.stock_date)}
                                   </p>
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
-                                {/* <div className="flex justify-center">
-                                  <p className=" purchaseData ">
-                                    {purchaseData.updated_at ===
-                                    "0000-00-00 00:00:00"
-                                      ? new Date(
-                                          purchaseData.created_at
-                                        ).toLocaleDateString("en-US", {
-                                          year: "numeric",
-                                          month: "long",
-                                          day: "numeric",
-                                        })
-                                      : new Date(
-                                          purchaseData.updated_at
-                                        ).toLocaleDateString("en-US", {
-                                          year: "numeric",
-                                          month: "long",
-                                          day: "numeric",
-                                        })}
-                                  </p>
-                                </div> */}
                                 <div className="flex">
                                   <p className="purchaseData">
-                                    {new Date(
-                                      purchaseData.lastUpdate
-                                    ).toLocaleDateString("en-US", {
-                                      year: "numeric",
-                                      month: "long",
-                                      day: "numeric",
-                                    })}
+                                    {
+                                      <>
+                                        {formatDate(purchaseData.lastUpdate)}
+                                        {/* {new Date(
+                                          purchaseData.lastUpdate
+                                        ).toLocaleDateString("en-US", {
+                                          year: "numeric",
+                                          month: "long",
+                                          day: "numeric",
+                                        })} */}
+                                      </>
+                                    }
                                   </p>
                                 </div>
                               </StyledTableCell>
@@ -466,15 +447,20 @@ const PurchaseTable = ({ seVisible }) => {
                                   <p className=" purchaseData">
                                     {purchaseData.received_status === "2" &&
                                     purchaseData.received_at !==
-                                      "0000-00-00 00:00:00"
-                                      ? new Date(
+                                      "0000-00-00 00:00:00" ? (
+                                      <>
+                                        {formatDate(purchaseData.received_at)}
+                                        {/* new Date(
                                           purchaseData.received_at
                                         ).toLocaleDateString("en-US", {
                                           year: "numeric",
                                           month: "long",
                                           day: "numeric",
-                                        })
-                                      : "-"}
+                                        }) */}
+                                      </>
+                                    ) : (
+                                      "-"
+                                    )}
                                   </p>
                                 </div>
                               </StyledTableCell>
@@ -484,7 +470,7 @@ const PurchaseTable = ({ seVisible }) => {
                     </Table>
                   </TableContainer>
                 ) : (
-                 ""
+                  ""
                 )}
               </>
             )}
@@ -506,7 +492,9 @@ const PurchaseTable = ({ seVisible }) => {
           </Grid>
         </div>
       </div>
-      {!AllpurchaseDataState.loading && !allPurchaseData?.length && <NoDataFound />}
+      {!AllpurchaseDataState.loading && !allPurchaseData?.length && (
+        <NoDataFound />
+      )}
     </>
   );
 };

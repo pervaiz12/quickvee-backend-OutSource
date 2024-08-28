@@ -13,12 +13,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
 import { priceFormate } from "../../../hooks/priceFormate";
-import { dateFormate } from "../../../hooks/dateFormate";
 import PasswordShow from "../../../Common/passwordShow";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
 import useDelayedNodata from "../../../hooks/useDelayedNoData";
+import { formatDate } from "../../../Constants/utils";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -128,7 +128,8 @@ const Employeedetails = (props) => {
     }
     return totalbreakdata.reduce(
       (total, workData) =>
-        total + convertSecondsToHours(parseFloat(workData.total_seconds_break ?? 0)),
+        total +
+        convertSecondsToHours(parseFloat(workData.total_seconds_break ?? 0)),
       0
     );
   };
@@ -142,15 +143,6 @@ const Employeedetails = (props) => {
       const validSeconds = isNaN(parsedSeconds) ? 0 : parsedSeconds;
       return total + convertSecondsToHours(validSeconds);
     }, 0); // Initial value of the accumulator is 0
-  };
-
-  const formatDate = (dateString) => {
-    const options = { day: "2-digit", month: "short", year: "numeric" };
-    const formattedDate = new Date(dateString).toLocaleDateString(
-      "en-US",
-      options
-    );
-    return formattedDate;
   };
 
   return (
@@ -213,7 +205,11 @@ const Employeedetails = (props) => {
                                   <>
                                     <StyledTableRow>
                                       <StyledTableCell>
-                                        <p>{dateFormate(workData.work_date)}</p>
+                                        <p>
+                                          {workData.work_date
+                                            ? formatDate(workData.work_date)
+                                            : "-"}
+                                        </p>
                                       </StyledTableCell>
                                       <StyledTableCell>
                                         <p>{workData.first_check_in_time}</p>
@@ -326,8 +322,9 @@ const Employeedetails = (props) => {
         )}
       </div>
       <Grid sx={{ mt: 3.5 }}>
-        {showNoData && !Object.keys(allEmpWorkingHrsData).length &&
-          !AllEmpWorkingHrsDataState.loading  &&  <NoDataFound />}
+        {showNoData &&
+          !Object.keys(allEmpWorkingHrsData).length &&
+          !AllEmpWorkingHrsDataState.loading && <NoDataFound />}
       </Grid>
     </>
   );
