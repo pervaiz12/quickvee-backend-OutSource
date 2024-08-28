@@ -487,10 +487,31 @@ const AutoPo = ({
               LoginGetDashBoardRecordJson?.data?.merchant_id
             );
             formData.append("vendor_id", Number(purchaseInfo?.vendorId));
-            formData.append("issue_date", issuedDate?.format("YYYY-MM-DD"));
+
+            // let formattedStockDate;
+
+            // if (stockDate && dayjs(stockDate).isValid()) {
+            //   formattedStockDate = dayjs(stockDate).format("YYYY-MM-DD");
+            // } else {
+            //   formattedStockDate = "0000-00-00"; // Use this as a fallback for invalid or undefined dates
+            // }
+            // console.log(formattedStockDate);
+            // return;
+            // formData.append("issuedDate", formattedStockDate);
+            const dateFormat =
+              issuedDate?.format("YYYY-MM-DD") == "Invalid Date"
+                ? ""
+                : issuedDate?.format("YYYY-MM-DD");
+            formData.append(
+              "issue_date",
+              dateFormat !== ""
+                ? issuedDate?.format("YYYY-MM-DD")
+                : "0000-00-00"
+            );
+
             formData.append(
               "stock_date",
-              stockDate ? stockDate?.format("YYYY-MM-DD") : "0000-00-00"
+              !!stockDate ? stockDate?.format("YYYY-MM-DD") : "0000-00-00"
             );
             formData.append("reference", purchaseInfo?.reference);
             formData.append("is_draft", isDraft);
@@ -499,7 +520,6 @@ const AutoPo = ({
             formData.append("order_items", JSON.stringify(orderItemsObject));
             formData.append("token_id", userTypeData.token_id);
             formData.append("login_type", userTypeData.login_type);
-
             const response = await axios.post(
               BASE_URL + SAVE_PO,
               //  "https://www.quickvee.net/Zoho_po/save_po",

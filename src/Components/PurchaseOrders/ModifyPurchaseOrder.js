@@ -164,14 +164,14 @@ const ModifyPurchaseOrder = () => {
   const puchaseOrderDetail = useSelector(
     (state) => state.purchaseOrderById.purchaseOrderDetail
   );
-
-  // setting default product items
   useEffect(() => {
     setPurchaseInfo((prev) => ({
       ...prev,
-      issuedDate: puchaseOrderDetail?.issued_date
-        ? dayjs(puchaseOrderDetail?.issued_date)
-        : null,
+      issuedDate:
+        puchaseOrderDetail?.issued_date &&
+        puchaseOrderDetail?.issued_date !== "0000-00-00"
+          ? dayjs(puchaseOrderDetail?.issued_date)
+          : null,
       stockDate:
         puchaseOrderDetail?.stock_date &&
         puchaseOrderDetail?.stock_date !== "0000-00-00"
@@ -359,6 +359,10 @@ const ModifyPurchaseOrder = () => {
 
       const issuedDateLessThanDefaultIssuedDate =
         selectedIssuedDate.isBefore(defaultIssuedDate);
+      const essueDateCheck = dayjs(selectedIssuedDate).format("YYYY-MM-DD");
+      const currentDate = dayjs().startOf("day");
+      const issuedDateIsFine = !selectedIssuedDate.isBefore(currentDate);
+      console.log(issuedDateIsFine);
 
       setPurchaseInfoErrors((prev) => ({
         ...prev,
@@ -366,7 +370,11 @@ const ModifyPurchaseOrder = () => {
           puchaseOrderDetail.is_draft === "1" &&
           issuedDateLessThanDefaultIssuedDate
             ? `Issued Date cannot be older than ${getDate()}`
-            : "",
+            : essueDateCheck == "Invalid Date"
+              ? "Issued Date is required"
+              : issuedDateIsFine == false
+                ? `Issued Date cannot be older than present date`
+                : "",
         stockDate: "",
       }));
     }
@@ -376,6 +384,7 @@ const ModifyPurchaseOrder = () => {
       const stockDateLessThanIssuedDate = selectedStockDate.isBefore(
         purchaseInfo.issuedDate
       );
+      console.log("stockDateLessThanIssuedDate", stockDateLessThanIssuedDate);
 
       setPurchaseInfoErrors((prev) => ({
         ...prev,
@@ -718,7 +727,6 @@ const ModifyPurchaseOrder = () => {
             acc[index] = curr;
             return acc;
           }, {});
-
           const { token } = userTypeData;
           const formData = new FormData();
           formData.append(
@@ -731,13 +739,30 @@ const ModifyPurchaseOrder = () => {
           );
           formData.append("po_id", id);
           formData.append("vendor_id", Number(purchaseInfo?.vendorId));
+          let DataIssue =
+            dayjs(purchaseInfo?.issuedDate).format("YYYY-MM-DD") ==
+            "Invalid Date"
+              ? ""
+              : dayjs(purchaseInfo?.issuedDate).format("YYYY-MM-DD");
+
+          let stockDateDeu =
+            purchaseInfo.stockDate?.format("YYYY-MM-DD") == "Invalid Date"
+              ? ""
+              : purchaseInfo.stockDate?.format("YYYY-MM-DD");
+
           formData.append(
             "issue_date",
-            dayjs(purchaseInfo?.issuedDate).format("YYYY-MM-DD")
+            DataIssue !== ""
+              ? dayjs(purchaseInfo?.issuedDate).format("YYYY-MM-DD")
+              : "0000-00-00"
           );
           formData.append(
             "stock_date",
-            stockDate ? stockDate?.format("YYYY-MM-DD") : "0000-00-00"
+            stockDateDeu == ""
+              ? "0000-00-00"
+              : !!purchaseInfo.stockDate
+                ? purchaseInfo.stockDate?.format("YYYY-MM-DD")
+                : "0000-00-00"
           );
           formData.append("reference", purchaseInfo?.reference);
           formData.append(
@@ -776,7 +801,7 @@ const ModifyPurchaseOrder = () => {
             ToastifyAlert(response.data.message, "error");
           }
         } catch (error) {
-          if (error.status == 401 || error.response.status === 401) {
+          if (error?.status == 401 || error?.response?.status === 401) {
             getUnAutherisedTokenMessage();
             handleCoockieExpire();
           } else if (error.status == "Network Error") {
@@ -881,6 +906,7 @@ const ModifyPurchaseOrder = () => {
                         }));
                       }}
                       value={purchaseInfo.issuedDate}
+                      disablePast
                     />
                   </DemoContainer>
                 </LocalizationProvider>
@@ -1011,6 +1037,11 @@ const ModifyPurchaseOrder = () => {
                                   }
                                 >
                                   <AsyncSelect
+                                    isDisabled={selectedProducts.some(
+                                      (item) =>
+                                        item.title !== "" &&
+                                        index !== selectedProducts.length - 1
+                                    )}
                                     closeMenuOnSelect={true}
                                     defaultOptions
                                     styles={customStyles}

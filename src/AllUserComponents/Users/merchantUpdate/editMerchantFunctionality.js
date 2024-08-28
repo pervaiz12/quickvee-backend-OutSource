@@ -373,7 +373,7 @@ export default function EditMerchantFunctionality() {
   // };
   const handleChangeMerchant = (e) => {
     let name, value;
-
+    const regex = /^[a-zA-Z0-9 ]*$/;
     if (e?.target?.name) {
       // Extract name and value from event target
       ({ name, value } = e.target);
@@ -394,7 +394,11 @@ export default function EditMerchantFunctionality() {
     }
     if (name === "owner_name") {
       updatedErrors.owner_name =
-        trimmedValue === "" ? "Owner Name is required" : "";
+        trimmedValue === ""
+          ? "Owner Name is required"
+          : !regex.test(trimmedValue)
+            ? "Special Character not allowed"
+            : "";
     }
     if (name == "usa_pin") {
       updatedErrors.usa_pin = trimmedValue === "" ? "USA Pin is required" : "";

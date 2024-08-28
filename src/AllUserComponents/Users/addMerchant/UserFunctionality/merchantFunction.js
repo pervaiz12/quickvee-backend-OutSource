@@ -161,6 +161,7 @@ const MerchantFunction = () => {
     if (e?.target?.name) {
       let emailRegex =
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      const regex = /^[a-zA-Z0-9 ]*$/;
       if (name === "storename") {
         updatedErrors[name] =
           value.trim() === ""
@@ -170,7 +171,12 @@ const MerchantFunction = () => {
               : "";
       }
       if (name == "ownerName") {
-        updatedErrors[name] = value === "" ? `Owner Name is required` : "";
+        updatedErrors[name] =
+          value.trim() === ""
+            ? `Owner Name is required`
+            : !regex.test(value)
+              ? "Special Character not allowed"
+              : "";
       }
       if (name == "email") {
         updatedErrors[name] =

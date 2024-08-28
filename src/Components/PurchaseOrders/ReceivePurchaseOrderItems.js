@@ -387,10 +387,12 @@ const ReceivePurchaseOrderItems = () => {
                 {purchaseOrder.vendor_name ? purchaseOrder.vendor_name : "-"}
               </p>
             </Grid>
+
             <Grid item xs={12} sm={6} md={4}>
               <label>Issued Date</label>
               <p>
-                {purchaseOrder.issued_date
+                {purchaseOrder.issued_date &&
+                purchaseOrder.issued_date !== "0000-00-00"
                   ? formatDate(purchaseOrder.issued_date)
                   : "-"}
               </p>
