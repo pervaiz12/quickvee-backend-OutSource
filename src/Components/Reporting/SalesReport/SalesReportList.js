@@ -180,8 +180,6 @@ const SalesReportList = (props) => {
 
   const NetTaxableSale = parseFloat(SalesReportData.taxable_net_sale) || 0;
   const NonNetTaxableSale = parseFloat(SalesReportData.non_taxable_net_sale) || 0;
-  const TaxesCreditFee = parseFloat(SalesReportData?.taxes_desc?.CreditFee).toFixed(2) || 0;
-  const TaxesSaleTax = parseFloat(SalesReportData?.taxes_desc?.["Sale Tax"]).toFixed(2) || 0;
 
   const SalesSummeryList = [
     {
@@ -248,11 +246,11 @@ const SalesReportList = (props) => {
       amount: CashCollected,
     },
     {
-      name: "Food EBT Card Collected",
+      name: "Food EBT",
       amount: SalesReportData.food_ebt_collected,
     },
     {
-      name: "Cash EBT Card Collected",
+      name: "Cash EBT",
       amount: SalesReportData.cash_ebt_collected,
     },
     {
@@ -398,8 +396,11 @@ const SalesReportList = (props) => {
                                 item.name === "Taxes" && (
                                   <>
                                     <BootstrapTooltip title={<ul className="">
-                                      <li>Credit Fee ${priceFormate(TaxesCreditFee)}</li>
-                                      <li>Sale Tax ${priceFormate(TaxesSaleTax)}</li>
+                                      {Object.entries(SalesReportData?.taxes_desc).map(([key, value], i) => (
+                                        <li key={i}>
+                                          {key}  ${priceFormate(parseFloat(value).toFixed(2))}
+                                        </li>
+                                      ))}
                                       </ul>} placement="right">
                                     <span className=" ml-2 cursor-pointer"> <LuInfo /></span>
                                   </BootstrapTooltip>

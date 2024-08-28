@@ -132,9 +132,9 @@ const ItemSalesDetails = (props) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <div className="q-attributes-bottom-header">
+          {/* <div className="q-attributes-bottom-header">
             <span>Item Sales Report</span>
-          </div>
+          </div> */}
           {AllItemSalesDataState.loading ||
           (apiStatus && !allItemSalesData.length) ? (
             <SkeletonTable columns={tableRow.map((item) => item.label)} />

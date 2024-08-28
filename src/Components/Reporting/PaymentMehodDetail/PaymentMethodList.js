@@ -108,13 +108,13 @@ const PaymentMethodList = ({ data }) => {
       <Grid container style={{ marginBottom: 0 }} className="box_shadow_div">
         <Grid item xs={12}>
           {paymentReportDataState.loading ? (
-            <SkeletonTable columns={["Card type", "Total"]} />
+            <SkeletonTable columns={["Payment Type", "Amount"]} />
           ) : (
             <TableContainer>
               <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
                 <TableHead>
-                  <StyledTableCell>Payment type</StyledTableCell>
-                  <StyledTableCell>Total</StyledTableCell>
+                  <StyledTableCell>Payment Type</StyledTableCell>
+                  <StyledTableCell>Amount</StyledTableCell>
                 </TableHead>
                 <TableBody>
                   {total ? (
@@ -145,6 +145,27 @@ const PaymentMethodList = ({ data }) => {
                   ) : (
                     ""
                   )}
+                  { total > 0  && (
+                      <>
+                    <StyledTableCell className="trBG_Color">
+                          <div className="q-category-bottom-report-listing">
+                            <div>
+                              <p className="report-sort totalReport">Grand Total</p>
+                            </div>
+                          </div>
+                        </StyledTableCell>
+                        <StyledTableCell  className="trBG_Color">
+                          <div className="q-category-bottom-report-listing">
+                            <div>
+                              <p className="report-title totalReport">
+                                ${priceFormate(total.toFixed(2))}
+                              </p>
+                            </div>
+                          </div>
+                    </StyledTableCell>
+                      </>
+                    )
+                  }
                 </TableBody>
               </StyledTable>
               {!total && <NoDataFound />}

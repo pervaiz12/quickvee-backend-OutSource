@@ -682,7 +682,7 @@ const AddNewStocktake = ({
                   <StyledTableCell>Product Name</StyledTableCell>
                   <StyledTableCell>Current Qty</StyledTableCell>
                   <StyledTableCell>New Qty</StyledTableCell>
-                  <StyledTableCell>Discrepency</StyledTableCell>
+                  <StyledTableCell>Discrepancy</StyledTableCell>
                   <StyledTableCell>UPC</StyledTableCell>
                   <StyledTableCell></StyledTableCell>
                 </TableHead>

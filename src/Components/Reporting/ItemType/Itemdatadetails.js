@@ -59,7 +59,6 @@ const Itemdatadetails = ({
     PasswordShow();
 
   const orderReportDataState = useSelector((state) => state.orderTypeList);
-  console.log("data", data);
 
   useEffect(() => {
     // Dispatch the action to fetch data when the component mounts
@@ -81,6 +80,7 @@ const Itemdatadetails = ({
   useEffect(() => {
     if (!orderReportDataState.loading && orderReportDataState.orderTypeData) {
       setorderReport(orderReportDataState.orderTypeData);
+      getTotalRecord(orderReportDataState.orderTypeData);
     }
   }, [
     orderReportDataState,
@@ -88,6 +88,43 @@ const Itemdatadetails = ({
     orderReportDataState.orderTypeData,
     data,
   ]);
+
+  const [totalCost, setTotalCost] = useState({
+    OfPayments: 0.0,
+    withoutTip: 0.0,
+    Tip: 0.0,
+    withTip: 0.0,
+  });
+
+
+  const getTotalRecord = (data) => {
+    if (Array.isArray(data) && data.length > 0) {
+      const { OfPayments, withoutTip,Tip, withTip } = data.reduce(
+        (acc, item) => {
+          const OfPayments = item?.total_count || 0;
+          const withoutTip = parseFloat(item?.amt_without_tip || 0);
+          const Tip = parseFloat(item?.tip || 0);
+          const withTip = parseFloat(item?.amount_with_tip || 0);
+
+          return {
+            OfPayments: parseInt(acc.OfPayments) + parseInt(OfPayments),
+            withoutTip: parseFloat(acc.withoutTip) + withoutTip,
+            Tip: parseFloat(acc.Tip) + Tip,
+            withTip: parseFloat(acc.withTip) + withTip,
+          };
+        },
+        { OfPayments: 0, withoutTip: 0, Tip: 0, withTip: 0 } // Initial values including totalCost
+      );
+      setTotalCost({
+        OfPayments: OfPayments,
+        withoutTip: withoutTip.toFixed(2),
+        Tip: Tip.toFixed(2),
+        withTip: withTip.toFixed(2),
+      });
+    } else {
+      console.log("No report data available");
+    }
+  };
 
   if (!data || data.length === 0) {
     return (
@@ -109,9 +146,9 @@ const Itemdatadetails = ({
               columns={[
                 "Name",
                 "# Of Payments",
-                "Net Revenue Without Tips",
+                "Total without Tips",
                 "Tips",
-                "Net Revenue With Tips",
+                "Total with Tips",
                 "Details",
               ]}
             />
@@ -125,9 +162,9 @@ const Itemdatadetails = ({
                   <TableHead>
                     <StyledTableCell>Name</StyledTableCell>
                     <StyledTableCell># Of Payments</StyledTableCell>
-                    <StyledTableCell>Net Revenue Without Tips</StyledTableCell>
+                    <StyledTableCell>Total without Tips</StyledTableCell>
                     <StyledTableCell>Tips</StyledTableCell>
-                    <StyledTableCell>Net Revenue With Tips</StyledTableCell>
+                    <StyledTableCell>Total with Tips</StyledTableCell>
                     <StyledTableCell>Details</StyledTableCell>
                   </TableHead>
                   <TableBody>
@@ -135,7 +172,14 @@ const Itemdatadetails = ({
                       ? orderReport?.map((orderReportDa, index) => (
                           <StyledTableRow key={index}>
                             <StyledTableCell>
-                              <p>{orderReportDa.order_method}</p>
+                              <p>
+                              {orderReportDa.is_online === "1"
+                              ? orderReportDa.order_method === "pickup"
+                                ? "Online Pickup"
+                                : orderReportDa.order_method === "delivery"
+                                ? "Online Delivery"
+                                : "In-Store"
+                              : "In-Store"}</p>
                             </StyledTableCell>
                             <StyledTableCell>
                               <p>{priceFormate(orderReportDa.total_count)}</p>
@@ -182,6 +226,38 @@ const Itemdatadetails = ({
                           </StyledTableRow>
                         ))
                       : ""}
+                      { orderReport.length > 0 ? (
+                          <>
+                            <StyledTableRow className="trBG_Color">
+                              <StyledTableCell className="trBG_Color">
+                                <p className=" totalReport ">Total</p>
+                              </StyledTableCell>
+                              <StyledTableCell className="trBG_Color">
+                                <p className=" totalReport">
+                                  {priceFormate(totalCost?.OfPayments)}
+                                </p>
+                              </StyledTableCell>
+                              <StyledTableCell className="trBG_Color">
+                                <p className=" totalReport">{`$${priceFormate(
+                                  totalCost?.withoutTip
+                                )}`}</p>
+                              </StyledTableCell>
+                              <StyledTableCell className="trBG_Color">
+                                <p className=" totalReport">{`$${priceFormate(
+                                  totalCost?.Tip
+                                )}`}</p>
+                              </StyledTableCell>
+                              <StyledTableCell className="trBG_Color">
+                                <p className=" totalReport">{`$${priceFormate(
+                                  totalCost?.withTip
+                                )}`}</p>
+                              </StyledTableCell>
+                              <StyledTableCell className="trBG_Color">
+                                <p className=" totalReport "></p>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          </>
+                        ):("")}
                   </TableBody>
                 </StyledTable>
               </TableContainer>
