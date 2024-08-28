@@ -15,6 +15,12 @@ import { Suspense } from "react";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import "../../Styles/ProductPage.css";
+import {
+  Router,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 
 const FilterProduct = lazy(() => import("./FilterProduct"));
 const ProductTable = lazy(() => import("./ProductTable"));
@@ -24,6 +30,9 @@ const MainProducts = () => {
   const { inventory_approval } = useSelector(
     (state) => state.StoreSetupList.storesetupData
   );
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [offset, setoffset] = useState(0);
   const [limit, setlimit] = useState(10);
   const [selectedEmployee, setSelectedEmployee] = useState("Select");
@@ -57,6 +66,26 @@ const MainProducts = () => {
 
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const searchParams = new URLSearchParams(window.location.search);
+  const categoryUrl = searchParams.get("category")?.trim().toLowerCase();
+  const statusUrl = searchParams.get("status")?.trim().toLowerCase();
+  const listingUrl = searchParams.get("listingType")?.trim().toLowerCase();
+  const imageUrl = searchParams.get("filterBy")?.trim().toLowerCase();
+
+  const changeProductPageUrl = (urlOption, content) => {
+    console.log("urloptions", urlOption, content);
+    if (content === 0 || content) {
+      // Get the current search parameters
+
+      // Set or update the new search parameter
+      searchParams.set(urlOption, content);
+
+      // Navigate to the updated URL with all search parameters
+      navigate(`/inventory/products?${searchParams.toString()}`);
+    } else {
+      navigate(location.pathname);
+    }
+  };
 
   const handleDeleteProduct = async (id) => {
     setDeleteCategoryId(id);
@@ -72,6 +101,7 @@ const MainProducts = () => {
 
   const handleSearch = (val) => {
     setSearchId(val);
+    // changeProductPageUrl("search", val);
   };
 
   const handleProductUnCheck = (id) => {
@@ -87,13 +117,11 @@ const MainProducts = () => {
     let data = {
       merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       format: "json",
-      category_id: categoryId === "All" ? "all" : categoryId,
-      show_status: selectedStatus,
+      category_id: categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
+      show_status: statusUrl === 0 || statusUrl ? statusUrl : "all",
       name: debouncedValue,
-      is_media_blank: productByImages === "All" ? "" : 1,
-      listing_type: selectedListingTypeValue?.id
-        ? selectedListingTypeValue?.id
-        : 0,
+      is_media_blank: imageUrl === "all" ? "" : imageUrl,
+      listing_type: listingUrl === 0 || listingUrl ? listingUrl : "0",
       offset: 0,
       limit: 10,
       page: 0,
@@ -163,6 +191,7 @@ const MainProducts = () => {
     selectedListingTypeValue,
     categoryId,
     productByImages,
+    location,
   ]);
 
   const handlefocus = (e) => {};
@@ -209,11 +238,14 @@ const MainProducts = () => {
                     let del_pic_data = {
                       merchant_id:
                         LoginGetDashBoardRecordJson?.data?.merchant_id,
-                      category_id: categoryId === "All" ? "all" : categoryId,
-                      show_status: selectedStatus,
+                      category_id:
+                        categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
+                      show_status:
+                        statusUrl === 0 || statusUrl ? statusUrl : "all",
                       name: searchId,
-                      is_media_blank: productByImages === "All" ? "" : 1,
-                      listing_type: selectedListingTypeValue,
+                      is_media_blank: imageUrl === "all" ? "" : imageUrl,
+                      listing_type:
+                        listingUrl === 0 || listingUrl ? listingUrl : "0",
                       offset: 0,
                       limit: 10,
                       page: 0,
@@ -266,7 +298,9 @@ const MainProducts = () => {
         setTransactionDropdownVisible(false);
         dispatch(emptyProduct([]));
         setProductIdList([]);
-
+        if (option !== "All") {
+          changeProductPageUrl("status", option?.id);
+        }
         setlistingTypesDropdownVisible(false);
         break;
       case "listingType":
@@ -280,9 +314,9 @@ const MainProducts = () => {
           setSelectedListingType("Select listing");
         }
         setSelectedListingTypeValue(option);
+        changeProductPageUrl("listingType", option?.id);
         setSearchId("");
         setProductIdList([]);
-
         setlistingTypesDropdownVisible(false);
         break;
       case "image_listing":
@@ -292,6 +326,12 @@ const MainProducts = () => {
         setSearchId("");
         setProductByImages(option?.title);
         setlistingTypesDropdownVisible(false);
+        console.log("option?.id", option?.id);
+        changeProductPageUrl(
+          "filterBy",
+          option?.id === "1" ? "all" : option?.id
+        );
+
       default:
         break;
     }
@@ -324,6 +364,7 @@ const MainProducts = () => {
                 handlefocus,
                 setSearchId,
                 productByImages,
+                changeProductPageUrl,
               }}
             />
           </Suspense>
