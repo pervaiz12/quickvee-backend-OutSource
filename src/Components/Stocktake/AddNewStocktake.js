@@ -92,6 +92,7 @@ const AddNewStocktake = ({
       price: "",
     },
   ]);
+  console.log("costperItem:product.costperItem || ,", stocktake_items);
   const location = useLocation();
 
   const { id } = useParams();
@@ -152,10 +153,10 @@ const AddNewStocktake = ({
     }
   }, [singleStocktakeState]);
 
-  useEffect(() => {
-    loadOptions(" ");
-  }, [stocktake_items]);
-  console.log("stocktake_items",stocktake_items)
+  // useEffect(() => {
+  //   // loadOptions(" ");
+  // }, []);
+
   const loadOptions = async (inputValue) => {
     let name_data = {
       merchant_id: merchant_id,
