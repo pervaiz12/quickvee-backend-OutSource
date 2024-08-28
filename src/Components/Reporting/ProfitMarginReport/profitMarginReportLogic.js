@@ -40,7 +40,7 @@ export default function ProfitMarginReportLogic() {
 
         let packet = {
           ...newData,
-          // cat_id: id,
+          cat_id: id,
           name: value,
           merchant_id,
           offset: 0,

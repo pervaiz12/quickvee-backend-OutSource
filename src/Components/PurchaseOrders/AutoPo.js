@@ -74,6 +74,8 @@ const customStyles = {
     boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
     height: 40,
     minHeight: 40,
+    height: 40,
+    minHeight: 40,
     "&:hover": {
       borderColor: "black",
     },
@@ -87,7 +89,11 @@ const customStyles = {
   }),
 };
 
-const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
+const AutoPo = ({
+  purchaseInfo,
+  setPurchaseInfoErrors,
+  purchaseInfoErrors,
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
@@ -411,135 +417,167 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
 
   // api for creating a new purchase order
   const savePurchaseOrder = async (isDraft) => {
-    try {
-      setLoaders((prev) => ({
-        ...prev,
-        createPo: isDraft === "0",
-        saveAsDraft: isDraft === "1",
-      }));
-
-      const { issuedDate, stockDate, selectedVendor, email } = purchaseInfo;
-
-      const currentDate = dayjs().startOf("day");
-      const selectedIssuedDate = dayjs(issuedDate).startOf("day");
-
-      const issuedDateIsFine = !selectedIssuedDate.isBefore(currentDate);
-
-      // validating purchase order info dataset
-      const purchaseInfoDetails = [selectedVendor].every((a) =>
-        Boolean(a && a.trim())
-      );
-
-      let emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-      const emailIsValid = email ? emailRegex.test(email) : true;
-
-      if (email && !emailIsValid) {
-        setPurchaseInfoErrors((prev) => ({
+    const { email, issuedDate, reference, selectedVendor, stockDate } =
+      purchaseInfoErrors;
+    if (
+      email == "" &&
+      issuedDate == "" &&
+      reference == "" &&
+      selectedVendor == "" &&
+      stockDate == ""
+    ) {
+      try {
+        setLoaders((prev) => ({
           ...prev,
-          email: "Please fill valid email",
+          createPo: isDraft === "0",
+          saveAsDraft: isDraft === "1",
         }));
-        return;
-      }
 
-      if (purchaseInfoDetails && validateProducts() && issuedDateIsFine) {
-        try {
-          const orderItems = selectedProducts.map((prod) => ({
-            product_id: prod.variant ? prod.product_id : prod.id,
-            variant_id: prod.variant ? prod.id : "",
-            required_qty: prod.newQty.toString(),
-            after_qty: (Number(prod.quantity) + Number(prod.newQty)).toString(),
-            cost_per_item: prod.newPrice.toString(),
-            total_pricing: prod.finalPrice.toString(), // Number(prod.newQty) * parseFloat(prod.newPrice),
-            upc: prod.upc,
-            note: prod.notes,
-            title: prod.title,
-          }));
+        const { issuedDate, stockDate, selectedVendor, email } = purchaseInfo;
 
-          const orderItemsObject = orderItems?.reduce((acc, curr, index) => {
-            acc[index] = curr;
-            return acc;
-          }, {});
+        const currentDate = dayjs().startOf("day");
+        const selectedIssuedDate = dayjs(issuedDate).startOf("day");
 
-          const { token } = userTypeData;
+        const issuedDateIsFine = !selectedIssuedDate.isBefore(currentDate);
 
-          const formData = new FormData();
-          formData.append(
-            "merchant_id",
-            LoginGetDashBoardRecordJson?.data?.merchant_id
-          );
-          formData.append(
-            "admin_id",
-            LoginGetDashBoardRecordJson?.data?.merchant_id
-          );
-          formData.append("vendor_id", Number(purchaseInfo?.vendorId));
-          formData.append("issue_date", issuedDate?.format("YYYY-MM-DD"));
-          formData.append(
-            "stock_date",
-            stockDate ? stockDate?.format("YYYY-MM-DD") : "0000-00-00"
-          );
-          formData.append("reference", purchaseInfo?.reference);
-          formData.append("is_draft", isDraft);
-          formData.append("created_at", createdAt(new Date()));
-          formData.append("vendor_email", purchaseInfo?.email);
-          formData.append("order_items", JSON.stringify(orderItemsObject));
-          formData.append("token_id", userTypeData.token_id);
-          formData.append("login_type", userTypeData.login_type);
+        // validating purchase order info dataset
+        const purchaseInfoDetails = [selectedVendor].every((a) =>
+          Boolean(a && a.trim())
+        );
 
-          const response = await axios.post(
-            BASE_URL + SAVE_PO,
-            //  "https://www.quickvee.net/Zoho_po/save_po",
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${token}`, // Use data?.token directly
-              },
-            }
-          );
+        let emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+        const emailIsValid = email ? emailRegex.test(email) : true;
 
-          // console.log("response: ", response);
-          if (response.data.status) {
-            ToastifyAlert(response.data.message, "success");
-            navigate("/purchase-data");
-          } else {
-            ToastifyAlert(response.data.message, "error");
-          }
-        } catch (error) {
-          if (error.status == 401 || error.response.status === 401) {
-            getUnAutherisedTokenMessage();
-            handleCoockieExpire();
-          } else if (error.status == "Network Error") {
-            getNetworkError();
-          }
-        }
-      } else {
-        if (!purchaseInfoDetails || !issuedDateIsFine) {
+        if (email && !emailIsValid) {
           setPurchaseInfoErrors((prev) => ({
             ...prev,
-            issuedDate:
-              issuedDate && issuedDateIsFine
-                ? ""
-                : issuedDate && !issuedDateIsFine
-                  ? "Issued Date cannot be older than present date"
-                  : "Issued Date is required",
-            // stockDate: stockDate ? "" : "Stock Due Date is required",
-            // email: email ? "" : "Email is required",
-            selectedVendor: selectedVendor ? "" : "Vendor is required",
+            email: "Please fill valid email",
           }));
+          return;
         }
 
-        if (!validateProducts()) {
-          displayErrors();
+        if (purchaseInfoDetails && validateProducts() && issuedDateIsFine) {
+          try {
+            const orderItems = selectedProducts.map((prod) => ({
+              product_id: prod.variant ? prod.product_id : prod.id,
+              variant_id: prod.variant ? prod.id : "",
+              required_qty: prod.newQty.toString(),
+              after_qty: (
+                Number(prod.quantity) + Number(prod.newQty)
+              ).toString(),
+              cost_per_item: prod.newPrice.toString(),
+              total_pricing: prod.finalPrice.toString(), // Number(prod.newQty) * parseFloat(prod.newPrice),
+              upc: prod.upc,
+              note: prod.notes,
+              title: prod.title,
+            }));
+
+            const orderItemsObject = orderItems?.reduce((acc, curr, index) => {
+              acc[index] = curr;
+              return acc;
+            }, {});
+
+            const { token } = userTypeData;
+
+            const formData = new FormData();
+            formData.append(
+              "merchant_id",
+              LoginGetDashBoardRecordJson?.data?.merchant_id
+            );
+            formData.append(
+              "admin_id",
+              LoginGetDashBoardRecordJson?.data?.merchant_id
+            );
+            formData.append("vendor_id", Number(purchaseInfo?.vendorId));
+
+            // let formattedStockDate;
+
+            // if (stockDate && dayjs(stockDate).isValid()) {
+            //   formattedStockDate = dayjs(stockDate).format("YYYY-MM-DD");
+            // } else {
+            //   formattedStockDate = "0000-00-00"; // Use this as a fallback for invalid or undefined dates
+            // }
+            // console.log(formattedStockDate);
+            // return;
+            // formData.append("issuedDate", formattedStockDate);
+            const dateFormat =
+              issuedDate?.format("YYYY-MM-DD") == "Invalid Date"
+                ? ""
+                : issuedDate?.format("YYYY-MM-DD");
+            formData.append(
+              "issue_date",
+              dateFormat !== ""
+                ? issuedDate?.format("YYYY-MM-DD")
+                : "0000-00-00"
+            );
+
+            formData.append(
+              "stock_date",
+              !!stockDate ? stockDate?.format("YYYY-MM-DD") : "0000-00-00"
+            );
+            formData.append("reference", purchaseInfo?.reference);
+            formData.append("is_draft", isDraft);
+            formData.append("created_at", createdAt(new Date()));
+            formData.append("vendor_email", purchaseInfo?.email);
+            formData.append("order_items", JSON.stringify(orderItemsObject));
+            formData.append("token_id", userTypeData.token_id);
+            formData.append("login_type", userTypeData.login_type);
+            const response = await axios.post(
+              BASE_URL + SAVE_PO,
+              //  "https://www.quickvee.net/Zoho_po/save_po",
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  Authorization: `Bearer ${token}`, // Use data?.token directly
+                },
+              }
+            );
+
+            // console.log("response: ", response);
+            if (response.data.status) {
+              ToastifyAlert(response.data.message, "success");
+              navigate("/purchase-data");
+            } else {
+              ToastifyAlert(response.data.message, "error");
+            }
+          } catch (error) {
+            if (error.status == 401 || error.response.status === 401) {
+              getUnAutherisedTokenMessage();
+              handleCoockieExpire();
+            } else if (error.status == "Network Error") {
+              getNetworkError();
+            }
+          }
+        } else {
+          if (!purchaseInfoDetails || !issuedDateIsFine) {
+            setPurchaseInfoErrors((prev) => ({
+              ...prev,
+              issuedDate:
+                issuedDate && issuedDateIsFine
+                  ? ""
+                  : issuedDate && !issuedDateIsFine
+                    ? "Issued Date cannot be older than present date"
+                    : "Issued Date is required",
+              // stockDate: stockDate ? "" : "Stock Due Date is required",
+              // email: email ? "" : "Email is required",
+              selectedVendor: selectedVendor ? "" : "Vendor is required",
+            }));
+          }
+
+          if (!validateProducts()) {
+            displayErrors();
+          }
         }
+      } catch (e) {
+        console.log("Error: ", e);
+      } finally {
+        setLoaders((prev) => ({
+          ...prev,
+          createPo: false,
+          saveAsDraft: false,
+        }));
       }
-    } catch (e) {
-      console.log("Error: ", e);
-    } finally {
-      setLoaders((prev) => ({
-        ...prev,
-        createPo: false,
-        saveAsDraft: false,
-      }));
     }
   };
 
@@ -638,6 +676,12 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
       setLoaders((prev) => ({ ...prev, autoPo: false }));
     }
   };
+  const handleQuantity = (e) => {
+    const charCode = e.which ? e.which : e.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      e.preventDefault();
+    }
+  };
 
   return (
     <div className="auto-po-container">
@@ -671,6 +715,11 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                             }
                           >
                             <AsyncSelect
+                              isDisabled={selectedProducts.some(
+                                (item) =>
+                                  item.title !== "" &&
+                                  index !== selectedProducts.length - 1
+                              )}
                               closeMenuOnSelect={true}
                               defaultOptions
                               styles={customStyles}
@@ -728,6 +777,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                           }}
                           variant="outlined"
                           size="small"
+                          onKeyPress={handleQuantity}
                         />
                         {product.qtyError && (
                           <p className="error-message">Qty is required</p>
