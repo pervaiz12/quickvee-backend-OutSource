@@ -161,7 +161,12 @@ const GeneratePUC = ({
                       {isMultipleVarient ? (
                         <div className="my-2 varient-title-name">
                           {productInfo?.title
-                            ? productInfo?.title + "  -  " + varientTitle[index]
+                            ? index +
+                              1 +
+                              ". " +
+                              productInfo?.title +
+                              "  -  " +
+                              varientTitle[index]
                             : varientTitle[index]}
                         </div>
                       ) : (

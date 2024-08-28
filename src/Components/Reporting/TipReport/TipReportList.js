@@ -191,7 +191,7 @@ const TipReportList = (props) => {
                   tipReportData.map((tipData, index) => (
                     <StyledTableRow key={index}>
                       <StyledTableCell>
-                        <p>{`${tipData.f_name || ""} ${tipData.l_name || ""}`}</p>
+                        <p>{`${tipData.f_name ?? ""} ${tipData.l_name ?? ""}`}</p>
                       </StyledTableCell>
                       <StyledTableCell>
                         <p>${priceFormate(parseFloat(tipData.net_tip).toFixed(2))}</p>

@@ -74,6 +74,8 @@ const customStyles = {
     boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
     height: 40,
     minHeight: 40,
+    height: 40,
+    minHeight: 40,
     "&:hover": {
       borderColor: "black",
     },
@@ -156,9 +158,9 @@ const AutoPo = ({
     setSelectedProducts(updatedProducts);
   };
 
-  useEffect(() => {
-    productOptions(" ");
-  }, [selectedProducts.length]);
+  // useEffect(() => {
+  //   productOptions(" ");
+  // }, [selectedProducts.length]);
 
   // check each product has required data
   const validateProducts = () => {
