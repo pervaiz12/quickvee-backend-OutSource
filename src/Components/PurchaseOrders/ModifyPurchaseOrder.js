@@ -414,10 +414,6 @@ const ModifyPurchaseOrder = () => {
     }
   };
 
-  useEffect(() => {
-    productOptions(" ");
-  }, [selectedProducts.length]);
-
   // generating product options once user searches any product name
   const productOptions = async (inputValue) => {
     try {
@@ -427,7 +423,7 @@ const ModifyPurchaseOrder = () => {
         show_status: "all",
         listing_type: 1,
         offset: 0,
-        limit: 100000,
+        limit: 50,
         name: inputValue,
         page: 0,
         ...userTypeData,

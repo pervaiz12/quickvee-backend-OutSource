@@ -158,10 +158,6 @@ const AutoPo = ({
     setSelectedProducts(updatedProducts);
   };
 
-  // useEffect(() => {
-  //   productOptions(" ");
-  // }, [selectedProducts.length]);
-
   // check each product has required data
   const validateProducts = () => {
     const bool = selectedProducts.every(
@@ -219,14 +215,13 @@ const AutoPo = ({
         show_status: "all",
         listing_type: 1,
         offset: 0,
-        limit: 100000,
+        limit: 50,
         name: inputValue,
         page: 0,
         ...userTypeData,
       };
 
       const res = await dispatch(fetchProductsData(name_data));
-      // console.log("api data: ", res.payload);
 
       const data = res.payload
         ?.filter((prod) => prod.upc && prod.upc !== "")
@@ -254,8 +249,6 @@ const AutoPo = ({
 
           return !productFound;
         });
-
-      // console.log("filteredProducts: ", filteredProducts);
 
       return filteredProducts || [];
     } catch (error) {

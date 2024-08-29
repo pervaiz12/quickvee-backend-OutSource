@@ -147,11 +147,11 @@ const CategoryListDropDown = ({
     };
   }, []);
 
-  const dropdownContentClass =
-    Object.values(fetchProductsData).length > 2
-      ? "dropdown-content scrollable"
-      : "dropdown-content";
-  const lengthOfArray = Object.values(fetchProductsData).length;
+  // const dropdownContentClass =
+  //   Object.values(fetchProductsData).length > 2
+  //     ? "dropdown-content scrollable"
+  //     : "dropdown-content";
+  // const lengthOfArray = Object.values(fetchProductsData).length;
 
   return (
     <>
