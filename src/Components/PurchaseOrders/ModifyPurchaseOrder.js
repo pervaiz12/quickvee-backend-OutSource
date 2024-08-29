@@ -664,10 +664,24 @@ const ModifyPurchaseOrder = () => {
   };
 
   // modifying purchase order api
+  const isValidStockDate = () => {
+    let isCheckvalidDate = purchaseInfo?.stockDate?.format("YYYY-MM-DD");
+    if (isCheckvalidDate == "Invalid Date") {
+      setPurchaseInfoErrors((prev) => ({
+        ...prev,
+        stockDate: "Invalid Stock Due",
+      }));
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const modifyPurchaseOrder = async (isDraft) => {
     if (loading) return;
 
     const { issuedDate, stockDate, selectedVendor, email } = purchaseInfo;
+    let isCheckValidstockDate = isValidStockDate();
 
     if (selectedProducts.length <= 0) {
       ToastifyAlert("No Products to update!", "error");
@@ -698,7 +712,8 @@ const ModifyPurchaseOrder = () => {
         stockDate == "" &&
         email == "" &&
         selectedVendor == "" &&
-        reference == ""
+        reference == "" &&
+        isCheckValidstockDate == false
       ) {
         try {
           setLoading(() => true);
