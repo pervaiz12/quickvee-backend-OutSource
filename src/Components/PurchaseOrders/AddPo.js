@@ -119,20 +119,27 @@ const AddPo = ({ seVisible }) => {
       const selectedIssuedDate = dayjs(dayjsDate).startOf("day");
       const issuedDateLessThanPresentDate =
         selectedIssuedDate.isBefore(currentDate);
-
+      console.log(
+        "selectedIssuedDate",
+        dayjs(selectedIssuedDate, "MM-DD-YYYY").format("YYYY-MM-DD")
+      );
+      const essueDateCheck = dayjs(selectedIssuedDate).format("YYYY-MM-DD");
       setPurchaseInfoErrors((prev) => ({
         ...prev,
         issuedDate: issuedDateLessThanPresentDate
           ? "Issued Date cannot be older than present date"
-          : "",
+          : essueDateCheck == "Invalid Date"
+            ? "Issued Date is required"
+            : "",
         stockDate: "",
       }));
     }
 
     if (type === "stockDate") {
       const selectedStockDate = dayjs(dayjsDate).startOf("day");
+      const currentDate = dayjs().startOf("day"); // Ensure currentDate is at the start of the day
       const stockDateLessThanIssuedDate = selectedStockDate.isBefore(
-        purchaseInfo.issuedDate
+        dayjs(purchaseInfo.issuedDate).startOf("day")
       );
       const stockDateLessThanPresentDate =
         selectedStockDate.isBefore(currentDate);
@@ -145,6 +152,23 @@ const AddPo = ({ seVisible }) => {
             ? "Stock Due Date cannot be older than present date"
             : "",
       }));
+
+      // const selectedStockDate = dayjs(dayjsDate).startOf("day");
+      // const stockDateLessThanIssuedDate = selectedStockDate.isBefore(
+      //   purchaseInfo.issuedDate
+      // );
+      // console.log(stockDateLessThanIssuedDate);
+      // const stockDateLessThanPresentDate =
+      //   selectedStockDate.isBefore(currentDate);
+
+      // setPurchaseInfoErrors((prev) => ({
+      //   ...prev,
+      //   stockDate: stockDateLessThanIssuedDate
+      //     ? "Stock Due Date cannot be older than issued date"
+      //     : stockDateLessThanPresentDate
+      //       ? "Stock Due Date cannot be older than present date"
+      //       : "",
+      // }));
     }
   };
 
@@ -152,11 +176,10 @@ const AddPo = ({ seVisible }) => {
     <>
       <div className="box">
         <div className="box_shadow_div">
-          <SwitchToBackButton 
+          <SwitchToBackButton
             linkTo={"/purchase-data"}
             title={"Create Purchase Order"}
           />
-        
 
           <div style={{ padding: "20px" }}>
             <Grid container spacing={2}>
@@ -254,7 +277,7 @@ const AddPo = ({ seVisible }) => {
                       disablePast
                       format={"MM/DD/YYYY"}
                       shouldDisableDate={(date) => {
-                        return dayjs(date) < dayjs(purchaseInfo.issuedDate);
+                        return dayjs(date) == dayjs(purchaseInfo.issuedDate);
                       }}
                       onChange={(newDate) => handleDate(newDate, "stockDate")}
                       value={purchaseInfo.stockDate}
@@ -300,6 +323,7 @@ const AddPo = ({ seVisible }) => {
       <AutoPo
         purchaseInfo={purchaseInfo}
         setPurchaseInfoErrors={setPurchaseInfoErrors}
+        purchaseInfoErrors={purchaseInfoErrors}
       />
     </>
   );
