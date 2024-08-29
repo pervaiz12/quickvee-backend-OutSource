@@ -216,6 +216,10 @@ const PurchaseTable = ({ seVisible }) => {
     setAllPurchaseData(sortedItems);
     setSortOrder(newOrder);
   };
+
+  const handleSetPoId = (data) => {
+    localStorage.setItem("PO_id", data);
+  };
   return (
     <>
       <div className="q-category-main-page">
@@ -301,7 +305,11 @@ const PurchaseTable = ({ seVisible }) => {
                           allPurchaseData.length > 0 &&
                           allPurchaseData.map((purchaseData, index) => (
                             <StyledTableRow key={index}>
-                              <StyledTableCell>
+                              <StyledTableCell
+                                onClick={() =>
+                                  handleSetPoId(purchaseData.po_number)
+                                }
+                              >
                                 <Link
                                   to={
                                     purchaseData.is_draft === "1"
@@ -424,7 +432,9 @@ const PurchaseTable = ({ seVisible }) => {
                                   <p className="purchaseData">
                                     {purchaseData.stock_date === "0000-00-00"
                                       ? "-"
-                                      : dateFormateMonthName(purchaseData.stock_date) }
+                                      : dateFormateMonthName(
+                                          purchaseData.stock_date
+                                        )}
                                   </p>
                                 </div>
                               </StyledTableCell>
@@ -484,7 +494,7 @@ const PurchaseTable = ({ seVisible }) => {
                     </Table>
                   </TableContainer>
                 ) : (
-                 ""
+                  ""
                 )}
               </>
             )}
@@ -506,7 +516,9 @@ const PurchaseTable = ({ seVisible }) => {
           </Grid>
         </div>
       </div>
-      {!AllpurchaseDataState.loading && !allPurchaseData?.length && <NoDataFound />}
+      {!AllpurchaseDataState.loading && !allPurchaseData?.length && (
+        <NoDataFound />
+      )}
     </>
   );
 };

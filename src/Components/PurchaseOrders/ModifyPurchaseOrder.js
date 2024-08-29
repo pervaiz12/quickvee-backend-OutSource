@@ -160,6 +160,7 @@ const ModifyPurchaseOrder = () => {
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [deletedProducts, setDeletedProducts] = useState([]);
+  const getPO_ID = localStorage.getItem("PO_id");
 
   const puchaseOrderDetail = useSelector(
     (state) => state.purchaseOrderById.purchaseOrderDetail
@@ -858,7 +859,7 @@ const ModifyPurchaseOrder = () => {
         <div className="box_shadow_div">
           <SwitchToBackButton
             linkTo={"/purchase-data"}
-            title={`Edit Purchase Order  (PO${id})`}
+            title={`Edit Purchase Order  (${getPO_ID})`}
           />
           {/* <div className="q-add-categories-section-header">
             <span onClick={() => navigate("/purchase-data")}>
