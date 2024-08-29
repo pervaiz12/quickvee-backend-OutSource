@@ -152,7 +152,6 @@ const AddPo = ({ seVisible }) => {
       );
       const stockDateLessThanPresentDate =
         selectedStockDate.isBefore(currentDate);
-
       setPurchaseInfoErrors((prev) => ({
         ...prev,
         stockDate: stockDateLessThanIssuedDate

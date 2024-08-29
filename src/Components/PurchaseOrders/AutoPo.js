@@ -416,7 +416,20 @@ const AutoPo = ({
   };
 
   // api for creating a new purchase order
+  const isValidStockDate = () => {
+    let isCheckvalidDate = purchaseInfo?.stockDate?.format("YYYY-MM-DD");
+    if (isCheckvalidDate == "Invalid Date") {
+      setPurchaseInfoErrors((prev) => ({
+        ...prev,
+        stockDate: "Invalid Stock Due",
+      }));
+      return true;
+    } else {
+      return false;
+    }
+  };
   const savePurchaseOrder = async (isDraft) => {
+    let isCheckValidstockDate = isValidStockDate();
     const { email, issuedDate, reference, selectedVendor, stockDate } =
       purchaseInfoErrors;
     if (
@@ -424,7 +437,8 @@ const AutoPo = ({
       issuedDate == "" &&
       reference == "" &&
       selectedVendor == "" &&
-      stockDate == ""
+      stockDate == "" &&
+      isCheckValidstockDate == false
     ) {
       try {
         setLoaders((prev) => ({
