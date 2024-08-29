@@ -13,15 +13,19 @@ import { handleInputNumber } from "../../Constants/utils";
 import { addNewDeal } from "../../Redux/features/MixAndMatch/mixAndMatchSlice";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import useDebounce from "../../hooks/useDebouncs";
+import { useSelector } from "react-redux";
 
 const AddMixAndMatchDeal = () => {
   const navigate = useNavigate();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
     PasswordShow();
+  const { mixAndMatchDeals } = useSelector((state) => state.mixAndMatchList);
   const dispatch = useDispatch();
 
+  // const [dealsList, setDealsList] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [productName, setProductName] = useState("");
   const debouncedValue = useDebounce(productName);
@@ -41,6 +45,12 @@ const AddMixAndMatchDeal = () => {
     minQty: "",
     discount: "",
   });
+
+  // useEffect(() => {
+  //   if (mixAndMatchDeals && mixAndMatchDeals.length > 0) {
+  //     setDealsList(mixAndMatchDeals);
+  //   }
+  // }, [mixAndMatchDeals]);
 
   const handleSelectProductOptions = (value, name) => {
     setDealInfo((prev) => ({
@@ -80,6 +90,38 @@ const AddMixAndMatchDeal = () => {
   };
 
   useEffect(() => {
+    console.log("dealInfo products: ", dealInfo.products);
+  }, [dealInfo.products]);
+
+  // Setting Product Options
+  useEffect(() => {
+    console.log("mixAndMatchDeals: ", mixAndMatchDeals);
+    const filterProducts = (productsList) => {
+      const temp = productsList.filter((product) => {
+        const result =
+          dealInfo.isPercent === "0"
+            ? parseFloat(product.price) >= (parseFloat(dealInfo.discount) || 0)
+            : product;
+        return result;
+      });
+      return temp;
+    };
+
+    if (products && products.length > 0) {
+      const temp = filterProducts(products);
+      setProductOptions(() => temp);
+    }
+
+    if (dealInfo.products && dealInfo.products.length > 0) {
+      setDealInfo((prev) => ({
+        ...prev,
+        products: filterProducts(prev.products),
+      }));
+    }
+  }, [dealInfo.discount, products, dealInfo.isPercent, mixAndMatchDeals]);
+
+  // Fetching Products Data
+  useEffect(() => {
     const fetchProducts = async () => {
       let data = {
         merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
@@ -95,15 +137,16 @@ const AddMixAndMatchDeal = () => {
       };
 
       try {
-        const products = await dispatch(fetchProductsData(data)).unwrap();
-        if (products && products.length > 0) {
-          const temp = products.filter((product) =>
-            dealInfo.isPercent === "0"
-              ? parseFloat(product.price) >=
-                (parseFloat(dealInfo.discount) || 0)
-              : product
-          );
-          setProductOptions(() => temp);
+        const productsData = await dispatch(fetchProductsData(data)).unwrap();
+        if (productsData && productsData.length > 0) {
+          setProducts(() => productsData);
+          // const temp = products.filter((product) =>
+          //   dealInfo.isPercent === "0"
+          //     ? parseFloat(product.price) >=
+          //       (parseFloat(dealInfo.discount) || 0)
+          //     : product
+          // );
+          // setProductOptions(() => temp);
         }
       } catch (error) {
         if (error.status === 401 || error.response.status === 401) {
@@ -117,54 +160,66 @@ const AddMixAndMatchDeal = () => {
     fetchProducts();
   }, [debouncedValue]);
 
+  useEffect(() => {
+    console.log("productOptions: ", productOptions);
+  }, [productOptions]);
+
   const handleAddNewDeal = async (e) => {
     try {
       e.preventDefault();
+      console.log("hi hello");
       setLoading(true);
       const { title, products, minQty, discount, isPercent, description } =
         dealInfo;
 
-      const bool = [title, minQty, discount].every((item) =>
-        Boolean(item.trim())
-      );
+      console.log("dealInfo: ", dealInfo);
 
-      if (bool && products.length > 0) {
-        // console.log("all ok.. 👍");
-
-        const items = {};
-        // console.log("products: ", products);
-        products.forEach((item) => {
-          if (item.isvarient === "1") {
-            if (items[item.id]) {
-              items[item.id] = [...items[item.id], item.var_id];
+      if (Boolean(title.trim()) && minQty && discount && products.length > 0) {
+        try {
+          const items = {};
+          products.forEach((item) => {
+            if (item.isvarient === "1") {
+              if (items[item.id]) {
+                items[item.id] = [...items[item.id], item.var_id];
+              } else {
+                items[item.id] = [item.var_id];
+              }
             } else {
-              items[item.id] = [item.var_id];
+              items[item.id] = "";
             }
+          });
+          console.log("items: ", items);
+
+          const data = {
+            merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+            deal_name: title,
+            min_qty: minQty,
+            description,
+            discount,
+            is_percent: isPercent,
+            items_id: JSON.stringify(items),
+            is_enable: 0,
+            mix_id: "",
+            ...userTypeData,
+          };
+
+          console.log("data: ", data);
+
+          const result = await dispatch(addNewDeal(data)).unwrap();
+
+          if (result) {
+            ToastifyAlert("Added Successfully", "success");
+            navigate("/mix-and-match");
           } else {
-            items[item.id] = "";
+            ToastifyAlert("Something went wrong!", "success");
           }
-        });
-        // console.log("items: ", items);
-
-        const data = {
-          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-          deal_name: title,
-          min_qty: minQty,
-          description,
-          discount,
-          is_percent: isPercent,
-          items_id: JSON.stringify(items),
-          is_enable: 0,
-          mix_id: "",
-          ...userTypeData,
-        };
-
-        const result = await dispatch(addNewDeal(data)).unwrap();
-        if (result) {
-          ToastifyAlert("Added Successfully", "success");
-          navigate("/mix-and-match");
-        } else {
-          ToastifyAlert("Something went wrong!", "success");
+        } catch (error) {
+          if (error?.status == 401 || error?.response?.status === 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error?.status == "Network Error") {
+            getNetworkError();
+          }
         }
       } else {
         setError((prev) => ({
@@ -176,12 +231,7 @@ const AddMixAndMatchDeal = () => {
         }));
       }
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
-        getUnAutherisedTokenMessage();
-        handleCoockieExpire();
-      } else if (error.status == "Network Error") {
-        getNetworkError();
-      }
+      console.log("error: ", error);
     } finally {
       setLoading(false);
     }
@@ -193,7 +243,7 @@ const AddMixAndMatchDeal = () => {
         <div className="box_shadow_div">
           <div className="q-add-categories-section">
             <SwitchToBackButton linkTo={"/mix-and-match"} title={"Add Deal"} />
-            <form onSubmit={handleAddNewDeal}>
+            <form>
               <div className="q-add-categories-section-middle-form">
                 <div className="q-add-coupon-single-input mb-4">
                   <label htmlFor="coupon_name">Deal Name</label>
@@ -322,7 +372,12 @@ const AddMixAndMatchDeal = () => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save" disabled={loading}>
+                <button
+                  className="quic-btn quic-btn-save"
+                  onClick={handleAddNewDeal}
+                  // type="submit"
+                  disabled={loading}
+                >
                   {" "}
                   {loading ? (
                     <>

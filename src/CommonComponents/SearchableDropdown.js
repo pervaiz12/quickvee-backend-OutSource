@@ -57,6 +57,8 @@ const SearchableDropdown = ({
       setShowOptions(false);
       setFilterValue("You can only select 2 items.");
     } else {
+      if (usingFor === "variantProducts") return;
+
       setFilterValue("");
     }
 

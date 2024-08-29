@@ -29,10 +29,21 @@
   font-family: CircularSTDBook !important;
 }
 
+.single-deal {
+  /* width: 75% !important; */
+  /* background-color: red !important; */
+}
+
 .deal-title {
   font-size: 20px;
   color: #000;
   font-family: CircularBold !important;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
+  /* background-color: pink; */
 }
 
 .offer-desc {

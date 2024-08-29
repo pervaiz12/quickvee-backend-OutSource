@@ -127,7 +127,7 @@ const SingleDeal = ({ deal, fetchDeals, setDealsList }) => {
             alignItems="center"
             sx={{ pt: 1 }}
           >
-            <Grid item>
+            <Grid item className="single-deal">
               <p className="deal-title">{deal.deal_name}</p>
             </Grid>
             <Grid item>
