@@ -164,14 +164,14 @@ const ModifyPurchaseOrder = () => {
   const puchaseOrderDetail = useSelector(
     (state) => state.purchaseOrderById.purchaseOrderDetail
   );
-
-  // setting default product items
   useEffect(() => {
     setPurchaseInfo((prev) => ({
       ...prev,
-      issuedDate: puchaseOrderDetail?.issued_date
-        ? dayjs(puchaseOrderDetail?.issued_date)
-        : null,
+      issuedDate:
+        puchaseOrderDetail?.issued_date &&
+        puchaseOrderDetail?.issued_date !== "0000-00-00"
+          ? dayjs(puchaseOrderDetail?.issued_date)
+          : null,
       stockDate:
         puchaseOrderDetail?.stock_date &&
         puchaseOrderDetail?.stock_date !== "0000-00-00"
@@ -359,6 +359,10 @@ const ModifyPurchaseOrder = () => {
 
       const issuedDateLessThanDefaultIssuedDate =
         selectedIssuedDate.isBefore(defaultIssuedDate);
+      const essueDateCheck = dayjs(selectedIssuedDate).format("YYYY-MM-DD");
+      const currentDate = dayjs().startOf("day");
+      const issuedDateIsFine = !selectedIssuedDate.isBefore(currentDate);
+      console.log(issuedDateIsFine);
 
       setPurchaseInfoErrors((prev) => ({
         ...prev,
@@ -366,7 +370,11 @@ const ModifyPurchaseOrder = () => {
           puchaseOrderDetail.is_draft === "1" &&
           issuedDateLessThanDefaultIssuedDate
             ? `Issued Date cannot be older than ${getDate()}`
-            : "",
+            : essueDateCheck == "Invalid Date"
+              ? "Issued Date is required"
+              : issuedDateIsFine == false
+                ? `Issued Date cannot be older than present date`
+                : "",
         stockDate: "",
       }));
     }
@@ -376,6 +384,7 @@ const ModifyPurchaseOrder = () => {
       const stockDateLessThanIssuedDate = selectedStockDate.isBefore(
         purchaseInfo.issuedDate
       );
+      console.log("stockDateLessThanIssuedDate", stockDateLessThanIssuedDate);
 
       setPurchaseInfoErrors((prev) => ({
         ...prev,
@@ -679,97 +688,128 @@ const ModifyPurchaseOrder = () => {
     }
 
     if (purchaseInfoDetails && issuedDate && validateProducts()) {
-      try {
-        setLoading(() => true);
-        const orderItems = selectedProducts?.map((prod) => ({
-          product_id:
-            prod.variant || prod.variant_id ? prod.product_id : prod.id,
-          variant_id: prod.variant
-            ? prod.id
-            : Number(prod.variant_id) > 0
-              ? prod.variant_id
-              : "",
-          required_qty:
-            prod?.recieved_status && prod?.recieved_status === "2"
-              ? 0
-              : prod?.newQty.toString(),
-          // after_qty: (Number(prod.quantity) + Number(prod.newQty)).toString(),
-          after_qty: Number(prod.finalQty).toString(),
-          cost_per_item: prod.newPrice.toString(),
-          total_pricing: prod.finalPrice.toString(), // Number(prod.newQty) * parseFloat(prod.newPrice),
-          upc: prod.upc,
-          note: prod.note,
-          order_item_id: prod.order_item_id ? prod.order_item_id : "",
-          recieved_status: prod?.recieved_status ? prod?.recieved_status : "0",
-        }));
+      const { issuedDate, stockDate, email, selectedVendor, reference } =
+        purchaseInfoErrors;
+      if (
+        issuedDate == "" &&
+        stockDate == "" &&
+        email == "" &&
+        selectedVendor == "" &&
+        reference == ""
+      ) {
+        try {
+          setLoading(() => true);
+          const orderItems = selectedProducts?.map((prod) => ({
+            product_id:
+              prod.variant || prod.variant_id ? prod.product_id : prod.id,
+            variant_id: prod.variant
+              ? prod.id
+              : Number(prod.variant_id) > 0
+                ? prod.variant_id
+                : "",
+            required_qty:
+              prod?.recieved_status && prod?.recieved_status === "2"
+                ? 0
+                : prod?.newQty.toString(),
+            // after_qty: (Number(prod.quantity) + Number(prod.newQty)).toString(),
+            after_qty: Number(prod.finalQty).toString(),
+            cost_per_item: prod.newPrice.toString(),
+            total_pricing: prod.finalPrice.toString(), // Number(prod.newQty) * parseFloat(prod.newPrice),
+            upc: prod.upc,
+            note: prod.note,
+            order_item_id: prod.order_item_id ? prod.order_item_id : "",
+            recieved_status: prod?.recieved_status
+              ? prod?.recieved_status
+              : "0",
+          }));
 
-        const orderItemsObject = orderItems?.reduce((acc, curr, index) => {
-          acc[index] = curr;
-          return acc;
-        }, {});
+          const orderItemsObject = orderItems?.reduce((acc, curr, index) => {
+            acc[index] = curr;
+            return acc;
+          }, {});
+          const { token } = userTypeData;
+          const formData = new FormData();
+          formData.append(
+            "merchant_id",
+            LoginGetDashBoardRecordJson?.data?.merchant_id
+          );
+          formData.append(
+            "admin_id",
+            LoginGetDashBoardRecordJson?.data?.merchant_id
+          );
+          formData.append("po_id", id);
+          formData.append("vendor_id", Number(purchaseInfo?.vendorId));
+          let DataIssue =
+            dayjs(purchaseInfo?.issuedDate).format("YYYY-MM-DD") ==
+            "Invalid Date"
+              ? ""
+              : dayjs(purchaseInfo?.issuedDate).format("YYYY-MM-DD");
 
-        const { token } = userTypeData;
-        const formData = new FormData();
-        formData.append(
-          "merchant_id",
-          LoginGetDashBoardRecordJson?.data?.merchant_id
-        );
-        formData.append(
-          "admin_id",
-          LoginGetDashBoardRecordJson?.data?.merchant_id
-        );
-        formData.append("po_id", id);
-        formData.append("vendor_id", Number(purchaseInfo?.vendorId));
-        formData.append(
-          "issue_date",
-          dayjs(purchaseInfo?.issuedDate).format("YYYY-MM-DD")
-        );
-        formData.append(
-          "stock_date",
-          stockDate ? stockDate?.format("YYYY-MM-DD") : "0000-00-00"
-        );
-        formData.append("reference", purchaseInfo?.reference);
-        formData.append("received_status", puchaseOrderDetail?.received_status);
-        formData.append("is_draft", isDraft);
-        formData.append(
-          "created_at",
-          puchaseOrderDetail?.created_at
-            ? puchaseOrderDetail?.created_at
-            : "0000-00-00 00:00:00"
-        );
-        formData.append("updated_at", createdAt(new Date()));
-        formData.append("vendor_email", purchaseInfo?.email);
-        formData.append("order_items", JSON.stringify(orderItemsObject));
-        formData.append("token_id", userTypeData.token_id);
-        formData.append("login_type", userTypeData.login_type);
+          let stockDateDeu =
+            purchaseInfo.stockDate?.format("YYYY-MM-DD") == "Invalid Date"
+              ? ""
+              : purchaseInfo.stockDate?.format("YYYY-MM-DD");
 
-        const response = await axios.post(BASE_URL + UPDATE_PO, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`, // Use data?.token directly
-          },
-        });
+          formData.append(
+            "issue_date",
+            DataIssue !== ""
+              ? dayjs(purchaseInfo?.issuedDate).format("YYYY-MM-DD")
+              : "0000-00-00"
+          );
+          formData.append(
+            "stock_date",
+            stockDateDeu == ""
+              ? "0000-00-00"
+              : !!purchaseInfo.stockDate
+                ? purchaseInfo.stockDate?.format("YYYY-MM-DD")
+                : "0000-00-00"
+          );
+          formData.append("reference", purchaseInfo?.reference);
+          formData.append(
+            "received_status",
+            puchaseOrderDetail?.received_status
+          );
+          formData.append("is_draft", isDraft);
+          formData.append(
+            "created_at",
+            puchaseOrderDetail?.created_at
+              ? puchaseOrderDetail?.created_at
+              : "0000-00-00 00:00:00"
+          );
+          formData.append("updated_at", createdAt(new Date()));
+          formData.append("vendor_email", purchaseInfo?.email);
+          formData.append("order_items", JSON.stringify(orderItemsObject));
+          formData.append("token_id", userTypeData.token_id);
+          formData.append("login_type", userTypeData.login_type);
 
-        // deleting product items if any from PO
-        if (deletedProducts.length > 0) {
-          deletedProducts.forEach((item) => deletePOItem(item));
+          const response = await axios.post(BASE_URL + UPDATE_PO, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`, // Use data?.token directly
+            },
+          });
+
+          // deleting product items if any from PO
+          if (deletedProducts.length > 0) {
+            deletedProducts.forEach((item) => deletePOItem(item));
+          }
+
+          if (response.data.status) {
+            ToastifyAlert(response.data.message, "success");
+            navigate("/purchase-data");
+          } else {
+            ToastifyAlert(response.data.message, "error");
+          }
+        } catch (error) {
+          if (error?.status == 401 || error?.response?.status === 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
+          }
+        } finally {
+          setLoading(() => false);
         }
-
-        if (response.data.status) {
-          ToastifyAlert(response.data.message, "success");
-          navigate("/purchase-data");
-        } else {
-          ToastifyAlert(response.data.message, "error");
-        }
-      } catch (error) {
-        if (error.status == 401 || error.response.status === 401) {
-          getUnAutherisedTokenMessage();
-          handleCoockieExpire();
-        } else if (error.status == "Network Error") {
-          getNetworkError();
-        }
-      } finally {
-        setLoading(() => false);
       }
     } else {
       if (!purchaseInfoDetails || !issuedDate) {
@@ -786,14 +826,21 @@ const ModifyPurchaseOrder = () => {
     }
   };
 
+  const handleQuantity = (e) => {
+    const charCode = e.which ? e.which : e.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <>
       {/* purchase order basic info */}
       <div className="box">
         <div className="box_shadow_div">
-          <SwitchToBackButton 
+          <SwitchToBackButton
             linkTo={"/purchase-data"}
-            title={"Edit Purchase Order"}
+            title={`Edit Purchase Order  (PO${id})`}
           />
           {/* <div className="q-add-categories-section-header">
             <span onClick={() => navigate("/purchase-data")}>
@@ -859,6 +906,7 @@ const ModifyPurchaseOrder = () => {
                         }));
                       }}
                       value={purchaseInfo.issuedDate}
+                      disablePast
                     />
                   </DemoContainer>
                 </LocalizationProvider>
@@ -989,6 +1037,11 @@ const ModifyPurchaseOrder = () => {
                                   }
                                 >
                                   <AsyncSelect
+                                    isDisabled={selectedProducts.some(
+                                      (item) =>
+                                        item.title !== "" &&
+                                        index !== selectedProducts.length - 1
+                                    )}
                                     closeMenuOnSelect={true}
                                     defaultOptions
                                     styles={customStyles}
@@ -1049,6 +1102,7 @@ const ModifyPurchaseOrder = () => {
                             variant="outlined"
                             size="small"
                             disabled={product.recieved_status === "2"}
+                            onKeyPress={handleQuantity}
                           />
                           {product.qtyError && (
                             <p className="error-message">Qty is required</p>
