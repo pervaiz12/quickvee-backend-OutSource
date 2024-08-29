@@ -371,7 +371,7 @@ const ModifyPurchaseOrder = () => {
           issuedDateLessThanDefaultIssuedDate
             ? `Issued Date cannot be older than ${getDate()}`
             : essueDateCheck == "Invalid Date"
-              ? "Issued Date is required"
+              ? "Issued Date is required or Invalid"
               : issuedDateIsFine == false
                 ? `Issued Date cannot be older than present date`
                 : "",
@@ -384,7 +384,10 @@ const ModifyPurchaseOrder = () => {
       const stockDateLessThanIssuedDate = selectedStockDate.isBefore(
         purchaseInfo.issuedDate
       );
-      console.log("stockDateLessThanIssuedDate", stockDateLessThanIssuedDate);
+
+      if (!dayjsDate || !dayjsDate.isValid()) {
+        return;
+      }
 
       setPurchaseInfoErrors((prev) => ({
         ...prev,

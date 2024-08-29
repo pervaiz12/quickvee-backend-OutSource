@@ -504,6 +504,12 @@ const AutoPo = ({
               issuedDate?.format("YYYY-MM-DD") == "Invalid Date"
                 ? ""
                 : issuedDate?.format("YYYY-MM-DD");
+
+            const stockDateFormat = !!stockDate
+              ? stockDate?.format("YYYY-MM-DD") == "Invalid Date"
+                ? ""
+                : stockDate?.format("YYYY-MM-DD")
+              : "";
             formData.append(
               "issue_date",
               dateFormat !== ""
@@ -513,7 +519,9 @@ const AutoPo = ({
 
             formData.append(
               "stock_date",
-              !!stockDate ? stockDate?.format("YYYY-MM-DD") : "0000-00-00"
+              stockDateFormat !== ""
+                ? stockDate?.format("YYYY-MM-DD")
+                : "0000-00-00"
             );
             formData.append("reference", purchaseInfo?.reference);
             formData.append("is_draft", isDraft);
