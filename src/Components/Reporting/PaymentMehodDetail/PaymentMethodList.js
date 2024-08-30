@@ -124,7 +124,7 @@ const PaymentMethodList = ({ data }) => {
                           <StyledTableRow key={index}>
                             <StyledTableCell>
                               <p className="report-title">
-                                {paymentData.card_type}
+                                {paymentData.card_type === '' ? "N/A" :paymentData.card_type}
                               </p>
                             </StyledTableCell>
                             <StyledTableCell>
