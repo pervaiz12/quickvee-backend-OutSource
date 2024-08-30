@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom";
 import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../Assests/Category/SortingW.svg";
 import NoDataFound from "../../reuseableComponents/NoDataFound";
+import { formatDate } from "../../Constants/utils";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -167,15 +168,7 @@ const StocktakeList = ({ setVisible }) => {
       }
     }
   };
-  const formatDate = (dateString) => {
-    const options = { day: "2-digit", month: "short", year: "numeric" };
-    const formattedDate = new Date(dateString).toLocaleDateString(
-      "en-US",
-      options
-    );
-    return formattedDate;
-  };
-  console.log("StocktakeListReducerState", StocktakeListReducerState);
+
   const [sortOrder, setSortOrder] = useState("asc");
   const sortByItemName = (type, name) => {
     const updatedList = StocktakeList?.map((item) => {

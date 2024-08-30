@@ -116,26 +116,35 @@ const AddPo = ({ seVisible }) => {
     const currentDate = dayjs().startOf("day");
 
     if (type === "issuedDate") {
+      // if (!dayjsDate || !dayjsDate.isValid()) {
+      //   return;
+      //   // console.log("stock Take Date stockDate", dayjsDate);
+      //   // console.log("Invalid date. Please select a valid date.");
+      //   // return;
+      // }
       const selectedIssuedDate = dayjs(dayjsDate).startOf("day");
       const issuedDateLessThanPresentDate =
         selectedIssuedDate.isBefore(currentDate);
-      console.log(
-        "selectedIssuedDate",
-        dayjs(selectedIssuedDate, "MM-DD-YYYY").format("YYYY-MM-DD")
-      );
       const essueDateCheck = dayjs(selectedIssuedDate).format("YYYY-MM-DD");
       setPurchaseInfoErrors((prev) => ({
         ...prev,
         issuedDate: issuedDateLessThanPresentDate
           ? "Issued Date cannot be older than present date"
           : essueDateCheck == "Invalid Date"
-            ? "Issued Date is required"
+            ? "Issued Date is required or Invalid"
             : "",
         stockDate: "",
       }));
     }
 
     if (type === "stockDate") {
+      if (!dayjsDate || !dayjsDate.isValid()) {
+        return;
+        // console.log("stock Take Date stockDate", dayjsDate);
+        // console.log("Invalid date. Please select a valid date.");
+        // return;
+      }
+      // console.log("stock Take Date stockDate", dayjsDate);
       const selectedStockDate = dayjs(dayjsDate).startOf("day");
       const currentDate = dayjs().startOf("day"); // Ensure currentDate is at the start of the day
       const stockDateLessThanIssuedDate = selectedStockDate.isBefore(
@@ -143,7 +152,6 @@ const AddPo = ({ seVisible }) => {
       );
       const stockDateLessThanPresentDate =
         selectedStockDate.isBefore(currentDate);
-
       setPurchaseInfoErrors((prev) => ({
         ...prev,
         stockDate: stockDateLessThanIssuedDate

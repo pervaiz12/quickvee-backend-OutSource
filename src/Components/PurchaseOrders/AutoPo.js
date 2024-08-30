@@ -158,10 +158,6 @@ const AutoPo = ({
     setSelectedProducts(updatedProducts);
   };
 
-  // useEffect(() => {
-  //   productOptions(" ");
-  // }, [selectedProducts.length]);
-
   // check each product has required data
   const validateProducts = () => {
     const bool = selectedProducts.every(
@@ -219,14 +215,13 @@ const AutoPo = ({
         show_status: "all",
         listing_type: 1,
         offset: 0,
-        limit: 100000,
+        limit: 50,
         name: inputValue,
         page: 0,
         ...userTypeData,
       };
 
       const res = await dispatch(fetchProductsData(name_data));
-      // console.log("api data: ", res.payload);
 
       const data = res.payload
         ?.filter((prod) => prod.upc && prod.upc !== "")
@@ -254,8 +249,6 @@ const AutoPo = ({
 
           return !productFound;
         });
-
-      // console.log("filteredProducts: ", filteredProducts);
 
       return filteredProducts || [];
     } catch (error) {
@@ -416,7 +409,20 @@ const AutoPo = ({
   };
 
   // api for creating a new purchase order
+  const isValidStockDate = () => {
+    let isCheckvalidDate = purchaseInfo?.stockDate?.format("YYYY-MM-DD");
+    if (isCheckvalidDate == "Invalid Date") {
+      setPurchaseInfoErrors((prev) => ({
+        ...prev,
+        stockDate: "Invalid Stock Due",
+      }));
+      return true;
+    } else {
+      return false;
+    }
+  };
   const savePurchaseOrder = async (isDraft) => {
+    let isCheckValidstockDate = isValidStockDate();
     const { email, issuedDate, reference, selectedVendor, stockDate } =
       purchaseInfoErrors;
     if (
@@ -424,7 +430,8 @@ const AutoPo = ({
       issuedDate == "" &&
       reference == "" &&
       selectedVendor == "" &&
-      stockDate == ""
+      stockDate == "" &&
+      isCheckValidstockDate == false
     ) {
       try {
         setLoaders((prev) => ({
@@ -504,6 +511,12 @@ const AutoPo = ({
               issuedDate?.format("YYYY-MM-DD") == "Invalid Date"
                 ? ""
                 : issuedDate?.format("YYYY-MM-DD");
+
+            const stockDateFormat = !!stockDate
+              ? stockDate?.format("YYYY-MM-DD") == "Invalid Date"
+                ? ""
+                : stockDate?.format("YYYY-MM-DD")
+              : "";
             formData.append(
               "issue_date",
               dateFormat !== ""
@@ -513,7 +526,9 @@ const AutoPo = ({
 
             formData.append(
               "stock_date",
-              !!stockDate ? stockDate?.format("YYYY-MM-DD") : "0000-00-00"
+              stockDateFormat !== ""
+                ? stockDate?.format("YYYY-MM-DD")
+                : "0000-00-00"
             );
             formData.append("reference", purchaseInfo?.reference);
             formData.append("is_draft", isDraft);

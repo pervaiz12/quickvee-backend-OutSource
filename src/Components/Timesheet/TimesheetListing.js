@@ -37,7 +37,7 @@ import PasswordShow from "../../Common/passwordShow";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import NoDataFound from "../../reuseableComponents/NoDataFound";
-import { dateFormate } from "../../hooks/dateFormate";
+import { formatDate } from "../../Constants/utils";
 
 const TimesheetListing = ({ data }) => {
   const dispatch = useDispatch();
@@ -475,7 +475,7 @@ const TimesheetListing = ({ data }) => {
     addbreakOut: "",
   });
 
-  const openModalBreak = (title, id, date, out_date,data) => {
+  const openModalBreak = (title, id, date, out_date, data) => {
     setEmployeeName(title);
     setModalAddBreakID(id);
     setModalDate(formatDate(date));
@@ -583,33 +583,46 @@ const TimesheetListing = ({ data }) => {
     formData.append("token_id", userTypeData.token_id);
     formData.append("login_type", userTypeData.login_type);
 
-    
     const breakInDate = new Date(modalDate);
     const breakOutDate = new Date(formatDatePayload(modalDateOUT));
-    const ModalBreakInDateTime = new Date(`${breakInDate.toDateString()} ${BreakModalInTime}`);
-    const ModalBreakOutDateTime = new Date(`${breakOutDate.toDateString()} ${BreakModalOutTime}`);
-    const breakInDateTime = new Date(`${breakInDate.toDateString()} ${addbreak.addbreakIn}`);
-    const breakOutDateTime = new Date(`${breakOutDate.toDateString()} ${addbreak.addbreakOut}`);
-    
+    const ModalBreakInDateTime = new Date(
+      `${breakInDate.toDateString()} ${BreakModalInTime}`
+    );
+    const ModalBreakOutDateTime = new Date(
+      `${breakOutDate.toDateString()} ${BreakModalOutTime}`
+    );
+    const breakInDateTime = new Date(
+      `${breakInDate.toDateString()} ${addbreak.addbreakIn}`
+    );
+    const breakOutDateTime = new Date(
+      `${breakOutDate.toDateString()} ${addbreak.addbreakOut}`
+    );
+
     // If breakInDate and breakOutDate are not the same, increment breakInDate by one day
     if (breakInDate.toDateString() !== breakOutDate.toDateString()) {
-      console.log("Database Add Break ModalBreakInDateTime",ModalBreakInDateTime)
-      console.log("Database Add Break ModalBreakOutDateTime",ModalBreakOutDateTime)
-      console.log("Var breakInDateTime",breakInDateTime)
-      console.log("var breakOutDateTime",breakOutDateTime)
-      if(ModalBreakInDateTime > breakInDateTime){
+      // console.log(
+      //   "Database Add Break ModalBreakInDateTime",
+      //   ModalBreakInDateTime
+      // );
+      // console.log(
+      //   "Database Add Break ModalBreakOutDateTime",
+      //   ModalBreakOutDateTime
+      // );
+      // console.log("Var breakInDateTime", breakInDateTime);
+      // console.log("var breakOutDateTime", breakOutDateTime);
+      if (ModalBreakInDateTime > breakInDateTime) {
         breakInDate.setDate(breakInDate.getDate() + 1);
         formData.append("break_in_date", formatDatePayload(breakInDate));
-        console.log("Var Change  breakInDate",breakInDate)
-      }else {
+        // console.log("Var Change  breakInDate", breakInDate);
+      } else {
         formData.append("break_in_date", formatDatePayload(modalDate));
       }
-    }else {
+    } else {
       formData.append("break_in_date", formatDatePayload(modalDate));
     }
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+    // for (const [key, value] of formData.entries()) {
+    //   // console.log(`${key}: ${value}`);
+    // }
     // return
     setLoader(true);
     try {
@@ -850,46 +863,30 @@ const TimesheetListing = ({ data }) => {
     setDeleteModalOpen(false);
   };
 
-  // for Delete Break End
-
   // const formatDate = (dateString) => {
-  //   const date = new Date(dateString);
-  //   const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  //   const day = date.getDate().toString().padStart(2, "0");
-  //   const year = date.getFullYear();
-  //   return `${month}/${day}/${year}`;
+  //   const months = [
+  //     "Jan",
+  //     "Feb",
+  //     "Mar",
+  //     "Apr",
+  //     "May",
+  //     "Jun",
+  //     "Jul",
+  //     "Aug",
+  //     "Sep",
+  //     "Oct",
+  //     "Nov",
+  //     "Dec",
+  //   ];
+  //   const [year, month, day] = dateString.split("-");
+  //   const date = new Date(year, month - 1, day);
+  //   const formattedDate = `${months[date.getMonth()]} ${String(
+  //     date.getDate()
+  //   ).padStart(2, "0")}, ${date.getFullYear()}`;
+
+  //   return formattedDate;
   // };
 
-  const formatDate = (dateString) => {
-    // const options = { day: "2-digit", month: "short", year: "numeric" };
-    // console.log("dateString",dateString)
-    // const formattedDate = new Date(dateString).toLocaleDateString(
-    //   "en-US",
-    //   options
-    // );
-
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const [year, month, day] = dateString.split("-");
-    const date = new Date(year, month - 1, day);
-    const formattedDate = `${months[date.getMonth()]} ${String(
-      date.getDate()
-    ).padStart(2, "0")}, ${date.getFullYear()}`;
-    
-    return formattedDate;
-  };
   const formDateOUtDate = (dateString) => {
     const months = [
       "Jan",
@@ -1006,7 +1003,9 @@ const TimesheetListing = ({ data }) => {
                         }
                       >
                         <p className="q-catereport-item">
-                          {dateFormate(entry.attendance_date)}
+                          {entry.attendance_date
+                            ? formatDate(entry.attendance_date)
+                            : "-"}
                         </p>
                         <p className="q-catereport-item">
                           {entry.wages_per_hr && entry.wages_per_hr > 0
@@ -1132,10 +1131,8 @@ const TimesheetListing = ({ data }) => {
   return (
     <>
       {renderDataTable()}
-      <Grid sx={{mt:3.5}}>
-      {!employeeList.length && <NoDataFound />}
-      </Grid>
-     
+      <Grid sx={{ mt: 3.5 }}>{!employeeList.length && <NoDataFound />}</Grid>
+
       {/* Modal for Add Clock-in/ClocK-out start  */}
       <Modal
         open={showModal}
@@ -1432,7 +1429,8 @@ const TimesheetListing = ({ data }) => {
             </span>
             <div className="viewTextBark">
               <span className="borderRight ">
-                {modalDate} - {modalDateOUT ? formDateOUtDate(modalDateOUT) : "-"}
+                {modalDate} -{" "}
+                {modalDateOUT ? formDateOUtDate(modalDateOUT) : "-"}
               </span>{" "}
               <span className="pl-1"> Break-in/Break-out</span>
             </div>
