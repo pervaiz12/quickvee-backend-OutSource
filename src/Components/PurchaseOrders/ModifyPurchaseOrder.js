@@ -160,6 +160,7 @@ const ModifyPurchaseOrder = () => {
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [deletedProducts, setDeletedProducts] = useState([]);
+  const getPO_ID = localStorage.getItem("PO_id");
 
   const puchaseOrderDetail = useSelector(
     (state) => state.purchaseOrderById.purchaseOrderDetail
@@ -371,7 +372,7 @@ const ModifyPurchaseOrder = () => {
           issuedDateLessThanDefaultIssuedDate
             ? `Issued Date cannot be older than ${getDate()}`
             : essueDateCheck == "Invalid Date"
-              ? "Issued Date is required"
+              ? "Issued Date is required or Invalid"
               : issuedDateIsFine == false
                 ? `Issued Date cannot be older than present date`
                 : "",
@@ -384,7 +385,10 @@ const ModifyPurchaseOrder = () => {
       const stockDateLessThanIssuedDate = selectedStockDate.isBefore(
         purchaseInfo.issuedDate
       );
-      console.log("stockDateLessThanIssuedDate", stockDateLessThanIssuedDate);
+
+      if (!dayjsDate || !dayjsDate.isValid()) {
+        return;
+      }
 
       setPurchaseInfoErrors((prev) => ({
         ...prev,
@@ -414,10 +418,6 @@ const ModifyPurchaseOrder = () => {
     }
   };
 
-  useEffect(() => {
-    productOptions(" ");
-  }, [selectedProducts.length]);
-
   // generating product options once user searches any product name
   const productOptions = async (inputValue) => {
     try {
@@ -427,7 +427,7 @@ const ModifyPurchaseOrder = () => {
         show_status: "all",
         listing_type: 1,
         offset: 0,
-        limit: 100000,
+        limit: 50,
         name: inputValue,
         page: 0,
         ...userTypeData,
@@ -661,10 +661,24 @@ const ModifyPurchaseOrder = () => {
   };
 
   // modifying purchase order api
+  const isValidStockDate = () => {
+    let isCheckvalidDate = purchaseInfo?.stockDate?.format("YYYY-MM-DD");
+    if (isCheckvalidDate == "Invalid Date") {
+      setPurchaseInfoErrors((prev) => ({
+        ...prev,
+        stockDate: "Invalid Stock Due",
+      }));
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const modifyPurchaseOrder = async (isDraft) => {
     if (loading) return;
 
     const { issuedDate, stockDate, selectedVendor, email } = purchaseInfo;
+    let isCheckValidstockDate = isValidStockDate();
 
     if (selectedProducts.length <= 0) {
       ToastifyAlert("No Products to update!", "error");
@@ -695,7 +709,8 @@ const ModifyPurchaseOrder = () => {
         stockDate == "" &&
         email == "" &&
         selectedVendor == "" &&
-        reference == ""
+        reference == "" &&
+        isCheckValidstockDate == false
       ) {
         try {
           setLoading(() => true);
@@ -840,7 +855,7 @@ const ModifyPurchaseOrder = () => {
         <div className="box_shadow_div">
           <SwitchToBackButton
             linkTo={"/purchase-data"}
-            title={`Edit Purchase Order  (PO${id})`}
+            title={`Edit Purchase Order  (${getPO_ID})`}
           />
           {/* <div className="q-add-categories-section-header">
             <span onClick={() => navigate("/purchase-data")}>

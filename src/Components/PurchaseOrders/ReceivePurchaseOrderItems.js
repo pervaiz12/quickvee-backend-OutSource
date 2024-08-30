@@ -80,7 +80,7 @@ const ReceivePurchaseOrderItems = () => {
   const [purchaseOrder, setPurchaseOrder] = useState({});
   const [headerCheckboxChecked, setHeaderCheckboxChecked] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
-
+  const getPO_ID = localStorage.getItem("PO_id");
   // setting purchaseOrder state data
   useEffect(() => {
     const { order_items, ...data } = puchaseOrderDetail;
@@ -364,7 +364,7 @@ const ReceivePurchaseOrderItems = () => {
       <div className="box_shadow_div">
         <SwitchToBackButton
           linkTo={"/purchase-data"}
-          title={`Update Purchase Order  (PO${id})`}
+          title={`Update Purchase Order  (${getPO_ID})`}
         />
         {/* <div className="q-add-categories-section-header">
           <Link to="/purchase-data" style={{ display: "flex" }}>

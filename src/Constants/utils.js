@@ -9,6 +9,8 @@ export function createdAt(date) {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
+const padZero = (input) => (input >= 10 ? input : `0${input}`);
+
 export function formatDate(inputDate) {
   const months = [
     "Jan",
@@ -27,19 +29,9 @@ export function formatDate(inputDate) {
 
   const [year, month, day] = inputDate.split("-");
   const monthName = months[parseInt(month, 10) - 1];
+  const date = padZero(parseInt(day, 10));
 
-  // Add suffix to the day
-  // let daySuffix = "th";
-  // if (day === "01" || day === "21" || day === "31") {
-  //   daySuffix = "st";
-  // } else if (day === "02" || day === "22") {
-  //   daySuffix = "nd";
-  // } else if (day === "03" || day === "23") {
-  //   daySuffix = "rd";
-  // }
-
-  // const formattedDate = `${parseInt(day, 10)}${daySuffix} ${monthName} ${year}`;
-  const formattedDate = `${monthName} ${parseInt(day, 10)}, ${year}`;
+  const formattedDate = `${monthName} ${date}, ${year}`;
   return formattedDate;
 }
 
