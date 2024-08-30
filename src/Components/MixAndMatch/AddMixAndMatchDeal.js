@@ -10,7 +10,10 @@ import { useDispatch } from "react-redux";
 import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import PasswordShow from "../../Common/passwordShow";
 import { handleInputNumber } from "../../Constants/utils";
-import { addNewDeal } from "../../Redux/features/MixAndMatch/mixAndMatchSlice";
+import {
+  addNewDeal,
+  mixAndMatchPricingDealsList,
+} from "../../Redux/features/MixAndMatch/mixAndMatchSlice";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import useDebounce from "../../hooks/useDebouncs";
 import { useSelector } from "react-redux";
@@ -23,7 +26,6 @@ const AddMixAndMatchDeal = () => {
   const { mixAndMatchDeals } = useSelector((state) => state.mixAndMatchList);
   const dispatch = useDispatch();
 
-  // const [dealsList, setDealsList] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -46,12 +48,27 @@ const AddMixAndMatchDeal = () => {
     discount: "",
   });
 
-  // useEffect(() => {
-  //   if (mixAndMatchDeals && mixAndMatchDeals.length > 0) {
-  //     setDealsList(mixAndMatchDeals);
-  //   }
-  // }, [mixAndMatchDeals]);
+  // Fetching all Mix and Pricing Deals
+  useEffect(() => {
+    const getMixAndMatchPricingDeals = async () => {
+      try {
+        const data = {
+          ...userTypeData,
+          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        };
+        await dispatch(mixAndMatchPricingDealsList(data)).unwrap();
+      } catch (error) {
+        if (error.status == 401) {
+          handleCoockieExpire();
+          getUnAutherisedTokenMessage();
+        }
+      }
+    };
 
+    getMixAndMatchPricingDeals();
+  }, []);
+
+  // Selecting a Product Option
   const handleSelectProductOptions = (value, name) => {
     setDealInfo((prev) => ({
       ...prev,
@@ -59,6 +76,7 @@ const AddMixAndMatchDeal = () => {
     }));
   };
 
+  // Deleting Selected Product Option
   const handleDeleteSelectedOption = (id, name, opt) => {
     const filterOptionItems = dealInfo[name].filter((item) =>
       item.isvarient === "1" ? item.var_id !== opt.var_id : item?.id !== id
@@ -76,11 +94,13 @@ const AddMixAndMatchDeal = () => {
     }));
   };
 
+  // All Inputs handler
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setDealInfo((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Discount & Percentage Tab handling
   const handleTabChange = (type) => {
     setDealInfo((prev) => ({
       ...prev,
@@ -89,29 +109,74 @@ const AddMixAndMatchDeal = () => {
     }));
   };
 
-  useEffect(() => {
-    console.log("dealInfo products: ", dealInfo.products);
-  }, [dealInfo.products]);
-
   // Setting Product Options
   useEffect(() => {
     console.log("mixAndMatchDeals: ", mixAndMatchDeals);
+    console.log("products: ", products);
+    console.log("dealInfo.products: ", dealInfo.products);
+    console.log("------------");
+
     const filterProducts = (productsList) => {
-      const temp = productsList.filter((product) => {
-        const result =
+      const filterByDiscount = (productsData) => {
+        console.log("filter by discount...");
+        const data = productsData.filter((product) => {
+          const result =
+            dealInfo.isPercent === "0"
+              ? parseFloat(product.price) >=
+                (parseFloat(dealInfo.discount) || 0)
+              : product;
+          return result;
+        });
+
+        return data;
+      };
+
+      let temp = [];
+
+      if (mixAndMatchDeals && mixAndMatchDeals.length > 0) {
+        const data = productsList.filter((product) => {
+          let alreadyInCart = false;
+          for (let i = 0; i < mixAndMatchDeals.length; i++) {
+            const itemsIdObject = JSON.parse(mixAndMatchDeals[i]?.items_id);
+            for (let key in itemsIdObject) {
+              // if product is a variant product
+              if (
+                product.isvarient === "1" &&
+                key === product.id &&
+                itemsIdObject[key].includes(product.var_id)
+              ) {
+                alreadyInCart = true;
+              }
+
+              // if product is not a variant product
+              if (product.isvarient === "0" && key === product.id) {
+                alreadyInCart = true;
+              }
+            }
+          }
+
+          return !alreadyInCart;
+        });
+
+        temp = dealInfo.isPercent === "0" ? filterByDiscount(data) : data;
+      } else {
+        temp =
           dealInfo.isPercent === "0"
-            ? parseFloat(product.price) >= (parseFloat(dealInfo.discount) || 0)
-            : product;
-        return result;
-      });
+            ? filterByDiscount(productsList)
+            : productsList;
+      }
+
       return temp;
     };
 
+    // removing products from Product Options whose price is less than discount price
     if (products && products.length > 0) {
       const temp = filterProducts(products);
+      console.log("product options: ", temp);
       setProductOptions(() => temp);
     }
 
+    // removing products from already Selected Products whose price is less than discount price
     if (dealInfo.products && dealInfo.products.length > 0) {
       setDealInfo((prev) => ({
         ...prev,
@@ -140,13 +205,6 @@ const AddMixAndMatchDeal = () => {
         const productsData = await dispatch(fetchProductsData(data)).unwrap();
         if (productsData && productsData.length > 0) {
           setProducts(() => productsData);
-          // const temp = products.filter((product) =>
-          //   dealInfo.isPercent === "0"
-          //     ? parseFloat(product.price) >=
-          //       (parseFloat(dealInfo.discount) || 0)
-          //     : product
-          // );
-          // setProductOptions(() => temp);
         }
       } catch (error) {
         if (error.status === 401 || error.response.status === 401) {
@@ -160,19 +218,19 @@ const AddMixAndMatchDeal = () => {
     fetchProducts();
   }, [debouncedValue]);
 
-  useEffect(() => {
-    console.log("productOptions: ", productOptions);
-  }, [productOptions]);
+  // useEffect(() => {
+  //   console.log("productOptions: ", productOptions);
+  // }, [productOptions]);
 
+  // Adding New Deal function
   const handleAddNewDeal = async (e) => {
     try {
       e.preventDefault();
-      console.log("hi hello");
       setLoading(true);
       const { title, products, minQty, discount, isPercent, description } =
         dealInfo;
 
-      console.log("dealInfo: ", dealInfo);
+      // console.log("dealInfo: ", dealInfo);
 
       if (Boolean(title.trim()) && minQty && discount && products.length > 0) {
         try {
@@ -188,7 +246,7 @@ const AddMixAndMatchDeal = () => {
               items[item.id] = "";
             }
           });
-          console.log("items: ", items);
+          // console.log("items: ", items);
 
           const data = {
             merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
@@ -203,7 +261,7 @@ const AddMixAndMatchDeal = () => {
             ...userTypeData,
           };
 
-          console.log("data: ", data);
+          // console.log("data: ", data);
 
           const result = await dispatch(addNewDeal(data)).unwrap();
 

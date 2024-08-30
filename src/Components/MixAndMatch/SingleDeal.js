@@ -125,13 +125,14 @@ const SingleDeal = ({ deal, fetchDeals, setDealsList }) => {
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ pt: 1 }}
+            sx={{ pt: 1, pb: 0.5 }}
+            wrap="nowrap"
           >
             <Grid item className="single-deal">
               <p className="deal-title">{deal.deal_name}</p>
             </Grid>
             <Grid item>
-              <Grid container spacing={1}>
+              <Grid container spacing={1} wrap="nowrap">
                 <Grid item>
                   <Link
                     to={
