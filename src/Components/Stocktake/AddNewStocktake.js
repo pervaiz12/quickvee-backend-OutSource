@@ -92,7 +92,7 @@ const AddNewStocktake = ({
       price: "",
     },
   ]);
-  console.log("costperItem:product.costperItem || ,", stocktake_items);
+  // console.log("costperItem:product.costperItem || ,", stocktake_items);
   const location = useLocation();
 
   const { id } = useParams();
@@ -153,10 +153,6 @@ const AddNewStocktake = ({
     }
   }, [singleStocktakeState]);
 
-  // useEffect(() => {
-  //   // loadOptions(" ");
-  // }, []);
-
   const loadOptions = async (inputValue) => {
     let name_data = {
       merchant_id: merchant_id,
@@ -164,7 +160,7 @@ const AddNewStocktake = ({
       show_status: "all",
       listing_type: 1,
       offset: 0,
-      limit: 100000,
+      limit: 50,
       name: inputValue,
       page: 0,
       ...userTypeData,
@@ -182,7 +178,6 @@ const AddNewStocktake = ({
         prodId: prod.id,
       }))
       .filter((prod) => {
-       
         const productFound = stocktake_items?.find((product) => {
           const a =
             (product?.variant &&
@@ -190,7 +185,6 @@ const AddNewStocktake = ({
               product.variant_id == prod.value) ||
             (!product.variant && product.product_id == prod.value);
           return a;
-          
         });
 
         // (product) =>
@@ -202,7 +196,7 @@ const AddNewStocktake = ({
 
         return !productFound;
       });
-      console.log("data option data",data)
+    // console.log("data option data", data);
     return data;
   };
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
@@ -255,14 +249,12 @@ const AddNewStocktake = ({
         },
       ]);
       setErrorMessages([]);
-     
     }
   };
 
   const handleDeleteProduct = (index) => {
     setDeleteCategoryId(index);
     setDeleteModalOpen(true);
-    
   };
 
   const confirmDeleteCategory = async () => {
@@ -339,7 +331,6 @@ const AddNewStocktake = ({
     }
     setDeleteCategoryId(null);
     setDeleteModalOpen(false);
-    
   };
 
   const handleNewQtyChange = (e, index) => {
@@ -703,7 +694,6 @@ const AddNewStocktake = ({
                                 product?.product_name
                               ) : (
                                 <>
-                       
                                   <AsyncSelect
                                     isDisabled={stocktake_items.some(
                                       (item) =>
