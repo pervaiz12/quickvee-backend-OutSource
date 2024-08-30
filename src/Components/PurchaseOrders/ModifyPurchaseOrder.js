@@ -372,7 +372,7 @@ const ModifyPurchaseOrder = () => {
           issuedDateLessThanDefaultIssuedDate
             ? `Issued Date cannot be older than ${getDate()}`
             : essueDateCheck == "Invalid Date"
-              ? "Issued Date is required or Invalid"
+              ? "The issued date is required or invalid."
               : issuedDateIsFine == false
                 ? `Issued Date cannot be older than present date`
                 : "",
@@ -418,6 +418,11 @@ const ModifyPurchaseOrder = () => {
     }
   };
 
+  useEffect(() => {
+    productOptions(" ");
+  }, [selectedProducts.length]);
+
+
   // generating product options once user searches any product name
   const productOptions = async (inputValue) => {
     try {
@@ -427,7 +432,7 @@ const ModifyPurchaseOrder = () => {
         show_status: "all",
         listing_type: 1,
         offset: 0,
-        limit: 50,
+        limit: 100000,
         name: inputValue,
         page: 0,
         ...userTypeData,
@@ -666,7 +671,7 @@ const ModifyPurchaseOrder = () => {
     if (isCheckvalidDate == "Invalid Date") {
       setPurchaseInfoErrors((prev) => ({
         ...prev,
-        stockDate: "Invalid Stock Due",
+        stockDate: "The stock due is invalid.",
       }));
       return true;
     } else {
@@ -897,7 +902,14 @@ const ModifyPurchaseOrder = () => {
                     components={["DatePicker"]}
                   >
                     <DatePicker
-                      sx={{ width: "100%" }}
+                      sx={{
+                        width: "100%",
+                        ".MuiOutlinedInput-root": {
+                          "&.Mui-error fieldset": {
+                            borderColor: "#c4c4c4", // Border color when there is an error  ##c4c4c4
+                          },
+                        },
+                      }}
                       className="issued-date default-border-color"
                       size="small"
                       slotProps={{

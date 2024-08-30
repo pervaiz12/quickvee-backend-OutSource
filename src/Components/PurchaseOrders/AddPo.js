@@ -131,7 +131,7 @@ const AddPo = ({ seVisible }) => {
         issuedDate: issuedDateLessThanPresentDate
           ? "Issued Date cannot be older than present date"
           : essueDateCheck == "Invalid Date"
-            ? "Issued Date is required or Invalid"
+            ? "The issued date is required or invalid."
             : "",
         stockDate: "",
       }));

@@ -93,17 +93,20 @@ const CategoryListDropDown = ({
         if (listFor === "massInventoryUpdate") {
           return;
         }
-        changeProductPageUrl("category", option?.id ? option?.id : "all");
+        // changeProductPageUrl("category", option?.id ? option?.id : "all");
         setCategoryDropdownVisible(false);
         // dispatch(emptyProduct([]));
         let data1 = {
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
           format: "json",
-          category_id: categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
-          show_status: statusUrl === 0 || statusUrl ? statusUrl : "all",
+          category_id: option === "All" ? "all" : option?.id,
+          show_status: selectedStatus,
+          // category_id: categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
+          // show_status: statusUrl === 0 || statusUrl ? statusUrl : "all",
           name: searchId,
+          listing_type: listing_type,
           is_media_blank: imageUrl === "all" ? "" : imageUrl,
-          listing_type: listingUrl === 0 || listingUrl ? listingUrl : "0",
+          // listing_type: listingUrl === 0 || listingUrl ? listingUrl : "0",
           offset,
           limit: 10,
           page: 0,
@@ -161,14 +164,15 @@ const CategoryListDropDown = ({
         heading={"All"}
         title={"title"}
         listItem={allcategories}
-        selectedOption={
-          allcategories?.filter((o) => {
-            return (
-              searchCategory.get("category")?.trim()?.toLowerCase() ===
-              o?.id?.trim()?.toLowerCase()
-            );
-          })?.[0]?.title ?? "All"
-        }
+        selectedOption={selectedCategory}
+        // selectedOption={
+        //   allcategories?.filter((o) => {
+        //     return (
+        //       searchCategory.get("category")?.trim()?.toLowerCase() ===
+        //       o?.id?.trim()?.toLowerCase()
+        //     );
+        //   })?.[0]?.title ?? "All"
+        // }
         onClickHandler={handleOptionClick}
         dropdownFor={"category"}
         disabled={loading}

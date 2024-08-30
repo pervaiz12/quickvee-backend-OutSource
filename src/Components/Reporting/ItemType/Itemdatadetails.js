@@ -168,8 +168,9 @@ const Itemdatadetails = ({
                     <StyledTableCell>Details</StyledTableCell>
                   </TableHead>
                   <TableBody>
-                    {orderReport.length > 0
+                    {orderReport.length > 0 
                       ? orderReport?.map((orderReportDa, index) => (
+                        orderReportDa.total_count > 0 &&
                           <StyledTableRow key={index}>
                             <StyledTableCell>
                               <p>

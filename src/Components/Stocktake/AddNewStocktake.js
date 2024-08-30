@@ -160,7 +160,7 @@ const AddNewStocktake = ({
       show_status: "all",
       listing_type: 1,
       offset: 0,
-      limit: 50,
+      limit: 100000,
       name: inputValue,
       page: 0,
       ...userTypeData,
@@ -256,7 +256,6 @@ const AddNewStocktake = ({
     setDeleteCategoryId(index);
     setDeleteModalOpen(true);
   };
-
   const confirmDeleteCategory = async () => {
     // Check if the singleStocktakeState object and stocktake_item array are present
     if (
@@ -267,7 +266,7 @@ const AddNewStocktake = ({
       // If singleStocktakeState or stocktake_item array is empty, filter the stocktake_items array and update the state
       const newList = stocktake_items.filter((_, i) => i !== deleteCategoryId);
       const newList1 = newList.filter((product) => product.product_name !== "");
-      setProductList(newList1);
+      setProductList(stocktake_items.length > 2 ? newList1 : newList);
       // Close the delete modal
       setDeleteModalOpen(false);
       return;

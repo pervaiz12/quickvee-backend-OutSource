@@ -414,7 +414,7 @@ const AutoPo = ({
     if (isCheckvalidDate == "Invalid Date") {
       setPurchaseInfoErrors((prev) => ({
         ...prev,
-        stockDate: "Invalid Stock Due",
+        stockDate: "The stock due is invalid.",
       }));
       return true;
     } else {

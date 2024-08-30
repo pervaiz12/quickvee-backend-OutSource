@@ -202,14 +202,14 @@ const SalesReportList = (props) => {
       name: "Refunds",
       amount: refunds,
     },
-    {
-      name: "Taxable Net Sale",
-      amount: NetTaxableSale,
-    },
-    {
-      name: "Non Taxable Net Sale",
-      amount: NonNetTaxableSale,
-    },
+    // {
+    //   name: "Taxable Net Sale",
+    //   amount: NetTaxableSale,
+    // },
+    // {
+    //   name: "Non Taxable Net Sale",
+    //   amount: NonNetTaxableSale,
+    // },
     {
       name: "Net Sales",
       amount: Math.abs(netSales),
@@ -392,7 +392,7 @@ const SalesReportList = (props) => {
                             <p style={{display:"flex",alignItems:"center"}}>
                               $
                               {priceFormate(parseFloat(item.amount).toFixed(2))}
-                              {
+                              {/* {
                                 item.name === "Taxes" && (
                                   <>
                                     <BootstrapTooltip title={<ul className="">
@@ -406,7 +406,7 @@ const SalesReportList = (props) => {
                                   </BootstrapTooltip>
                                   </>
                                 )
-                              }
+                              } */}
                             </p>
                           </StyledTableCell>
                         </StyledTableRow>
