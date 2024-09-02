@@ -53,11 +53,13 @@ const FilterProduct = ({
 
   const listingTypeList = [
     {
-      id: "0",
+      // id: "0",
+      id: 0,
       title: "Product listing",
     },
     {
-      id: "1",
+      // id: "1",
+      id: 1,
       title: "Variant listing",
     },
   ];
@@ -223,14 +225,15 @@ const FilterProduct = ({
                 sx={{ pt: 0.5 }}
                 title={"title"}
                 listItem={productStatusList}
-                selectedOption={
-                  productStatusList?.filter((o) => {
-                    return (
-                      searchParams?.get("status")?.trim()?.toLowerCase() ===
-                      o?.id?.trim()?.toLowerCase()
-                    );
-                  })?.[0]?.title ?? "All"
-                }
+                selectedOption={selectedStatusValue}
+                // selectedOption={
+                //   productStatusList?.filter((o) => {
+                //     return (
+                //       searchParams?.get("status")?.trim()?.toLowerCase() ===
+                //       o?.id?.trim()?.toLowerCase()
+                //     );
+                //   })?.[0]?.title ?? "All"
+                // }
                 onClickHandler={handleOptionClick}
                 dropdownFor={"status"}
                 disabled={loading}
@@ -240,17 +243,18 @@ const FilterProduct = ({
               <label>Listing Type</label>
               <SelectDropDown
                 sx={{ pt: 0.5 }}
-                // heading={"Select listing"}
+                heading={"Select listing"}
                 title={"title"}
                 listItem={listingTypeList}
-                selectedOption={
-                  listingTypeList?.filter((o) => {
-                    return (
-                      searchParams.get("listingType")?.trim()?.toLowerCase() ===
-                      o?.id?.trim()?.toLowerCase()
-                    );
-                  })?.[0]?.title ?? "Product listing"
-                }
+                selectedOption={selectedListingType}
+                // selectedOption={
+                //   listingTypeList?.filter((o) => {
+                //     return (
+                //       searchParams.get("listingType")?.trim()?.toLowerCase() ===
+                //       o?.id?.trim()?.toLowerCase()
+                //     );
+                //   })?.[0]?.title ?? "Product listing"
+                // }
                 onClickHandler={handleOptionClick}
                 dropdownFor={"listingType"}
                 disabled={loading}
@@ -279,14 +283,15 @@ const FilterProduct = ({
                 // heading={"All"}
                 title={"title"}
                 listItem={productFilterByList}
-                selectedOption={
-                  productFilterByList?.filter((o) => {
-                    return (
-                      searchParams?.get("filterBy")?.trim()?.toLowerCase() ===
-                      o?.id?.trim()?.toLowerCase()
-                    );
-                  })?.[0]?.title ?? "All"
-                }
+                selectedOption={productByImages}
+                // selectedOption={
+                //   productFilterByList?.filter((o) => {
+                //     return (
+                //       searchParams?.get("filterBy")?.trim()?.toLowerCase() ===
+                //       o?.id?.trim()?.toLowerCase()
+                //     );
+                //   })?.[0]?.title ?? "All"
+                // }
                 onClickHandler={handleOptionClick}
                 dropdownFor={"image_listing"}
                 disabled={loading}
