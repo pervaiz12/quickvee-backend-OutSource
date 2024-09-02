@@ -55,11 +55,106 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: "none",
   },
 }));
-const AddNewStocktake = ({
-  setVisible,
 
-  getSingleStocktakeData,
+const StocktakeDropDownRow = ({
+  index,
+  singleStocktakeState,
+  product,
+  stocktake_items,
+  loadProductOptions,
+  customStyles,
+  handleOnChangeSelectDropDown,
+  handleClearDropdown,
+  lastDropdownKey,
+  errorMessages,
+  handleNewQtyChange,
+  handleKeyPress,
+  DeleteIcon,
+  handleDeleteProduct,
 }) => {
+  return (
+    <StyledTableRow
+      key={product.variant_id ? product.variant_id : product.product_id}
+    >
+      <StyledTableCell sx={{ width: "40%", verticalAlign: "top" }}>
+        <div style={{ position: "relative", zIndex: 100 }}>
+          {singleStocktakeState?.stocktake_item[index]?.product_id &&
+          singleStocktakeState?.stocktake_item[index]?.product_id ===
+            product.product_id ? (
+            product?.product_name
+          ) : (
+            <AsyncSelect
+              isDisabled={stocktake_items.some(
+                (item) =>
+                  item.product_name !== "" &&
+                  index !== stocktake_items.length - 1
+              )}
+              closeMenuOnSelect={true}
+              loadOptions={loadProductOptions}
+              defaultOptions
+              styles={customStyles}
+              menuPortalTarget={document.body}
+              onChange={(option) => {
+                handleOnChangeSelectDropDown(
+                  option.prodId,
+                  option.variantId,
+                  index
+                );
+              }}
+              value={{
+                label: product && product?.product_name,
+                value:
+                  product.isvarient === "1" ? product?.var_id : product?.id,
+              }}
+            />
+          )}
+          {errorMessages[index]?.product_name && (
+            <div className="error-message-stocktake">
+              {errorMessages[index].product_name}
+            </div>
+          )}
+        </div>
+      </StyledTableCell>
+      <StyledTableCell sx={{ verticalAlign: "top" }}>
+        {product.current_qty}
+      </StyledTableCell>
+      <StyledTableCell sx={{ width: "20%", verticalAlign: "top" }}>
+        <BasicTextFields
+          value={product.new_qty}
+          maxLength={6}
+          onChangeFun={(e) => {
+            handleNewQtyChange(e, index);
+          }}
+          onKeyPressFun={handleKeyPress}
+          autoComplete={false}
+        />
+        {errorMessages[index]?.new_qty && (
+          <div className="error-message-stocktake">
+            {errorMessages[index].new_qty}
+          </div>
+        )}
+      </StyledTableCell>
+      <StyledTableCell sx={{ verticalAlign: "top" }}>
+        {product.discrepancy}
+      </StyledTableCell>
+      <StyledTableCell sx={{ verticalAlign: "top" }}>
+        {product.upc}
+      </StyledTableCell>
+      <StyledTableCell sx={{ verticalAlign: "top" }}>
+        {stocktake_items.length === 1 ? null : (
+          <img
+            src={DeleteIcon}
+            onClick={() => handleDeleteProduct(index)}
+            alt="Delete Icon"
+            className="cursor-pointer"
+          />
+        )}
+      </StyledTableCell>
+    </StyledTableRow>
+  );
+};
+
+const AddNewStocktake = () => {
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
@@ -92,7 +187,6 @@ const AddNewStocktake = ({
       price: "",
     },
   ]);
-  // console.log("costperItem:product.costperItem || ,", stocktake_items);
   const location = useLocation();
 
   const { id } = useParams();
@@ -153,14 +247,14 @@ const AddNewStocktake = ({
     }
   }, [singleStocktakeState]);
 
-  const loadOptions = async (inputValue) => {
+  const loadProductOptions = async (inputValue) => {
     let name_data = {
       merchant_id: merchant_id,
       category_id: "all",
       show_status: "all",
       listing_type: 1,
       offset: 0,
-      limit: 50,
+      limit: 25,
       name: inputValue,
       page: 0,
       ...userTypeData,
@@ -168,36 +262,32 @@ const AddNewStocktake = ({
 
     const res = await dispatch(fetchProductsData(name_data));
     setSelectedProducts(res.payload);
-    // console.log(res.payload);
 
-    const data = res.payload
-      ?.map((prod) => ({
-        label: prod.title,
-        value: prod.var_id || prod.id,
-        variantId: prod.isvarient === "1" ? prod.var_id : null,
-        prodId: prod.id,
-      }))
-      .filter((prod) => {
-        const productFound = stocktake_items?.find((product) => {
-          const a =
-            (product?.variant &&
-              product.variant_id == prod.variantId &&
-              product.variant_id == prod.value) ||
-            (!product.variant && product.product_id == prod.value);
-          return a;
-        });
+    const data = res.payload?.map((prod) => ({
+      label: prod.title,
+      value: prod.id,
+      variantId: prod.isvarient === "1" ? prod.var_id : null,
+      prodId: prod.id,
+    }));
 
-        // (product) =>
-        //   (product.id &&
-        //     product.product_id &&
-        //     product.id === prod.variantId &&
-        //     product.product_id === prod.value) ||
-        //   (product.id && !product.product_id && product.id === prod.value)
-
-        return !productFound;
+    const temp = data.filter((prod) => {
+      const productFound = stocktake_items?.find((product) => {
+        const a =
+          (product?.variant && product.variant_id == prod.variantId) ||
+          (!product.variant && product.product_id == prod.value);
+        return a;
       });
-    // console.log("data option data", data);
-    return data;
+
+      // (product) =>
+      //   (product.id &&
+      //     product.product_id &&
+      //     product.id === prod.variantId &&
+      //     product.product_id === prod.value) ||
+      //   (product.id && !product.product_id && product.id === prod.value)
+
+      return !productFound;
+    });
+    return temp;
   };
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -267,7 +357,7 @@ const AddNewStocktake = ({
       // If singleStocktakeState or stocktake_item array is empty, filter the stocktake_items array and update the state
       const newList = stocktake_items.filter((_, i) => i !== deleteCategoryId);
       const newList1 = newList.filter((product) => product.product_name !== "");
-      setProductList(newList1);
+      setProductList(newList);
       // Close the delete modal
       setDeleteModalOpen(false);
       return;
@@ -459,6 +549,8 @@ const AddNewStocktake = ({
               costperItem: product?.costperItem || "",
               new_qty: "",
               discrepancy: "0",
+              variant_id: "",
+              variant: "",
             };
 
             return updatedList;
@@ -681,92 +773,24 @@ const AddNewStocktake = ({
                 <TableBody>
                   {stocktake_items.map((product, index) => {
                     return (
-                      <>
-                        <StyledTableRow key={index}>
-                          <StyledTableCell
-                            sx={{ width: "40%", verticalAlign: "top" }}
-                          >
-                            <div style={{ position: "relative", zIndex: 100 }}>
-                              {singleStocktakeState?.stocktake_item[index]
-                                ?.product_id &&
-                              singleStocktakeState?.stocktake_item[index]
-                                ?.product_id === product.product_id ? (
-                                product?.product_name
-                              ) : (
-                                <>
-                                  <AsyncSelect
-                                    isDisabled={stocktake_items.some(
-                                      (item) =>
-                                        item.product_name !== "" &&
-                                        index !== stocktake_items.length - 1
-                                    )}
-                                    loadOptions={loadOptions}
-                                    defaultOptions
-                                    styles={customStyles}
-                                    menuPortalTarget={document.body}
-                                    onChange={(option) => {
-                                      handleOnChangeSelectDropDown(
-                                        option.prodId,
-                                        option.variantId,
-                                        index
-                                      );
-                                    }}
-                                    value={{
-                                      label: product && product?.product_name,
-                                      value:
-                                        (product && product?.var_id) ||
-                                        product?.id,
-                                    }}
-                                  />
-                                </>
-                              )}
-                              {errorMessages[index]?.product_name && (
-                                <div className="error-message-stocktake">
-                                  {errorMessages[index].product_name}
-                                </div>
-                              )}
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell sx={{ verticalAlign: "top" }}>
-                            {product.current_qty}
-                          </StyledTableCell>
-                          <StyledTableCell
-                            sx={{ width: "20%", verticalAlign: "top" }}
-                          >
-                            <BasicTextFields
-                              value={product.new_qty}
-                              maxLength={6}
-                              onChangeFun={(e) => {
-                                handleNewQtyChange(e, index);
-                              }}
-                              onKeyPressFun={handleKeyPress}
-                              autoComplete={false}
-                            />
-                            {errorMessages[index]?.new_qty && (
-                              <div className="error-message-stocktake">
-                                {errorMessages[index].new_qty}
-                              </div>
-                            )}
-                          </StyledTableCell>
-                          <StyledTableCell sx={{ verticalAlign: "top" }}>
-                            {product.discrepancy}
-                          </StyledTableCell>
-                          <StyledTableCell sx={{ verticalAlign: "top" }}>
-                            {product.upc}
-                          </StyledTableCell>
-
-                          <StyledTableCell sx={{ verticalAlign: "top" }}>
-                            {stocktake_items.length === 1 ? null : (
-                              <img
-                                src={DeleteIcon}
-                                onClick={() => handleDeleteProduct(index)}
-                                alt="Delete Icon"
-                                className="cursor-pointer"
-                              />
-                            )}
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      </>
+                      <StocktakeDropDownRow
+                        index={index}
+                        singleStocktakeState={singleStocktakeState}
+                        product={product}
+                        stocktake_items={stocktake_items}
+                        loadProductOptions={loadProductOptions}
+                        customStyles={customStyles}
+                        handleOnChangeSelectDropDown={
+                          handleOnChangeSelectDropDown
+                        }
+                        // handleClearDropdown={handleClearDropdown}
+                        // lastDropdownKey={lastDropdownKey}
+                        errorMessages={errorMessages}
+                        handleNewQtyChange={handleNewQtyChange}
+                        handleKeyPress={handleKeyPress}
+                        DeleteIcon={DeleteIcon}
+                        handleDeleteProduct={handleDeleteProduct}
+                      />
                     );
                   })}
                 </TableBody>
