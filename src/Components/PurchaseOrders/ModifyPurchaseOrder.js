@@ -427,7 +427,7 @@ const ModifyPurchaseOrder = () => {
         show_status: "all",
         listing_type: 1,
         offset: 0,
-        limit: 50,
+        limit: 25,
         name: inputValue,
         page: 0,
         ...userTypeData,
