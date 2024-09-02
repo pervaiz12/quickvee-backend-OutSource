@@ -1,0 +1,10 @@
+For Uploading on Live server - quickvee.com/merchant
+- Add  "homepage": "/merchants", in Package.json file
+- In Header page, Uncomment the link for Live Link - quickvee.com/merchant....
+- In Index.js file, uncomment the Router along with basename="/merchants"
+
+For Uploading on Testing server - production.quickvee.com 
+- Remove  "homepage": "/merchants", from Package.json file
+- In Header page, comment the link for Live Link - quickvee.com/merchant.... and uncomment "sandbox.quickvee.com/merchant"
+- In Index.js file, comment the Router along with basename="/merchants" and uncomment the normal Router
+
