@@ -89,6 +89,150 @@ const customStyles = {
   }),
 };
 
+const SingleProduct = ({
+  product,
+  selectedProducts,
+  index,
+  productOptions,
+  getProductData,
+  handleQuantity,
+  handleProduct,
+  handleDelete,
+}) => {
+  return (
+    <StyledTableRow key={product?.id}>
+      <StyledTableCell sx={{ width: "30%" }}>
+        <>
+          <span
+            title={
+              product.variant
+                ? `${product.title} ~ ${product.variant}`
+                : `${product.title}`
+            }
+          >
+            <AsyncSelect
+              isDisabled={selectedProducts.some(
+                (item) =>
+                  item.title !== "" && index !== selectedProducts.length - 1
+              )}
+              closeMenuOnSelect={true}
+              defaultOptions
+              styles={customStyles}
+              menuPortalTarget={document.body}
+              value={{
+                label: product.variant
+                  ? `${product.title} ~ ${product.variant}`
+                  : `${product.title}`,
+                value: product.id,
+              }}
+              loadOptions={productOptions}
+              onChange={(option) => {
+                getProductData(option.value, option.variantId, index);
+              }}
+              placeholder="Search Product by Title or UPC"
+            />{" "}
+          </span>
+          {product.titleError && (
+            <p className="error-message">Please select a Product</p>
+          )}
+        </>
+      </StyledTableCell>
+      <StyledTableCell>
+        <TextField
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              "&.Mui-focused fieldset": {
+                borderColor: "black",
+              },
+            },
+          }}
+          id="outlined-basic"
+          value={product.newQty}
+          inputProps={{
+            type: "text",
+          }}
+          onChange={(e) => {
+            if (
+              e.target.value >= 0 &&
+              e.target.value.length <= 6 &&
+              !isNaN(e.target.value)
+            ) {
+              const disable = disableZeroOnFirstIndex(e.target.value);
+              if (disable) return;
+              handleProduct(e, product.id, "newQty");
+            }
+          }}
+          variant="outlined"
+          size="small"
+          onKeyPress={handleQuantity}
+        />
+        {product.qtyError && <p className="error-message">Qty is required</p>}
+      </StyledTableCell>
+      <StyledTableCell>
+        <p className="text-[16px]">{product?.finalQty}</p>
+      </StyledTableCell>
+      <StyledTableCell>
+        <TextField
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              "&.Mui-focused fieldset": {
+                borderColor: "black",
+              },
+            },
+          }}
+          id="outlined-basic"
+          value={parseFloat(product.newPrice).toFixed(2)}
+          inputProps={{ type: "number" }}
+          onChange={(e) => {
+            if (e.target.value.length <= 9) {
+              handleProduct(e, product.id, "newPrice");
+            }
+          }}
+          variant="outlined"
+          size="small"
+        />
+        {product.priceError && (
+          <p className="error-message">Cost Per Item is required</p>
+        )}
+      </StyledTableCell>
+      <StyledTableCell>
+        <p className="text-[16px]">${product?.finalPrice}</p>
+      </StyledTableCell>
+      <StyledTableCell>
+        <p className="text-[16px]">{product?.upc}</p>
+      </StyledTableCell>
+      <StyledTableCell>
+        <TextField
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              "&.Mui-focused fieldset": {
+                borderColor: "black",
+              },
+            },
+          }}
+          id="outlined-basic"
+          inputProps={{ type: "text" }}
+          value={product.notes}
+          onChange={(e) => handleProduct(e, product.id, "notes")}
+          placeholder="Note"
+          variant="outlined"
+          size="small"
+        />
+      </StyledTableCell>
+      <StyledTableCell>
+        {selectedProducts.length > 1 && (
+          <img
+            src={DeleteIcon}
+            alt=""
+            className="w-8 h-8 cursor-pointer"
+            onClick={() => handleDelete(index)}
+          />
+        )}
+      </StyledTableCell>
+    </StyledTableRow>
+  );
+};
+
 const AutoPo = ({
   purchaseInfo,
   setPurchaseInfoErrors,
@@ -719,151 +863,16 @@ const AutoPo = ({
                 </TableHead>
                 <TableBody>
                   {selectedProducts.map((product, index) => (
-                    <StyledTableRow key={product?.id}>
-                      <StyledTableCell sx={{ width: "30%" }}>
-                        <>
-                          <span
-                            title={
-                              product.variant
-                                ? `${product.title} ~ ${product.variant}`
-                                : `${product.title}`
-                            }
-                          >
-                            <AsyncSelect
-                              isDisabled={selectedProducts.some(
-                                (item) =>
-                                  item.title !== "" &&
-                                  index !== selectedProducts.length - 1
-                              )}
-                              closeMenuOnSelect={true}
-                              defaultOptions
-                              styles={customStyles}
-                              menuPortalTarget={document.body}
-                              value={{
-                                label: product.variant
-                                  ? `${product.title} ~ ${product.variant}`
-                                  : `${product.title}`,
-                                value: product.id,
-                              }}
-                              loadOptions={productOptions}
-                              onChange={(option) => {
-                                getProductData(
-                                  option.value,
-                                  option.variantId,
-                                  index
-                                );
-                              }}
-                              placeholder="Search Product by Title or UPC"
-                            />{" "}
-                          </span>
-                          {product.titleError && (
-                            <p className="error-message">
-                              Please select a Product
-                            </p>
-                          )}
-                        </>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <TextField
-                          sx={{
-                            "& .MuiOutlinedInput-root": {
-                              "&.Mui-focused fieldset": {
-                                borderColor: "black",
-                              },
-                            },
-                          }}
-                          id="outlined-basic"
-                          value={product.newQty}
-                          inputProps={{
-                            type: "text",
-                          }}
-                          onChange={(e) => {
-                            if (
-                              e.target.value >= 0 &&
-                              e.target.value.length <= 6 &&
-                              !isNaN(e.target.value)
-                            ) {
-                              const disable = disableZeroOnFirstIndex(
-                                e.target.value
-                              );
-                              if (disable) return;
-                              handleProduct(e, product.id, "newQty");
-                            }
-                          }}
-                          variant="outlined"
-                          size="small"
-                          onKeyPress={handleQuantity}
-                        />
-                        {product.qtyError && (
-                          <p className="error-message">Qty is required</p>
-                        )}
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p className="text-[16px]">{product?.finalQty}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <TextField
-                          sx={{
-                            "& .MuiOutlinedInput-root": {
-                              "&.Mui-focused fieldset": {
-                                borderColor: "black",
-                              },
-                            },
-                          }}
-                          id="outlined-basic"
-                          value={parseFloat(product.newPrice).toFixed(2)}
-                          inputProps={{ type: "number" }}
-                          onChange={(e) => {
-                            if (e.target.value.length <= 9) {
-                              handleProduct(e, product.id, "newPrice");
-                            }
-                          }}
-                          variant="outlined"
-                          size="small"
-                        />
-                        {product.priceError && (
-                          <p className="error-message">
-                            Cost Per Item is required
-                          </p>
-                        )}
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p className="text-[16px]">${product?.finalPrice}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p className="text-[16px]">{product?.upc}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <TextField
-                          sx={{
-                            "& .MuiOutlinedInput-root": {
-                              "&.Mui-focused fieldset": {
-                                borderColor: "black",
-                              },
-                            },
-                          }}
-                          id="outlined-basic"
-                          inputProps={{ type: "text" }}
-                          value={product.notes}
-                          onChange={(e) =>
-                            handleProduct(e, product.id, "notes")
-                          }
-                          placeholder="Note"
-                          variant="outlined"
-                          size="small"
-                        />
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        {selectedProducts.length > 1 && (
-                          <img
-                            src={DeleteIcon}
-                            alt=""
-                            className="w-8 h-8 cursor-pointer"
-                            onClick={() => handleDelete(index)}
-                          />
-                        )}
-                      </StyledTableCell>
-                    </StyledTableRow>
+                    <SingleProduct
+                      product={product}
+                      selectedProducts={selectedProducts}
+                      index={index}
+                      productOptions={productOptions}
+                      getProductData={getProductData}
+                      handleQuantity={handleQuantity}
+                      handleProduct={handleProduct}
+                      handleDelete={handleDelete}
+                    />
                   ))}
                 </TableBody>
               </StyledTable>

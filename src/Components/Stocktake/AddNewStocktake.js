@@ -73,7 +73,9 @@ const StocktakeDropDownRow = ({
   handleDeleteProduct,
 }) => {
   return (
-    <StyledTableRow key={product.id}>
+    <StyledTableRow
+      key={product.variant_id ? product.variant_id : product.product_id}
+    >
       <StyledTableCell sx={{ width: "40%", verticalAlign: "top" }}>
         <div style={{ position: "relative", zIndex: 100 }}>
           {singleStocktakeState?.stocktake_item[index]?.product_id &&
@@ -81,29 +83,30 @@ const StocktakeDropDownRow = ({
             product.product_id ? (
             product?.product_name
           ) : (
-              <AsyncSelect
-                isDisabled={stocktake_items.some(
-                  (item) =>
-                    item.product_name !== "" &&
-                    index !== stocktake_items.length - 1
-                )}
-                closeMenuOnSelect={true}
-                loadOptions={loadProductOptions}
-                defaultOptions
-                styles={customStyles}
-                menuPortalTarget={document.body}
-                onChange={(option) => {
-                  handleOnChangeSelectDropDown(
-                    option.prodId,
-                    option.variantId,
-                    index
-                  );
-                }}
-                value={{
-                  label: product && product?.product_name,
-                  value: (product && product?.var_id) || product?.id,
-                }}
-              />
+            <AsyncSelect
+              isDisabled={stocktake_items.some(
+                (item) =>
+                  item.product_name !== "" &&
+                  index !== stocktake_items.length - 1
+              )}
+              closeMenuOnSelect={true}
+              loadOptions={loadProductOptions}
+              defaultOptions
+              styles={customStyles}
+              menuPortalTarget={document.body}
+              onChange={(option) => {
+                handleOnChangeSelectDropDown(
+                  option.prodId,
+                  option.variantId,
+                  index
+                );
+              }}
+              value={{
+                label: product && product?.product_name,
+                value:
+                  product.isvarient === "1" ? product?.var_id : product?.id,
+              }}
+            />
           )}
           {errorMessages[index]?.product_name && (
             <div className="error-message-stocktake">
@@ -149,8 +152,7 @@ const StocktakeDropDownRow = ({
       </StyledTableCell>
     </StyledTableRow>
   );
-}
-
+};
 
 const AddNewStocktake = () => {
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
@@ -260,35 +262,32 @@ const AddNewStocktake = () => {
 
     const res = await dispatch(fetchProductsData(name_data));
     setSelectedProducts(res.payload);
-    // console.log(res.payload);
 
-    const data = res.payload
-      ?.map((prod) => ({
-        label: prod.title,
-        value: prod.var_id || prod.id,
-        variantId: prod.isvarient === "1" ? prod.var_id : null,
-        prodId: prod.id,
-      }))
-      .filter((prod) => {
-        const productFound = stocktake_items?.find((product) => {
-          const a =
-            (product?.variant &&
-              product.variant_id == prod.variantId) ||
-            (!product.variant && product.product_id == prod.value);
-          return a;
-        });
+    const data = res.payload?.map((prod) => ({
+      label: prod.title,
+      value: prod.id,
+      variantId: prod.isvarient === "1" ? prod.var_id : null,
+      prodId: prod.id,
+    }));
 
-        // (product) =>
-        //   (product.id &&
-        //     product.product_id &&
-        //     product.id === prod.variantId &&
-        //     product.product_id === prod.value) ||
-        //   (product.id && !product.product_id && product.id === prod.value)
-
-        return !productFound;
+    const temp = data.filter((prod) => {
+      const productFound = stocktake_items?.find((product) => {
+        const a =
+          (product?.variant && product.variant_id == prod.variantId) ||
+          (!product.variant && product.product_id == prod.value);
+        return a;
       });
-    console.log("data option data", data);
-    return data;
+
+      // (product) =>
+      //   (product.id &&
+      //     product.product_id &&
+      //     product.id === prod.variantId &&
+      //     product.product_id === prod.value) ||
+      //   (product.id && !product.product_id && product.id === prod.value)
+
+      return !productFound;
+    });
+    return temp;
   };
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -550,6 +549,8 @@ const AddNewStocktake = () => {
               costperItem: product?.costperItem || "",
               new_qty: "",
               discrepancy: "0",
+              variant_id: "",
+              variant: "",
             };
 
             return updatedList;
@@ -779,7 +780,9 @@ const AddNewStocktake = () => {
                         stocktake_items={stocktake_items}
                         loadProductOptions={loadProductOptions}
                         customStyles={customStyles}
-                        handleOnChangeSelectDropDown={handleOnChangeSelectDropDown}
+                        handleOnChangeSelectDropDown={
+                          handleOnChangeSelectDropDown
+                        }
                         // handleClearDropdown={handleClearDropdown}
                         // lastDropdownKey={lastDropdownKey}
                         errorMessages={errorMessages}
