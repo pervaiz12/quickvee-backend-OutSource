@@ -84,6 +84,9 @@ const StocktakeDropDownRow = ({
             product?.product_name
           ) : (
             <AsyncSelect
+              key={
+                index === stocktake_items.length - 1 ? lastDropdownKey : index
+              }
               isDisabled={stocktake_items.some(
                 (item) =>
                   item.product_name !== "" &&
@@ -100,6 +103,10 @@ const StocktakeDropDownRow = ({
                   option.variantId,
                   index
                 );
+                // Only trigger re-render for the last dropdown
+                if (index === stocktake_items.length - 1) {
+                  handleClearDropdown(); // Call this only for the last one
+                }
               }}
               value={{
                 label: product && product?.product_name,
@@ -155,6 +162,12 @@ const StocktakeDropDownRow = ({
 };
 
 const AddNewStocktake = () => {
+  const [lastDropdownKey, setLastDropdownKey] = useState(0);
+
+  const handleClearDropdown = () => {
+    setLastDropdownKey((prevKey) => prevKey + 1);
+    loadProductOptions(""); // Optionally, reload options if necessary
+  };
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
@@ -270,7 +283,7 @@ const AddNewStocktake = () => {
       prodId: prod.id,
     }));
 
-    const temp = data.filter((prod) => {
+    const temp = data?.filter((prod) => {
       const productFound = stocktake_items?.find((product) => {
         const a =
           (product?.variant && product.variant_id == prod.variantId) ||
@@ -784,8 +797,8 @@ const AddNewStocktake = () => {
                         handleOnChangeSelectDropDown={
                           handleOnChangeSelectDropDown
                         }
-                        // handleClearDropdown={handleClearDropdown}
-                        // lastDropdownKey={lastDropdownKey}
+                        handleClearDropdown={handleClearDropdown}
+                        lastDropdownKey={lastDropdownKey}
                         errorMessages={errorMessages}
                         handleNewQtyChange={handleNewQtyChange}
                         handleKeyPress={handleKeyPress}
