@@ -1114,7 +1114,11 @@ const productsSlice = createSlice({
           productIds.add(product.title);
         }
       });
-      state.offset += 10;
+      JSON.parse(localStorage.getItem("product-focus-data")) &&
+      JSON.parse(localStorage.getItem("product-focus-data"))?.offset
+        ? (state.offset =
+            JSON.parse(localStorage.getItem("product-focus-data"))?.offset + 10)
+        : (state.offset += 10);
       state.hasMore = action?.payload?.length > 0;
       state.error = "";
     });

@@ -1,6 +1,6 @@
 import React from "react";
 import { formData } from "./data";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 
 import AddNewCategory from "../../Assests/Dashboard/Left.svg";
@@ -27,6 +27,7 @@ const GeneratePUC = ({
   const isProductVariant = location.pathname.includes("/products/varient-edit");
 
   const findVarientName = productData?.product_name?.split("~");
+  const lastUrl = location?.state?.from || "/inventory/products";
 
   const varientTitle = handleVarientTitleBasedItemList();
   const setInputMaxLength = (fieldname) => {
@@ -108,15 +109,10 @@ const GeneratePUC = ({
         <Grid item xs={12} className="">
           {isVarientEdit ? (
             <div className="q-category-bottom-header">
-              <span
-                onClick={() => {
-                  navigate("/inventory/products");
-                }}
-                className="varient-edit-text"
-              >
+              <Link to={lastUrl} className="varient-edit-text">
                 <img src={AddNewCategory} alt="Add-New-Category" />
                 <span className="title">Variants </span>
-              </span>
+              </Link>
             </div>
           ) : (
             ""
@@ -161,14 +157,13 @@ const GeneratePUC = ({
                       {isMultipleVarient ? (
                         <div className="my-2 varient-title-name">
                           {productInfo?.title
-                            ? productInfo?.title + "  -  " + varientTitle[index]
-                            : // index +
-                              //   1 +
-                              //   ". " +
-                              //   productInfo?.title +
-                              //   "  -  " +
-                              //   varientTitle[index]
-                              varientTitle[index]}
+                            ? index +
+                              1 +
+                              ". " +
+                              productInfo?.title +
+                              "  -  " +
+                              varientTitle[index]
+                            : varientTitle[index]}
                         </div>
                       ) : (
                         ""

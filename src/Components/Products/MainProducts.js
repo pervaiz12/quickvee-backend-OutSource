@@ -73,16 +73,17 @@ const MainProducts = () => {
   const imageUrl = searchParams.get("filterBy")?.trim().toLowerCase();
 
   const changeProductPageUrl = (urlOption, content) => {
-    // console.log("urloptions", urlOption, content);
-    // if (content === 0 || content) {
-    //   // Get the current search parameters
-    //   // Set or update the new search parameter
-    //   searchParams.set(urlOption, content);
-    //   // Navigate to the updated URL with all search parameters
-    //   navigate(`/inventory/products?${searchParams.toString()}`);
-    // } else {
-    //   navigate(location.pathname);
-    // }
+    if (content === 0 || content) {
+      // Get the current search parameters
+
+      // Set or update the new search parameter
+      searchParams.set(urlOption, content);
+
+      // Navigate to the updated URL with all search parameters
+      navigate(`/inventory/products?${searchParams.toString()}`);
+    } else {
+      navigate(location.pathname);
+    }
   };
 
   const handleDeleteProduct = async (id) => {
@@ -115,19 +116,23 @@ const MainProducts = () => {
     let data = {
       merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       format: "json",
-      category_id: categoryId === "All" ? "all" : categoryId,
-      show_status: selectedStatus,
-      // category_id: categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
-      // show_status: statusUrl === 0 || statusUrl ? statusUrl : "all",
+      // category_id: categoryId === "All" ? "all" : categoryId,
+      // show_status: selectedStatus,
+      category_id: categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
+      show_status: statusUrl === 0 || statusUrl ? statusUrl : "all",
       name: debouncedValue,
-      is_media_blank: productByImages === "All" ? "" : 1,
-      listing_type: selectedListingTypeValue?.id
-        ? selectedListingTypeValue?.id
-        : 0,
-      // is_media_blank: imageUrl === "all" ? "" : imageUrl,
-      // listing_type: listingUrl === 0 || listingUrl ? listingUrl : "0",
+      // is_media_blank: productByImages === "All" ? "" : 1,
+      // listing_type: selectedListingTypeValue?.id
+      //   ? selectedListingTypeValue?.id
+      //   : 0,
+      is_media_blank: imageUrl === "all" ? "" : imageUrl,
+      listing_type: listingUrl === 0 || listingUrl ? listingUrl : "0",
       offset: 0,
-      limit: 10,
+      limit:
+        JSON.parse(localStorage.getItem("product-focus-data")) &&
+        JSON.parse(localStorage.getItem("product-focus-data"))?.limit
+          ? JSON.parse(localStorage.getItem("product-focus-data"))?.limit
+          : 10,
       page: 0,
       ...userTypeData,
     };
@@ -242,18 +247,18 @@ const MainProducts = () => {
                     let del_pic_data = {
                       merchant_id:
                         LoginGetDashBoardRecordJson?.data?.merchant_id,
-                      category_id: categoryId === "All" ? "all" : categoryId,
-                      show_status: selectedStatus,
-                      // category_id:
-                      //   categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
-                      // show_status:
-                      //   statusUrl === 0 || statusUrl ? statusUrl : "all",
+                      // category_id: categoryId === "All" ? "all" : categoryId,
+                      // show_status: selectedStatus,
+                      category_id:
+                        categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
+                      show_status:
+                        statusUrl === 0 || statusUrl ? statusUrl : "all",
                       name: searchId,
-                      is_media_blank: productByImages === "All" ? "" : 1,
-                      listing_type: selectedListingTypeValue,
-                      // is_media_blank: imageUrl === "all" ? "" : imageUrl,
-                      // listing_type:
-                      //   listingUrl === 0 || listingUrl ? listingUrl : "0",
+                      // is_media_blank: productByImages === "All" ? "" : 1,
+                      // listing_type: selectedListingTypeValue,
+                      is_media_blank: imageUrl === "all" ? "" : imageUrl,
+                      listing_type:
+                        listingUrl === 0 || listingUrl ? listingUrl : "0",
                       offset: 0,
                       limit: 10,
                       page: 0,
@@ -334,7 +339,6 @@ const MainProducts = () => {
         setSearchId("");
         setProductByImages(option?.title);
         setlistingTypesDropdownVisible(false);
-        console.log("option?.id", option?.id);
         changeProductPageUrl(
           "filterBy",
           option?.id === "1" ? "all" : option?.id
