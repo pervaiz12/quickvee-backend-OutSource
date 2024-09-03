@@ -209,6 +209,7 @@ export default function Header() {
           <MenuItem
             sx={{ fontFamily: "CircularSTDBook" }}
             disableTouchRipple={true}
+            className="Searchmarchant"
           >
             <div>
               <InputBase
