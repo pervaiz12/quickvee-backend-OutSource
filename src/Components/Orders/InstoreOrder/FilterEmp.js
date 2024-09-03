@@ -204,7 +204,7 @@ const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
           <Grid container className="mt-5">
             <Grid item xs={12} className="">
               <InputTextSearch
-                placeholder="Search orders by order ID, or invoice ID "
+                placeholder="Search orders by order ID, or invoice ID, or Customer Name "
                 value={searchId}
                 handleChange={setSearchId}
                 handleSearchButton={handleSearch}
