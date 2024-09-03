@@ -207,14 +207,14 @@ const SalesReportList = (props) => {
       name: "Taxable Net Sale",
       amount: NetTaxableSale,
     },
-    {
-      name: "Non Taxable Net Sale",
-      amount: NonNetTaxableSale,
-    },
-    {
-      name: "Net Sales",
-      amount: Math.abs(netSales),
-    },
+    // {
+    //   name: "Non Taxable Net Sale",
+    //   amount: NonNetTaxableSale,
+    // },
+    // {
+    //   name: "Net Sales",
+    //   amount: Math.abs(netSales),
+    // },
     {
       name: "Taxes",
       amount: taxesAndFees,
@@ -254,10 +254,10 @@ const SalesReportList = (props) => {
       name: "Cash EBT",
       amount: SalesReportData.cash_ebt_collected,
     },
-    {
-      name: "Store Credit Collected",
-      amount: SalesReportData.store_credit_collected,
-    },
+    // {
+    //   name: "Store Credit Collected",
+    //   amount: SalesReportData.store_credit_collected,
+    // },
     {
       name: "Amount Collected",
       amount: amountCollected,
@@ -399,7 +399,7 @@ const SalesReportList = (props) => {
                             >
                               $
                               {priceFormate(parseFloat(item.amount).toFixed(2))}
-                              {item.name === "Taxes" && (
+                              {/* {item.name === "Taxes" && (
                                 <>
                                   <BootstrapTooltip
                                     title={
@@ -424,7 +424,7 @@ const SalesReportList = (props) => {
                                     </span>
                                   </BootstrapTooltip>
                                 </>
-                              )}
+                              )} */}
                             </p>
                           </StyledTableCell>
                         </StyledTableRow>
