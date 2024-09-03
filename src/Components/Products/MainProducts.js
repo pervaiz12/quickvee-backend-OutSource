@@ -73,18 +73,16 @@ const MainProducts = () => {
   const imageUrl = searchParams.get("filterBy")?.trim().toLowerCase();
 
   const changeProductPageUrl = (urlOption, content) => {
-    console.log("urloptions", urlOption, content);
-    if (content === 0 || content) {
-      // Get the current search parameters
-
-      // Set or update the new search parameter
-      searchParams.set(urlOption, content);
-
-      // Navigate to the updated URL with all search parameters
-      navigate(`/inventory/products?${searchParams.toString()}`);
-    } else {
-      navigate(location.pathname);
-    }
+    // console.log("urloptions", urlOption, content);
+    // if (content === 0 || content) {
+    //   // Get the current search parameters
+    //   // Set or update the new search parameter
+    //   searchParams.set(urlOption, content);
+    //   // Navigate to the updated URL with all search parameters
+    //   navigate(`/inventory/products?${searchParams.toString()}`);
+    // } else {
+    //   navigate(location.pathname);
+    // }
   };
 
   const handleDeleteProduct = async (id) => {
@@ -244,8 +242,8 @@ const MainProducts = () => {
                     let del_pic_data = {
                       merchant_id:
                         LoginGetDashBoardRecordJson?.data?.merchant_id,
-                        category_id: categoryId === "All" ? "all" : categoryId,
-                        show_status: selectedStatus,
+                      category_id: categoryId === "All" ? "all" : categoryId,
+                      show_status: selectedStatus,
                       // category_id:
                       //   categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
                       // show_status:
