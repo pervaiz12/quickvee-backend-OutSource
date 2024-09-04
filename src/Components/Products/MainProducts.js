@@ -224,14 +224,19 @@ const MainProducts = () => {
   const handleOptionClick = (option, dropdown, value) => {
     switch (dropdown) {
       case "del_pic":
-        setSelectedEmployee(option.title);
         setdel_picDropdownVisible(false);
-
+        console.log(option);
+        if (option === "Select") {
+          setSelectedEmployee("Select");
+          return;
+        }
         if (window.confirm("Are you sure you want to update?")) {
           dispatch(emptyProduct([]));
           setSearchId("");
           handleOptionClick([]);
           setProductIdList([]);
+          console.log(option);
+          setSelectedEmployee(option.title);
           let type_date = {
             merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
             id: option.id,
@@ -296,10 +301,11 @@ const MainProducts = () => {
               }
             }
           }
-          setSelectedEmployee("Select");
+          // setSelectedEmployee("Select");
           setdel_picDropdownVisible(false);
         } else {
           console.log("No");
+          setSelectedEmployee("Select");
         }
 
         break;
@@ -341,7 +347,7 @@ const MainProducts = () => {
         setlistingTypesDropdownVisible(false);
         changeProductPageUrl(
           "filterBy",
-          option?.id === "1" ? "all" : option?.id
+          option?.id === "0" ? "all" : option?.id
         );
 
       default:

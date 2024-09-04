@@ -20,6 +20,8 @@ const EditItemOptions = ({
   handleCheckAllCheckBoxesOnName,
 }) => {
   const [value, setValue] = React.useState("1");
+  const [selectItems, setSelectItems] = React.useState([]);
+  console.log("selectItems", selectItems);
 
   const [checkbox, setCheckbox] = React.useState({
     trackQuantity: false,
@@ -39,33 +41,53 @@ const EditItemOptions = ({
       disable: false,
       isFoodStamble: false,
     });
+    setSelectItems([]);
   };
 
   const labels = [
     "Track Quantity",
     // "Create this item for all linked locations",
     "Continue selling when out of stock",
-    "check ID",
+    "Check ID",
     "Disable",
     "Food Stampable",
   ];
 
-  const showModalCheck = (i, status) => {
+  const showModalCheck = (status) => {
     console.log("status", status);
     if (status) {
-      ToastifyAlert("All " + labels[i] + " Checked. ", "warn");
+      ToastifyAlert("Selected Options Checked.", "warn");
     } else {
-      ToastifyAlert("All " + labels[i] + " UnChecked. ", "warn");
+      ToastifyAlert("Selected Options UnChecked.", "warn");
     }
+    clearAllCheckBoxes();
+    handleOpenItemOption();
   };
+
   const handleChangeCheckboxes = (e, i) => {
     const { value, name, checked } = e.target;
-    handleCheckAllCheckBoxesOnName(name, checked);
-    showModalCheck(i, checked);
+    if (checked) {
+      selectItems.push(name);
+      setSelectItems(selectItems);
+    } else {
+      const item = selectItems.find((io) => io === name);
+      const filterItem = selectItems?.filter((o) => o !== item);
+      setSelectItems(filterItem);
+    }
     setCheckbox((prev) => ({
       ...prev,
       [name]: checked,
     }));
+  };
+
+  const handleCheck = () => {
+    handleCheckAllCheckBoxesOnName(selectItems, true);
+    showModalCheck(true);
+  };
+
+  const handleUnCheck = () => {
+    handleCheckAllCheckBoxesOnName(selectItems, false);
+    showModalCheck(false);
   };
 
   return (
@@ -111,7 +133,7 @@ const EditItemOptions = ({
                       <div class="options">
                         {Object.keys(checkbox)?.map((item, i) => {
                           return (
-                            <>
+                            <div className="label">
                               <label
                                 class="q_resigter_setting_section"
                                 style={{ color: "#000", fontSize: "18px" }}
@@ -126,9 +148,40 @@ const EditItemOptions = ({
                                 />
                                 <span class="checkmark"></span>
                               </label>
-                            </>
+                            </div>
                           );
                         })}
+                      </div>
+                      <div class="add-btn check-uncheck-btn-section">
+                        <button
+                          className="quic-btn quic-btn-save submit-btn-click"
+                          // onClick={handleSubmitForm}
+                          // disabled={isLoading || enbaledSubmit}
+                          style={{
+                            backgroundColor: selectItems?.length
+                              ? "#0A64F9"
+                              : "#878787",
+                          }}
+                          onClick={handleCheck}
+                          disabled={!selectItems.length}
+                        >
+                          Check
+                        </button>
+
+                        <button
+                          className="quic-btn quic-btn-save submit-btn-click"
+                          // onClick={handleSubmitForm}
+                          // disabled={isLoading || enbaledSubmit}
+                          style={{
+                            backgroundColor: selectItems?.length
+                              ? "#0A64F9"
+                              : "#878787",
+                          }}
+                          onClick={handleUnCheck}
+                          disabled={!selectItems.length}
+                        >
+                          Uncheck
+                        </button>
                       </div>
                     </div>
                   </Suspense>

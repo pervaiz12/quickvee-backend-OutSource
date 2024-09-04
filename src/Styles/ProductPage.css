@@ -1049,6 +1049,7 @@
   text-transform: capitalize;
   font-weight: 600;
   font-family: CircularSTDBook;
+  cursor: default;
 }
 
 .checkbox-for-all-form .modal-title-tab .MuiTabs-scroller button span {
@@ -1067,11 +1068,15 @@
   margin-left: 3%;
 }
 
-.checkbox-for-all-form .checkbox-item-options .options label {
+.checkbox-for-all-form .checkbox-item-options .options .label {
   width: 47%;
   margin-bottom: 30px;
   justify-content: unset !important;
   font-size: 18px !important;
+}
+
+.checkbox-for-all-form .checkbox-item-options .options .label label {
+  display: unset;
 }
 
 .item-edit-modal {
@@ -1090,4 +1095,10 @@
   right: 10px;
   cursor: pointer;
   z-index: 10;
+}
+
+.check-uncheck-btn-section {
+  display: flex;
+  justify-content: end;
+  gap: 9px;
 }

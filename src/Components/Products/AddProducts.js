@@ -298,15 +298,19 @@ const AddProducts = () => {
     }
   };
 
-  const handleCheckAllCheckBoxesOnName = (name, value) => {
-    let updatedCheckBoxData = formValue?.map((item, index) => {
+  const handleCheckAllCheckBoxesOnName = (names, value) => {
+    let updatedCheckBoxData = formValue?.map((item) => {
       const title = Object.keys(item)[0];
+
+      // Iterate over the names array and update each key in the object
+      let updatedItem = { ...item[title] };
+      names.forEach((name) => {
+        updatedItem[name] = value;
+      });
+
       return {
         ...item,
-        [title]: {
-          ...item[title],
-          [name]: value,
-        },
+        [title]: updatedItem,
       };
     });
 

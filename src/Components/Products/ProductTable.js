@@ -134,6 +134,7 @@ const ProductTable = ({
 
   useEffect(() => {
     let timer;
+    let focusId;
     if (!hasFocused.current && productIndex !== -1) {
       const targetElement = document.getElementById(`row-${selectedProductId}`);
 
@@ -143,13 +144,16 @@ const ProductTable = ({
         hasFocused.current = true;
 
         timer = setTimeout(() => {
-          targetElement.classList.remove("product-line-highlight-bg");
           localStorage.removeItem("product-focus-data");
         }, 500);
+
+        focusId = setTimeout(() => {
+          targetElement.classList.remove("product-line-highlight-bg");
+        }, 3000);
       }
     }
 
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timer, focusId);
   }, [productIndex]);
 
   const fetchInventoryData = async () => {

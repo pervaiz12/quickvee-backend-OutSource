@@ -94,11 +94,11 @@ const FilterProduct = ({
 
   const productFilterByList = [
     {
-      id: "1",
+      id: "0",
       title: "All",
     },
     {
-      id: "2",
+      id: "1",
       title: "Without Image",
     },
   ];
