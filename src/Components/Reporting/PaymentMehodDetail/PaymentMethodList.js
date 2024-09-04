@@ -108,42 +108,65 @@ const PaymentMethodList = ({ data }) => {
       <Grid container style={{ marginBottom: 0 }} className="box_shadow_div">
         <Grid item xs={12}>
           {paymentReportDataState.loading ? (
-            <SkeletonTable columns={["Card type", "Total"]} />
+            <SkeletonTable columns={["Payment Type", "Amount"]} />
           ) : (
             <TableContainer>
               <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
                 <TableHead>
-                  <StyledTableCell>Payment type</StyledTableCell>
-                  <StyledTableCell>Total</StyledTableCell>
+                  <StyledTableCell>Payment Type</StyledTableCell>
+                  <StyledTableCell>Amount</StyledTableCell>
                 </TableHead>
                 <TableBody>
-                  {total ? (
-                    paymentReport.map((paymentData, index) => {
-                      if (paymentData.amt > 0) {
-                        return (
-                          <StyledTableRow key={index}>
-                            <StyledTableCell>
-                              <p className="report-title">
-                                {paymentData.card_type}
-                              </p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <p className="report-title">
-                                {typeof paymentData.amt != ""
-                                  ? `$${priceFormate(
-                                      Number(paymentData.amt).toFixed(2)
-                                    )}`
-                                  : "N/A"}
-                              </p>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        );
-                      } else {
-                        return null;
-                      }
-                    })
-                  ) : (
-                    ""
+                  {total
+                    ? paymentReport.map((paymentData, index) => {
+                        if (paymentData.amt > 0) {
+                          return (
+                            <StyledTableRow key={index}>
+                              <StyledTableCell>
+                                <p className="report-title">
+                                  {/* {paymentData.card_type} */}
+                                  {paymentData.card_type === ""
+                                    ? "N/A"
+                                    : paymentData.card_type}
+                                </p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p className="report-title">
+                                  {typeof paymentData.amt != ""
+                                    ? `$${priceFormate(
+                                        Number(paymentData.amt).toFixed(2)
+                                      )}`
+                                    : "N/A"}
+                                </p>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          );
+                        } else {
+                          return null;
+                        }
+                      })
+                    : ""}
+                  {total > 0 && (
+                    <>
+                      <StyledTableCell className="trBG_Color">
+                        <div className="q-category-bottom-report-listing">
+                          <div>
+                            <p className="report-sort totalReport">
+                              Grand Total
+                            </p>
+                          </div>
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell className="trBG_Color">
+                        <div className="q-category-bottom-report-listing">
+                          <div>
+                            <p className="report-title totalReport">
+                              ${priceFormate(total.toFixed(2))}
+                            </p>
+                          </div>
+                        </div>
+                      </StyledTableCell>
+                    </>
                   )}
                 </TableBody>
               </StyledTable>

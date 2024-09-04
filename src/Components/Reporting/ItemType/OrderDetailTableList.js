@@ -163,9 +163,18 @@ export default function OrderDetailTableList({
                                 <p className="text-[#818181]">
                                   {data.merchant_time || ""}
                                 </p>
-                                <p className="text-[#818181] order_method">
+                                
+                                {/* <p className="text-[#818181] order_method">
                                   {data.order_method || ""}
-                                </p>
+                                </p> */}
+                                <p>
+                              {data.is_online === "1"
+                              ? data.order_method === "pickup"
+                                ? "pickup"
+                                : data.order_method === "delivery"
+                                ? "delivery"
+                                : ""
+                              : ""}</p>
                               </StyledTableCell>
                               <StyledTableCell>
                                 <p>{"$" + data.amt || ""}</p>

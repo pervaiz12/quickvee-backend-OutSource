@@ -80,7 +80,7 @@ const CurrentInventoryValue = () => {
         <Grid item xs={12} sm={6} md={4}>
           <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
             <div className="font-normal  tracking-normal Admin_std">
-              Total Quantity
+              Total Number of Items
             </div>
             <div className="text-[20px] font-bold mt-4 common-font-bold">
               
@@ -95,7 +95,7 @@ const CurrentInventoryValue = () => {
         <Grid item xs={12} sm={6} md={4}>
           <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
             <div className="font-normal  tracking-normal Admin_std">
-              Total Selling Price
+              Total Retail Value
             </div>
             <div className="text-[20px] font-bold mt-4 common-font-bold">
               
@@ -111,7 +111,7 @@ const CurrentInventoryValue = () => {
         <Grid item xs={12} sm={6} md={4}>
           <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
             <div className="font-normal  tracking-normal Admin_std">
-              Total Cost Per Item
+              Total Inventory Cost
             </div>
             <div className="text-[20px] font-bold mt-4 common-font-bold">
               

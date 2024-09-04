@@ -73,6 +73,7 @@ const customStyles = {
       state.isFocused || state.isHovered ? "black" : provided.borderColor,
     boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
     height: 40,
+    cursor: "pointer",
     minHeight: 40,
     "&:hover": {
       borderColor: "black",

@@ -54,17 +54,17 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.arrow}`]: {
-    color: '#f5f5f9',
-    '&::before': {
-      border: '1px solid #dadde9',
+    color: "#f5f5f9",
+    "&::before": {
+      border: "1px solid #dadde9",
     },
   },
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: '#f5f5f9',
-    color: 'rgba(0, 0, 0, 0.87)',
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
     maxWidth: 300,
     fontSize: theme.typography.pxToRem(16),
-    border: '1px solid #dadde9',
+    border: "1px solid #dadde9",
   },
 }));
 
@@ -179,9 +179,8 @@ const SalesReportList = (props) => {
     parseFloat(SalesReportData.cash_back_amt);
 
   const NetTaxableSale = parseFloat(SalesReportData.taxable_net_sale) || 0;
-  const NonNetTaxableSale = parseFloat(SalesReportData.non_taxable_net_sale) || 0;
-  const TaxesCreditFee = parseFloat(SalesReportData?.taxes_desc?.CreditFee).toFixed(2) || 0;
-  const TaxesSaleTax = parseFloat(SalesReportData?.taxes_desc?.["Sale Tax"]).toFixed(2) || 0;
+  const NonNetTaxableSale =
+    parseFloat(SalesReportData.non_taxable_net_sale) || 0;
 
   const SalesSummeryList = [
     {
@@ -248,12 +247,16 @@ const SalesReportList = (props) => {
       amount: CashCollected,
     },
     {
-      name: "Food EBT Card Collected",
+      name: "Food EBT",
       amount: SalesReportData.food_ebt_collected,
     },
     {
-      name: "Cash EBT Card Collected",
+      name: "Cash EBT",
       amount: SalesReportData.cash_ebt_collected,
+    },
+    {
+      name: "Store Credit Collected",
+      amount: SalesReportData.store_credit_collected,
     },
     {
       name: "Amount Collected",
@@ -391,21 +394,37 @@ const SalesReportList = (props) => {
                                   : "",
                             }}
                           >
-                            <p style={{display:"flex",alignItems:"center"}}>
+                            <p
+                              style={{ display: "flex", alignItems: "center" }}
+                            >
                               $
                               {priceFormate(parseFloat(item.amount).toFixed(2))}
-                              {
-                                item.name === "Taxes" && (
-                                  <>
-                                    <BootstrapTooltip title={<ul className="">
-                                      <li>Credit Fee ${priceFormate(TaxesCreditFee)}</li>
-                                      <li>Sale Tax ${priceFormate(TaxesSaleTax)}</li>
-                                      </ul>} placement="right">
-                                    <span className=" ml-2 cursor-pointer"> <LuInfo /></span>
+                              {item.name === "Taxes" && (
+                                <>
+                                  <BootstrapTooltip
+                                    title={
+                                      <ul className="">
+                                        {Object.entries(
+                                          SalesReportData?.taxes_desc
+                                        ).map(([key, value], i) => (
+                                          <li key={i}>
+                                            {key} $
+                                            {priceFormate(
+                                              parseFloat(value).toFixed(2)
+                                            )}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    }
+                                    placement="right"
+                                  >
+                                    <span className=" ml-2 cursor-pointer">
+                                      {" "}
+                                      <LuInfo />
+                                    </span>
                                   </BootstrapTooltip>
-                                  </>
-                                )
-                              }
+                                </>
+                              )}
                             </p>
                           </StyledTableCell>
                         </StyledTableRow>

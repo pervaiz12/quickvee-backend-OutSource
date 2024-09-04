@@ -195,7 +195,7 @@ const StocktakeReport = ({ setVisible }) => {
 
                   <StyledTableRow>
                     <StyledTableCell>
-                      <p className="text-[#0A64F9]">Total Discrepency</p>
+                      <p className="text-[#0A64F9]">Total Discrepancy</p>
                     </StyledTableCell>
 
                     <StyledTableCell></StyledTableCell>
