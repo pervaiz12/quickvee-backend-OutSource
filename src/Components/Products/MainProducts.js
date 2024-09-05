@@ -59,9 +59,6 @@ const MainProducts = () => {
     useState(false);
   const [categoryId, setCategoryId] = useState("all");
 
-  const [searchId, setSearchId] = useState(""); // State to track search ID
-  const debouncedValue = useDebounce(searchId, 500);
-
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
@@ -71,6 +68,15 @@ const MainProducts = () => {
   const statusUrl = searchParams.get("status")?.trim().toLowerCase();
   const listingUrl = searchParams.get("listingType")?.trim().toLowerCase();
   const imageUrl = searchParams.get("filterBy")?.trim().toLowerCase();
+  const searchUrl = searchParams.get("search")?.trim().toLowerCase();
+  const [searchId, setSearchId] = useState(searchUrl ? searchUrl : ""); // State to track search ID
+  const debouncedValue = useDebounce(searchId, 500);
+
+  useEffect(() => {
+    if (debouncedValue) {
+      changeProductPageUrl("search", debouncedValue);
+    }
+  }, [debouncedValue]);
 
   const changeProductPageUrl = (urlOption, content) => {
     if (content === 0 || content) {
@@ -95,12 +101,15 @@ const MainProducts = () => {
   const handleCategoryChange = (catId) => {
     setProductIdList([]);
     setSearchId("");
+    searchParams.delete("search");
     setCategoryId(catId);
   };
 
   const handleSearch = (val) => {
     setSearchId(val);
-    // changeProductPageUrl("search", val);
+    if (!val) {
+      changeProductPageUrl("search", "");
+    }
   };
 
   const handleProductUnCheck = (id) => {
@@ -120,7 +129,7 @@ const MainProducts = () => {
       // show_status: selectedStatus,
       category_id: categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
       show_status: statusUrl === 0 || statusUrl ? statusUrl : "all",
-      name: debouncedValue,
+      name: searchUrl,
       // is_media_blank: productByImages === "All" ? "" : 1,
       // listing_type: selectedListingTypeValue?.id
       //   ? selectedListingTypeValue?.id
@@ -233,6 +242,7 @@ const MainProducts = () => {
         if (window.confirm("Are you sure you want to update?")) {
           dispatch(emptyProduct([]));
           setSearchId("");
+          searchParams.delete("search");
           handleOptionClick([]);
           setProductIdList([]);
           console.log(option);
@@ -258,7 +268,7 @@ const MainProducts = () => {
                         categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
                       show_status:
                         statusUrl === 0 || statusUrl ? statusUrl : "all",
-                      name: searchId,
+                      name: searchUrl,
                       // is_media_blank: productByImages === "All" ? "" : 1,
                       // listing_type: selectedListingTypeValue,
                       is_media_blank: imageUrl === "all" ? "" : imageUrl,
@@ -311,6 +321,7 @@ const MainProducts = () => {
         break;
       case "status":
         setSearchId("");
+        searchParams.delete("search");
         handleOptionClick([]);
         setSelectedStatus(option.id);
         setSelectedStatusValue(option.title);
@@ -335,6 +346,7 @@ const MainProducts = () => {
         setSelectedListingTypeValue(option);
         changeProductPageUrl("listingType", option?.id);
         setSearchId("");
+        searchParams.delete("search");
         setProductIdList([]);
         setlistingTypesDropdownVisible(false);
         break;
@@ -343,6 +355,7 @@ const MainProducts = () => {
         handleOptionClick([]);
         setProductIdList([]);
         setSearchId("");
+        searchParams.delete("search");
         setProductByImages(option?.title);
         setlistingTypesDropdownVisible(false);
         changeProductPageUrl(

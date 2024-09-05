@@ -26,6 +26,7 @@ const CategoryListDropDown = ({
   const statusUrl = searchCategory.get("status")?.trim().toLowerCase();
   const listingUrl = searchCategory.get("listingType")?.trim().toLowerCase();
   const imageUrl = searchCategory.get("filterBy")?.trim().toLowerCase();
+  const searchUrl = searchCategory.get("search")?.trim().toLowerCase();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [categoryDropdownVisible, setCategoryDropdownVisible] = useState(false);
   const [allcategories, setallcategories] = useState([]);
@@ -103,7 +104,7 @@ const CategoryListDropDown = ({
           // show_status: selectedStatus,
           category_id: categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
           show_status: statusUrl === 0 || statusUrl ? statusUrl : "all",
-          name: searchId,
+          name: searchUrl,
           // listing_type: listing_type,
           is_media_blank: imageUrl === "all" ? "" : imageUrl,
           listing_type: listingUrl === 0 || listingUrl ? listingUrl : "0",
