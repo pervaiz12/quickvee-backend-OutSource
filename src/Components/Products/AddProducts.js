@@ -28,7 +28,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { Box } from "@mui/material";
 import * as yup from "yup";
 import AlertModal from "../../CommonComponents/AlertModal";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../../Constants/Config";
 import Loader from "../../CommonComponents/Loader";
 
@@ -3013,14 +3013,23 @@ const AddProducts = () => {
                             </button>
                           </>
                         )}
-                        <button
+                        {/* <button
                           className="quic-btn quic-btn-cancle"
                           onClick={() => {
-                            navigate("/inventory/products");
+                            navigateToUrl(lastUrl);
                           }}
                         >
                           Cancel
-                        </button>
+                        </button> */}
+                        <Link
+                          className="quic-btn quic-btn-cancle"
+                          // onClick={() => {
+                          //   navigateToUrl(lastUrl);
+                          // }}
+                          to={lastUrl}
+                        >
+                          Cancel
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -3100,14 +3109,28 @@ const AddProducts = () => {
                     )}
                     Update
                   </button>
-                  <button
+                  {/* <button
                     className="quic-btn quic-btn-cancle"
                     onClick={() => {
-                      navigate("/inventory/products");
+                      navigateToUrl(lastUrl);
                     }}
                     style={{ marginLeft: "20px" }}
                   >
                     Cancel
+                  </button> */}
+                  <button
+                    style={{ marginLeft: "10px", backgroundColor: "#878787" }}
+                    className="quic-btn quic-btn-save"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Link
+                      // onClick={() => {
+                      //   navigateToUrl(lastUrl);
+                      // }}
+                      to={lastUrl}
+                    >
+                      Cancel
+                    </Link>
                   </button>
                 </div>
               </div>
