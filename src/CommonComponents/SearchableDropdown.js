@@ -5,6 +5,21 @@ import DownArrow from "../Assests/Dashboard/Down.svg";
 import CloseIcon from "../Assests/Dashboard/cross.svg";
 import Validation from "../Constants/Validation";
 import { useLocation } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+
+const LoadingOptions = () => {
+  return (
+    <div className="options-box custom-scroll">
+      {["100", "200", "75", "250", "250"].map((item) => (
+        <div className="item" key={item}>
+          <span>
+            <Skeleton style={{ width: `${item}px` }} />
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const SearchableDropdown = ({
   title,
@@ -24,6 +39,7 @@ const SearchableDropdown = ({
   modalType,
   usingFor,
   setProductName,
+  optionsLoading = false,
 }) => {
   const location = useLocation();
   const { checkLength } = Validation();
@@ -150,6 +166,7 @@ const SearchableDropdown = ({
       handleUpdateError(error);
     }
   };
+
   return (
     <>
       {title ? (
@@ -246,39 +263,41 @@ const SearchableDropdown = ({
             )}
           </div>
         </div>
+
+        {/* <LoadingOptions /> */}
+
         {showOptions ? (
           <div className="options-box custom-scroll">
-            {showOptions
-              ? changeFilterableList()?.map((opt) => {
-                  const isInSelectedOptions = selectedOption?.some(
-                    (selected) =>
-                      usingFor === "variantProducts" &&
-                      selected.isvarient === "1"
-                        ? selected?.id === opt?.id &&
-                          selected.var_id === opt.var_id
-                        : selected?.id === opt?.id
+            {showOptions && !optionsLoading ? (
+              changeFilterableList()?.map((opt) => {
+                const isInSelectedOptions = selectedOption?.some((selected) =>
+                  usingFor === "variantProducts" && selected.isvarient === "1"
+                    ? selected?.id === opt?.id && selected.var_id === opt.var_id
+                    : selected?.id === opt?.id
+                );
+                if (typeof opt === "string") {
+                  return <p>{opt}</p>;
+                } else if (opt?.id && opt?.[name]) {
+                  return (
+                    <span
+                      className={
+                        isInSelectedOptions ? "item active-item" : "item"
+                      }
+                      key={opt.isvarient === "1" ? opt.var_id : opt?.id}
+                      onClick={() =>
+                        isInSelectedOptions
+                          ? handleDeleteSelectedOption(opt?.id, keyName, opt)
+                          : handleSelectProductOptions(opt, keyName)
+                      }
+                    >
+                      {opt?.[name]}
+                    </span>
                   );
-                  if (typeof opt === "string") {
-                    return <p>{opt}</p>;
-                  } else if (opt?.id && opt?.[name]) {
-                    return (
-                      <span
-                        className={
-                          isInSelectedOptions ? "item active-item" : "item"
-                        }
-                        key={opt.isvarient === "1" ? opt.var_id : opt?.id}
-                        onClick={() =>
-                          isInSelectedOptions
-                            ? handleDeleteSelectedOption(opt?.id, keyName, opt)
-                            : handleSelectProductOptions(opt, keyName)
-                        }
-                      >
-                        {opt?.[name]}
-                      </span>
-                    );
-                  }
-                })
-              : ""}
+                }
+              })
+            ) : (
+              <LoadingOptions />
+            )}
           </div>
         ) : (
           ""

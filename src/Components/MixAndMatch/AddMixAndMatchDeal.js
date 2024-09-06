@@ -29,6 +29,7 @@ const AddMixAndMatchDeal = () => {
   const [productOptions, setProductOptions] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [optionsLoading, setOptionsLoading] = useState(false);
   const [productName, setProductName] = useState("");
   const debouncedValue = useDebounce(productName);
 
@@ -109,7 +110,7 @@ const AddMixAndMatchDeal = () => {
     }));
   };
 
-  // Setting Product Options
+  // Filtering Product Options
   useEffect(() => {
     console.log("mixAndMatchDeals: ", mixAndMatchDeals);
     console.log("products: ", products);
@@ -135,7 +136,7 @@ const AddMixAndMatchDeal = () => {
 
       if (mixAndMatchDeals && mixAndMatchDeals.length > 0) {
         const data = productsList.filter((product) => {
-          let alreadyInCart = false;
+          let alreadyInDeal = false;
           for (let i = 0; i < mixAndMatchDeals.length; i++) {
             const itemsIdObject = JSON.parse(mixAndMatchDeals[i]?.items_id);
             for (let key in itemsIdObject) {
@@ -145,17 +146,17 @@ const AddMixAndMatchDeal = () => {
                 key === product.id &&
                 itemsIdObject[key].includes(product.var_id)
               ) {
-                alreadyInCart = true;
+                alreadyInDeal = true;
               }
 
               // if product is not a variant product
               if (product.isvarient === "0" && key === product.id) {
-                alreadyInCart = true;
+                alreadyInDeal = true;
               }
             }
           }
 
-          return !alreadyInCart;
+          return !alreadyInDeal;
         });
 
         temp = dealInfo.isPercent === "0" ? filterByDiscount(data) : data;
@@ -196,12 +197,13 @@ const AddMixAndMatchDeal = () => {
         name: debouncedValue,
         listing_type: 1,
         offset: 0,
-        limit: 100,
+        limit: 50,
         page: 0,
         ...userTypeData,
       };
 
       try {
+        setOptionsLoading(true);
         const productsData = await dispatch(fetchProductsData(data)).unwrap();
         if (productsData && productsData.length > 0) {
           setProducts(() => productsData);
@@ -213,6 +215,8 @@ const AddMixAndMatchDeal = () => {
         } else if (error.status === "Network Error") {
           getNetworkError();
         }
+      } finally {
+        setOptionsLoading(false);
       }
     };
     fetchProducts();
@@ -423,6 +427,7 @@ const AddMixAndMatchDeal = () => {
                         placeholder="Search Products"
                         usingFor="variantProducts"
                         setProductName={setProductName}
+                        optionsLoading={optionsLoading}
                       />
                     </div>
                   </Grid>
