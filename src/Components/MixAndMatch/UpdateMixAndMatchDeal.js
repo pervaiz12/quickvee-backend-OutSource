@@ -17,7 +17,6 @@ import {
   updateMixAndMatchpricingDeal,
 } from "../../Redux/features/MixAndMatch/mixAndMatchSlice";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
-import CurrencyInputHelperFun from "../../helperFunctions/CurrencyInputHelperFun";
 import useDebounce from "../../hooks/useDebouncs";
 
 const UpdateMixAndMatchDeal = () => {
@@ -29,7 +28,7 @@ const UpdateMixAndMatchDeal = () => {
     PasswordShow();
   const { mixAndMatchDeals } = useSelector((state) => state.mixAndMatchList);
 
-  const [productOptions, setProductOptions] = useState([]); // for products dropdown after all filters
+  const [productOptions, setProductOptions] = useState([]); // for products list dropdown after all filters
   const [products, setProducts] = useState([]); // api response products
   const [productName, setProductName] = useState(""); // products dropdown input value
   const debouncedValue = useDebounce(productName);
@@ -46,6 +45,7 @@ const UpdateMixAndMatchDeal = () => {
     discount: "",
     isPercent: "0",
   });
+  // console.log("updatedDeal: ", updatedDeal);
 
   const [error, setError] = useState({
     title: "",
@@ -94,7 +94,6 @@ const UpdateMixAndMatchDeal = () => {
   useEffect(() => {
     if (mixAndMatchDeals && mixAndMatchDeals.length > 0) {
       const deal = mixAndMatchDeals[0];
-      // console.log("deal: ", deal);
 
       const productsList = products.filter((product) =>
         deal.is_percent === "0"
@@ -119,7 +118,6 @@ const UpdateMixAndMatchDeal = () => {
         });
       }
 
-      // console.log("defaultProducts: ", defaultProducts);
       if (selectedProducts.length <= 0 && defaultProducts.length > 0) {
         setSelectedProducts(defaultProducts);
       }
@@ -133,36 +131,45 @@ const UpdateMixAndMatchDeal = () => {
         isPercent: deal.is_percent || "0",
         isEnable: deal.is_enable || "0",
       };
-      // console.log("deal data: ", dealData);
+      console.log("1: ", dealData);
       setUpdatedDeal(dealData);
     }
-  }, [mixAndMatchDeals, products]);
+  }, [mixAndMatchDeals, products, selectedProducts]);
+
+  // filter products by discount
+  const filterByDiscount = (productsData) => {
+    const data = productsData.filter((product) => {
+      const result =
+        updatedDeal.isPercent === "0"
+          ? parseFloat(product.price) >= (parseFloat(updatedDeal.discount) || 0)
+          : product;
+
+      return result;
+    });
+
+    // console.log("filter by discount: ", data);
+    return data;
+  };
+
+  useEffect(() => {
+    // removing products from already Selected Products whose price is less than discount price
+    if (updatedDeal.products.length > 0) {
+      const temp =
+        updatedDeal.isPercent === "0"
+          ? filterByDiscount(updatedDeal.products)
+          : updatedDeal.products;
+
+      console.log("2: ", temp);
+      setUpdatedDeal((prev) => ({
+        ...prev,
+        products: temp,
+      }));
+    }
+  }, [updatedDeal.isPercent, updatedDeal.discount]);
 
   // filtering Products Options
   useEffect(() => {
-    console.log("mixAndMatchDeals: ", mixAndMatchDeals);
-    console.log("products: ", products);
-    console.log("updatedDeal.products: ", updatedDeal.products);
-    console.log("------------");
-
     const filterProducts = (productsList) => {
-      const filterByDiscount = (productsData) => {
-        console.log("filter by discount...");
-        console.log("products data: ", productsData);
-        const data = productsData.filter((product) => {
-          const result =
-            updatedDeal.isPercent === "0"
-              ? parseFloat(product.price) >=
-                (parseFloat(updatedDeal.discount) || 0)
-              : product;
-
-          return result;
-        });
-
-        console.log("filter by discount: ", data);
-        return data;
-      };
-
       let temp = [];
 
       if (mixAndMatchDeals && mixAndMatchDeals.length > 0) {
@@ -204,19 +211,8 @@ const UpdateMixAndMatchDeal = () => {
     // removing products from Product Options whose price is less than discount price
     if (products && products.length > 0) {
       const temp = filterProducts(products);
-      console.log("product options: ", temp);
+      // console.log("product options: ", temp);
       setProductOptions(() => temp);
-    }
-
-    // removing products from already Selected Products whose price is less than discount price
-    if (updatedDeal.products.length > 0) {
-      const temp = filterProducts(updatedDeal.products);
-      console.log("updatedDeal.products options: ", updatedDeal.products);
-      console.log("temp 2: ", temp);
-      setUpdatedDeal((prev) => ({
-        ...prev,
-        products: temp,
-      }));
     }
   }, [updatedDeal.discount, products, updatedDeal.isPercent, mixAndMatchDeals]);
 
@@ -368,8 +364,6 @@ const UpdateMixAndMatchDeal = () => {
       setLoading(false);
     }
   };
-
-  console.log("updatedDeal?.products: ", updatedDeal?.products);
 
   return (
     <div className="box">
