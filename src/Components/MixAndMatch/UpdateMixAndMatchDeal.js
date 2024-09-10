@@ -301,11 +301,12 @@ const UpdateMixAndMatchDeal = () => {
       const { title, products, minQty, discount, isPercent, description } =
         updatedDeal;
 
-      const bool = [title, minQty, discount].every((item) =>
-        Boolean(item.trim())
-      );
-
-      if (bool && products.length > 0) {
+      if (
+        Boolean(title.trim()) &&
+        minQty > 0 &&
+        parseFloat(discount) > 0 &&
+        products.length > 0
+      ) {
         const items = {};
         products.forEach((item) => {
           if (item.isvarient === "1") {
@@ -349,8 +350,11 @@ const UpdateMixAndMatchDeal = () => {
           ...prev,
           title: !title ? "Title is required!" : "",
           products: products.length <= 0 ? "Products are required!" : "",
-          minQty: !minQty ? "Minimum Quantity is required!" : "",
-          discount: !discount ? "Discount is required" : "",
+          minQty: !minQty || minQty <= 0 ? "Minimum Quantity is required!" : "",
+          discount:
+            !discount || parseFloat(discount) <= 0
+              ? "Discount is required"
+              : "",
         }));
       }
     } catch (error) {

@@ -112,14 +112,14 @@ const AddMixAndMatchDeal = () => {
 
   // Filtering Product Options
   useEffect(() => {
-    console.log("mixAndMatchDeals: ", mixAndMatchDeals);
-    console.log("products: ", products);
-    console.log("dealInfo.products: ", dealInfo.products);
-    console.log("------------");
+    // console.log("mixAndMatchDeals: ", mixAndMatchDeals);
+    // console.log("products: ", products);
+    // console.log("dealInfo.products: ", dealInfo.products);
+    // console.log("------------");
 
     const filterProducts = (productsList) => {
       const filterByDiscount = (productsData) => {
-        console.log("filter by discount...");
+        // console.log("filter by discount...");
         const data = productsData.filter((product) => {
           const result =
             dealInfo.isPercent === "0"
@@ -173,7 +173,7 @@ const AddMixAndMatchDeal = () => {
     // removing products from Product Options whose price is less than discount price
     if (products && products.length > 0) {
       const temp = filterProducts(products);
-      console.log("product options: ", temp);
+      // console.log("product options: ", temp);
       setProductOptions(() => temp);
     }
 
@@ -236,7 +236,12 @@ const AddMixAndMatchDeal = () => {
 
       // console.log("dealInfo: ", dealInfo);
 
-      if (Boolean(title.trim()) && minQty && discount && products.length > 0) {
+      if (
+        Boolean(title.trim()) &&
+        minQty > 0 &&
+        parseFloat(discount) > 0 &&
+        products.length > 0
+      ) {
         try {
           const items = {};
           products.forEach((item) => {
@@ -288,8 +293,11 @@ const AddMixAndMatchDeal = () => {
           ...prev,
           title: !title ? "Title is required!" : "",
           products: products.length <= 0 ? "Products are required!" : "",
-          minQty: !minQty ? "Minimum Quantity is required!" : "",
-          discount: !discount ? "Discount is required" : "",
+          minQty: !minQty || minQty <= 0 ? "Minimum Quantity is required!" : "",
+          discount:
+            !discount || parseFloat(discount) <= 0
+              ? "Discount is required"
+              : "",
         }));
       }
     } catch (error) {
