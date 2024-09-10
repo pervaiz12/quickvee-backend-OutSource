@@ -29,6 +29,7 @@ import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetw
 import ExportInventoryReducer from "../features/ExportInventory/ExportInventorySlice";
 import StoreOrderSliceReducer from "../features/StoreOrder/StoreOrderSlice";
 import ItemSalesReportListReducer from "../features/Reports/ItemSales/ItemSalesSlice";
+import NewItemSalesReportListReducer from "../features/Reports/NewItemSales/NewItemSalesSlice";
 import OrderTypeReducer from "../features/OrderType/OrderTypeSlice";
 import TaxesreportSliceReducer from "../features/TaxesReport/taxesreportSlice";
 import PermissionListReducer from "../features/Permission/PermissionSlice";
@@ -119,6 +120,7 @@ const store = configureStore({
     ExportInventoryData: ExportInventoryReducer,
 
     ItemSalesReportList: ItemSalesReportListReducer,
+    NewItemSalesReportList: NewItemSalesReportListReducer,
 
     //Order Type
     orderTypeList: OrderTypeReducer,
