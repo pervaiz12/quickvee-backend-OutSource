@@ -525,9 +525,21 @@ const OnlineTableViewData = (props) => {
     if (props?.OrderTypeData === "Failed") {
       console.log("props?.OrderTypeData ");
       if (data.is_tried === "0") {
-        return "Incomplete order";
+        // return "Incomplete order";
+        return (
+          <>
+            <p>Incomplete order</p>
+            {data.cvvResult && <p>{data.cvvResult}</p>}
+          </>
+        );
       } else {
-        return "Failed payment";
+        return (
+          <>
+            <p>Failed payment</p>
+            {data.failResult && <p>{data.failResult}</p>}
+          </>
+        )
+        // return "Failed payment";
       }
     }
   };
