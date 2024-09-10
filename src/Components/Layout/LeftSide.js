@@ -85,6 +85,7 @@ const ReceiptMainpage = lazy(
 const MainItemSales = lazy(
   () => import("../Reporting/ItemSales/MainItemSales")
 );
+const NewMainItemSales = lazy( () => import("../Reporting/NewItemsales/NewMainItemSales"));
 const NewItemCreatedBetweenMain = lazy(
   () => import("../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain")
 );
@@ -317,6 +318,8 @@ const LeftSide = ({ visible }) => {
         return <ReceiptMainpage />;
       case "item-sales":
         return <MainItemSales />;
+      case "new-item-sales-report":
+        return <NewMainItemSales />;
       case "item-create-between":
         return <NewItemCreatedBetweenMain />;
       case "permission":

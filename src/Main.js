@@ -92,6 +92,7 @@ const Main = ({ visible }) => {
       {visible === "addemployee" && <Layout visible={visible} />}
       {visible === "receipt" && <Layout visible={visible} />}
       {visible === "item-sales" && <Layout visible={visible} />}
+      {visible === "new-item-sales-report" && <Layout visible={visible} />}
       {visible === "permission" && <Layout visible={visible} />}
       {visible === "order-summary" && <Layout visible={visible} />}
       {visible === "vendors-list" && <Layout visible={visible} />}

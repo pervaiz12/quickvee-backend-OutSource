@@ -714,6 +714,12 @@ const menuItems = [
           //   text: "Discount Per Sales Report",
           //   link: "/store-reporting/discount-per-sales-report",
           // },
+
+          {
+            id: 105,
+            text: "New Item Sales Report",
+            link: "/store-reporting/new-item-sales-report",
+          },
         ],
       },
       {
