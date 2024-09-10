@@ -34,6 +34,10 @@ export const fetchReorderInventoryData = createAsyncThunk(
         const arr = response.data.reorder_array;
         const status = response.data.status
         return {arr, status};
+      }else if ( response.data.status === false ) {
+        const arr = [];
+        const status = false;
+        return {arr, status};
       }
     } catch (error) {
       const customError = {
@@ -61,7 +65,7 @@ const ReorderInventorySlice = createSlice({
     });
     builder.addCase(fetchReorderInventoryData.rejected, (state, action) => {
       state.loading = false;
-      state.ReorderData = {};
+      state.ReorderData = [];
       state.error = action.error.message;
     });
   },

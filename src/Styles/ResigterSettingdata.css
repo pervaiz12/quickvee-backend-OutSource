@@ -353,6 +353,8 @@
 label.q_resigter_setting_section {
     color: #6A6A6A;
     font-family: CircularSTDBook !important;
+    margin-left: 0px !important;
+    margin-right: 20px !important;
 }
 
 label.q_setting_radio_resigter {
