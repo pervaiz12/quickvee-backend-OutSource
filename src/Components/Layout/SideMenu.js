@@ -677,7 +677,7 @@ const menuItems = [
             text: "Gift Card Report",
             link: "/store-reporting/gift-card-report",
           },
-          
+
           {
             id: 79,
             text: "Order Type",
@@ -703,7 +703,7 @@ const menuItems = [
           //   text: "Sales by Hour Report",
           //   link: "/store-reporting/sales-by-hour-report",
           // },
-          
+
           {
             id: 69,
             text: "Top Sellers",
@@ -1177,6 +1177,11 @@ const menuItems = [
       { id: 69, text: "Register Settings", link: "/store-settings/register" },
       // { id: 70, text: "Quick Add", link: "/store-settings/quick-add" },
       { id: 71, text: "System Access", link: "/store-settings/system-access" },
+      {
+        id: 107,
+        text: "Loyalty Program",
+        link: "/store-settings/loyalty-program",
+      },
     ],
   },
   // {
