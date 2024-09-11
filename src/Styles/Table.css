@@ -140,4 +140,12 @@ table.dataTable tbody td {
     background: #fff;
     border-bottom: 1px solid #e8e8e8;
 }
+
+.trBG_ColorSaleSummary{
+    background-color: #F8F8F8 !important;
+}
+
+.totalAmountCollected th{
+    background-color: #0A64F9 !important;
+}
 /* for new table css End */
