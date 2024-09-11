@@ -123,9 +123,9 @@ const AddVendors = ({ setVisible }) => {
         }
         break;
       case "email":
-        if(value == ""){
+        if (value == "") {
           errorMsg = "";
-        }else if (!/\S+@\S+\.\S+/.test(value)) {
+        } else if (!/\S+@\S+\.\S+/.test(value)) {
           errorMsg = "Invalid email address";
         }
         break;
@@ -332,7 +332,6 @@ const AddVendors = ({ setVisible }) => {
                 linkTo={"/vendors"}
                 title={"Add New Vendors"}
               />
-
             </Grid>
             <Grid container sx={{ padding: 2.5 }}>
               <Grid item xs={12}>
@@ -346,13 +345,15 @@ const AddVendors = ({ setVisible }) => {
                         isClearable
                         styles={customStyles}
                         onChange={handleAutocompleteChange}
-                        options={allvendors.map((option, index) => {
-                          return {
-                            value: option.name,
-                            label: option?.name,
-                            name: "name",
-                          };
-                        })}
+                        options={allvendors
+                          .filter((option) => option.enabled === "1")
+                          .map((option, index) => {
+                            return {
+                              value: option.name,
+                              label: option?.name,
+                              name: "name",
+                            };
+                          })}
                       />
                       {errorMessage.name && (
                         <span className="error">{errorMessage.name}</span>

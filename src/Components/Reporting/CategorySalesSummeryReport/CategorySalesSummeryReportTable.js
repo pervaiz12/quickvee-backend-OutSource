@@ -137,7 +137,7 @@ const CategorySalesSummeryReportTable = (props) => {
                             props.sortByItemName("str", "category_name")
                           }
                         >
-                          <p className="whitespace-nowrap">Name of Category</p>
+                          <p className="whitespace-nowrap">Category</p>
                           <img src={sortIcon} alt="" className="pl-1" />
                         </button>
                       </StyledTableCell>

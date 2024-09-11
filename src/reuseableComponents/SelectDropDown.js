@@ -34,6 +34,7 @@ const SelectDropDown = ({
   name,
   disabled = false,
 }) => {
+  console.log("xzvxc",listItem)
   return (
     <>
       <FormControl sx={{ ...sx }} disabled={disabled} fullWidth>
@@ -78,6 +79,7 @@ const SelectDropDown = ({
               listItem.length > 0 &&
               listItem?.map((item, index) => (
                 <MenuItem
+                  disabled={item?.disabled}
                   sx={{ fontFamily: "CircularSTDBook" }}
                   key={index}
                   onClick={(e) => {

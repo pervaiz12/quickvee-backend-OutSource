@@ -1,7 +1,5 @@
 // All api calls are initialized in this component for this application
 
-const { Dashboard } = require("@material-ui/icons");
-
 //remove unwanted and credentials of other app
 module.exports = Object.freeze({
   // BASE_URL: "https://sandbox.quickvee.net/",
@@ -33,6 +31,14 @@ module.exports = Object.freeze({
 
   //Importdata API Calls
   IMPORT_DATA: "Import_data_api/import",
+
+  // Mix and Match Pricing
+  ADD_MIX_MAX_PRICING_DEAL: "React_max_purchase_api/add_mix_match_pricing",
+  MIX_MAX_PRICING_DEALS_LIST: "React_max_purchase_api/mix_match_pricing_list",
+  DELETE_MIX_MAX_PRICING_DEAL:
+    "React_max_purchase_api/delete_mix_match_pricing",
+  ENABLE_DISABLE_MIX_MAX_PRICING_DEAL:
+    "React_max_purchase_api/enable_mix_match_pricing",
 
   //Loyalty Program
   LOYALTY_PROGRAM_LIST: "LoyaltyProgramReactAPI/loyalty_program_list",
@@ -135,7 +141,6 @@ module.exports = Object.freeze({
   TOP_SALLER_REPORT: "ReportingReactapi/top_seller_10",
   INSTANT_ACTIVITY_REPORT: "ReportingReactapi/instant_po_activity_report",
 
-
   //Employee List
   LIST_ALL_EMPLOYEE: "ReportingReactapi/employee_list",
 
@@ -153,6 +158,7 @@ module.exports = Object.freeze({
 
   // for item sales report
   GET_ITEMWISE_SALE_LIST: "ReportingReactapi/get_itemwise_sale_list",
+  NEW_ITEMWISE_SALE_LIST: "ReportingReactapi/new_item_sale_report",
   PAY_IN_REPORT: "ReportingReactapi/pay_in_report",
   DROP_CASH_REPORT: "ReportingReactapi/drop_cash_report",
   EMPLOYEE_SALES_PER_CATEGORY_REPORT: "ReportingReactapi/emp_category_sale",
@@ -276,6 +282,7 @@ module.exports = Object.freeze({
   PRODUCT_DEFAULT_IMAGE: this.BASE_URL + "upload/products/MaskGroup4542.png",
   UPDATE_TYPE: "Product_api_react/update_type",
   MASS_INVENTORY_UPDATE: "Product_api_react/mass_update_inventory",
+  ALL_PRODUCTS_WITH_VARIANTS_LIST: "ReportingReactapi/variant_list_data",
 
   //shiftsummary api
 
@@ -365,9 +372,9 @@ module.exports = Object.freeze({
   GET_REFUND_EMAILS_COUNT: "Order_list_api/get_refund_emails_count",
   CATEGORY_SALES_SUMMERY_REPORT: "ReportingReactapi/category_sale_summary",
   SALES_BY_HOURS_REPORT: "ReportingReactapi/sale_per_hour",
-  TRANSFER_INVENTORY : "Product_api_react/transfer_inventory",
-  NEW_CUSTOMER_ADDED_REPORT:"ReportingReactapi/new_customer_added_report",
-  REFUND_EMAIL_STATUS_CHANGE:"Order_list_api/refund_email_status_change",
+  TRANSFER_INVENTORY: "Product_api_react/transfer_inventory",
+  NEW_CUSTOMER_ADDED_REPORT: "ReportingReactapi/new_customer_added_report",
+  REFUND_EMAIL_STATUS_CHANGE: "Order_list_api/refund_email_status_change",
 });
 
 // All api calls are initialized in this component for this application

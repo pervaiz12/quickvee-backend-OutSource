@@ -39,6 +39,9 @@ const Main = ({ visible }) => {
       {visible === "coupons" && <Layout visible={visible} />}
       {visible === "add-coupons" && <Layout visible={visible} />}
       {visible === "coupons-edit-cop" && <Layout visible={visible} />}
+      {visible === "mix-and-match" && <Layout visible={visible} />}
+      {visible === "add-mix-and-match" && <Layout visible={visible} />}
+      {visible === "update-mix-and-match" && <Layout visible={visible} />}
       {visible === "vendors" && <Layout visible={visible} />}
       {visible === "add-vendors" && <Layout visible={visible} />}
       {visible === "timesheet" && <Layout visible={visible} />}
@@ -89,6 +92,7 @@ const Main = ({ visible }) => {
       {visible === "addemployee" && <Layout visible={visible} />}
       {visible === "receipt" && <Layout visible={visible} />}
       {visible === "item-sales" && <Layout visible={visible} />}
+      {visible === "new-item-sales-report" && <Layout visible={visible} />}
       {visible === "permission" && <Layout visible={visible} />}
       {visible === "order-summary" && <Layout visible={visible} />}
       {visible === "vendors-list" && <Layout visible={visible} />}
@@ -116,10 +120,7 @@ const Main = ({ visible }) => {
       {visible === "detailed-loyalty-points-report" && (
         <Layout visible={visible} />
       )}
-      {visible === "new-customers-added-report" && (
-        <Layout visible={visible} />
-      )}
-      
+      {visible === "new-customers-added-report" && <Layout visible={visible} />}
 
       {/* multip user layout */}
       {visible === "multimerchant" && <IndexAllUsers />}
@@ -127,7 +128,7 @@ const Main = ({ visible }) => {
       {visible === "newsletter" && <IndexAllUsers visible={visible} />}
       {visible === "store-order" && <IndexAllUsers visible={visible} />}
       {visible === "refund-request" && <IndexAllUsers visible={visible} />}
-      
+
       {visible === "order-count" && <IndexAllUsers visible={visible} />}
       {/* {visible === "need_help" && <IndexAllUsers visible={visible} />} */}
       {visible === "need_help" && <Layout visible={visible} />}

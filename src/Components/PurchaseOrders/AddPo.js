@@ -196,7 +196,9 @@ const AddPo = ({ seVisible }) => {
                 <SelectDropDown
                   selectedOption={purchaseInfo.selectedVendor}
                   listItem={
-                    allVendors?.vendorListData && allVendors?.vendorListData[0]
+                    allVendors?.vendorListData?.[0]?.filter(option => option.enabled === "1").length > 0
+                      ? allVendors.vendorListData[0]?.filter(option => option.enabled === "1")
+                      : [{ name: "No Option", disabled: true }]
                   }
                   onClickHandler={handleVendorClick}
                   title={"name"}

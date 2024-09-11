@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_3276" data-name="Rectangle 3276" width="24" height="24" transform="translate(27 998)" fill="none" stroke="#000" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Mix_Match" data-name="Mix &amp; Match" transform="translate(-27 -998)" clip-path="url(#clip-path)">
+    <g id="application" transform="translate(10.981 981.981)">
+      <path id="Path_10541" data-name="Path 10541" d="M22.718,20h-.68A2.039,2.039,0,0,0,20,22.039V34a2.039,2.039,0,0,0,2.039,2.039H34A2.039,2.039,0,0,0,36.037,34V22.039A2.039,2.039,0,0,0,34,20H25.436v1.359A1.359,1.359,0,0,0,26.8,22.718h9.242" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      <circle id="Ellipse_448" data-name="Ellipse 448" cx="1.359" cy="1.359" r="1.359" transform="translate(23.378 26.66) rotate(-45)" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      <circle id="Ellipse_449" data-name="Ellipse 449" cx="1.359" cy="1.359" r="1.359" transform="translate(28.815 26.66) rotate(-45)" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      <circle id="Ellipse_450" data-name="Ellipse 450" cx="1.359" cy="1.359" r="1.359" transform="translate(28.815 32.096) rotate(-45)" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      <circle id="Ellipse_451" data-name="Ellipse 451" cx="1.359" cy="1.359" r="1.359" transform="translate(23.378 32.096) rotate(-45)" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

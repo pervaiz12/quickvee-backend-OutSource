@@ -105,7 +105,7 @@ const TopSallerList = ({ data }) => {
               columns={[
                 "Item Name",
                 "Category",
-                "Varient Name",
+                "Variant Name",
                 "Quantity Sold",
               ]}
             />
@@ -136,7 +136,7 @@ const TopSallerList = ({ data }) => {
                       className="flex items-center"
                       onClick={() => sortByItemName("str", "variant")}
                     >
-                      <p>Varient Name</p>
+                      <p>Variant Name</p>
                       <img src={SortIcon} alt="" className="pl-1" />
                     </button>
                   </StyledTableCell>

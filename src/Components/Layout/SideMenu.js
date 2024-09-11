@@ -23,6 +23,8 @@ import VenIcon from "../../Assests/Dashboard/venderb.svg";
 import VenIconActive from "../../Assests/Dashboard/vendery.svg";
 import DataIconActive from "../../Assests/Dashboard/importy.svg";
 import CouIcon from "../../Assests/Dashboard/coupony.svg";
+import MixMatchIcon from "../../Assests/Dashboard/mix-match-icon.svg";
+import MixMatchIcon1 from "../../Assests/Dashboard/mix-match-icon-1.svg";
 import PurIcon from "../../Assests/Dashboard/purchaseY.svg";
 import SettingIcon from "../../Assests/Dashboard/settingY.svg";
 import ResportIcons from "../../Assests/Dashboard/reports.svg";
@@ -152,6 +154,7 @@ const SideMenu = () => {
           text: "Import Data",
           link: "/import-data",
         };
+        console.log("updatedMenuItems",updatedMenuItems)
         updatedMenuItems.splice(updatedMenuItems.length - 1, 0, newMenuItem);
         const newMenuItemDigit = {
           id: 92,
@@ -193,7 +196,7 @@ const SideMenu = () => {
         };
 
         const updatedTest = updatedMenuItems.map((item) => {
-          if (item.id === 9 && item.dropdownItems) {
+          if (item.id === 10 && item.dropdownItems) {
             return {
               ...item,
               dropdownItems: [...item.dropdownItems, newMenuItemDigit],
@@ -712,6 +715,12 @@ const menuItems = [
           //   text: "Discount Per Sales Report",
           //   link: "/store-reporting/discount-per-sales-report",
           // },
+
+          {
+            id: 105,
+            text: "New Item Sales Report",
+            link: "/store-reporting/new-item-sales-report",
+          },
         ],
       },
       {
@@ -1072,6 +1081,25 @@ const menuItems = [
   },
   {
     id: 9,
+    icon: (
+      <img
+        src={MixMatchIcon}
+        alt="mix-match-icon"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={MixMatchIcon1}
+        alt="mix-match-icon-1"
+        className="h-6 w-10 mt-4 mb-4 "
+      />
+    ),
+    text: "Mix N' Match Pricing",
+    link: "/mix-and-match",
+  },
+  {
+    id: 10,
     icon: (
       <img
         src={StoreSettingIcon}

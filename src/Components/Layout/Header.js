@@ -86,11 +86,10 @@ export default function Header() {
   const handleMenuOpen = (event) => {
     setAnchorElForDropDown(event.currentTarget);
     setTimeout(() => {
-      console.log("inside menu open")
       if (inputRef.current) {
         inputRef.current.focus();
       }
-    }, 0); 
+    }, 0);
   };
 
   const handleCloseForDropDown = (e) => {
@@ -170,7 +169,6 @@ export default function Header() {
   };
 
   function renderDashboardDropDown() {
-    
     const displayOptions = (
       JSON.parse(localStorage.getItem("AllStore")) || allStoresData
     )
@@ -211,6 +209,7 @@ export default function Header() {
           <MenuItem
             sx={{ fontFamily: "CircularSTDBook" }}
             disableTouchRipple={true}
+            className="Searchmarchant"
           >
             <div>
               <InputBase
@@ -218,7 +217,6 @@ export default function Header() {
                 onChange={handleSearchChange}
                 value={searchText}
                 inputRef={inputRef}
-                
               />
             </div>
           </MenuItem>
@@ -342,7 +340,12 @@ export default function Header() {
             ""
           )}
           <Link to="/">
-            <img src={Quick} alt="Logo" className={`${isTablet ? "ml-2" :"ml-6"} `}  width={isTablet ? '80%' : 'auto'} />
+            <img
+              src={Quick}
+              alt="Logo"
+              className={`${isTablet ? "ml-2" : "ml-6"} `}
+              width={isTablet ? "80%" : "auto"}
+            />
           </Link>
           {
             //  console.log(localStorage.getItem("AllStore"))
@@ -449,15 +452,27 @@ export default function Header() {
                   // to={`https://www.quickvee.com/merchant/${LoginGetDashBoardRecordJson?.data?.merchant_id}?orderMethod=pickup`}
                   target="_blank"
                 >
-                  <div className={`cursor-pointer ${isTablet ? "" :"ml-5"} flex items-center`}>
-                    <img src={OnlineData} alt="icon" className={`${isTablet ? "" :"ml-2"}`} />
-                    <p className={`${isTablet ? "" :"ml-2"} admin_medium `}>Online Store</p>
+                  <div
+                    className={`cursor-pointer ${
+                      isTablet ? "" : "ml-5"
+                    } flex items-center`}
+                  >
+                    <img
+                      src={OnlineData}
+                      alt="icon"
+                      className={`${isTablet ? "" : "ml-2"}`}
+                    />
+                    <p className={`${isTablet ? "" : "ml-2"} admin_medium `}>
+                      Online Store
+                    </p>
                   </div>
                 </Link>
                 {userTypeData?.login_type !== "superadmin" &&
                 inventory_approval === "1" ? (
                   <button
-                    className={`cursor-pointer ${isTablet ? "mx-2" :"mx-5"} flex items-center syncConatiner`}
+                    className={`cursor-pointer ${
+                      isTablet ? "mx-2" : "mx-5"
+                    } flex items-center syncConatiner`}
                     onClick={handleSendForApproval}
                   >
                     <CircularProgress
@@ -479,7 +494,9 @@ export default function Header() {
                   </button>
                 ) : (
                   <button
-                    className={`cursor-pointer ${isTablet ? "mx-2" :"mx-5"} flex items-center syncConatiner`}
+                    className={`cursor-pointer ${
+                      isTablet ? "mx-2" : "mx-5"
+                    } flex items-center syncConatiner`}
                     onClick={SyncData}
                     disabled={loader}
                   >

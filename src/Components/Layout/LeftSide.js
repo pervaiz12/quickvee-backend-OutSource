@@ -1,4 +1,7 @@
 import React, { useEffect, lazy, Suspense } from "react";
+import MainMixAndMatch from "../MixAndMatch/MainMixAndMatch";
+import AddMixAndMatchDeal from "../MixAndMatch/AddMixAndMatchDeal";
+import UpdateMixAndMatchDeal from "../MixAndMatch/UpdateMixAndMatchDeal";
 const DropCashMain = lazy(() => import("../Reporting/DropCash/DropCashMain"));
 const PayInMain = lazy(() => import("../Reporting/PayIn/PayInMain"));
 const MainEmployeeSalesPerCategory = lazy(
@@ -82,6 +85,7 @@ const ReceiptMainpage = lazy(
 const MainItemSales = lazy(
   () => import("../Reporting/ItemSales/MainItemSales")
 );
+const NewMainItemSales = lazy( () => import("../Reporting/NewItemsales/NewMainItemSales"));
 const NewItemCreatedBetweenMain = lazy(
   () => import("../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain")
 );
@@ -226,6 +230,12 @@ const LeftSide = ({ visible }) => {
         return <AddCoupon />;
       case "coupons-edit-cop":
         return <EditCoupon />;
+      case "mix-and-match":
+        return <MainMixAndMatch />;
+      case "add-mix-and-match":
+        return <AddMixAndMatchDeal />;
+      case "update-mix-and-match":
+        return <UpdateMixAndMatchDeal />;
       case "vendors":
         return <MainVendors />;
       case "add-vendors":
@@ -308,6 +318,8 @@ const LeftSide = ({ visible }) => {
         return <ReceiptMainpage />;
       case "item-sales":
         return <MainItemSales />;
+      case "new-item-sales-report":
+        return <NewMainItemSales />;
       case "item-create-between":
         return <NewItemCreatedBetweenMain />;
       case "permission":

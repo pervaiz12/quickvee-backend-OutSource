@@ -41,7 +41,7 @@ export default function CategorySalesSummeryReportLogic() {
     // profitPercentage: 0.0,
   });
   const rowHeader = [
-    "Name of Category",
+    "Category",
     "Units Sold",
     "Totals Sales",
     "Total Cost",
