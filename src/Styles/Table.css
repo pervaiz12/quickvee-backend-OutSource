@@ -144,6 +144,13 @@ table.dataTable tbody td {
 .trBG_ColorSaleSummary{
     background-color: #F8F8F8 !important;
 }
+.BORHeaderRight{
+    border-right: 1px solid #444E51 !important;
+}
+.BORBodyRight{
+    /* border-right: 1px solid #E8E8E8 !important; */
+    border-right: 1px solid #cdcdcd !important;
+}
 
 .totalAmountCollected th{
     background-color: #0A64F9 !important;
