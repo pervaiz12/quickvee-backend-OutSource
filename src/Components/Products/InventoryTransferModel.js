@@ -54,8 +54,8 @@ export default function InventoryTransferModel({
   varientName,
   handleCloseEditModal,
   fetchProductDataById,
-}) {  
-
+  varientIndex,
+}) {
   const inventoryTransferData = {
     quantity:
       varientData.length > 0
@@ -157,7 +157,7 @@ export default function InventoryTransferModel({
       [name]: errorMsg,
     }));
   };
-  const [msgAPI,setmsgAPi] = useState("");
+  const [msgAPI, setmsgAPi] = useState("");
 
   const handleSubmit = async () => {
     const validationErrors = {};
@@ -180,6 +180,10 @@ export default function InventoryTransferModel({
         fromstore: merchant_id,
         product_name: productData.title,
         variant_name: varientName,
+        upc:
+          varientData.length > 0
+            ? varientData?.find((varient) => varient?.id === varientIndex)
+                ?.upc || "" : productData.upc || "",
         merchant_id,
         ...userTypeData,
       };
@@ -193,16 +197,19 @@ export default function InventoryTransferModel({
         });
         if (response.data.status === true) {
           ToastifyAlert("Updated Successfully", "success");
-          setmsgAPi("")
+          setmsgAPi("");
           await fetchProductDataById();
           handleCloseEditModal();
-        } else if (response.data.status === false && response.data.message === "Product not found in selected Store ") {
-          setmsgAPi("Product not found in the selected store.")
+        } else if (
+          response.data.status === false &&
+          response.data.message === "Product not found in selected Store "
+        ) {
+          setmsgAPi("Product not found in the selected store.");
           // ToastifyAlert(response.data.message, "error");
         }
       } catch (error) {
         console.error("Error during submission:", error);
-        setmsgAPi("")
+        setmsgAPi("");
       } finally {
         setLoading(false);
       }
@@ -318,18 +325,17 @@ export default function InventoryTransferModel({
                 minRows={5}
                 placeholder="Description..."
               />
-            {msgAPI && (
-                <p className="error-message">
-                  {msgAPI}
-                </p>
-            )}
+              {msgAPI && <p className="error-message">{msgAPI}</p>}
             </Grid>
           </Grid>
           <Grid container sx={{ px: 3 }}>
             <Grid item xs={12}>
               <div className="box">
                 <div className="variant-attributes-container">
-                  <div style={{paddingRight:0}} className="q-add-categories-section-middle-footer  ">
+                  <div
+                    style={{ paddingRight: 0 }}
+                    className="q-add-categories-section-middle-footer  "
+                  >
                     <div
                       style={{ padding: "0px" }}
                       className="q-category-bottom-header"
