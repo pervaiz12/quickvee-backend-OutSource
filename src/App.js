@@ -615,6 +615,16 @@ function App() {
               path="/store-reporting/coupon-report"
               element={<Main visible={"coupon-report"} />}
             />
+            <Route
+              exact
+              path="/store-reporting/register-closures"
+              element={<Main visible={"register-closures"} />}
+            />
+            <Route
+              exact
+              path="/store-reporting/register-closures/register-closures-summery"
+              element={<Main visible={"register-closures-summery"} />}
+            />
             {/*  category sales summery report*/}
             <Route
               path="/store-reporting/category-sales-summery-report"

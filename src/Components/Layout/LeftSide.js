@@ -85,7 +85,9 @@ const ReceiptMainpage = lazy(
 const MainItemSales = lazy(
   () => import("../Reporting/ItemSales/MainItemSales")
 );
-const NewMainItemSales = lazy( () => import("../Reporting/NewItemsales/NewMainItemSales"));
+const NewMainItemSales = lazy(
+  () => import("../Reporting/NewItemsales/NewMainItemSales")
+);
 const NewItemCreatedBetweenMain = lazy(
   () => import("../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain")
 );
@@ -185,6 +187,12 @@ const NewCustomersAddedReportMain = lazy(
   () =>
     import("../Reporting/NewCustomerAddedReport/NewCustomersAddedReportMain")
 );
+const RegisterClosuresMain = lazy(
+  () => import("../Reporting/RegisterClosures/RegisterClosuresMain")
+);
+const RegisterClosuresSummery = lazy(
+  () => import("../Reporting/RegisterClosures/RegisterClosureSummery")
+)
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -346,6 +354,10 @@ const LeftSide = ({ visible }) => {
         return <TipReportMain />;
       case "coupon-report":
         return <CouponReportMain />;
+      case "register-closures":
+        return <RegisterClosuresMain />;
+      case "register-closures-summery":
+        return <RegisterClosuresSummery />;
       case "drop-cash-report":
         return <DropCashMain />;
 

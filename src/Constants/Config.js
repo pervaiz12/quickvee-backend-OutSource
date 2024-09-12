@@ -375,6 +375,7 @@ module.exports = Object.freeze({
   TRANSFER_INVENTORY: "Product_api_react/transfer_inventory",
   NEW_CUSTOMER_ADDED_REPORT: "ReportingReactapi/new_customer_added_report",
   REFUND_EMAIL_STATUS_CHANGE: "Order_list_api/refund_email_status_change",
+  GET_REGISTER_CLOSURE_LIST:"Shift_summary_report_react/shift_summary_report_react",
 });
 
 // All api calls are initialized in this component for this application
