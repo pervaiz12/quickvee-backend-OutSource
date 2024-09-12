@@ -638,6 +638,11 @@ const menuItems = [
             link: "/store-reporting/sales-report",
           },
           {
+            id: 108,
+            text: "Sales Report",
+            link: "/store-reporting/new-sales-report",
+          },
+          {
             id: 77,
             text: "Item Sales",
             link: "/store-reporting/item-sales",

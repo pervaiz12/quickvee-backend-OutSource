@@ -2,6 +2,7 @@ import React, { useEffect, lazy, Suspense } from "react";
 import MainMixAndMatch from "../MixAndMatch/MainMixAndMatch";
 import AddMixAndMatchDeal from "../MixAndMatch/AddMixAndMatchDeal";
 import UpdateMixAndMatchDeal from "../MixAndMatch/UpdateMixAndMatchDeal";
+import MainSalesReport from "../Reporting/SalesReport/MainSalesReport";
 const DropCashMain = lazy(() => import("../Reporting/DropCash/DropCashMain"));
 const PayInMain = lazy(() => import("../Reporting/PayIn/PayInMain"));
 const MainEmployeeSalesPerCategory = lazy(
@@ -353,6 +354,8 @@ const LeftSide = ({ visible }) => {
         return <PayInMain />;
       case "sales-report":
         return <SalesReportMain />;
+      case "new-sales-report":
+        return <MainSalesReport />;
       case "brands":
         return <Brands />;
       case "tags":
