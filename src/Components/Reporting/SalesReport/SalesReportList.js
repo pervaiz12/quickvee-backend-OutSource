@@ -50,23 +50,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   // hide last border
 }));
 
-const BootstrapTooltip = styled(({ className, ...props }) => (
-  <Tooltip {...props} arrow classes={{ popper: className }} />
-))(({ theme }) => ({
-  [`& .${tooltipClasses.arrow}`]: {
-    color: "#f5f5f9",
-    "&::before": {
-      border: "1px solid #dadde9",
-    },
-  },
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: "#f5f5f9",
-    color: "rgba(0, 0, 0, 0.87)",
-    maxWidth: 300,
-    fontSize: theme.typography.pxToRem(16),
-    border: "1px solid #dadde9",
-  },
-}));
+
 
 const SalesReportList = (props) => {
   const dispatch = useDispatch();
@@ -309,6 +293,21 @@ const SalesReportList = (props) => {
   const TaxesList = [
     {
       taxesR1: "",
+      taxesR2: "",
+      taxesR3: <b>Total Tax Collected</b>,
+      taxesR4: "$237.75",
+    },
+    {
+      taxesR1: "",
+      taxesR2: "",
+      taxesR3: <b>Non-Taxable Sales</b>,
+      taxesR4: "$500.00",
+    },
+  ];
+
+  const TaxesTableList = [
+    {
+      taxesR1: "",
       taxesR2: <b>Current Rate</b>,
       taxesR3: <b>Taxable Amount</b>,
       taxesR4: <b>Estimated Sales Tax Due</b>,
@@ -333,12 +332,6 @@ const SalesReportList = (props) => {
     },
     {
       taxesR1: "",
-      taxesR2: "",
-      taxesR3: "",
-      taxesR4: "",
-    },
-    {
-      taxesR1: "",
       taxesR2: <b>Current Rate</b>,
       taxesR3: <b>Taxable Amount</b>,
       taxesR4: <b>Estimated Sales Tax Due</b>,
@@ -346,34 +339,25 @@ const SalesReportList = (props) => {
     {
       taxesR1: "Sales Tax 2",
       taxesR2: "12%",
-      taxesR3: "$500.00",
-      taxesR4: "$60.00",
+      taxesR3: "$2500.00",
+      taxesR4: "$206.25",
     },
     {
       taxesR1: "Refunds",
       taxesR2: "12%",
-      taxesR3: "-$100.00",
-      taxesR4: "-$12.00",
+      taxesR3: "-$200.00",
+      taxesR4: "-$16.50",
     },
     {
       taxesR1: "Total",
       taxesR2: "",
-      taxesR3: "$400.00",
-      taxesR4: "$48.00",
+      taxesR3: "$2,300.00",
+      taxesR4: "$189.75",
     },
-    {
-      taxesR1: "",
-      taxesR2: "",
-      taxesR3: <b>Total Tax Collected</b>,
-      taxesR4: "$237.75",
-    },
-    {
-      taxesR1: "",
-      taxesR2: "",
-      taxesR3: <b>Non-Taxable Sales</b>,
-      taxesR4: "$500.00",
-    },
-  ];
+  ]
+
+  const lastTotalIndex = TaxesTableList?.map(item => item.taxesR1).lastIndexOf("Total");
+
 
   const lastList = [
     {
@@ -437,20 +421,18 @@ const SalesReportList = (props) => {
                     <TableBody>
                       {GrossSaleList?.map((item, index) => (
                         <StyledTableRow key={index}>
-                          <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""}`}>
+                          <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""} BORBodyRight`} colSpan={2}>
                             <div className={`q_sales_trading_data p-0 ${item.name === "Net Sales" ? "totalReport" : ""}`}>
                               <p>{item.name}</p>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""} BORBodyRight`}></StyledTableCell>
+                          {/* <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""} BORBodyRight`}></StyledTableCell> */}
                           <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""}`} >
                           <div className={`q_sales_trading_data p-0 ${item.name === "Net Sales" ? "totalReport" : ""}`}>
                               <p className={getClassName(item.amount)}>{formatCurrency(item.amount)}</p>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""}`}></StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""}`}></StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""}`}></StyledTableCell>
+                          <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""}`}colSpan={3} ></StyledTableCell>
                         </StyledTableRow>
                       ))}
                     </TableBody>
@@ -480,14 +462,14 @@ const SalesReportList = (props) => {
                       <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
                     </TableHead>
                     <TableBody>
-                      {TaxesList?.map((item, index) => (
+                      {TaxesTableList?.map((item, index) => (
+                        <>
                         <StyledTableRow key={index}>
-                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color" : ""}`}>
-                            <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
+                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color BORREMOVE" : ""} BORBodyRight`} colSpan={2}>
+                            <div className={`q_sales_trading_data p-0 ${item.taxesR1 === "Total" ? "totalReport" : ""} `}>
                               <p>{item.taxesR1}</p>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color" : ""} `}></StyledTableCell>
                           <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color" : ""} BORBodyRight`}>
                           <div className={`q_sales_trading_data p-0 ${item.taxesR1 === "Total" ? "totalReport" : ""}`}>
                               <p>{item.taxesR2}</p>
@@ -498,13 +480,45 @@ const SalesReportList = (props) => {
                               <p>{item.taxesR3}</p>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color" : ""}`}>
+                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color" : ""}`} colSpan={3}>
                             <div className={`q_sales_trading_data p-0 ${item.taxesR1 === "Total" ? "totalReport" : ""}`}>
                               <p>{item.taxesR4}</p>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color" : ""}`}></StyledTableCell>
-                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color" : ""}`}></StyledTableCell>
+
+                        </StyledTableRow>
+                          {item.taxesR1 === "Total" && index != lastTotalIndex && (
+                            <StyledTableRow key={`blank-${index}`}>
+                              <StyledTableCell colSpan={7}>&nbsp;</StyledTableCell>
+                            </StyledTableRow>
+                          )}
+                        </>
+                      ))}
+
+                      {TaxesList?.map((item, index) => (
+                        <StyledTableRow key={index}>
+                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color" : ""} `} colSpan={2}>
+                            <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
+                              <p>{item.taxesR1}</p>
+                            </div>
+                          </StyledTableCell>
+
+                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color" : ""} BORBodyRight`}>
+                          <div className={`q_sales_trading_data p-0 ${item.taxesR1 === "Total" ? "totalReport" : ""}`}>
+                              <p>{item.taxesR2}</p>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color" : ""} BORBodyRight`}>
+                          <div className={`q_sales_trading_data p-0 ${item.taxesR1 === "Total" ? "totalReport" : ""}`}>
+                              <p>{item.taxesR3}</p>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color" : ""}`} colSpan={3}>
+                            <div className={`q_sales_trading_data p-0 ${item.taxesR1 === "Total" ? "totalReport" : ""}`}>
+                              <p>{item.taxesR4}</p>
+                            </div>
+                          </StyledTableCell>
+
                         </StyledTableRow>
                       ))}
                     </TableBody>
@@ -535,20 +549,17 @@ const SalesReportList = (props) => {
                     <TableBody>
                       {OtherFeeList?.map((item, index) => (
                         <StyledTableRow key={index}>
-                          <StyledTableCell className={` ${item.name === "Total Other Fees" ? "trBG_Color" : ""}`}>
+                          <StyledTableCell className={` ${item.name === "Total Other Fees" ? "trBG_Color" : ""} BORBodyRight`} colSpan={2}>
                             <div className={`q_sales_trading_data p-0 ${item.name === "Total Other Fees" ? "totalReport" : ""}`}>
                               <p>{item.name}</p>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total Other Fees" ? "trBG_Color" : ""} BORBodyRight`}></StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total Other Fees" ? "trBG_Color" : ""}`}>
+                          
+                          <StyledTableCell className={` ${item.name === "Total Other Fees" ? "trBG_Color" : ""}`} colSpan={4}>
                           <div className={`q_sales_trading_data p-0 ${item.name === "Total Other Fees" ? "totalReport" : ""}`}>
                               <p>{item.amount}</p>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total Other Fees" ? "trBG_Color" : ""}`}></StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total Other Fees" ? "trBG_Color" : ""}`}></StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total Other Fees" ? "trBG_Color" : ""}`}></StyledTableCell>
                         </StyledTableRow>
                       ))}
                     </TableBody>
@@ -564,11 +575,8 @@ const SalesReportList = (props) => {
             <TableContainer>
                 <StyledTable >
                     <TableHead className="totalAmountCollected">
-                      <StyledTableCell sx={{ width: "16.66%" }}>Total Amount Collected</StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }} className="BORBodyRight"></StyledTableCell>
-                      <StyledTableCell sx={{ width: "33.32%" }}>$3,500.33 = Net Sales + Taxes + Other Fees</StyledTableCell>
-                      {/* <StyledTableCell sx={{ width: "16.66%" }} align="left">= Net Sales + Taxes + Other Fees</StyledTableCell> */}
-                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
+                      <StyledTableCell sx={{ width: "33.32%" }} className="BORBodyRight">Total Amount Collected</StyledTableCell>
+                      <StyledTableCell sx={{ width: "49.98%" }} >$3,500.33 = Net Sales + Taxes + Other Fees</StyledTableCell>
                       <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
                     </TableHead>
                 </StyledTable>
@@ -589,8 +597,7 @@ const SalesReportList = (props) => {
                         Sales by Tender
                       </StyledTableCell>
                       <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }}># of Transactions</StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
+                      <StyledTableCell sx={{ width: "33.32%" }}># of Transactions</StyledTableCell>
                       <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
                       <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
                     </TableHead>
@@ -615,9 +622,7 @@ const SalesReportList = (props) => {
                             </p>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`}></StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`}></StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`}></StyledTableCell>
+                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`} colSpan={3}></StyledTableCell>
                         </StyledTableRow>
                       ))}
                     </TableBody>
@@ -640,8 +645,7 @@ const SalesReportList = (props) => {
                         Payouts
                       </StyledTableCell>
                       <StyledTableCell sx={{ width: "16.66%" }}  className=" BORHeaderRight"></StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }}># of Transactions</StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
+                      <StyledTableCell sx={{ width: "33.32%" }}># of Transactions</StyledTableCell>
                       <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
                       <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
                     </TableHead>
@@ -666,9 +670,7 @@ const SalesReportList = (props) => {
                             </p>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`}></StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`}></StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`}></StyledTableCell>
+                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`} colSpan={3}></StyledTableCell>
                         </StyledTableRow>
                       ))}
                     </TableBody>
@@ -689,19 +691,17 @@ const SalesReportList = (props) => {
                 <TableBody>
                       {lastList?.map((item, index) => (
                         <StyledTableRow key={index}>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`} sx={{ width: "16.66%" }}>
+                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} BORBodyRight`} sx={{ width: "33.32%" }}>
                             <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
                               <p>{item.name}</p>
                             </div>
                           </StyledTableCell>
                           
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} BORBodyRight`} sx={{ width: "16.66%" }}></StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`} sx={{ width: "33.32%" }}>
+                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`} sx={{ width: "49.98%" }}>
                           <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
                               <p>{item.amount}</p>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`} sx={{ width: "16.66%" }}></StyledTableCell>
                           <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`} sx={{ width: "16.66%" }}></StyledTableCell>
                         </StyledTableRow>
                       ))}
