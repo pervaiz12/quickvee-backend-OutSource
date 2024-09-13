@@ -376,6 +376,7 @@ module.exports = Object.freeze({
   NEW_CUSTOMER_ADDED_REPORT: "ReportingReactapi/new_customer_added_report",
   REFUND_EMAIL_STATUS_CHANGE: "Order_list_api/refund_email_status_change",
   GET_REGISTER_CLOSURE_LIST:"Shift_summary_report_react/shift_summary_report_react",
+  GET_SHIFT_SUMMARY_REPORT_ORDER_DETAILS:"Shift_summary_report_react/order_details",
 });
 
 // All api calls are initialized in this component for this application

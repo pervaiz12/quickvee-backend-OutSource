@@ -28,8 +28,23 @@ export const fetchRegisterClosuresData = createAsyncThunk(
           },
         }
       );
-      console.log("fetchRegisterClosuresData", response);
-    } catch (error) {}
+      if (response.data.length > 0) {
+        const arr = response.data;
+        const status = true;
+        return { arr, status };
+      } else if (response.data.length === 0) {
+        const arr = [];
+        const status = false;
+        return { arr, status };
+      }
+    } catch (error) {
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
+    }
   }
 );
 
@@ -42,7 +57,8 @@ const RegisterClosuresSlice = createSlice({
     });
     builder.addCase(fetchRegisterClosuresData.fulfilled, (state, action) => {
       state.loading = false;
-      state.RegisterClosuresData = action.payload;
+      state.RegisterClosuresData = action.payload.arr;
+      state.status = action.payload.status;
       state.error = "";
     });
     builder.addCase(fetchRegisterClosuresData.rejected, (state, action) => {
@@ -51,6 +67,6 @@ const RegisterClosuresSlice = createSlice({
       state.error = action.error.message;
     });
   },
-})
+});
 
-export default RegisterClosuresSlice.reducer
+export default RegisterClosuresSlice.reducer;

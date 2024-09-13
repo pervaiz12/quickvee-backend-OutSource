@@ -83,6 +83,15 @@ h3 {
   font-family: CircularSTDBook;
   font-size: 15px;
 }
+.CircularSTDBook-13px{
+  font-family: CircularSTDBook !important;
+  font-size: 13px !important;
+}
+
+.CircularSTDBook-12px{
+  font-family: CircularSTDBook !important;
+  font-size: 12px !important;
+}
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;

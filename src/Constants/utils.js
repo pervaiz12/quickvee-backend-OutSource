@@ -35,6 +35,39 @@ export function formatDate(inputDate) {
   return formattedDate;
 }
 
+export function formatDateTime(dateTimeStr) {
+    // Split the input string into date and time parts
+    const [datePart, timePart] = dateTimeStr.split(' ');
+  
+    // Further split the date part into year, month, and day
+    const [year, month, day] = datePart.split('-');
+    
+    // Further split the time part into hours, minutes, and seconds
+    const [hours, minutes] = timePart.split(':').map(Number);
+    
+    // Convert 24-hour time to 12-hour format
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const formattedHours = hours % 12 || 12;
+    
+    // Create a new Date object using the extracted values
+    const date = new Date(`${year}-${month}-${day}T${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`);
+    
+    // Define formatting options
+    const options = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    };
+    
+    // Format the date using Intl.DateTimeFormat
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+    
+    // Format the time
+    const formattedTime = `${formattedHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}${period}`;
+    
+    return `${formattedDate} ${formattedTime}`;
+}
+
 export const CurrencyInputHelperFun = (value) => {
   let val = value.replace(/[^\d]/g, "");
 

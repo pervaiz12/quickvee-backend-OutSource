@@ -3,11 +3,44 @@ import React from "react";
 import downloadIcon from "../../../Assests/Dashboard/download.svg";
 import RegisterClosuresTableContainer from "./RegisterClosuresTableContainer";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { useDispatch } from "react-redux";
+import { fetchRegisterClosuresData } from "../../../Redux/features/Reports/RegisterClosures/RegisterClosuresSlice";
+import PasswordShow from "../../../Common/passwordShow";
 export default function RegisterClosuresMain() {
-    function onDateRangeChange(dateRange) {
-        console.log("dateRange", dateRange);
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
+    const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
+  let dispatch = useDispatch()
+  function onDateRangeChange(dateRange) {
+    console.log("dateRange", dateRange);
+
+    try {
+      let data = {
+        ...dateRange,
+        ...userTypeData,
+        merchant_id,
+      };
+      if (dateRange && userTypeData && merchant_id) {
+        dispatch(fetchRegisterClosuresData(data)).unwrap();
+      } else {
+        console.log("Please fill all required fields.");
+      }
+    } catch (error) {
+      if (
+        error.status == 401
+        // || error.response.status === 401
+      ) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
-  return (  
+  }
+  return (
     <>
       <Grid container sx={{ padding: 2.5, mt: 2.5 }} className=" ">
         <Grid item xs={12}>
@@ -33,13 +66,9 @@ export default function RegisterClosuresMain() {
           </Grid>
         </Grid>
       </Grid>
-      <Grid
-        container
-        sx={{  mb: 2.5 }}
-       
-      ><DateRangeComponent
-        onDateRangeChange={onDateRangeChange}
-      /></Grid>
+      <Grid container sx={{ mb: 2.5 }}>
+        <DateRangeComponent onDateRangeChange={onDateRangeChange} />
+      </Grid>
       <RegisterClosuresTableContainer />
     </>
   );
