@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { handleInputNumber } from "../../Constants/utils";
 import {
   mixAndMatchPricingDealsList,
+  singleMixAndMatchPricingDeal,
   updateMixAndMatchpricingDeal,
 } from "../../Redux/features/MixAndMatch/mixAndMatchSlice";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
@@ -26,7 +27,9 @@ const UpdateMixAndMatchDeal = () => {
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
-  const { mixAndMatchDeals } = useSelector((state) => state.mixAndMatchList);
+  const { mixAndMatchDeals, singleMixAndMatchDeal } = useSelector(
+    (state) => state.mixAndMatchList
+  );
 
   const [productOptions, setProductOptions] = useState([]); // for products list dropdown after all filters
   const [products, setProducts] = useState([]); // api response products
@@ -45,7 +48,6 @@ const UpdateMixAndMatchDeal = () => {
     discount: "",
     isPercent: "0",
   });
-  // console.log("updatedDeal: ", updatedDeal);
 
   const [error, setError] = useState({
     title: "",
@@ -53,6 +55,10 @@ const UpdateMixAndMatchDeal = () => {
     minQty: "",
     discount: "",
   });
+
+  // useEffect(() => {
+  //   console.log("mixAndMatchDeals: ", mixAndMatchDeals);
+  // }, [mixAndMatchDeals]);
 
   // fetching products data
   useEffect(() => {
@@ -90,10 +96,10 @@ const UpdateMixAndMatchDeal = () => {
     fetchProducts();
   }, [debouncedValue]);
 
-  // setting default data
+  // setting default data for the current deal selected
   useEffect(() => {
-    if (mixAndMatchDeals && mixAndMatchDeals.length > 0) {
-      const deal = mixAndMatchDeals[0];
+    if (singleMixAndMatchDeal && singleMixAndMatchDeal.length > 0) {
+      const deal = singleMixAndMatchDeal[0];
 
       const productsList = products.filter((product) =>
         deal.is_percent === "0"
@@ -124,17 +130,16 @@ const UpdateMixAndMatchDeal = () => {
 
       const dealData = {
         title: deal.deal_name || "",
-        description: deal.description || "",
+        // description: deal.description || "",
         products: selectedProducts,
         minQty: deal.min_qty || "0",
         discount: deal.discount || "0.00",
         isPercent: deal.is_percent || "0",
         isEnable: deal.is_enable || "0",
       };
-      console.log("1: ", dealData);
       setUpdatedDeal(dealData);
     }
-  }, [mixAndMatchDeals, products, selectedProducts]);
+  }, [singleMixAndMatchDeal, products, selectedProducts]);
 
   // filter products by discount
   const filterByDiscount = (productsData) => {
@@ -147,19 +152,17 @@ const UpdateMixAndMatchDeal = () => {
       return result;
     });
 
-    // console.log("filter by discount: ", data);
     return data;
   };
 
+  // removing products from already Selected Products whose price is less than discount price
   useEffect(() => {
-    // removing products from already Selected Products whose price is less than discount price
     if (updatedDeal.products.length > 0) {
       const temp =
         updatedDeal.isPercent === "0"
           ? filterByDiscount(updatedDeal.products)
           : updatedDeal.products;
 
-      console.log("2: ", temp);
       setUpdatedDeal((prev) => ({
         ...prev,
         products: temp,
@@ -211,21 +214,26 @@ const UpdateMixAndMatchDeal = () => {
     // removing products from Product Options whose price is less than discount price
     if (products && products.length > 0) {
       const temp = filterProducts(products);
-      // console.log("product options: ", temp);
       setProductOptions(() => temp);
     }
   }, [updatedDeal.discount, products, updatedDeal.isPercent, mixAndMatchDeals]);
 
   // on load fetching details of the Deal
   useEffect(() => {
-    const getSingleDeal = async () => {
+    const getDealsInfo = async () => {
       try {
-        const data = {
+        const allDeals = {
+          ...userTypeData,
+          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        };
+        const singleDeal = {
           ...userTypeData,
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
           mix_id: dealId,
         };
-        await dispatch(mixAndMatchPricingDealsList(data)).unwrap();
+
+        await dispatch(mixAndMatchPricingDealsList(allDeals)).unwrap();
+        await dispatch(singleMixAndMatchPricingDeal(singleDeal)).unwrap();
       } catch (error) {
         if (error.status == 401) {
           handleCoockieExpire();
@@ -234,8 +242,30 @@ const UpdateMixAndMatchDeal = () => {
       }
     };
 
-    getSingleDeal();
+    getDealsInfo();
+
+    return () => {
+      setUpdatedDeal({
+        title: "",
+        description: "",
+        products: [],
+        minQty: "",
+        discount: "",
+        isPercent: "0",
+      });
+    };
   }, []);
+
+  // handling description
+  useEffect(() => {
+    const description = `Buy ${updatedDeal.minQty || 0} get ${
+      updatedDeal.isPercent === "1"
+        ? `${updatedDeal.discount || "0"}%`
+        : `$${updatedDeal.discount || "0.00"}`
+    } off each`;
+
+    setUpdatedDeal((prev) => ({ ...prev, description }));
+  }, [updatedDeal.discount, updatedDeal.isPercent, updatedDeal.minQty]);
 
   // Common Input handler function
   const handleInputChange = (e) => {
@@ -261,7 +291,7 @@ const UpdateMixAndMatchDeal = () => {
     setUpdatedDeal((prev) => ({
       ...prev,
       isPercent: type === "amount" ? "0" : "1",
-      discount: "",
+      discount: type === "amount" ? "0.00" : "0",
     }));
   };
 
@@ -273,8 +303,26 @@ const UpdateMixAndMatchDeal = () => {
     }));
   };
 
+  // useEffect(() => {
+  //   console.log("productOptions: ", productOptions);
+  // }, [productOptions]);
+
   // Deleting a Selected Option
   const handleDeleteSelectedOption = (id, name, opt) => {
+    // console.log("opt: ", opt);
+    // console.log("product options: ", productOptions);
+    setProductOptions((prev) => {
+      const alreadyExists = prev.find((item) =>
+        opt.var_id
+          ? opt.var_id === item.var_id && item.id === opt.id
+          : item.id === opt.id
+      );
+      if (!alreadyExists) {
+        return [opt, ...prev];
+      } else {
+        return prev;
+      }
+    });
     const filterOptionItems = updatedDeal[name].filter((item) =>
       item.isvarient === "1" ? item.var_id !== opt.var_id : item?.id !== id
     );
@@ -300,6 +348,18 @@ const UpdateMixAndMatchDeal = () => {
 
       const { title, products, minQty, discount, isPercent, description } =
         updatedDeal;
+
+      // const duplicateDealName = mixAndMatchDeals.find(
+      //   ({ id, deal_name }) => id !== dealId && deal_name === title
+      // );
+
+      // if (duplicateDealName) {
+      //   setError((prev) => ({
+      //     ...prev,
+      //     title: "Deal name already exists",
+      //   }));
+      //   return;
+      // }
 
       if (
         Boolean(title.trim()) &&
@@ -348,12 +408,12 @@ const UpdateMixAndMatchDeal = () => {
       } else {
         setError((prev) => ({
           ...prev,
-          title: !title ? "Title is required!" : "",
+          title: !title ? "Deal name is required!" : "",
           products: products.length <= 0 ? "Products are required!" : "",
-          minQty: !minQty || minQty <= 0 ? "Minimum Quantity is required!" : "",
+          minQty: !minQty || minQty <= 0 ? "Minimum quantity is required!" : "",
           discount:
             !discount || parseFloat(discount) <= 0
-              ? "Discount is required"
+              ? "Discount per item is required"
               : "",
         }));
       }
@@ -381,6 +441,7 @@ const UpdateMixAndMatchDeal = () => {
                 <div className="input_area" style={{ marginBottom: "0px" }}>
                   <BasicTextFields
                     type={"text"}
+                    maxLength={100}
                     value={updatedDeal.title}
                     name="title"
                     onChangeFun={handleInputChange}
@@ -391,7 +452,7 @@ const UpdateMixAndMatchDeal = () => {
 
               <div className="q-add-coupon-single-input mb-6">
                 <label htmlFor="description">Description</label>
-                <textarea
+                {/* <textarea
                   className="mt-1"
                   id="description"
                   name="description"
@@ -399,7 +460,16 @@ const UpdateMixAndMatchDeal = () => {
                   cols="50"
                   value={updatedDeal.description}
                   onChange={handleInputChange}
-                ></textarea>
+                ></textarea> */}
+                <div className="input_area" style={{ marginBottom: "0px" }}>
+                  <BasicTextFields
+                    type={"text"}
+                    value={updatedDeal.description}
+                    name="description"
+                    readOnly={true}
+                    // disable={true}
+                  />
+                </div>
               </div>
 
               <Grid container spacing={2}>
@@ -408,6 +478,7 @@ const UpdateMixAndMatchDeal = () => {
                     <label htmlFor="minorder_amt">Minimum Quantity</label>
                     <BasicTextFields
                       type={"text"}
+                      maxLength={6}
                       value={updatedDeal.minQty}
                       onChangeFun={(e) =>
                         handleInputNumber(e, setUpdatedDeal, updatedDeal)
@@ -431,6 +502,7 @@ const UpdateMixAndMatchDeal = () => {
                           </label>
                           <BasicTextFields
                             type={"text"}
+                            maxLength={9}
                             value={updatedDeal.discount}
                             onChangeFun={(e) =>
                               handleInputNumber(e, setUpdatedDeal, updatedDeal)

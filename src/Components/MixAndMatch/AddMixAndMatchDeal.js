@@ -49,6 +49,10 @@ const AddMixAndMatchDeal = () => {
     discount: "",
   });
 
+  // useEffect(() => {
+  //   console.log("mixAndMatchDeals: ", mixAndMatchDeals);
+  // }, [mixAndMatchDeals]);
+
   // Fetching all Mix and Pricing Deals
   useEffect(() => {
     const getMixAndMatchPricingDeals = async () => {
@@ -106,7 +110,7 @@ const AddMixAndMatchDeal = () => {
     setDealInfo((prev) => ({
       ...prev,
       isPercent: type === "amount" ? "0" : "1",
-      discount: "",
+      discount: type === "amount" ? "0.00" : "0",
     }));
   };
 
@@ -186,6 +190,17 @@ const AddMixAndMatchDeal = () => {
     }
   }, [dealInfo.discount, products, dealInfo.isPercent, mixAndMatchDeals]);
 
+  // handling description
+  useEffect(() => {
+    const description = `Buy ${dealInfo.minQty} get ${
+      dealInfo.isPercent === "1"
+        ? `${dealInfo.discount}%`
+        : `$${dealInfo.discount}`
+    } off each`;
+
+    setDealInfo((prev) => ({ ...prev, description }));
+  }, [dealInfo.discount, dealInfo.isPercent, dealInfo.minQty]);
+
   // Fetching Products Data
   useEffect(() => {
     const fetchProducts = async () => {
@@ -222,10 +237,6 @@ const AddMixAndMatchDeal = () => {
     fetchProducts();
   }, [debouncedValue]);
 
-  // useEffect(() => {
-  //   console.log("productOptions: ", productOptions);
-  // }, [productOptions]);
-
   // Adding New Deal function
   const handleAddNewDeal = async (e) => {
     try {
@@ -233,8 +244,6 @@ const AddMixAndMatchDeal = () => {
       setLoading(true);
       const { title, products, minQty, discount, isPercent, description } =
         dealInfo;
-
-      // console.log("dealInfo: ", dealInfo);
 
       if (
         Boolean(title.trim()) &&
@@ -255,7 +264,6 @@ const AddMixAndMatchDeal = () => {
               items[item.id] = "";
             }
           });
-          // console.log("items: ", items);
 
           const data = {
             merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
@@ -265,12 +273,10 @@ const AddMixAndMatchDeal = () => {
             discount,
             is_percent: isPercent,
             items_id: JSON.stringify(items),
-            is_enable: 0,
+            is_enable: 1,
             mix_id: "",
             ...userTypeData,
           };
-
-          // console.log("data: ", data);
 
           const result = await dispatch(addNewDeal(data)).unwrap();
 
@@ -291,12 +297,12 @@ const AddMixAndMatchDeal = () => {
       } else {
         setError((prev) => ({
           ...prev,
-          title: !title ? "Title is required!" : "",
+          title: !title ? "Deal name is required!" : "",
           products: products.length <= 0 ? "Products are required!" : "",
-          minQty: !minQty || minQty <= 0 ? "Minimum Quantity is required!" : "",
+          minQty: !minQty || minQty <= 0 ? "Minimum quantity is required!" : "",
           discount:
             !discount || parseFloat(discount) <= 0
-              ? "Discount is required"
+              ? "Discount per item is required"
               : "",
         }));
       }
@@ -320,6 +326,7 @@ const AddMixAndMatchDeal = () => {
                   <div className="input_area" style={{ marginBottom: "0px" }}>
                     <BasicTextFields
                       type={"text"}
+                      maxLength={100}
                       value={dealInfo.title}
                       name="title"
                       onChangeFun={handleInputChange}
@@ -332,15 +339,15 @@ const AddMixAndMatchDeal = () => {
 
                 <div className="q-add-coupon-single-input mb-6">
                   <label htmlFor="description">Description</label>
-                  <textarea
-                    className="mt-1"
-                    id="description"
-                    name="description"
-                    rows="4"
-                    cols="50"
-                    value={dealInfo.description}
-                    onChange={handleInputChange}
-                  ></textarea>
+                  <div className="input_area" style={{ marginBottom: "0px" }}>
+                    <BasicTextFields
+                      type={"text"}
+                      value={dealInfo.description}
+                      name="description"
+                      readOnly={true}
+                      // disable={true}
+                    />
+                  </div>
                 </div>
 
                 <Grid container spacing={2}>
@@ -349,6 +356,7 @@ const AddMixAndMatchDeal = () => {
                       <label htmlFor="minorder_amt">Minimum Quantity</label>
                       <BasicTextFields
                         type={"text"}
+                        maxLength={6}
                         value={dealInfo.minQty}
                         onChangeFun={(e) =>
                           handleInputNumber(e, setDealInfo, dealInfo)
@@ -372,6 +380,7 @@ const AddMixAndMatchDeal = () => {
                             </label>
                             <BasicTextFields
                               type={"text"}
+                              maxLength={9}
                               value={dealInfo.discount}
                               onChangeFun={(e) => {
                                 handleInputNumber(e, setDealInfo, dealInfo);

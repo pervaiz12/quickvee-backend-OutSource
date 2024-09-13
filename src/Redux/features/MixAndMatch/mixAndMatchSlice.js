@@ -11,6 +11,7 @@ import {
 const initialState = {
   loading: false,
   mixAndMatchDeals: [],
+  singleMixAndMatchDeal: [],
   error: "",
 };
 
@@ -46,6 +47,38 @@ export const addNewDeal = createAsyncThunk(
 
 export const mixAndMatchPricingDealsList = createAsyncThunk(
   "mixAndMatch/mixAndMatchPricingDealsList",
+  async (data, { rejectWithValue }) => {
+    try {
+      const { token, ...dataNew } = data;
+
+      const response = await axios.post(
+        BASE_URL + MIX_MAX_PRICING_DEALS_LIST,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // console.log("mix match deals response: ", response);
+      if (response.status === 200) {
+        return response.data.data || [];
+      }
+    } catch (error) {
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
+    }
+  }
+);
+
+export const singleMixAndMatchPricingDeal = createAsyncThunk(
+  "mixAndMatch/singleMixAndMatchPricingDeal",
   async (data, { rejectWithValue }) => {
     try {
       const { token, ...dataNew } = data;
@@ -186,6 +219,17 @@ const mixAndMatchSlice = createSlice({
     });
     builder.addCase(mixAndMatchPricingDealsList.rejected, (state, action) => {
       state.mixAndMatchDeals = [];
+      state.loading = false;
+    });
+    builder.addCase(singleMixAndMatchPricingDeal.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(singleMixAndMatchPricingDeal.fulfilled, (state, action) => {
+      state.singleMixAndMatchDeal = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(singleMixAndMatchPricingDeal.rejected, (state, action) => {
+      state.singleMixAndMatchDeal = [];
       state.loading = false;
     });
   },
