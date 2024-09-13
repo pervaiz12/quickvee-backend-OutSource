@@ -30,6 +30,7 @@ const StickyTableCell = styled(StyledTableCell)(({ theme }) => ({
   left: 0,
   backgroundColor: theme.palette.background.paper,
   zIndex: 1,
+  // borderRight: "1px solid #444E51 !important;"
 }));
 
 const StickyTableCellR = styled(StyledTableCell)(({ theme }) => ({
@@ -37,6 +38,7 @@ const StickyTableCellR = styled(StyledTableCell)(({ theme }) => ({
     right: 0,
     backgroundColor: theme.palette.background.paper,
     zIndex: 1,
+    // borderLeft: "1px solid #444E51 !important;"
   }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -83,19 +85,6 @@ const SalesbyTable = (props) => {
   }, [allshiftsummaryDataState]);
   console.log(allshiftsummary);
 
-  const time = [
-    {
-        timedse:"12AM - 1AM",
-    },
-    {
-        timedse:"1AM - 2AM",
-    }
-  ]
-  const Aomunt = [
-    {
-        hr:"$10",
-    },
-  ]
 
   return (
     <>
@@ -106,12 +95,12 @@ const SalesbyTable = (props) => {
       </div>
 
        <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
-      <div style={{ overflowX: 'auto' }}>
+      <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
         <Table sx={{ minWidth: 500 }} aria-label="shift summary table">
           <TableHead >
             <TableRow >
-                <StickyTableCell className="whitespace-nowrap salebyhourHeading">Hours</StickyTableCell>
-                    <StyledTableCell  className="whitespace-nowrap">12AM - 1AM</StyledTableCell>
+                <StickyTableCell className="whitespace-nowrap salebyhourHeading BORHeaderRight" >Hours</StickyTableCell>
+                    <StyledTableCell  className="whitespace-nowrap  ">12AM - 1AM</StyledTableCell>
                     <StyledTableCell className="whitespace-nowrap">1AM - 2AM</StyledTableCell>
                     <StyledTableCell className="whitespace-nowrap">2AM - 3AM</StyledTableCell>
                     <StyledTableCell className="whitespace-nowrap">3AM - 4AM</StyledTableCell>
@@ -136,64 +125,64 @@ const SalesbyTable = (props) => {
                     <StyledTableCell className="whitespace-nowrap">9PM - 10PM</StyledTableCell>
                     <StyledTableCell className="whitespace-nowrap">10PM - 11PM</StyledTableCell>
                     <StyledTableCell className="whitespace-nowrap">11PM - 12AM</StyledTableCell>
-                    <StickyTableCellR>Total</StickyTableCellR>
+                    <StickyTableCellR className="whitespace-nowrap BORHeaderLeft">Total</StickyTableCellR>
             </TableRow>
           </TableHead>
           <TableBody>
                 <TableRow>
-                    <StickyTableCell className="whitespace-nowrap">Sales Count</StickyTableCell>
+                    <StickyTableCell className="whitespace-nowrap BORBodyRight">Sales Count</StickyTableCell>
                     {Array(25).fill(100).map((value, index) => (
                             <StyledTableCell key={index} className="whitespace-nowrap">
                                 {value}
                             </StyledTableCell>
                         ))}
-                    <StickyTableCellR className="whitespace-nowrap">4</StickyTableCellR>
+                    <StickyTableCellR className="whitespace-nowrap BORBodyLeft">4</StickyTableCellR>
                 </TableRow>
                 <TableRow>
-                    <StickyTableCell className="whitespace-nowrap">Net Sales </StickyTableCell>
+                    <StickyTableCell className="whitespace-nowrap BORBodyRight">Net Sales </StickyTableCell>
                     {Array(25).fill(100).map((value, index) => (
                             <StyledTableCell key={index} className="whitespace-nowrap">
                                 {value}
                             </StyledTableCell>
                         ))}
-                    <StickyTableCellR className="whitespace-nowrap">$1945.40</StickyTableCellR>
+                    <StickyTableCellR className="whitespace-nowrap BORBodyLeft">$1945.40</StickyTableCellR>
                 </TableRow>
                 <TableRow>
-                    <StickyTableCell className="whitespace-nowrap">Cost of good sold</StickyTableCell>
+                    <StickyTableCell className="whitespace-nowrap BORBodyRight">Cost of good sold</StickyTableCell>
                     {Array(25).fill(100).map((value, index) => (
                             <StyledTableCell key={index} className="whitespace-nowrap">
                                 {100}
                             </StyledTableCell>
                         ))}
-                    <StickyTableCellR className="whitespace-nowrap">$940.40</StickyTableCellR>
+                    <StickyTableCellR className="whitespace-nowrap BORBodyLeft">$940.40</StickyTableCellR>
                 </TableRow>
                 <TableRow>
-                    <StickyTableCell className="whitespace-nowrap">Gross profit</StickyTableCell>
+                    <StickyTableCell className="whitespace-nowrap BORBodyRight">Gross profit</StickyTableCell>
                     {Array(25).fill(100).map((value, index) => (
                             <StyledTableCell key={index} className="whitespace-nowrap">
                                 {value}
                             </StyledTableCell>
                         ))}
-                    <StickyTableCellR className="whitespace-nowrap">$1014.40</StickyTableCellR>
+                    <StickyTableCellR className="whitespace-nowrap BORBodyLeft">$1014.40</StickyTableCellR>
                 </TableRow>
                 <TableRow>
-                    <StickyTableCell className="whitespace-nowrap">Margin (%)</StickyTableCell>
+                    <StickyTableCell className="whitespace-nowrap BORBodyRight">Margin (%)</StickyTableCell>
                     {Array(25).fill(100).map((value, index) => (
                             <StyledTableCell key={index} className="whitespace-nowrap">
                                 {value}
                             </StyledTableCell>
                         ))}
-                    <StickyTableCellR className="whitespace-nowrap">50%</StickyTableCellR>
+                    <StickyTableCellR className="whitespace-nowrap BORBodyLeft">50%</StickyTableCellR>
                 </TableRow>
                 <TableRow>
-                    <StickyTableCell className="whitespace-nowrap">Tax</StickyTableCell>
+                    <StickyTableCell className="whitespace-nowrap BORBodyRight">Tax</StickyTableCell>
                     {Array(25).fill(100).map((value, index) => (
                             <StyledTableCell key={index} className="whitespace-nowrap">
                                 {value}
                             </StyledTableCell>
                         ))}
 
-                    <StickyTableCellR className="whitespace-nowrap">$0.00</StickyTableCellR>
+                    <StickyTableCellR className="whitespace-nowrap BORBodyLeft">$0.00</StickyTableCellR>
                 </TableRow>
           </TableBody>
         </Table>

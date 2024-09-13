@@ -11,7 +11,7 @@ import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent"
 
 const MainSalesReport = () => {
   const { start_date, end_date, order_env, order_method } = useParams();
-  const [activeTab, setActiveTab] = useState("Summary");
+  const [activeTab, setActiveTab] = useState("Salesbyhour");
 
   const [OrderSourceData, setOrderSourceData] = useState(null);
   const [OrderTypeData, setOrderTypeData] = useState(

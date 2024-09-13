@@ -140,4 +140,44 @@ table.dataTable tbody td {
     background: #fff;
     border-bottom: 1px solid #e8e8e8;
 }
+
+.trBG_ColorSaleSummary{
+    background-color: #F8F8F8 !important;
+}
+.BORHeaderRight{
+    border-right: 1px solid #444E51 !important;
+}
+.BORBodyRight{
+    /* border-right: 1px solid #E8E8E8 !important; */
+    border-right: 1px solid #cdcdcd !important;
+}
+.BORREMOVE{
+    border-right: none !important;
+}
+
+.totalAmountCollected th{
+    background-color: #0A64F9 !important;
+}
+.BORHeaderLeft{
+    border-left: 1px solid #444E51 !important;
+}
+.BORBodyLeft{
+    /* border-right: 1px solid #E8E8E8 !important; */
+    border-left: 1px solid #cdcdcd !important;
+}
+
+.Graph-dropdown-content{
+    position: absolute;
+    right: 2rem;
+    background-color: #fff;
+    box-shadow: 0 0px 7px rgb(225 225 225);
+    border: 1px solid #ddd;
+    z-index: 2;
+    font-size: 12px;
+    cursor: pointer;
+    color: #707070;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+}
 /* for new table css End */
