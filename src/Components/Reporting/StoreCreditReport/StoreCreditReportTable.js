@@ -16,6 +16,8 @@ import { useSelector } from "react-redux";
 import { priceFormate } from "../../../hooks/priceFormate";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import emailLogo from "../../../Assests/Dashboard/email.svg";
+import phoneLogo from "../../../Assests/Dashboard/phone.svg";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -57,7 +59,7 @@ export default function StoreCreditReportTable({
   const [sortOrder, setSortOrder] = useState("asc");
   // console.log(dataArr);
   const tableRow = [
-    { type: "str", name: "customer_name", label: "Customer Name" },
+    { type: "str", name: "customer_name", label: "Customer Details" },
     { type: "num", name: "total_credit_amount", label: "Total Issued" },
     { type: "num", name: "total_debit_amount", label: "Total Redeemed" },
     { type: "num", name: "available_balance", label: "Balance" },
@@ -146,7 +148,31 @@ export default function StoreCreditReportTable({
                           <>
                             <StyledTableRow key={index}>
                               <StyledTableCell>
-                                <p>{item.customer_name}</p>
+                                <div className="text-[#000000] order_method ">
+                                    {item.customer_name.length < 18
+                                      ? item.customer_name
+                                      : item.customer_name.slice(0, 18) + `...` || ""}
+                                </div>
+                                <div className="text-[#818181]  flex">
+                                {item.customer_email && (
+                                  <img
+                                    src={emailLogo}
+                                    alt=""
+                                    className="pe-1"
+                                  />
+                                )}{" "}
+                                <p>{item.customer_email || ""}</p>
+                              </div>
+                              <div className="text-[#818181] flex">
+                                {item.customer_phone && (
+                                  <img
+                                    src={phoneLogo}
+                                    alt=""
+                                    className="pe-1"
+                                  />
+                                )}{" "}
+                                <p> {item.customer_phone || ""}</p>
+                              </div>
                               </StyledTableCell>
                               <StyledTableCell>
                                 <p>${priceFormate(item.total_credit_amount)}</p>

@@ -138,7 +138,12 @@ export default function DetailedLoyaltyReportTable({
                       <>
                         <StyledTableRow key={index}>
                           <StyledTableCell>
-                            <p>{item.customer_name}</p>
+                            {/* <p>{item.customer_name}</p> */}
+                            <div className="text-[#000000] order_method">
+                                    {item.customer_name.length < 18
+                                      ? item.customer_name
+                                      : item.customer_name.slice(0, 18) + `...` || ""}
+                            </div>
                             { item.customer_email && ( <p className="text-[#818181] ">{item.customer_email ?? ""}</p>) }
                           </StyledTableCell>
                           <StyledTableCell>
