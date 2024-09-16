@@ -136,7 +136,7 @@ const RegisterSettingFormLogic = () => {
       // case "device_name":
       //   await isText(fieldValue, fieldName, errors);
       //   break;
-      case "upload_paxlog":
+      case "denomination":
         let newval = parseInt(event.target.value) === 1 ? 0 : 1;
         let newval1 = event.target.checked ? 1 : 0;
         console.log(newval);
@@ -147,7 +147,7 @@ const RegisterSettingFormLogic = () => {
           [fieldName]: newval,
         }));
         break;
-      case "denomination":
+      case "upload_paxlog":
         let newuploadpaxlog = parseInt(event.target.value) === 1 ? 0 : 1;
           setValues((prevValues) => ({
             ...prevValues,
