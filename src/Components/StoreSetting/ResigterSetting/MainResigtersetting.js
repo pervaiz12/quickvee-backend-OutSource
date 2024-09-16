@@ -4,9 +4,11 @@ import RegisterSettingFormLogic from "./RegisterSettingFormLogic";
 import TextField from "@mui/material/TextField";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const MainResigtersetting = () => {
   // const [alertmsg, setAlertMsg] = useState('');
+  const { userTypeData } = useAuthDetails();
   const [openAlert, setOpenAlert] = useState(true);
   const {
     handleRegisterSettingInput,
@@ -134,6 +136,41 @@ const MainResigtersetting = () => {
                       />
                       <span className="checkmark"></span>
                     </label>
+                    {userTypeData?.login_type?.toString()?.toLowerCase() == "superadmin" ? (
+                    <label className="q_resigter_setting_section">
+                      <p
+                        className={`${
+                          values.upload_paxlog ? "text-black" : ""
+                        } `}
+                      >
+                        Upload Paxlog
+                      </p>
+                      <input
+                        type="checkbox"
+                        name="upload_paxlog"
+                        checked={values.upload_paxlog}
+                        onChange={handleRegisterSettingInput}
+                      />
+                      <span className="checkmark"></span>
+                    </label>
+                    ) : ("")}
+
+                    {/* <label className="q_resigter_setting_section">
+                      <p
+                        className={`${
+                          values.shared_lp ? "text-black" : ""
+                        } `}
+                      >
+                        Enable LP sharing with other locations
+                      </p>
+                      <input
+                        type="checkbox"
+                        name="shared_lp"
+                        checked={values.shared_lp}
+                        onChange={handleRegisterSettingInput}
+                      />
+                      <span className="checkmark"></span>
+                    </label> */}
                   </ul>
                 </div>
                 <div className="q-resigtersetting-bottom-section mt-8 px-7">
