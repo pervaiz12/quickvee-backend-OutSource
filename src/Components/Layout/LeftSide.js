@@ -193,6 +193,9 @@ const RegisterClosuresMain = lazy(
 const RegisterClosuresSummery = lazy(
   () => import("../Reporting/RegisterClosures/RegisterClosureSummery")
 )
+const RegisterClosuresTransactions = lazy(
+  () => import("../Reporting/RegisterClosures/RegisterClosureTransactions")
+)
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -358,6 +361,8 @@ const LeftSide = ({ visible }) => {
         return <RegisterClosuresMain />;
       case "register-closures-summery":
         return <RegisterClosuresSummery />;
+        case "register-closures-transactions":
+          return <RegisterClosuresTransactions />;
       case "drop-cash-report":
         return <DropCashMain />;
 

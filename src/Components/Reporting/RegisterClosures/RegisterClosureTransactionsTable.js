@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { tableCellClasses } from "@mui/material/TableCell";
 import { formatDateTime } from "../../../Constants/utils";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 // Styled Components
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -60,7 +61,7 @@ export default function RegisterClosureTransactionsTable({ tableData }) {
           {tableData?.arr?.length > 0 &&
             tableData?.arr?.map((row, index) => (
               <StyledTableRow key={index}>
-                <StyledTableCell>
+                <StyledTableCell width="25%" sx={{ verticalAlign: "top" }}>
                   {[
                     {
                       label: "Employee",
@@ -95,45 +96,99 @@ export default function RegisterClosureTransactionsTable({ tableData }) {
                       )
                   )}
                 </StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell
+                  sx={{ verticalAlign: "top", height: "50px", p: 0 }}
+                >
                   <Grid
                     container
+                    justifyContent="space-between"
                     direction="column"
-                    sx={{
-                      justifyContent: "space-between",
-                      alignItems: "start",
-                    }}
+                    sx={{ height: "100%" }}
                   >
-                    <Grid item>
+                    <Grid item sx={{ px: 2, pt: 2 }}>
                       {row.cart_data.map((product, i) => (
-                        <Typography key={i}>{product?.name}</Typography>
+                        <Typography
+                          sx={{ pb: 2 }}
+                          className="CircularSTDBook-13px"
+                          key={i}
+                        >
+                          {product?.name}
+                        </Typography>
                       ))}
                     </Grid>
-                    <Grid item>
-                      <Typography sx={{ fontWeight: "bold" }}>
+                    <Grid item sx={{ borderTop: "1px solid #ECECEC", px: 2 }}>
+                      <Typography sx={{ py: 1 }} className="CircularBold-13px">
                         Total Sale
                       </Typography>
                     </Grid>
                   </Grid>
                 </StyledTableCell>
-
-                {/* <StyledTableCell>
-                {row.products.map((product, i) => (
-                  <Typography key={i}>
-                    {i === 0 ? "$269.90" : i === 1 ? "$269.90" : "$49.90"}
-                  </Typography>
-                ))}
-                <Typography sx={{ fontWeight: "bold" }}>
-                  {row.totalSale}
-                </Typography>
-              </StyledTableCell>
-              <StyledTableCell>
-                <Typography>{row.payment}</Typography>
-                <Typography sx={{ fontWeight: "bold" }}>Total Paid</Typography>
-              </StyledTableCell>
-              <StyledTableCell>
-                <Typography>{row.paid}</Typography>
-              </StyledTableCell> */}
+                <StyledTableCell
+                  sx={{ verticalAlign: "top", height: "50px", p: 0 }}
+                >
+                  <Grid
+                    container
+                    justifyContent="space-between"
+                    direction="column"
+                    sx={{ height: "100%" }}
+                  >
+                    <Grid item sx={{ px: 2, pt: 2 }}>
+                      {row.cart_data.map((product, i) => {
+                        const price = parseFloat(product?.price) || 0;
+                        const taxRate = parseFloat(product?.taxRates) || 0;
+                        const quantity = parseFloat(product?.qty) || 0;
+                        const otherTaxesAmount =
+                          parseFloat(product?.other_taxes_amount) || 0;
+                        const totalPrice =
+                          (price + price * (taxRate / 100)) * quantity +
+                          otherTaxesAmount;
+                        return (
+                          <Typography
+                            sx={{ pb: 2 }}
+                            className="CircularSTDBook-13px"
+                            key={i}
+                          >
+                            ${parseFloat(totalPrice).toFixed(2)}
+                          </Typography>
+                        );
+                      })}
+                    </Grid>
+                    <Grid item sx={{ borderTop: "1px solid #ECECEC", px: 2 }}>
+                      <Typography sx={{ py: 1 }} className="CircularBold-13px">
+                        {row.cart_data
+                          .reduce((acc, product) => {
+                            const price = parseFloat(product?.price) || 0;
+                            const taxRate = parseFloat(product?.taxRates) || 0;
+                            const quantity = parseFloat(product?.qty) || 0;
+                            const otherTaxesAmount =
+                              parseFloat(product?.other_taxes_amount) || 0;
+                            const totalPrice =
+                              (price + price * (taxRate / 100)) * quantity +
+                              otherTaxesAmount;
+                            return acc + totalPrice;
+                          }, 0)
+                          .toFixed(2)}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </StyledTableCell>
+                <StyledTableCell
+                  sx={{ verticalAlign: "top", height: "50px", p: 0 }}
+                >
+                  <Grid
+                    container
+                    justifyContent="space-between"
+                    direction="column"
+                    sx={{ height: "100%" }}
+                  >
+                    <Grid item sx={{ px: 2, pt: 2 }}></Grid>
+                    <Grid item sx={{ borderTop: "1px solid #ECECEC", px: 2 }}>
+                      <Typography sx={{ py: 1 }} className="CircularBold-13px">
+                        Total Sale
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </StyledTableCell>
               </StyledTableRow>
             ))}
           {/* Total row at the bottom */}
@@ -147,7 +202,12 @@ export default function RegisterClosureTransactionsTable({ tableData }) {
               <Typography
                 sx={{ fontWeight: "bold", fontSize: "18px", color: "#0A64F9" }}
               >
-                $1627.10
+                {tableData?.arr
+                  ?.reduce(
+                    (acc, product) => acc + (parseFloat(product?.amt) || 0),
+                    0
+                  )
+                  .toFixed(2)}
               </Typography>
             </StyledTableCell>
             <StyledTableCell />

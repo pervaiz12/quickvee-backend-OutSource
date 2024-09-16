@@ -81,6 +81,7 @@ export default function RegisterClosuresTableContainer() {
           />
         </>
       ) : (
+        RegisterClosuresReportReduxState &&
         RegisterClosuresReportReduxState?.RegisterClosuresData?.map((table) => (
           <RegisterClosuresTable table={table} />
         ))

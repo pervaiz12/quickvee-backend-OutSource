@@ -92,6 +92,11 @@ h3 {
   font-family: CircularSTDBook !important;
   font-size: 12px !important;
 }
+
+.CircularBold-13px{
+  font-family: CircularBold !important;
+  font-size: 13px !important;
+}
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
