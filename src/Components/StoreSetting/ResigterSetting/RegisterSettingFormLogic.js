@@ -136,7 +136,7 @@ const RegisterSettingFormLogic = () => {
       // case "device_name":
       //   await isText(fieldValue, fieldName, errors);
       //   break;
-      case "denomination":
+      case "upload_paxlog":
         let newval = parseInt(event.target.value) === 1 ? 0 : 1;
         let newval1 = event.target.checked ? 1 : 0;
         console.log(newval);
