@@ -189,9 +189,11 @@ const SingleDeal = ({ deal, fetchDeals, setDealsList }) => {
           <Grid container sx={{ pb: 1 }}>
             <Grid item xs={12}>
               <p className="offer-desc mb-2">
-                Buy {deal.min_qty} get {`${deal.is_percent === "0" ? "$" : ""}`}
-                {deal.is_percent === "1" ? +deal.discount : deal.discount}
-                {`${deal.is_percent === "1" ? "%" : ""}`} off each
+                {`Buy ${deal.min_qty} get ${
+                  deal.is_percent === "1"
+                    ? `${deal.discount}%`
+                    : `$${deal.discount}`
+                } off each`}
               </p>
             </Grid>
           </Grid>

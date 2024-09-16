@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { handleInputNumber } from "../../Constants/utils";
 import {
   mixAndMatchPricingDealsList,
+  singleMixAndMatchPricingDeal,
   updateMixAndMatchpricingDeal,
 } from "../../Redux/features/MixAndMatch/mixAndMatchSlice";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
@@ -26,7 +27,9 @@ const UpdateMixAndMatchDeal = () => {
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
-  const { mixAndMatchDeals } = useSelector((state) => state.mixAndMatchList);
+  const { mixAndMatchDeals, singleMixAndMatchDeal } = useSelector(
+    (state) => state.mixAndMatchList
+  );
 
   const [productOptions, setProductOptions] = useState([]); // for products list dropdown after all filters
   const [products, setProducts] = useState([]); // api response products
@@ -45,7 +48,6 @@ const UpdateMixAndMatchDeal = () => {
     discount: "",
     isPercent: "0",
   });
-  // console.log("updatedDeal: ", updatedDeal);
 
   const [error, setError] = useState({
     title: "",
@@ -73,9 +75,8 @@ const UpdateMixAndMatchDeal = () => {
       try {
         setOptionsLoading(true);
         const productsData = await dispatch(fetchProductsData(data)).unwrap();
-        if (productsData && productsData.length > 0) {
-          setProducts(() => productsData);
-        }
+        // console.log("api productsData: ", productsData);
+        setProducts(() => productsData);
       } catch (error) {
         if (error.status === 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
@@ -90,17 +91,26 @@ const UpdateMixAndMatchDeal = () => {
     fetchProducts();
   }, [debouncedValue]);
 
-  // setting default data
+  // setting dropdown product options via api
   useEffect(() => {
-    if (mixAndMatchDeals && mixAndMatchDeals.length > 0) {
-      const deal = mixAndMatchDeals[0];
+    // filtering based on the price & discount
+    const productsList = products.filter((product) =>
+      updatedDeal.isPercent === "0"
+        ? parseFloat(product.price) >= updatedDeal.discount
+        : product
+    );
+    setProductOptions(productsList);
+  }, [products, updatedDeal.isPercent, updatedDeal.discount]);
 
-      const productsList = products.filter((product) =>
-        deal.is_percent === "0"
-          ? parseFloat(product.price) >= deal.discount
-          : product
-      );
-      setProductOptions(productsList);
+  // setting default data for the current deal selected
+  useEffect(() => {
+    if (singleMixAndMatchDeal && singleMixAndMatchDeal.length > 0) {
+      const deal = singleMixAndMatchDeal[0];
+      // console.log("single deal: ", deal);
+
+      if (deal.id !== dealId) {
+        return;
+      }
 
       const items = deal.items_names;
       let defaultProducts = [];
@@ -122,19 +132,18 @@ const UpdateMixAndMatchDeal = () => {
         setSelectedProducts(defaultProducts);
       }
 
+      // console.log("setting default products: ", selectedProducts);
       const dealData = {
         title: deal.deal_name || "",
-        description: deal.description || "",
         products: selectedProducts,
         minQty: deal.min_qty || "0",
         discount: deal.discount || "0.00",
         isPercent: deal.is_percent || "0",
         isEnable: deal.is_enable || "0",
       };
-      console.log("1: ", dealData);
       setUpdatedDeal(dealData);
     }
-  }, [mixAndMatchDeals, products, selectedProducts]);
+  }, [singleMixAndMatchDeal, selectedProducts]);
 
   // filter products by discount
   const filterByDiscount = (productsData) => {
@@ -147,19 +156,18 @@ const UpdateMixAndMatchDeal = () => {
       return result;
     });
 
-    // console.log("filter by discount: ", data);
     return data;
   };
 
+  // removing products from already Selected Products whose price is less than discount price
   useEffect(() => {
-    // removing products from already Selected Products whose price is less than discount price
     if (updatedDeal.products.length > 0) {
       const temp =
         updatedDeal.isPercent === "0"
           ? filterByDiscount(updatedDeal.products)
           : updatedDeal.products;
 
-      console.log("2: ", temp);
+      // console.log("new default selected product: ", temp);
       setUpdatedDeal((prev) => ({
         ...prev,
         products: temp,
@@ -167,16 +175,24 @@ const UpdateMixAndMatchDeal = () => {
     }
   }, [updatedDeal.isPercent, updatedDeal.discount]);
 
-  // filtering Products Options
+  // filtering dropdown Products Options
   useEffect(() => {
     const filterProducts = (productsList) => {
       let temp = [];
 
-      if (mixAndMatchDeals && mixAndMatchDeals.length > 0) {
+      // only passing all other deals except the current one.
+      const otherMixAndMatchDeals =
+        mixAndMatchDeals &&
+        mixAndMatchDeals.length > 0 &&
+        mixAndMatchDeals.filter((deal) => deal.id !== dealId);
+
+      if (otherMixAndMatchDeals && otherMixAndMatchDeals.length > 0) {
         const data = productsList.filter((product) => {
           let alreadyInDeal = false;
-          for (let i = 0; i < mixAndMatchDeals.length; i++) {
-            const itemsIdObject = JSON.parse(mixAndMatchDeals[i]?.items_id);
+          for (let i = 0; i < otherMixAndMatchDeals.length; i++) {
+            const itemsIdObject = JSON.parse(
+              otherMixAndMatchDeals[i]?.items_id
+            );
             for (let key in itemsIdObject) {
               // if product is a variant product
               if (
@@ -211,21 +227,27 @@ const UpdateMixAndMatchDeal = () => {
     // removing products from Product Options whose price is less than discount price
     if (products && products.length > 0) {
       const temp = filterProducts(products);
-      // console.log("product options: ", temp);
       setProductOptions(() => temp);
+      // console.log("2nd update... ", temp);
     }
   }, [updatedDeal.discount, products, updatedDeal.isPercent, mixAndMatchDeals]);
 
   // on load fetching details of the Deal
   useEffect(() => {
-    const getSingleDeal = async () => {
+    const getDealInfo = async () => {
       try {
-        const data = {
+        const allDeals = {
+          ...userTypeData,
+          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        };
+        const singleDeal = {
           ...userTypeData,
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
           mix_id: dealId,
         };
-        await dispatch(mixAndMatchPricingDealsList(data)).unwrap();
+
+        await dispatch(mixAndMatchPricingDealsList(allDeals)).unwrap();
+        await dispatch(singleMixAndMatchPricingDeal(singleDeal)).unwrap();
       } catch (error) {
         if (error.status == 401) {
           handleCoockieExpire();
@@ -234,26 +256,38 @@ const UpdateMixAndMatchDeal = () => {
       }
     };
 
-    getSingleDeal();
+    getDealInfo();
+
+    return () => {
+      // console.log("going bye...");
+      setProducts([]);
+      setProductOptions([]);
+      setUpdatedDeal({
+        title: "",
+        description: "",
+        products: [],
+        minQty: "",
+        discount: "",
+        isPercent: "0",
+      });
+    };
   }, []);
+
+  // handling description
+  useEffect(() => {
+    const description = `Buy ${updatedDeal.minQty || 0} get ${
+      updatedDeal.isPercent === "1"
+        ? `${updatedDeal.discount || "0"}%`
+        : `$${updatedDeal.discount || "0.00"}`
+    } off each`;
+
+    setUpdatedDeal((prev) => ({ ...prev, description }));
+  }, [updatedDeal.discount, updatedDeal.isPercent, updatedDeal.minQty]);
 
   // Common Input handler function
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUpdatedDeal((prev) => ({ ...prev, [name]: value }));
-
-    // setting product options depending on the Discount Amount
-    // if (name === "discount" && products && products.length > 0) {
-    //   const formattedValue = CurrencyInputHelperFun(value);
-    //   const temp = products.filter((product) =>
-    //     updatedDeal.isPercent === "0"
-    //       ? parseFloat(product.price) >= parseFloat(formattedValue)
-    //       : product
-    //   );
-    //   console.log("temp: ", temp);
-    //   setProductOptions(temp);
-    //   setUpdatedDeal((prev) => ({ ...prev, products: [] }));
-    // }
   };
 
   // Tab changing handler - Discount Amount & Discount Percentage
@@ -261,7 +295,7 @@ const UpdateMixAndMatchDeal = () => {
     setUpdatedDeal((prev) => ({
       ...prev,
       isPercent: type === "amount" ? "0" : "1",
-      discount: "",
+      discount: type === "amount" ? "0.00" : "0",
     }));
   };
 
@@ -275,6 +309,18 @@ const UpdateMixAndMatchDeal = () => {
 
   // Deleting a Selected Option
   const handleDeleteSelectedOption = (id, name, opt) => {
+    setProductOptions((prev) => {
+      const alreadyExists = prev.find((item) =>
+        opt.var_id
+          ? opt.var_id === item.var_id && item.id === opt.id
+          : item.id === opt.id
+      );
+      if (!alreadyExists) {
+        return [opt, ...prev];
+      } else {
+        return prev;
+      }
+    });
     const filterOptionItems = updatedDeal[name].filter((item) =>
       item.isvarient === "1" ? item.var_id !== opt.var_id : item?.id !== id
     );
@@ -300,6 +346,18 @@ const UpdateMixAndMatchDeal = () => {
 
       const { title, products, minQty, discount, isPercent, description } =
         updatedDeal;
+
+      // const duplicateDealName = mixAndMatchDeals.find(
+      //   ({ id, deal_name }) => id !== dealId && deal_name === title
+      // );
+
+      // if (duplicateDealName) {
+      //   setError((prev) => ({
+      //     ...prev,
+      //     title: "Deal name already exists",
+      //   }));
+      //   return;
+      // }
 
       if (
         Boolean(title.trim()) &&
@@ -348,12 +406,12 @@ const UpdateMixAndMatchDeal = () => {
       } else {
         setError((prev) => ({
           ...prev,
-          title: !title ? "Title is required!" : "",
+          title: !title ? "Deal name is required!" : "",
           products: products.length <= 0 ? "Products are required!" : "",
-          minQty: !minQty || minQty <= 0 ? "Minimum Quantity is required!" : "",
+          minQty: !minQty || minQty <= 0 ? "Minimum quantity is required!" : "",
           discount:
             !discount || parseFloat(discount) <= 0
-              ? "Discount is required"
+              ? "Discount per item is required"
               : "",
         }));
       }
@@ -381,6 +439,7 @@ const UpdateMixAndMatchDeal = () => {
                 <div className="input_area" style={{ marginBottom: "0px" }}>
                   <BasicTextFields
                     type={"text"}
+                    maxLength={100}
                     value={updatedDeal.title}
                     name="title"
                     onChangeFun={handleInputChange}
@@ -391,7 +450,7 @@ const UpdateMixAndMatchDeal = () => {
 
               <div className="q-add-coupon-single-input mb-6">
                 <label htmlFor="description">Description</label>
-                <textarea
+                {/* <textarea
                   className="mt-1"
                   id="description"
                   name="description"
@@ -399,7 +458,16 @@ const UpdateMixAndMatchDeal = () => {
                   cols="50"
                   value={updatedDeal.description}
                   onChange={handleInputChange}
-                ></textarea>
+                ></textarea> */}
+                <div className="input_area" style={{ marginBottom: "0px" }}>
+                  <BasicTextFields
+                    type={"text"}
+                    value={updatedDeal.description}
+                    name="description"
+                    readOnly={true}
+                    // disable={true}
+                  />
+                </div>
               </div>
 
               <Grid container spacing={2}>
@@ -408,6 +476,7 @@ const UpdateMixAndMatchDeal = () => {
                     <label htmlFor="minorder_amt">Minimum Quantity</label>
                     <BasicTextFields
                       type={"text"}
+                      maxLength={6}
                       value={updatedDeal.minQty}
                       onChangeFun={(e) =>
                         handleInputNumber(e, setUpdatedDeal, updatedDeal)
@@ -431,6 +500,7 @@ const UpdateMixAndMatchDeal = () => {
                           </label>
                           <BasicTextFields
                             type={"text"}
+                            maxLength={9}
                             value={updatedDeal.discount}
                             onChangeFun={(e) =>
                               handleInputNumber(e, setUpdatedDeal, updatedDeal)

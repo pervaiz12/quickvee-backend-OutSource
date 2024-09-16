@@ -265,38 +265,44 @@ const SearchableDropdown = ({
             )}
           </div>
         </div>
-
-        {/* <LoadingOptions /> */}
-
         {showOptions ? (
           <div className="options-box custom-scroll">
             {showOptions && !optionsLoading ? (
-              changeFilterableList()?.map((opt) => {
-                const isInSelectedOptions = selectedOption?.some((selected) =>
-                  usingFor === "variantProducts" && selected.isvarient === "1"
-                    ? selected?.id === opt?.id && selected.var_id === opt.var_id
-                    : selected?.id === opt?.id
-                );
-                if (typeof opt === "string") {
-                  return <p>{opt}</p>;
-                } else if (opt?.id && opt?.[name]) {
-                  return (
-                    <span
-                      className={
-                        isInSelectedOptions ? "item active-item" : "item"
-                      }
-                      key={opt.isvarient === "1" ? opt.var_id : opt?.id}
-                      onClick={() =>
-                        isInSelectedOptions
-                          ? handleDeleteSelectedOption(opt?.id, keyName, opt)
-                          : handleSelectProductOptions(opt, keyName)
-                      }
-                    >
-                      {opt?.[name]}
-                    </span>
+              changeFilterableList()?.length > 0 ? (
+                changeFilterableList().map((opt) => {
+                  const isInSelectedOptions = selectedOption?.some(
+                    (selected) =>
+                      usingFor === "variantProducts" &&
+                      selected.isvarient === "1"
+                        ? selected?.id === opt?.id &&
+                          selected.var_id === opt.var_id
+                        : selected?.id === opt?.id
                   );
-                }
-              })
+                  if (typeof opt === "string") {
+                    return <p>{opt}</p>;
+                  } else if (opt?.id && opt?.[name]) {
+                    return (
+                      <span
+                        className={
+                          isInSelectedOptions ? "item active-item" : "item"
+                        }
+                        key={opt.isvarient === "1" ? opt.var_id : opt?.id}
+                        onClick={() =>
+                          isInSelectedOptions
+                            ? handleDeleteSelectedOption(opt?.id, keyName, opt)
+                            : handleSelectProductOptions(opt, keyName)
+                        }
+                      >
+                        {opt?.[name]}
+                      </span>
+                    );
+                  }
+                })
+              ) : (
+                <div className="options-box custom-scroll">
+                  <p className="">No Products found</p>
+                </div>
+              )
             ) : (
               <LoadingOptions />
             )}
