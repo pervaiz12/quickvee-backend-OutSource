@@ -54,11 +54,10 @@ const EditItemOptions = ({
   ];
 
   const showModalCheck = (status) => {
-    console.log("status", status);
     if (status) {
-      ToastifyAlert("Selected Options Checked.", "warn");
+      ToastifyAlert("Selected Options Checked.", "success");
     } else {
-      ToastifyAlert("Selected Options UnChecked.", "warn");
+      ToastifyAlert("Selected Options UnChecked.", "success");
     }
     clearAllCheckBoxes();
     handleOpenItemOption();

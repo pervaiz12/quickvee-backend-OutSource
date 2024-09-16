@@ -773,6 +773,7 @@ const AddProducts = () => {
 
     return () => {
       dispatch(emptyProduct([]));
+      localStorage.removeItem("product-focus-data");
     };
   }, []);
 

@@ -167,12 +167,14 @@ const CategoryListDropDown = ({
         listItem={allcategories}
         // selectedOption={selectedCategory}
         selectedOption={
-          allcategories?.filter((o) => {
-            return (
-              searchCategory.get("category")?.trim()?.toLowerCase() ===
-              o?.id?.trim()?.toLowerCase()
-            );
-          })?.[0]?.title ?? "All"
+          Array.isArray(allcategories)
+            ? allcategories.filter((o) => {
+                return (
+                  searchCategory.get("category")?.trim()?.toLowerCase() ===
+                  o?.id?.trim()?.toLowerCase()
+                );
+              })?.[0]?.title ?? "All"
+            : "All"
         }
         onClickHandler={handleOptionClick}
         dropdownFor={"category"}
