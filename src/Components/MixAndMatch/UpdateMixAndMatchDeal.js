@@ -56,10 +56,6 @@ const UpdateMixAndMatchDeal = () => {
     discount: "",
   });
 
-  // useEffect(() => {
-  //   console.log("mixAndMatchDeals: ", mixAndMatchDeals);
-  // }, [mixAndMatchDeals]);
-
   // fetching products data
   useEffect(() => {
     const fetchProducts = async () => {
@@ -79,9 +75,8 @@ const UpdateMixAndMatchDeal = () => {
       try {
         setOptionsLoading(true);
         const productsData = await dispatch(fetchProductsData(data)).unwrap();
-        if (productsData && productsData.length > 0) {
-          setProducts(() => productsData);
-        }
+        // console.log("api productsData: ", productsData);
+        setProducts(() => productsData);
       } catch (error) {
         if (error.status === 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
@@ -96,17 +91,26 @@ const UpdateMixAndMatchDeal = () => {
     fetchProducts();
   }, [debouncedValue]);
 
+  // setting dropdown product options via api
+  useEffect(() => {
+    // filtering based on the price & discount
+    const productsList = products.filter((product) =>
+      updatedDeal.isPercent === "0"
+        ? parseFloat(product.price) >= updatedDeal.discount
+        : product
+    );
+    setProductOptions(productsList);
+  }, [products, updatedDeal.isPercent, updatedDeal.discount]);
+
   // setting default data for the current deal selected
   useEffect(() => {
     if (singleMixAndMatchDeal && singleMixAndMatchDeal.length > 0) {
       const deal = singleMixAndMatchDeal[0];
+      // console.log("single deal: ", deal);
 
-      const productsList = products.filter((product) =>
-        deal.is_percent === "0"
-          ? parseFloat(product.price) >= deal.discount
-          : product
-      );
-      setProductOptions(productsList);
+      if (deal.id !== dealId) {
+        return;
+      }
 
       const items = deal.items_names;
       let defaultProducts = [];
@@ -128,9 +132,9 @@ const UpdateMixAndMatchDeal = () => {
         setSelectedProducts(defaultProducts);
       }
 
+      // console.log("setting default products: ", selectedProducts);
       const dealData = {
         title: deal.deal_name || "",
-        // description: deal.description || "",
         products: selectedProducts,
         minQty: deal.min_qty || "0",
         discount: deal.discount || "0.00",
@@ -139,7 +143,7 @@ const UpdateMixAndMatchDeal = () => {
       };
       setUpdatedDeal(dealData);
     }
-  }, [singleMixAndMatchDeal, products, selectedProducts]);
+  }, [singleMixAndMatchDeal, selectedProducts]);
 
   // filter products by discount
   const filterByDiscount = (productsData) => {
@@ -163,6 +167,7 @@ const UpdateMixAndMatchDeal = () => {
           ? filterByDiscount(updatedDeal.products)
           : updatedDeal.products;
 
+      // console.log("new default selected product: ", temp);
       setUpdatedDeal((prev) => ({
         ...prev,
         products: temp,
@@ -170,16 +175,24 @@ const UpdateMixAndMatchDeal = () => {
     }
   }, [updatedDeal.isPercent, updatedDeal.discount]);
 
-  // filtering Products Options
+  // filtering dropdown Products Options
   useEffect(() => {
     const filterProducts = (productsList) => {
       let temp = [];
 
-      if (mixAndMatchDeals && mixAndMatchDeals.length > 0) {
+      // only passing all other deals except the current one.
+      const otherMixAndMatchDeals =
+        mixAndMatchDeals &&
+        mixAndMatchDeals.length > 0 &&
+        mixAndMatchDeals.filter((deal) => deal.id !== dealId);
+
+      if (otherMixAndMatchDeals && otherMixAndMatchDeals.length > 0) {
         const data = productsList.filter((product) => {
           let alreadyInDeal = false;
-          for (let i = 0; i < mixAndMatchDeals.length; i++) {
-            const itemsIdObject = JSON.parse(mixAndMatchDeals[i]?.items_id);
+          for (let i = 0; i < otherMixAndMatchDeals.length; i++) {
+            const itemsIdObject = JSON.parse(
+              otherMixAndMatchDeals[i]?.items_id
+            );
             for (let key in itemsIdObject) {
               // if product is a variant product
               if (
@@ -215,12 +228,13 @@ const UpdateMixAndMatchDeal = () => {
     if (products && products.length > 0) {
       const temp = filterProducts(products);
       setProductOptions(() => temp);
+      // console.log("2nd update... ", temp);
     }
   }, [updatedDeal.discount, products, updatedDeal.isPercent, mixAndMatchDeals]);
 
   // on load fetching details of the Deal
   useEffect(() => {
-    const getDealsInfo = async () => {
+    const getDealInfo = async () => {
       try {
         const allDeals = {
           ...userTypeData,
@@ -242,9 +256,12 @@ const UpdateMixAndMatchDeal = () => {
       }
     };
 
-    getDealsInfo();
+    getDealInfo();
 
     return () => {
+      // console.log("going bye...");
+      setProducts([]);
+      setProductOptions([]);
       setUpdatedDeal({
         title: "",
         description: "",
@@ -271,19 +288,6 @@ const UpdateMixAndMatchDeal = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUpdatedDeal((prev) => ({ ...prev, [name]: value }));
-
-    // setting product options depending on the Discount Amount
-    // if (name === "discount" && products && products.length > 0) {
-    //   const formattedValue = CurrencyInputHelperFun(value);
-    //   const temp = products.filter((product) =>
-    //     updatedDeal.isPercent === "0"
-    //       ? parseFloat(product.price) >= parseFloat(formattedValue)
-    //       : product
-    //   );
-    //   console.log("temp: ", temp);
-    //   setProductOptions(temp);
-    //   setUpdatedDeal((prev) => ({ ...prev, products: [] }));
-    // }
   };
 
   // Tab changing handler - Discount Amount & Discount Percentage
@@ -303,14 +307,8 @@ const UpdateMixAndMatchDeal = () => {
     }));
   };
 
-  // useEffect(() => {
-  //   console.log("productOptions: ", productOptions);
-  // }, [productOptions]);
-
   // Deleting a Selected Option
   const handleDeleteSelectedOption = (id, name, opt) => {
-    // console.log("opt: ", opt);
-    // console.log("product options: ", productOptions);
     setProductOptions((prev) => {
       const alreadyExists = prev.find((item) =>
         opt.var_id

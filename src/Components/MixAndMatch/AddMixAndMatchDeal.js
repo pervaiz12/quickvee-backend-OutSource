@@ -26,8 +26,8 @@ const AddMixAndMatchDeal = () => {
   const { mixAndMatchDeals } = useSelector((state) => state.mixAndMatchList);
   const dispatch = useDispatch();
 
-  const [productOptions, setProductOptions] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [productOptions, setProductOptions] = useState([]); // fpr products dropdown options
+  const [products, setProducts] = useState([]); // for api products
   const [loading, setLoading] = useState(false);
   const [optionsLoading, setOptionsLoading] = useState(false);
   const [productName, setProductName] = useState("");
@@ -49,10 +49,6 @@ const AddMixAndMatchDeal = () => {
     discount: "",
   });
 
-  // useEffect(() => {
-  //   console.log("mixAndMatchDeals: ", mixAndMatchDeals);
-  // }, [mixAndMatchDeals]);
-
   // Fetching all Mix and Pricing Deals
   useEffect(() => {
     const getMixAndMatchPricingDeals = async () => {
@@ -73,57 +69,56 @@ const AddMixAndMatchDeal = () => {
     getMixAndMatchPricingDeals();
   }, []);
 
-  // Selecting a Product Option
-  const handleSelectProductOptions = (value, name) => {
-    setDealInfo((prev) => ({
-      ...prev,
-      [name]: [...prev[name], value],
-    }));
-  };
+  // Fetching Products Data
+  useEffect(() => {
+    const fetchProducts = async () => {
+      let data = {
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        format: "json",
+        category_id: "all",
+        show_status: "all",
+        name: debouncedValue,
+        listing_type: 1,
+        offset: 0,
+        limit: 50,
+        page: 0,
+        ...userTypeData,
+      };
 
-  // Deleting Selected Product Option
-  const handleDeleteSelectedOption = (id, name, opt) => {
-    const filterOptionItems = dealInfo[name].filter((item) =>
-      item.isvarient === "1" ? item.var_id !== opt.var_id : item?.id !== id
+      try {
+        setOptionsLoading(true);
+        const productsData = await dispatch(fetchProductsData(data)).unwrap();
+        setProducts(() => productsData);
+      } catch (error) {
+        if (error.status === 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status === "Network Error") {
+          getNetworkError();
+        }
+      } finally {
+        setOptionsLoading(false);
+      }
+    };
+    fetchProducts();
+  }, [debouncedValue]);
+
+  // setting dropdown product options via api
+  useEffect(() => {
+    // filtering based on the price & discount
+    const productsList = products.filter((product) =>
+      dealInfo.isPercent === "0"
+        ? parseFloat(product.price) >= dealInfo.discount
+        : product
     );
-    setDealInfo((prev) => ({
-      ...prev,
-      [name]: filterOptionItems,
-    }));
-  };
-
-  const handleUpdateError = (updatedErrorValue) => {
-    setError((prev) => ({
-      ...prev,
-      ...updatedErrorValue,
-    }));
-  };
-
-  // All Inputs handler
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setDealInfo((prev) => ({ ...prev, [name]: value }));
-  };
-
-  // Discount & Percentage Tab handling
-  const handleTabChange = (type) => {
-    setDealInfo((prev) => ({
-      ...prev,
-      isPercent: type === "amount" ? "0" : "1",
-      discount: type === "amount" ? "0.00" : "0",
-    }));
-  };
+    setProductOptions(productsList);
+    // console.log("1st update... ", productsList);
+  }, [products, dealInfo.isPercent, dealInfo.discount]);
 
   // Filtering Product Options
   useEffect(() => {
-    // console.log("mixAndMatchDeals: ", mixAndMatchDeals);
-    // console.log("products: ", products);
-    // console.log("dealInfo.products: ", dealInfo.products);
-    // console.log("------------");
-
     const filterProducts = (productsList) => {
       const filterByDiscount = (productsData) => {
-        // console.log("filter by discount...");
         const data = productsData.filter((product) => {
           const result =
             dealInfo.isPercent === "0"
@@ -174,14 +169,14 @@ const AddMixAndMatchDeal = () => {
       return temp;
     };
 
-    // removing products from Product Options whose price is less than discount price
+    // removing products from Product Options whose price is less than discount price & already in another deal
     if (products && products.length > 0) {
       const temp = filterProducts(products);
-      // console.log("product options: ", temp);
+      // console.log("dropdown product options: ", temp);
       setProductOptions(() => temp);
     }
 
-    // removing products from already Selected Products whose price is less than discount price
+    // removing products from already Selected Products whose price is less than discount price & already in another deal
     if (dealInfo.products && dealInfo.products.length > 0) {
       setDealInfo((prev) => ({
         ...prev,
@@ -201,41 +196,46 @@ const AddMixAndMatchDeal = () => {
     setDealInfo((prev) => ({ ...prev, description }));
   }, [dealInfo.discount, dealInfo.isPercent, dealInfo.minQty]);
 
-  // Fetching Products Data
-  useEffect(() => {
-    const fetchProducts = async () => {
-      let data = {
-        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-        format: "json",
-        category_id: "all",
-        show_status: "all",
-        name: debouncedValue,
-        listing_type: 1,
-        offset: 0,
-        limit: 50,
-        page: 0,
-        ...userTypeData,
-      };
+  // Selecting a Product Option
+  const handleSelectProductOptions = (value, name) => {
+    setDealInfo((prev) => ({
+      ...prev,
+      [name]: [...prev[name], value],
+    }));
+  };
 
-      try {
-        setOptionsLoading(true);
-        const productsData = await dispatch(fetchProductsData(data)).unwrap();
-        if (productsData && productsData.length > 0) {
-          setProducts(() => productsData);
-        }
-      } catch (error) {
-        if (error.status === 401 || error.response.status === 401) {
-          getUnAutherisedTokenMessage();
-          handleCoockieExpire();
-        } else if (error.status === "Network Error") {
-          getNetworkError();
-        }
-      } finally {
-        setOptionsLoading(false);
-      }
-    };
-    fetchProducts();
-  }, [debouncedValue]);
+  // Deleting Selected Product Option
+  const handleDeleteSelectedOption = (id, name, opt) => {
+    const filterOptionItems = dealInfo[name].filter((item) =>
+      item.isvarient === "1" ? item.var_id !== opt.var_id : item?.id !== id
+    );
+    setDealInfo((prev) => ({
+      ...prev,
+      [name]: filterOptionItems,
+    }));
+  };
+
+  const handleUpdateError = (updatedErrorValue) => {
+    setError((prev) => ({
+      ...prev,
+      ...updatedErrorValue,
+    }));
+  };
+
+  // All Inputs handler
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setDealInfo((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Discount & Percentage Tab handling
+  const handleTabChange = (type) => {
+    setDealInfo((prev) => ({
+      ...prev,
+      isPercent: type === "amount" ? "0" : "1",
+      discount: type === "amount" ? "0.00" : "0",
+    }));
+  };
 
   // Adding New Deal function
   const handleAddNewDeal = async (e) => {
@@ -336,7 +336,6 @@ const AddMixAndMatchDeal = () => {
                     <p className="error-message">{error.title}</p>
                   )}
                 </div>
-
                 <div className="q-add-coupon-single-input mb-6">
                   <label htmlFor="description">Description</label>
                   <div className="input_area" style={{ marginBottom: "0px" }}>
@@ -345,11 +344,9 @@ const AddMixAndMatchDeal = () => {
                       value={dealInfo.description}
                       name="description"
                       readOnly={true}
-                      // disable={true}
                     />
                   </div>
                 </div>
-
                 <Grid container spacing={2}>
                   <Grid item md={5} xs={12}>
                     <div className="q_coupon_minium input_area">
@@ -394,7 +391,6 @@ const AddMixAndMatchDeal = () => {
                             )}
                           </div>
                         </Grid>
-
                         <Grid item xs={7}>
                           <div className="AMT_PER_button">
                             <Grid container>
