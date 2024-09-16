@@ -334,6 +334,8 @@ const MainProducts = () => {
         setlistingTypesDropdownVisible(false);
         break;
       case "listingType":
+        setSearchId("");
+        searchParams.delete("search");
         dispatch(emptyProduct([]));
         handleOptionClick([]);
         if (option.id === 0) {
@@ -345,8 +347,6 @@ const MainProducts = () => {
         }
         setSelectedListingTypeValue(option);
         changeProductPageUrl("listingType", option?.id);
-        setSearchId("");
-        searchParams.delete("search");
         setProductIdList([]);
         setlistingTypesDropdownVisible(false);
         break;

@@ -178,6 +178,14 @@ const ProductTable = ({
 
   useEffect(() => {
     fetchInventoryData();
+    let timer;
+    if (localStorage.getItem("product-focus-data") !== null) {
+      timer = setTimeout(() => {
+        localStorage.removeItem("product-focus-data");
+      }, 600);
+    }
+
+    return () => clearTimeout(timer);
   }, []);
 
   const checkStatus = (status) => {
