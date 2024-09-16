@@ -143,18 +143,18 @@ export default function StoreCreditReportTable({
                       ))}
                     </TableHead>
                     <TableBody>
-                      {dataArr.length > 0 &&
+                      {dataArr?.length > 0 &&
                         dataArr?.map((item, index) => (
                           <>
                             <StyledTableRow key={index}>
                             <StyledTableCell>
                                 <div className="text-[#000000] order_method ">
-                                    {item.customer_name.length < 18
-                                      ? item.customer_name
-                                      : item.customer_name.slice(0, 18) + `...` || ""}
+                                    {item.customer_name?.length < 18
+                                      ? item?.customer_name
+                                      : item?.customer_name?.slice(0, 18) + `...` || ""}
                                 </div>
                                 <div className="text-[#818181]  flex">
-                                {item.customer_email && (
+                                {item?.customer_email && (
                                   <img
                                     src={emailLogo}
                                     alt=""
@@ -164,14 +164,14 @@ export default function StoreCreditReportTable({
                                 <p>{item.customer_email || ""}</p>
                               </div>
                               <div className="text-[#818181] flex">
-                                {item.customer_phone && (
+                                {item?.customer_phone && (
                                   <img
                                     src={phoneLogo}
                                     alt=""
                                     className="pe-1"
                                   />
                                 )}{" "}
-                                <p> {item.customer_phone || ""}</p>
+                                <p> {item?.customer_phone || ""}</p>
                               </div>
                               </StyledTableCell>
                               <StyledTableCell>
