@@ -154,7 +154,7 @@ const SideMenu = () => {
           text: "Import Data",
           link: "/import-data",
         };
-        console.log("updatedMenuItems",updatedMenuItems)
+        // console.log("updatedMenuItems",updatedMenuItems)
         updatedMenuItems.splice(updatedMenuItems.length - 1, 0, newMenuItem);
         const newMenuItemDigit = {
           id: 92,
@@ -682,7 +682,7 @@ const menuItems = [
             text: "Gift Card Report",
             link: "/store-reporting/gift-card-report",
           },
-          
+
           {
             id: 79,
             text: "Order Type",
@@ -708,7 +708,7 @@ const menuItems = [
           //   text: "Sales by Hour Report",
           //   link: "/store-reporting/sales-by-hour-report",
           // },
-          
+
           {
             id: 69,
             text: "Top Sellers",
