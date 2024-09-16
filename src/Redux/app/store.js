@@ -29,6 +29,7 @@ import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetw
 import ExportInventoryReducer from "../features/ExportInventory/ExportInventorySlice";
 import StoreOrderSliceReducer from "../features/StoreOrder/StoreOrderSlice";
 import ItemSalesReportListReducer from "../features/Reports/ItemSales/ItemSalesSlice";
+import NewItemSalesReportListReducer from "../features/Reports/NewItemSales/NewItemSalesSlice";
 import OrderTypeReducer from "../features/OrderType/OrderTypeSlice";
 import TaxesreportSliceReducer from "../features/TaxesReport/taxesreportSlice";
 import PermissionListReducer from "../features/Permission/PermissionSlice";
@@ -77,6 +78,7 @@ import DetailedLoyaltyPointsReportSlice from "../features/Reports/DatailedLoyalt
 import GiftCardReportSlice from "../features/Reports/GiftCard/GiftCardReportSlice";
 import RefundRequestSlice from "../features/RefundRequest/RefundRequestSlice";
 import NewCustomersAddedReportSlice from "../features/Reports/NewCustomersAddedReport/NewCustomersAddedReportSlice";
+import MixAndMatchSliceReducer from "../features/MixAndMatch/mixAndMatchSlice";
 const store = configureStore({
   reducer: {
     VendorList: VendorListReducer,
@@ -119,6 +121,7 @@ const store = configureStore({
     ExportInventoryData: ExportInventoryReducer,
 
     ItemSalesReportList: ItemSalesReportListReducer,
+    NewItemSalesReportList: NewItemSalesReportListReducer,
 
     //Order Type
     orderTypeList: OrderTypeReducer,
@@ -145,7 +148,7 @@ const store = configureStore({
     unverifiedMerchantRecord: UnVerifiedMerchantSliceReducer,
     OrderRefundList: OrderRefundListReducer,
     productsListData: productsReducer,
-
+    mixAndMatchList: MixAndMatchSliceReducer,
     loyaltyprogram: loyaltyprogramSlice,
     ShiftSummarylist: ShiftSummarySlice,
     StoreSetupList: SettingSetupSlice,
@@ -171,8 +174,8 @@ const store = configureStore({
     SalesByHoursData: SalesByHoursReportSlice,
     storeCreditReportList: StoreCreditReportSlice,
     DetailedLoyaltyPointsReport: DetailedLoyaltyPointsReportSlice,
-    RefundRequestList: RefundRequestSlice, 
-    NewCustomersAddedReport:NewCustomersAddedReportSlice,
+    RefundRequestList: RefundRequestSlice,
+    NewCustomersAddedReport: NewCustomersAddedReportSlice,
   },
 
   //setting setup

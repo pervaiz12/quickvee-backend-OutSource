@@ -1,7 +1,5 @@
 // All api calls are initialized in this component for this application
 
-const { Dashboard } = require("@material-ui/icons");
-
 //remove unwanted and credentials of other app
 module.exports = Object.freeze({
   // BASE_URL: "https://sandbox.quickvee.net/",
@@ -33,6 +31,14 @@ module.exports = Object.freeze({
 
   //Importdata API Calls
   IMPORT_DATA: "Import_data_api/import",
+
+  // Mix and Match Pricing
+  ADD_MIX_MAX_PRICING_DEAL: "React_max_purchase_api/add_mix_match_pricing",
+  MIX_MAX_PRICING_DEALS_LIST: "React_max_purchase_api/mix_match_pricing_list",
+  DELETE_MIX_MAX_PRICING_DEAL:
+    "React_max_purchase_api/delete_mix_match_pricing",
+  ENABLE_DISABLE_MIX_MAX_PRICING_DEAL:
+    "React_max_purchase_api/enable_mix_match_pricing",
 
   //Loyalty Program
   LOYALTY_PROGRAM_LIST: "LoyaltyProgramReactAPI/loyalty_program_list",
@@ -152,6 +158,7 @@ module.exports = Object.freeze({
 
   // for item sales report
   GET_ITEMWISE_SALE_LIST: "ReportingReactapi/get_itemwise_sale_list",
+  NEW_ITEMWISE_SALE_LIST: "ReportingReactapi/new_item_sale_report",
   PAY_IN_REPORT: "ReportingReactapi/pay_in_report",
   DROP_CASH_REPORT: "ReportingReactapi/drop_cash_report",
   EMPLOYEE_SALES_PER_CATEGORY_REPORT: "ReportingReactapi/emp_category_sale",
@@ -275,6 +282,7 @@ module.exports = Object.freeze({
   PRODUCT_DEFAULT_IMAGE: this.BASE_URL + "upload/products/MaskGroup4542.png",
   UPDATE_TYPE: "Product_api_react/update_type",
   MASS_INVENTORY_UPDATE: "Product_api_react/mass_update_inventory",
+  ALL_PRODUCTS_WITH_VARIANTS_LIST: "ReportingReactapi/variant_list_data",
 
   //shiftsummary api
 

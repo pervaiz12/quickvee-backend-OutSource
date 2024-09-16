@@ -448,7 +448,7 @@ const GeneratePUC = ({
                               onClick={() =>
                                 handleCloseEditModal(
                                   "single_inventory_tranfer",
-                                  formValue?.[0]?.productEditId,
+                                  formValue?.[index]?.[title]?.productEditId,
                                   varientTitle[index]
                                 )
                               }

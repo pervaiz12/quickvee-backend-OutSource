@@ -55,6 +55,7 @@ import "./Styles/PurchasePage.css";
 import "./Styles/TableOrderPage.css";
 import "./Styles/MainInStore.css";
 import "./Styles/MainOrderPage.css";
+import "./Styles/MixAndMatch.css";
 import "./Styles/CouponDiscount.css";
 import "./Styles/ImportData.css";
 import "./Styles/DailyDaterange.css";
@@ -328,6 +329,22 @@ function App() {
               path="/coupons/edit-coupons/:couponsCode"
               element={<Main visible={"coupons-edit-cop"} />}
             />
+            <Route
+              exact
+              path="/mix-and-match"
+              element={<Main visible={"mix-and-match"} />}
+            />
+            <Route
+              exact
+              path="/mix-and-match/add"
+              element={<Main visible={"add-mix-and-match"} />}
+            />
+            <Route
+              exact
+              path="/mix-and-match/update/:dealId"
+              element={<Main visible={"update-mix-and-match"} />}
+            />
+
             <Route
               exact
               path="/vendors"
@@ -649,6 +666,12 @@ function App() {
               element={<Main visible={"need_help"} />}
             />
 
+            <Route
+              exact
+              path="/store-reporting/new-item-sales-report"
+              element={<Main visible={"new-item-sales-report"} />}
+            />
+
             {/* multiple users dashbaord */}
 
             <Route
@@ -774,7 +797,7 @@ function App() {
               path="/unapprove/store-order"
               element={<Main visible={"store-order"} />}
             />
-             <Route
+            <Route
               exact
               path="/unapprove/refund-request"
               element={<Main visible={"refund-request"} />}
@@ -835,7 +858,6 @@ function App() {
               path="/users/view/unapprove/merchant-details"
               element={<Main visible={"merchant-details"} />}
             />
-            
           </Route>
 
           {/* -----------------=============superadmin===========------------------- */}
