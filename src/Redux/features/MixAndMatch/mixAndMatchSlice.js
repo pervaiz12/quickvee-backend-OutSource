@@ -94,7 +94,7 @@ export const singleMixAndMatchPricingDeal = createAsyncThunk(
         }
       );
 
-      // console.log("mix match deals response: ", response);
+      // console.log("single deal response: ", response);
       if (response.status === 200) {
         return response.data.data || [];
       }
@@ -208,7 +208,11 @@ export const deleteMixAndMatchPricingDeal = createAsyncThunk(
 const mixAndMatchSlice = createSlice({
   name: "mixAndMatch",
   initialState,
-  reducers: {},
+  reducers: {
+    clearSingleMixAndMatchDeal: (state, action) => {
+      state.singleMixAndMatchDeal = [];
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(mixAndMatchPricingDealsList.pending, (state) => {
       state.loading = true;
@@ -235,4 +239,5 @@ const mixAndMatchSlice = createSlice({
   },
 });
 
+export const { clearSingleMixAndMatchDeal } = mixAndMatchSlice.actions;
 export default mixAndMatchSlice.reducer;

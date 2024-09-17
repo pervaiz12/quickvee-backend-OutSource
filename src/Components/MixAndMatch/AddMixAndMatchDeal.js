@@ -9,7 +9,7 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import { useDispatch } from "react-redux";
 import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import PasswordShow from "../../Common/passwordShow";
-import { handleInputNumber } from "../../Constants/utils";
+import { handleInputNumber, isValidNumber } from "../../Constants/utils";
 import {
   addNewDeal,
   mixAndMatchPricingDealsList,
@@ -355,9 +355,11 @@ const AddMixAndMatchDeal = () => {
                         type={"text"}
                         maxLength={6}
                         value={dealInfo.minQty}
-                        onChangeFun={(e) =>
-                          handleInputNumber(e, setDealInfo, dealInfo)
-                        }
+                        onChangeFun={(e) => {
+                          if (isValidNumber(Number(e.target.value))) {
+                            handleInputNumber(e, setDealInfo, dealInfo);
+                          }
+                        }}
                         placeholder="Enter Minimum Quantity"
                         name="minQty"
                       />

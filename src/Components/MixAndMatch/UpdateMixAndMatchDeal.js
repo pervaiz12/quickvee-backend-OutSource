@@ -11,8 +11,9 @@ import { useDispatch } from "react-redux";
 import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import PasswordShow from "../../Common/passwordShow";
 import { useSelector } from "react-redux";
-import { handleInputNumber } from "../../Constants/utils";
+import { handleInputNumber, isValidNumber } from "../../Constants/utils";
 import {
+  clearSingleMixAndMatchDeal,
   mixAndMatchPricingDealsList,
   singleMixAndMatchPricingDeal,
   updateMixAndMatchpricingDeal,
@@ -141,6 +142,7 @@ const UpdateMixAndMatchDeal = () => {
         isPercent: deal.is_percent || "0",
         isEnable: deal.is_enable || "0",
       };
+      // console.log("deal data: ", dealData);
       setUpdatedDeal(dealData);
     }
   }, [singleMixAndMatchDeal, selectedProducts]);
@@ -260,6 +262,7 @@ const UpdateMixAndMatchDeal = () => {
 
     return () => {
       // console.log("going bye...");
+      dispatch(clearSingleMixAndMatchDeal());
       setProducts([]);
       setProductOptions([]);
       setUpdatedDeal({
@@ -271,7 +274,7 @@ const UpdateMixAndMatchDeal = () => {
         isPercent: "0",
       });
     };
-  }, []);
+  }, [dealId]);
 
   // handling description
   useEffect(() => {
@@ -478,9 +481,11 @@ const UpdateMixAndMatchDeal = () => {
                       type={"text"}
                       maxLength={6}
                       value={updatedDeal.minQty}
-                      onChangeFun={(e) =>
-                        handleInputNumber(e, setUpdatedDeal, updatedDeal)
-                      }
+                      onChangeFun={(e) => {
+                        if (isValidNumber(Number(e.target.value))) {
+                          handleInputNumber(e, setUpdatedDeal, updatedDeal);
+                        }
+                      }}
                       placeholder="Enter Minimum Quantity"
                       name="minQty"
                     />

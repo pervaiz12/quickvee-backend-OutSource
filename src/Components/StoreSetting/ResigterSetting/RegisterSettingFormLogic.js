@@ -147,7 +147,7 @@ const RegisterSettingFormLogic = () => {
           [fieldName]: newval,
         }));
         break;
-      case "denomination":
+      case "upload_paxlog":
         let newuploadpaxlog = parseInt(event.target.value) === 1 ? 0 : 1;
           setValues((prevValues) => ({
             ...prevValues,
