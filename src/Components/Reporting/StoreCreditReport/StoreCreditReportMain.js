@@ -32,12 +32,13 @@ export default function StoreCreditReportMain() {
   );
   useEffect(() => {
     getStoreCreditReportTableData();
-  }, [merchant_id]);
+  }, [merchant_id,searchRecord]);
   const getStoreCreditReportTableData = async () => {
     if (merchant_id) {
       try {
         let data = {
           merchant_id,
+          search_by:searchRecord,
           ...userTypeData,
         };
 
