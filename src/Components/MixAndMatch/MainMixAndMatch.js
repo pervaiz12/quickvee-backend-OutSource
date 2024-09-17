@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import PasswordShow from "../../Common/passwordShow";
 import SingleDeal from "./SingleDeal";
+import NoDataFound from "../../reuseableComponents/NoDataFound";
 
 const LoadingDeals = () => {
   return (
@@ -151,9 +152,12 @@ const MainMixAndMatch = () => {
                       />
                     ))
                   ) : (
-                    <Grid item>
+                    <>
+                      {/* <Grid item>
                       <p>No Deals Found</p>
-                    </Grid>
+                    </Grid> */}
+                      <NoDataFound table={true} />
+                    </>
                   )}
                 </>
               )}

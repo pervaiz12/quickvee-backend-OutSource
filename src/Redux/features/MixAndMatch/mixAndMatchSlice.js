@@ -11,6 +11,7 @@ import {
 const initialState = {
   loading: false,
   mixAndMatchDeals: [],
+  singleMixAndMatchDeal: [],
   error: "",
 };
 
@@ -62,6 +63,38 @@ export const mixAndMatchPricingDealsList = createAsyncThunk(
       );
 
       // console.log("mix match deals response: ", response);
+      if (response.status === 200) {
+        return response.data.data || [];
+      }
+    } catch (error) {
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
+    }
+  }
+);
+
+export const singleMixAndMatchPricingDeal = createAsyncThunk(
+  "mixAndMatch/singleMixAndMatchPricingDeal",
+  async (data, { rejectWithValue }) => {
+    try {
+      const { token, ...dataNew } = data;
+
+      const response = await axios.post(
+        BASE_URL + MIX_MAX_PRICING_DEALS_LIST,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // console.log("single deal response: ", response);
       if (response.status === 200) {
         return response.data.data || [];
       }
@@ -175,7 +208,11 @@ export const deleteMixAndMatchPricingDeal = createAsyncThunk(
 const mixAndMatchSlice = createSlice({
   name: "mixAndMatch",
   initialState,
-  reducers: {},
+  reducers: {
+    clearSingleMixAndMatchDeal: (state, action) => {
+      state.singleMixAndMatchDeal = [];
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(mixAndMatchPricingDealsList.pending, (state) => {
       state.loading = true;
@@ -188,7 +225,19 @@ const mixAndMatchSlice = createSlice({
       state.mixAndMatchDeals = [];
       state.loading = false;
     });
+    builder.addCase(singleMixAndMatchPricingDeal.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(singleMixAndMatchPricingDeal.fulfilled, (state, action) => {
+      state.singleMixAndMatchDeal = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(singleMixAndMatchPricingDeal.rejected, (state, action) => {
+      state.singleMixAndMatchDeal = [];
+      state.loading = false;
+    });
   },
 });
 
+export const { clearSingleMixAndMatchDeal } = mixAndMatchSlice.actions;
 export default mixAndMatchSlice.reducer;

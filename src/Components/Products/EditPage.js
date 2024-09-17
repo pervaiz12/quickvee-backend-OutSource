@@ -172,6 +172,7 @@ const EditPage = ({
                       fetchSingleVarientData={fetchSingleVarientData}
                       varientName={varientName}
                       handleCloseEditModal={handleCloseEditModal}
+                      varientIndex={varientIndex}
                     />
                   </Suspense>
                 </TabPanel>

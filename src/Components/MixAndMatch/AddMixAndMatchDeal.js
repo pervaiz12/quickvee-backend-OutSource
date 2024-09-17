@@ -9,7 +9,7 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import { useDispatch } from "react-redux";
 import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import PasswordShow from "../../Common/passwordShow";
-import { handleInputNumber } from "../../Constants/utils";
+import { handleInputNumber, isValidNumber } from "../../Constants/utils";
 import {
   addNewDeal,
   mixAndMatchPricingDealsList,
@@ -26,8 +26,8 @@ const AddMixAndMatchDeal = () => {
   const { mixAndMatchDeals } = useSelector((state) => state.mixAndMatchList);
   const dispatch = useDispatch();
 
-  const [productOptions, setProductOptions] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [productOptions, setProductOptions] = useState([]); // fpr products dropdown options
+  const [products, setProducts] = useState([]); // for api products
   const [loading, setLoading] = useState(false);
   const [optionsLoading, setOptionsLoading] = useState(false);
   const [productName, setProductName] = useState("");
@@ -69,57 +69,56 @@ const AddMixAndMatchDeal = () => {
     getMixAndMatchPricingDeals();
   }, []);
 
-  // Selecting a Product Option
-  const handleSelectProductOptions = (value, name) => {
-    setDealInfo((prev) => ({
-      ...prev,
-      [name]: [...prev[name], value],
-    }));
-  };
+  // Fetching Products Data
+  useEffect(() => {
+    const fetchProducts = async () => {
+      let data = {
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        format: "json",
+        category_id: "all",
+        show_status: "all",
+        name: debouncedValue,
+        listing_type: 1,
+        offset: 0,
+        limit: 50,
+        page: 0,
+        ...userTypeData,
+      };
 
-  // Deleting Selected Product Option
-  const handleDeleteSelectedOption = (id, name, opt) => {
-    const filterOptionItems = dealInfo[name].filter((item) =>
-      item.isvarient === "1" ? item.var_id !== opt.var_id : item?.id !== id
+      try {
+        setOptionsLoading(true);
+        const productsData = await dispatch(fetchProductsData(data)).unwrap();
+        setProducts(() => productsData);
+      } catch (error) {
+        if (error.status === 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status === "Network Error") {
+          getNetworkError();
+        }
+      } finally {
+        setOptionsLoading(false);
+      }
+    };
+    fetchProducts();
+  }, [debouncedValue]);
+
+  // setting dropdown product options via api
+  useEffect(() => {
+    // filtering based on the price & discount
+    const productsList = products.filter((product) =>
+      dealInfo.isPercent === "0"
+        ? parseFloat(product.price) >= dealInfo.discount
+        : product
     );
-    setDealInfo((prev) => ({
-      ...prev,
-      [name]: filterOptionItems,
-    }));
-  };
-
-  const handleUpdateError = (updatedErrorValue) => {
-    setError((prev) => ({
-      ...prev,
-      ...updatedErrorValue,
-    }));
-  };
-
-  // All Inputs handler
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setDealInfo((prev) => ({ ...prev, [name]: value }));
-  };
-
-  // Discount & Percentage Tab handling
-  const handleTabChange = (type) => {
-    setDealInfo((prev) => ({
-      ...prev,
-      isPercent: type === "amount" ? "0" : "1",
-      discount: "",
-    }));
-  };
+    setProductOptions(productsList);
+    // console.log("1st update... ", productsList);
+  }, [products, dealInfo.isPercent, dealInfo.discount]);
 
   // Filtering Product Options
   useEffect(() => {
-    // console.log("mixAndMatchDeals: ", mixAndMatchDeals);
-    // console.log("products: ", products);
-    // console.log("dealInfo.products: ", dealInfo.products);
-    // console.log("------------");
-
     const filterProducts = (productsList) => {
       const filterByDiscount = (productsData) => {
-        // console.log("filter by discount...");
         const data = productsData.filter((product) => {
           const result =
             dealInfo.isPercent === "0"
@@ -170,14 +169,14 @@ const AddMixAndMatchDeal = () => {
       return temp;
     };
 
-    // removing products from Product Options whose price is less than discount price
+    // removing products from Product Options whose price is less than discount price & already in another deal
     if (products && products.length > 0) {
       const temp = filterProducts(products);
-      // console.log("product options: ", temp);
+      // console.log("dropdown product options: ", temp);
       setProductOptions(() => temp);
     }
 
-    // removing products from already Selected Products whose price is less than discount price
+    // removing products from already Selected Products whose price is less than discount price & already in another deal
     if (dealInfo.products && dealInfo.products.length > 0) {
       setDealInfo((prev) => ({
         ...prev,
@@ -186,45 +185,57 @@ const AddMixAndMatchDeal = () => {
     }
   }, [dealInfo.discount, products, dealInfo.isPercent, mixAndMatchDeals]);
 
-  // Fetching Products Data
+  // handling description
   useEffect(() => {
-    const fetchProducts = async () => {
-      let data = {
-        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-        format: "json",
-        category_id: "all",
-        show_status: "all",
-        name: debouncedValue,
-        listing_type: 1,
-        offset: 0,
-        limit: 50,
-        page: 0,
-        ...userTypeData,
-      };
+    const description = `Buy ${dealInfo.minQty} get ${
+      dealInfo.isPercent === "1"
+        ? `${dealInfo.discount}%`
+        : `$${dealInfo.discount}`
+    } off each`;
 
-      try {
-        setOptionsLoading(true);
-        const productsData = await dispatch(fetchProductsData(data)).unwrap();
-        if (productsData && productsData.length > 0) {
-          setProducts(() => productsData);
-        }
-      } catch (error) {
-        if (error.status === 401 || error.response.status === 401) {
-          getUnAutherisedTokenMessage();
-          handleCoockieExpire();
-        } else if (error.status === "Network Error") {
-          getNetworkError();
-        }
-      } finally {
-        setOptionsLoading(false);
-      }
-    };
-    fetchProducts();
-  }, [debouncedValue]);
+    setDealInfo((prev) => ({ ...prev, description }));
+  }, [dealInfo.discount, dealInfo.isPercent, dealInfo.minQty]);
 
-  // useEffect(() => {
-  //   console.log("productOptions: ", productOptions);
-  // }, [productOptions]);
+  // Selecting a Product Option
+  const handleSelectProductOptions = (value, name) => {
+    setDealInfo((prev) => ({
+      ...prev,
+      [name]: [...prev[name], value],
+    }));
+  };
+
+  // Deleting Selected Product Option
+  const handleDeleteSelectedOption = (id, name, opt) => {
+    const filterOptionItems = dealInfo[name].filter((item) =>
+      item.isvarient === "1" ? item.var_id !== opt.var_id : item?.id !== id
+    );
+    setDealInfo((prev) => ({
+      ...prev,
+      [name]: filterOptionItems,
+    }));
+  };
+
+  const handleUpdateError = (updatedErrorValue) => {
+    setError((prev) => ({
+      ...prev,
+      ...updatedErrorValue,
+    }));
+  };
+
+  // All Inputs handler
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setDealInfo((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Discount & Percentage Tab handling
+  const handleTabChange = (type) => {
+    setDealInfo((prev) => ({
+      ...prev,
+      isPercent: type === "amount" ? "0" : "1",
+      discount: type === "amount" ? "0.00" : "0",
+    }));
+  };
 
   // Adding New Deal function
   const handleAddNewDeal = async (e) => {
@@ -233,8 +244,6 @@ const AddMixAndMatchDeal = () => {
       setLoading(true);
       const { title, products, minQty, discount, isPercent, description } =
         dealInfo;
-
-      // console.log("dealInfo: ", dealInfo);
 
       if (
         Boolean(title.trim()) &&
@@ -255,7 +264,6 @@ const AddMixAndMatchDeal = () => {
               items[item.id] = "";
             }
           });
-          // console.log("items: ", items);
 
           const data = {
             merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
@@ -265,12 +273,10 @@ const AddMixAndMatchDeal = () => {
             discount,
             is_percent: isPercent,
             items_id: JSON.stringify(items),
-            is_enable: 0,
+            is_enable: 1,
             mix_id: "",
             ...userTypeData,
           };
-
-          // console.log("data: ", data);
 
           const result = await dispatch(addNewDeal(data)).unwrap();
 
@@ -291,12 +297,12 @@ const AddMixAndMatchDeal = () => {
       } else {
         setError((prev) => ({
           ...prev,
-          title: !title ? "Title is required!" : "",
+          title: !title ? "Deal name is required!" : "",
           products: products.length <= 0 ? "Products are required!" : "",
-          minQty: !minQty || minQty <= 0 ? "Minimum Quantity is required!" : "",
+          minQty: !minQty || minQty <= 0 ? "Minimum quantity is required!" : "",
           discount:
             !discount || parseFloat(discount) <= 0
-              ? "Discount is required"
+              ? "Discount per item is required"
               : "",
         }));
       }
@@ -320,6 +326,7 @@ const AddMixAndMatchDeal = () => {
                   <div className="input_area" style={{ marginBottom: "0px" }}>
                     <BasicTextFields
                       type={"text"}
+                      maxLength={100}
                       value={dealInfo.title}
                       name="title"
                       onChangeFun={handleInputChange}
@@ -329,30 +336,30 @@ const AddMixAndMatchDeal = () => {
                     <p className="error-message">{error.title}</p>
                   )}
                 </div>
-
                 <div className="q-add-coupon-single-input mb-6">
                   <label htmlFor="description">Description</label>
-                  <textarea
-                    className="mt-1"
-                    id="description"
-                    name="description"
-                    rows="4"
-                    cols="50"
-                    value={dealInfo.description}
-                    onChange={handleInputChange}
-                  ></textarea>
+                  <div className="input_area" style={{ marginBottom: "0px" }}>
+                    <BasicTextFields
+                      type={"text"}
+                      value={dealInfo.description}
+                      name="description"
+                      readOnly={true}
+                    />
+                  </div>
                 </div>
-
                 <Grid container spacing={2}>
                   <Grid item md={5} xs={12}>
                     <div className="q_coupon_minium input_area">
                       <label htmlFor="minorder_amt">Minimum Quantity</label>
                       <BasicTextFields
                         type={"text"}
+                        maxLength={6}
                         value={dealInfo.minQty}
-                        onChangeFun={(e) =>
-                          handleInputNumber(e, setDealInfo, dealInfo)
-                        }
+                        onChangeFun={(e) => {
+                          if (isValidNumber(Number(e.target.value))) {
+                            handleInputNumber(e, setDealInfo, dealInfo);
+                          }
+                        }}
                         placeholder="Enter Minimum Quantity"
                         name="minQty"
                       />
@@ -372,6 +379,7 @@ const AddMixAndMatchDeal = () => {
                             </label>
                             <BasicTextFields
                               type={"text"}
+                              maxLength={9}
                               value={dealInfo.discount}
                               onChangeFun={(e) => {
                                 handleInputNumber(e, setDealInfo, dealInfo);
@@ -385,7 +393,6 @@ const AddMixAndMatchDeal = () => {
                             )}
                           </div>
                         </Grid>
-
                         <Grid item xs={7}>
                           <div className="AMT_PER_button">
                             <Grid container>

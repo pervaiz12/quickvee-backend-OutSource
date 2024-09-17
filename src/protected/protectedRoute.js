@@ -85,7 +85,7 @@ export default function ProtectedRoute(props) {
     Cookies.remove("token_data");
     localStorage.removeItem("AllStore");
   };
-  console.log(AdminRocord);
+  // console.log(AdminRocord);
   if (
     AdminRocord?.status == true &&
     AdminRocord?.login_type == "superadmin" &&
