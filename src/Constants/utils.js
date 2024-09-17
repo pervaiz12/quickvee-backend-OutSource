@@ -80,3 +80,13 @@ export const handleInputNumber = (e, setDealInfo, dealInfo) => {
     setDealInfo((prev) => ({ ...prev, [name]: formattedValue }));
   }
 };
+
+export function isValidNumber(input) {
+  // Check if the input is a number and is finite
+  if (typeof input === "number" && isFinite(input)) {
+    // Check if the number is a non-negative integer (not decimal and not negative)
+    return input >= 0 && Number.isInteger(input);
+  }
+  // Return false if input is not a number
+  return false;
+}
