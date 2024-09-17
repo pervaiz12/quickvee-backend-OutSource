@@ -11,14 +11,17 @@ import {
 } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import axios from "axios";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 export default function RegisterClosureTransactions() {
   const [RegisterClosureTransactions, setRegisterClosureTransactions] =
-    useState({ arr: [], status: false });
+    useState({ arr: [], status: true });
   const location = useLocation();
   const { state } = location;
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
+  const [loading, setLoading] = useState(false);
   const handleViewFullDetails = async () => {
     if (Object.keys(state).length > 0) {
       try {
@@ -39,8 +42,8 @@ export default function RegisterClosureTransactions() {
             },
           }
         );
-        console.log(response);
-        if (response.data.status === true) {
+        
+        if (response.data.result.length > 0) {
           setRegisterClosureTransactions({
             arr: response.data.result,
             status: true,
@@ -52,12 +55,13 @@ export default function RegisterClosureTransactions() {
           });
         }
       } catch (error) {}
+      setLoading(false);
     }
   };
   useEffect(() => {
+    setLoading(true);
     handleViewFullDetails();
   }, []);
-  console.log(state);
   return (
     <>
       <Grid container sx={{ padding: 2.5, mt: 1.5 }}>
@@ -81,13 +85,31 @@ export default function RegisterClosureTransactions() {
         <StationStatus state={state} />
 
         <Grid container className="box_shadow_div" sx={{ mt: 0 }}>
-          <RegisterClosureTransactionsTable
-            tableData={RegisterClosureTransactions}
-          />
+          {console.log(
+            "loading",
+            loading,
+            "RegisterClosureTransactions.status",
+            RegisterClosureTransactions.status,
+            "!RegisterClosureTransactions?.arr?.length",
+            !RegisterClosureTransactions?.arr?.length
+          )}
+          {loading ||
+          (RegisterClosureTransactions.status &&
+            !RegisterClosureTransactions?.arr?.length) ? (
+            <SkeletonTable
+              columns={["Order Info", "	Products", "Total", "Payments", "	Paid"]}
+            />
+          ) : (
+            RegisterClosureTransactions?.arr?.length > 0 && (
+              <RegisterClosureTransactionsTable
+                tableData={RegisterClosureTransactions}
+              />
+            )
+          )}
+          {!loading && !RegisterClosureTransactions?.arr?.length && (
+            <NoDataFound />
+          )}
         </Grid>
-        {/* <Grid container className="box_shadow_div" sx={{ mt: 0 }}>
-          <PaymentsTable />
-        </Grid> */}
       </Grid>
     </>
   );

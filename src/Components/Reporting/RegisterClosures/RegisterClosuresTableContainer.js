@@ -12,10 +12,6 @@ export default function RegisterClosuresTableContainer() {
 
   return (
     <>
-      {console.log(
-        "RegisterClosuresReportReduxState.loading",
-        RegisterClosuresReportReduxState.loading
-      )}
       {RegisterClosuresReportReduxState.loading ||
       (RegisterClosuresReportReduxState.status &&
         !RegisterClosuresReportReduxState?.RegisterClosuresData?.length) ? (
@@ -86,9 +82,10 @@ export default function RegisterClosuresTableContainer() {
           <RegisterClosuresTable table={table} />
         ))
       )}
-      {!RegisterClosuresReportReduxState?.RegisterClosuresData?.length && (
-        <NoDataFound />
-      )}
+      {!RegisterClosuresReportReduxState.loading &&
+        !RegisterClosuresReportReduxState?.RegisterClosuresData?.length && (
+          <NoDataFound />
+        )}
     </>
   );
 }

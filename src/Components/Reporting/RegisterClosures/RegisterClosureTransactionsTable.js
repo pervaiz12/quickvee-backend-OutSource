@@ -43,8 +43,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function RegisterClosureTransactionsTable({ tableData }) {
-  console.log("tableData", tableData);
-
   return (
     <TableContainer component={Paper}>
       <StyledTable>
@@ -155,7 +153,7 @@ export default function RegisterClosureTransactionsTable({ tableData }) {
                     </Grid>
                     <Grid item sx={{ borderTop: "1px solid #ECECEC", px: 2 }}>
                       <Typography sx={{ py: 1 }} className="CircularBold-13px">
-                        {row.cart_data
+                        ${row.cart_data
                           .reduce((acc, product) => {
                             const price = parseFloat(product?.price) || 0;
                             const taxRate = parseFloat(product?.taxRates) || 0;
@@ -181,10 +179,92 @@ export default function RegisterClosureTransactionsTable({ tableData }) {
                     direction="column"
                     sx={{ height: "100%" }}
                   >
-                    <Grid item sx={{ px: 2, pt: 2 }}></Grid>
+                    <Grid item sx={{ px: 2, pt: 2 }}>
+                      {row.is_split_payment !== "1" ? (
+                        <>
+                          <Typography className="CircularSTDBook-13px">
+                            Cash
+                          </Typography>
+                        </>
+                      ) : (
+                        <>
+                          {row?.split_payments?.map((payment, index) => (
+                            <Typography
+                              sx={{ pb: 2 }}
+                              className="CircularSTDBook-13px"
+                              key={index}
+                            >
+                              {payment.pay_type}
+                            </Typography>
+                          ))}
+                        </>
+                      )}
+                    </Grid>
                     <Grid item sx={{ borderTop: "1px solid #ECECEC", px: 2 }}>
                       <Typography sx={{ py: 1 }} className="CircularBold-13px">
                         Total Sale
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </StyledTableCell>
+                <StyledTableCell
+                  sx={{ verticalAlign: "top", height: "50px", p: 0 }}
+                >
+                  <Grid
+                    container
+                    justifyContent="space-between"
+                    direction="column"
+                    sx={{ height: "100%" }}
+                  >
+                    <Grid item sx={{ px: 2, pt: 2 }}>
+                      {row.is_split_payment !== "1" ? (
+                        <>
+                          <Typography className="CircularSTDBook-13px">
+                            ${row.cart_data
+                              .reduce((acc, product) => {
+                                const price = parseFloat(product?.price) || 0;
+                                const taxRate =
+                                  parseFloat(product?.taxRates) || 0;
+                                const quantity = parseFloat(product?.qty) || 0;
+                                const otherTaxesAmount =
+                                  parseFloat(product?.other_taxes_amount) || 0;
+                                const totalPrice =
+                                  (price + price * (taxRate / 100)) * quantity +
+                                  otherTaxesAmount;
+                                return acc + totalPrice;
+                              }, 0)
+                              .toFixed(2)}
+                          </Typography>
+                        </>
+                      ) : (
+                        <>
+                          {row?.split_payments?.map((payment, index) => (
+                            <Typography
+                              sx={{ pb: 2 }}
+                              className="CircularSTDBook-13px"
+                              key={index}
+                            >
+                              ${payment?.pay_amount}
+                            </Typography>
+                          ))}
+                        </>
+                      )}
+                    </Grid>
+                    <Grid item sx={{ borderTop: "1px solid #ECECEC", px: 2 }}>
+                      <Typography sx={{ py: 1 }} className="CircularBold-13px">
+                        {row.is_split_payment !== "1" ? (
+                          <>${row?.amt}</>
+                        ) : (
+                          <>
+                            ${row?.split_payments
+                              ?.reduce(
+                                (acc, payment) =>
+                                  acc + parseFloat(payment?.pay_amount),
+                                0
+                              )
+                              .toFixed(2)}
+                          </>
+                        )}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -202,7 +282,7 @@ export default function RegisterClosureTransactionsTable({ tableData }) {
               <Typography
                 sx={{ fontWeight: "bold", fontSize: "18px", color: "#0A64F9" }}
               >
-                {tableData?.arr
+                ${tableData?.arr
                   ?.reduce(
                     (acc, product) => acc + (parseFloat(product?.amt) || 0),
                     0
@@ -215,7 +295,12 @@ export default function RegisterClosureTransactionsTable({ tableData }) {
               <Typography
                 sx={{ fontWeight: "bold", fontSize: "18px", color: "#0A64F9" }}
               >
-                $1627.10
+                ${tableData?.arr
+                  ?.reduce(
+                    (acc, product) => acc + (parseFloat(product?.amt) || 0),
+                    0
+                  )
+                  .toFixed(2)}
               </Typography>
             </StyledTableCell>
           </StyledTableRow>
