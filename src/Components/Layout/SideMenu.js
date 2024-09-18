@@ -880,7 +880,7 @@ const menuItems = [
       // { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
       { id: 87, text: "Tip Report", link: "/store-reporting/tip-report" },
       { id: 88, text: "Coupon Report", link: "/store-reporting/coupon-report" },
-      { id: 1726033807930, text: "Shift Summary", link: "/store-reporting/shift-summary" },
+      // { id: 1726033807930, text: "Shift Summary", link: "/store-reporting/shift-summary" },
       { id: 1726123837135, text: "Register Closures", link: "/store-reporting/register-closures" },
 
 

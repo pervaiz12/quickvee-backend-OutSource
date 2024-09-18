@@ -553,11 +553,11 @@ function App() {
               path="/store-reporting/recorder-inventory"
               element={<Main visible={"recorder-inventory"} />}
             />
-            <Route
+            {/* <Route
               exact
               path="/store-reporting/shift-summary"
               element={<Main visible={"shift-summary"} />}
-            />
+            /> */}
             <Route
               exact
               path="/store-reporting/payment-method-details"
