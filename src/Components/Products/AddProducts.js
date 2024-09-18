@@ -773,7 +773,7 @@ const AddProducts = () => {
 
     return () => {
       dispatch(emptyProduct([]));
-      localStorage.removeItem("product-focus-data");
+      // localStorage.removeItem("product-focus-data");
     };
   }, []);
 
@@ -1841,8 +1841,18 @@ const AddProducts = () => {
   };
 
   const fetchSingleVarientData = async () => {
-    const id = varientPageParamas.get("var_id");
-    const title = varientPageParamas.get("title");
+    const queryString = location.search.split("?var_id=")[1]
+      ? location.search.split("?var_id=")[1]
+      : location.hash.split("?var_id=")[1];
+    const id = queryString?.split("&")[0]; // Extracts the var_id value
+
+    // Extract the title by finding "title=" in the URL
+    const title = location.search.split("title=")[1]
+      ? location.search.split("title=")[1]
+      : location.hash.split("title=")[1];
+    // const title = titleQueryString ? titleQueryString.split("&")[0] : "";
+    // const id = varientPageParamas.get("var_id");
+    // const title = varientPageParamas.get("title");
     const formData = new FormData();
     setSingleVarientPageLoading(true);
 

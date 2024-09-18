@@ -126,7 +126,7 @@ const GeneratePUC = ({
                   : productInfo?.title
                     ? productInfo?.title
                     : isVarientEdit
-                      ? productData?.product_name
+                      ? decodeURIComponent(productData?.product_name)
                       : "ProductName"}
               </span>
               <span></span>

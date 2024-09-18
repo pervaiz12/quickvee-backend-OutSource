@@ -21,7 +21,6 @@ const EditItemOptions = ({
 }) => {
   const [value, setValue] = React.useState("1");
   const [selectItems, setSelectItems] = React.useState([]);
-  console.log("selectItems", selectItems);
 
   const [checkbox, setCheckbox] = React.useState({
     trackQuantity: false,
