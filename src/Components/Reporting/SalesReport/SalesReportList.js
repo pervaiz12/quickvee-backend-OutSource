@@ -79,8 +79,6 @@ const SalesReportList = (props) => {
         merchant_id: merchant_id,
         start_date: StartDateData,
         end_date: EndDateData,
-        order_env: 9,
-        order_typ: "both",
       };
 
       if (data) {
@@ -180,18 +178,8 @@ const SalesReportList = (props) => {
     const TotalAmountCollected = parseFloat(SalesReportData?.total_amount_collected) || 0;
 
     // for Taxes 
-    // const generateTaxesTableList = (taxes) => {
-    //   if (!taxes) return [];
-    //   return taxes.map((tax) => ({
-    //     taxesR1: tax.tax_type,
-    //     taxesR2: tax.tax_rate !== "N/A" ? `${tax.tax_rate}%` : "N/A",
-    //     taxesR3: `$${parseFloat(tax.taxable_amount).toFixed(2)}`,
-    //     taxesR4: `$${parseFloat(tax.estimated_tax_due).toFixed(2)}`,
-    //   }));
-    // };
-    
-    // // Generate TaxesTableList using the tax data
-    // const TaxesTableList = generateTaxesTableList(SalesReportData?.taxes || []);
+    const TotalEstimate = SalesReportData?.taxes?.reduce((sum, tax) => sum + parseFloat(tax.estimated_tax_due || 0), 0)
+    const NonTaxableSales = SalesReportData?.taxes?.filter((item) => item?.tax_type === "Non-Taxable");
 
 
     // for payouts
@@ -200,50 +188,19 @@ const SalesReportList = (props) => {
     const Payoutlottery_non_scrach= parseFloat(SalesReportData?.payouts?.lottery_non_scrach) || 0;
     const Payoutvendor_payments= parseFloat(SalesReportData?.payouts?.vendor_payments) || 0;
     
+    // for sales_by_tender_type
+    const sales_by_tender_type= SalesReportData?.sales_by_tender_type?.data || {};
+    const totalCollected = Object.values(sales_by_tender_type)?.reduce((acc, tender) => acc + (tender.collected || 0), 0);
+    const totalTransactions = Object.values(sales_by_tender_type)?.reduce((acc, tender) => acc + (tender.transactions || 0), 0);
+
+    // for OtherFeeList
+    const ServicesCharges = parseFloat(SalesReportData?.other_fees?.breakdown?.convenience_fee) || 0;
+    const DeliveryFees = parseFloat(SalesReportData?.other_fees?.breakdown?.delivery_fee) || 0;
+    const NonCashAdjustmentFees = parseFloat(SalesReportData?.other_fees?.breakdown?.cash_discounting) || 0;
+    const Tip = parseFloat(SalesReportData?.other_fees?.breakdown?.tip) || 0;
+
     // for new Data Array End
 
-  const SalesByTenderAndCardTypeList = [
-    {
-      name: "Credit",
-      amount: "$2,216.00",
-      number: 52,
-    },
-    {
-      name: "Debit",
-      amount: "$249.33",
-      number: 12,
-    },
-    {
-      name: "Cash",
-      amount: "$335.00",
-      number: 18,
-    },
-    {
-      name: "Food EBT",
-      amount: "$200.00",
-      number: 16,
-    },
-    {
-      name: "Cash EBT",
-      amount: "$200.00",
-      number: 15,
-    },
-    {
-      name: "Gift Card",
-      amount: "$100.00",
-      number: 5,
-    },
-    {
-      name: "Store Credit",
-      amount: "$200.00",
-      number: 6,
-    },
-    {
-      name: "Total",
-      amount: "$200.00",
-      number: 124,
-    },
-  ];
 
   const PayoutsTypeList = [
     {
@@ -266,11 +223,11 @@ const SalesReportList = (props) => {
       amount: Payoutvendor_payments,
       number: 4,
     },
-    {
-      name: "Checks Cashed",
-      amount: "785.00",
-      number: 3,
-    },
+    // {
+    //   name: "Checks Cashed",
+    //   amount: "785.00",
+    //   number: 3,
+    // },
     {
       name: "Total",
       amount: (Payoutcashback+Payoutlottery+Payoutlottery_non_scrach+Payoutvendor_payments),
@@ -298,114 +255,53 @@ const SalesReportList = (props) => {
     },
   ];
 
+
   const OtherFeeList = [
     {
       name: "Services Charges",
-      amount: "-$82.58",
+      amount: ServicesCharges+DeliveryFees,
     },
+    // {
+    //   name: "Delivery Fees",
+    //   amount: DeliveryFees,
+    // },
     {
       name: "Non Cash Adjustment Fees",
-      amount: "-$75.00",
+      amount: NonCashAdjustmentFees,
     },
     {
       name: "Cash Back Fees",
-      amount: "-$50.00",
+      amount: 50,
     },
     {
       name: "Tips",
-      amount: "-$20.00",
-    },
-    {
-      name: "Check Cashing Fees",
-      amount: "-$35.00",
-    },
-    {
-      name: "Total Other Fees",
-      amount: "$262.58",
-    },
-  ];
-
-  const TaxesList = [
-    {
-      taxesR1: "",
-      taxesR2: "",
-      taxesR3: <b>Total Tax Collected</b>,
-      taxesR4: "$237.75",
+      amount: Tip,
     },
     // {
-    //   taxesR1: "",
-    //   taxesR2: "",
-    //   taxesR3: <b>Non-Taxable Sales</b>,
-    //   taxesR4: "$500.00",
+    //   name: "Check Cashing Fees",
+    //   amount: "-$35.00",
     // },
+    {
+      name: "Total Other Fees",
+      amount: (ServicesCharges+DeliveryFees+NonCashAdjustmentFees+Tip+50),
+    },
   ];
 
-  const TaxesTableList = [
-    {
-      taxesR1: "",
-      taxesR2: <b>Current Rate</b>,
-      taxesR3: <b>Taxable Amount</b>,
-      taxesR4: <b>Estimated Sales Tax Due</b>,
-    },
-    {
-      taxesR1: "Sales Tax",
-      taxesR2: "8.25%",
-      taxesR3: "$2500.00",
-      taxesR4: "$206.25",
-    },
-    {
-      taxesR1: "Refunds",
-      taxesR2: "8.25%",
-      taxesR3: "-$200.00",
-      taxesR4: "-$16.50",
-    },
-    {
-      taxesR1: "Total",
-      taxesR2: "",
-      taxesR3: "$2,300.00",
-      taxesR4: "$189.75",
-    },
-    {
-      taxesR1: "",
-      taxesR2: <b>Current Rate</b>,
-      taxesR3: <b>Taxable Amount</b>,
-      taxesR4: <b>Estimated Sales Tax Due</b>,
-    },
-    {
-      taxesR1: "Sales Tax 2",
-      taxesR2: "12%",
-      taxesR3: "$2500.00",
-      taxesR4: "$206.25",
-    },
-    {
-      taxesR1: "Refunds",
-      taxesR2: "12%",
-      taxesR3: "-$200.00",
-      taxesR4: "-$16.50",
-    },
-    {
-      taxesR1: "Total",
-      taxesR2: "",
-      taxesR3: "$2,300.00",
-      taxesR4: "$189.75",
-    },
-  ]
-
-  const lastTotalIndex = TaxesTableList?.map(item => item.taxesR1).lastIndexOf("Total");
+  const lastTotalIndexs = SalesReportData?.taxes?.map(item => item.taxesR1).lastIndexOf();
 
 
   const lastList = [
     {
       name: "Cash Collected",
-      amount: "$335.00",
+      amount: totalCollected,
     },
     {
       name: "Total Payout",
-      amount: "$1,570.00",
+      amount: (Payoutcashback+Payoutlottery+Payoutlottery_non_scrach+Payoutvendor_payments),
     },
     {
       name: "Remaining Cash",
-      amount: "-$1,235 = Cash Collected - Total Payout",
+      amount: totalCollected - (Payoutcashback+Payoutlottery+Payoutlottery_non_scrach+Payoutvendor_payments),
     },
 
   ];
@@ -478,87 +374,98 @@ const SalesReportList = (props) => {
       </Grid>
 
       {/* Taxes */}
-      <Grid container className="box_shadow_div">
-          <Grid item xs={12}>
+          <Grid container className="box_shadow_div">
+            <Grid item xs={12}>
                 <TableContainer>
                   <StyledTable
                     sx={{ minWidth: 500 }}
                     aria-label="customized table"
                   >
                     <TableHead className="TaxesTable">
-                      <StyledTableCell sx={{ width: "8.33%" }}>
+                      <StyledTableCell colSpan={2} sx={{ width: "33.32%" }}>
                         Taxes
                       </StyledTableCell>
-                      <StyledTableCell sx={{ width: "8.33%" }}></StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }} className="TaxesTableHead">$500.00</StyledTableCell>
-                      <StyledTableCell sx={{ width: "49.98%" }} colSpan={2} className="TaxesTableHead">Non-Taxable Sales</StyledTableCell>
+                      <StyledTableCell  colSpan={2} className="TaxesTableHead">
+                       {formatCurrency(NonTaxableSales?.[0]?.taxable_amount)} Non-Taxable Sales</StyledTableCell>
                     </TableHead>
                     <TableBody>
-                      {TaxesTableList?.map((item, index) => (
+                        {SalesReportData?.taxes?.map((item, index) => {
+                        let TaxableAmountsum = +item.taxable_amount - (+item.refunded_taxable_amount);
+                          return (
                         <>
-                        <StyledTableRow key={index}>
-                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color BORREMOVE totalBORDERDOWN" : ""} BORBodyRight`} colSpan={2}>
-                            <div className={`q_sales_trading_data p-0 ${item.taxesR1 === "Total" ? "totalReport" : ""} `}>
-                              <p>{item.taxesR1}</p>
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color totalBORDERDOWN" : ""} BORBodyRight`}>
-                          <div className={`q_sales_trading_data p-0 ${item.taxesR1 === "Total" ? "totalReport" : ""}`}>
-                              <p>{item.taxesR2}</p>
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color totalBORDERDOWN" : ""} BORBodyRight`}>
-                          <div className={`q_sales_trading_data p-0 ${item.taxesR1 === "Total" ? "totalReport" : ""}`}>
-                              <p>{item.taxesR3}</p>
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color totalBORDERDOWN" : ""}`} colSpan={3}>
-                            <div className={`q_sales_trading_data p-0 ${item.taxesR1 === "Total" ? "totalReport" : ""}`}>
-                              <p>{item.taxesR4}</p>
-                            </div>
-                          </StyledTableCell>
+                          <StyledTableRow >
+                              <StyledTableCell  className="BORBodyRight"></StyledTableCell>
+                              <StyledTableCell  className="BORBodyRight "> <p className="font-bold">Current Rate</p></StyledTableCell>
+                              <StyledTableCell  className="BORBodyRight"><p className="font-bold">Taxable Amount</p></StyledTableCell>
+                              <StyledTableCell  ><p className="font-bold">Estimated Sales Tax Due</p></StyledTableCell>
+                          </StyledTableRow >
 
-                        </StyledTableRow>
-                          {item.taxesR1 === "Total" && index != lastTotalIndex && (
+                          <StyledTableRow key={index}>
+                            <StyledTableCell  className="BORBodyRight" >{item.tax_type}</StyledTableCell>
+                            <StyledTableCell className="BORBodyRight">{item.tax_rate} %</StyledTableCell>
+                            <StyledTableCell className="BORBodyRight">
+                              <p className={getClassName(item.taxable_amount)}>
+                              {formatCurrency(item.taxable_amount)}
+                              </p>
+                            </StyledTableCell>
+                            <StyledTableCell  >
+                              <p className={getClassName(item.refunded_tax)}>
+                              {formatCurrency(item.refunded_tax)}
+                              </p>
+                            </StyledTableCell>
+                          </StyledTableRow>
+
+                          <StyledTableRow >
+                              <StyledTableCell className="BORBodyRight">Refunds</StyledTableCell>
+                              <StyledTableCell  className="BORBodyRight">{item.tax_rate} %</StyledTableCell>
+                              <StyledTableCell  className="BORBodyRight">
+                                <p className="error-message" >
+                                -{formatCurrency(item.refunded_taxable_amount)} 
+                                </p>
+                              </StyledTableCell>
+                              <StyledTableCell >
+                              <p className={getClassName(item.collected_tax)}>
+                                {formatCurrency(item.collected_tax)}
+                                </p>
+                              </StyledTableCell>
+                          </StyledTableRow >
+
+                          <StyledTableRow className="trBG_Color totalBORDERDOWN">
+                            <StyledTableCell  colSpan={2} className="BORBodyRight">
+                            <div className={`q_sales_trading_data p-0  totalReport`}>
+                              <p>Total</p>
+                            </div>
+                            </StyledTableCell>
+                            <StyledTableCell className="BORBodyRight">
+                             <div className={`q_sales_trading_data p-0  totalReport ${getClassName(item.TaxableAmountsum)}` }>
+                              <p>{formatCurrency(TaxableAmountsum)}</p>
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell  >
+                             <div className={`q_sales_trading_data p-0  totalReport ${getClassName(item.TaxableAmountsum)}`}>
+                              <p>{formatCurrency(item.estimated_tax_due)}</p>
+                              </div>
+                            </StyledTableCell>
+                          </StyledTableRow >
+                          { index != lastTotalIndexs && (
                             <StyledTableRow key={`blank-${index}`} className="totalBORDERUPDOWN">
                               <StyledTableCell colSpan={7}>&nbsp;</StyledTableCell>
                             </StyledTableRow>
                           )}
+                          
                         </>
-                      ))}
+                      )})}
+                      <StyledTableRow className=" ">
+                            <StyledTableCell  colSpan={2}  className="BORBodyRight"></StyledTableCell>
+                            <StyledTableCell className="BORBodyRight"><p className="font-bold">Total Tax Collected</p></StyledTableCell>
+                            <StyledTableCell  ><p className="font-bold">{formatCurrency(TotalEstimate)}</p></StyledTableCell>
+                      </StyledTableRow >
 
-                      {TaxesList?.map((item, index) => (
-                        <StyledTableRow key={index}>
-                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color totalBORDERUPDOWN" : ""} `} colSpan={2}>
-                            <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
-                              <p>{item.taxesR1}</p>
-                            </div>
-                          </StyledTableCell>
-
-                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color " : ""} BORBodyRight`}>
-                          <div className={`q_sales_trading_data p-0 ${item.taxesR1 === "Total" ? "totalReport" : ""}`}>
-                              <p>{item.taxesR2}</p>
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color totalBORDERUPDOWN" : ""} BORBodyRight`}>
-                          <div className={`q_sales_trading_data p-0 ${item.taxesR1 === "Total" ? "totalReport" : ""}`}>
-                              <p>{item.taxesR3}</p>
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell className={` ${item.taxesR1 === "Total" ? "trBG_Color totalBORDERUPDOWN" : ""}`} colSpan={3}>
-                            <div className={`q_sales_trading_data p-0 ${item.taxesR1 === "Total" ? "totalReport" : ""}`}>
-                              <p>{item.taxesR4}</p>
-                            </div>
-                          </StyledTableCell>
-
-                        </StyledTableRow>
-                      ))}
                     </TableBody>
                   </StyledTable>
                 </TableContainer>
  
-          </Grid>
+            </Grid>
       </Grid>
 
       {/* Other Fees */}
@@ -590,7 +497,7 @@ const SalesReportList = (props) => {
                           
                           <StyledTableCell className={` ${item.name === "Total Other Fees" ? "trBG_Color" : ""}`} colSpan={4}>
                           <div className={`q_sales_trading_data p-0 ${item.name === "Total Other Fees" ? "totalReport" : ""}`}>
-                              <p>{item.amount}</p>
+                              <p>{formatCurrency(item.amount)}</p>
                             </div>
                           </StyledTableCell>
                         </StyledTableRow>
@@ -635,30 +542,53 @@ const SalesReportList = (props) => {
                       <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
                     </TableHead>
                     <TableBody>
-                      {SalesByTenderAndCardTypeList?.map((item, index) => (
-                        <StyledTableRow key={index}>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} `}>
-                            <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
-                              <p>{item.name}</p>
+                      {/* {SalesByTenderAndCardTypeList?.map((item, index) => ( */}
+                        {Object.entries(sales_by_tender_type)?.map(([key, value]) => (
+                        <StyledTableRow key={key}>
+                          <StyledTableCell className={`  `}>
+                            <div className={`q_sales_trading_data p-0 capitalize`}>
+                            {key?.replace('_', ' ')}
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} BORBodyRight`}></StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} BORBodyRight`}>
-                          <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
-                              <p>{item.amount}</p>
+                          <StyledTableCell  className="BORBodyRight"></StyledTableCell>
+                          <StyledTableCell className={`  BORBodyRight`}>
+                          <div className={`q_sales_trading_data p-0 `}>
+                              <p>{formatCurrency(value.collected)}</p>
                             </div>
                           </StyledTableCell>
                           
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} `}>
-                          <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
+                          <StyledTableCell className={`  `}>
+                          <div className={`q_sales_trading_data p-0 `}>
                             <p>
-                              {priceFormate(item.number)}
+                              {value.transactions}
                             </p>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`} colSpan={3}></StyledTableCell>
+                          <StyledTableCell  colSpan={3}></StyledTableCell>
                         </StyledTableRow>
                       ))}
+                      <StyledTableRow >
+                          <StyledTableCell className="trBG_Color">
+                            <div className={`q_sales_trading_data p-0 totalReport`}>
+                                Total
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell className="BORBodyRight trBG_Color"></StyledTableCell>
+                          <StyledTableCell className="BORBodyRight trBG_Color">
+                          <div className={`q_sales_trading_data p-0 totalReport`}>
+                              <p>{formatCurrency(totalCollected)}</p>
+                            </div>
+                          </StyledTableCell>
+                          
+                          <StyledTableCell className="trBG_Color">
+                          <div className={`q_sales_trading_data p-0 totalReport`}>
+                            <p>
+                              {totalTransactions}
+                            </p>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell  colSpan={3} className="trBG_Color"></StyledTableCell>
+                        </StyledTableRow>
                     </TableBody>
                   </StyledTable>
                 </TableContainer>
@@ -727,14 +657,14 @@ const SalesReportList = (props) => {
                       {lastList?.map((item, index) => (
                         <StyledTableRow key={index}>
                           <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} BORBodyRight`} sx={{ width: "33.32%" }}>
-                            <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
+                            <div className={`q_sales_trading_data p-0  totalReport`}>
                               <p>{item.name}</p>
                             </div>
                           </StyledTableCell>
                           
                           <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`} sx={{ width: "49.98%" }}>
-                          <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
-                              <p>{item.amount}</p>
+                          <div className={`q_sales_trading_data p-0  totalReport`}>
+                              <p>{formatCurrency(item.amount)}{item.name === "Remaining Cash" ? " = Cash Collected - Total Payout": "" }  </p>
                             </div>
                           </StyledTableCell>
                           <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`} sx={{ width: "16.66%" }}></StyledTableCell>
@@ -748,6 +678,158 @@ const SalesReportList = (props) => {
      
 
       {/* for New Order Summay End */}
+
+
+
+
+
+      {/* for new Nodata Found start  */}
+
+
+      {SalesReportDataState.loading ? (
+        <>
+          {/* Gross Sales */}
+          <Grid container className="box_shadow_div">
+              <Grid item xs={12}>
+                    <TableContainer>
+                      <StyledTable
+                        sx={{ minWidth: 500 }}
+                        aria-label="customized table"
+                      >
+                        <TableHead>
+                          <StyledTableCell sx={{ width: "16.66%" }}>
+                            Gross Sales
+                          </StyledTableCell>
+                          <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
+                          <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
+                          <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
+                          <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
+                          <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
+                        </TableHead>
+                        <TableBody>
+
+                            <StyledTableRow >
+                              <StyledTableCell className={` BORBodyRight`} colSpan={2}>
+                                <div className={`q_sales_trading_data p-0 `}>
+                                  <p><Skeleton /></p>
+                                </div>
+                              </StyledTableCell>
+
+                              <StyledTableCell className={` `} >
+                              <div className={`q_sales_trading_data p-0 `}>
+                                  <p ><Skeleton /></p>
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell className={` `}colSpan={3} ></StyledTableCell>
+                            </StyledTableRow>
+
+                        </TableBody>
+                      </StyledTable>
+                    </TableContainer>
+    
+              </Grid>
+          </Grid>
+
+          {/* Taxes */}
+          <Grid container className="box_shadow_div">
+            <Grid item xs={12}>
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead className="TaxesTable">
+                      <StyledTableCell colSpan={2} sx={{ width: "33.32%" }}>
+                        Taxes
+                      </StyledTableCell>
+                      <StyledTableCell  colSpan={2} className="TaxesTableHead">
+                        Non-Taxable Sales</StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                          <StyledTableRow >
+                              <StyledTableCell  className="BORBodyRight"></StyledTableCell>
+                              <StyledTableCell  className="BORBodyRight "> <p className="font-bold">Current Rate</p></StyledTableCell>
+                              <StyledTableCell  className="BORBodyRight"><p className="font-bold">Taxable Amount</p></StyledTableCell>
+                              <StyledTableCell  ><p className="font-bold">Estimated Sales Tax Due</p></StyledTableCell>
+                          </StyledTableRow >
+
+                          <StyledTableRow>
+                            <StyledTableCell  className="BORBodyRight" ><Skeleton /></StyledTableCell>
+                            <StyledTableCell className="BORBodyRight"><Skeleton /></StyledTableCell>
+                            <StyledTableCell className="BORBodyRight">
+                              <p >
+                              <Skeleton />
+                              </p>
+                            </StyledTableCell>
+                            <StyledTableCell  >
+                              <p >
+                              <Skeleton />
+                              </p>
+                            </StyledTableCell>
+                          </StyledTableRow>
+
+                          <StyledTableRow >
+                              <StyledTableCell className="BORBodyRight">Refunds</StyledTableCell>
+                              <StyledTableCell  className="BORBodyRight"><Skeleton /></StyledTableCell>
+                              <StyledTableCell  className="BORBodyRight">
+                                <p className="error-message" >
+                                <Skeleton /> 
+                                </p>
+                              </StyledTableCell>
+                              <StyledTableCell >
+                              <p >
+                              <Skeleton />
+                                </p>
+                              </StyledTableCell>
+                          </StyledTableRow >
+
+                          <StyledTableRow className="trBG_Color totalBORDERDOWN">
+                            <StyledTableCell  colSpan={2} className="BORBodyRight">
+                            <div className={`q_sales_trading_data p-0  totalReport`}>
+                              <p>Total</p>
+                            </div>
+                            </StyledTableCell>
+                            <StyledTableCell className="BORBodyRight">
+                             <div className={`q_sales_trading_data p-0  totalReport ` }>
+                              <p><Skeleton /></p>
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell  >
+                             <div className={`q_sales_trading_data p-0  totalReport `}>
+                              <p><Skeleton /></p>
+                              </div>
+                            </StyledTableCell>
+                          </StyledTableRow >
+
+                
+                      <StyledTableRow className=" ">
+                            <StyledTableCell  colSpan={2}  className="BORBodyRight"></StyledTableCell>
+                            <StyledTableCell className="BORBodyRight"><p className="font-bold">Total Tax Collected</p></StyledTableCell>
+                            <StyledTableCell  ><p className="font-bold"><Skeleton /></p></StyledTableCell>
+                      </StyledTableRow >
+
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+ 
+            </Grid>
+          </Grid>
+
+
+       
+        </>
+      ) : SalesReportData && GrossSalesubtotal> 0 ? (
+        <>
+          Data Display
+        </>
+      ) : (
+        <NoDataFound />
+      )}
+
+
+
+
+      {/* for new Nodata Found End */}
     </>
   );
 };
