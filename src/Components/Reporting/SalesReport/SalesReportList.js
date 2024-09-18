@@ -203,14 +203,14 @@ const SalesReportList = (props) => {
       name: "Refunds",
       amount: refunds,
     },
-    {
-      name: "Taxable Net Sale",
-      amount: NetTaxableSale,
-    },
-    {
-      name: "Non Taxable Net Sale",
-      amount: NonNetTaxableSale,
-    },
+    // {
+    //   name: "Taxable Net Sale",
+    //   amount: NetTaxableSale,
+    // },
+    // {
+    //   name: "Non Taxable Net Sale",
+    //   amount: NonNetTaxableSale,
+    // },
     {
       name: "Net Sales",
       amount: Math.abs(netSales),
@@ -423,8 +423,9 @@ const SalesReportList = (props) => {
                                       <LuInfo />
                                     </span>
                                   </BootstrapTooltip>
-                                </>
-                              )}
+                                  </>
+                                )
+                              } */}
                             </p>
                           </StyledTableCell>
                         </StyledTableRow>

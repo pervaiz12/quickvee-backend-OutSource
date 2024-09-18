@@ -77,6 +77,10 @@
   font-family: CircularSTDMedium !important;
 }
 
+.q-category-bottom-header.blue-text span {
+  color: #0a64f9;
+}
+
 .q-category-bottom-header p {
   cursor: pointer;
   display: flex;
@@ -269,8 +273,6 @@
   padding: 20px;
   border-bottom: 1px solid #e8e8e8;
 }
-
-
 
 .q-add-categories-section-middle-form {
   padding: 20px;
@@ -498,7 +500,6 @@
 .select-cat-unique .css-1xc3v61-indicatorContainer {
   padding: 0px 4px;
   align-self: flex-start !important;
-  
 }
 
 .select-cat-unique .category-select .css-1xc3v61-indicatorContainer {
@@ -509,11 +510,10 @@
   display: none !important;
 }
 
-
-.categoryTable .category-checkmark-div{
+.categoryTable .category-checkmark-div {
   width: 200px;
 }
 
-.permissionEditBTN{
+.permissionEditBTN {
   width: max-content !important;
 }
