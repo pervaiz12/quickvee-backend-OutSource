@@ -378,9 +378,12 @@ module.exports = Object.freeze({
   REFUND_EMAIL_STATUS_CHANGE: "Order_list_api/refund_email_status_change",
   GET_REGISTER_CLOSURE_LIST:"Shift_summary_report_react/shift_summary_report_react",
   GET_SHIFT_SUMMARY_REPORT_ORDER_DETAILS:"Shift_summary_report_react/order_details",
+  LOYALITY_PROGRAM_STORE_LIST: "LoyaltyProgramReactAPI/loyalty_program",
+  SAVE_LOYALITY_PROGRAM: "LoyaltyProgramReactAPI/save_loyalty_program",
+  ADD_LOYALITY_PROGRAM: "LoyaltyProgramReactAPI/add_bouns_point_promotions",
 });
 
-// All api calls are initialized in this component for this application
+// All api calls are initialized in this component for this application ADD_LOYALITY_PROGRAM BASE_URL
 //remove unwanted and credentials of other app
 
 // module.exports = Object.freeze({

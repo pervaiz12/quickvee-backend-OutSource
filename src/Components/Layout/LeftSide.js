@@ -199,6 +199,10 @@ const RegisterClosuresSummery = lazy(
 const RegisterClosuresTransactions = lazy(
   () => import("../Reporting/RegisterClosures/RegisterClosureTransactions")
 )
+
+const MainLoyaltyProgramPage = lazy(
+  () => import("../StoreSetting/LoyaltyProgram/MainLoyaltyProgram")
+);
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -292,6 +296,8 @@ const LeftSide = ({ visible }) => {
         return <MainResigtersetting />;
       case "system-access":
         return <MainSyastemAccess />;
+      case "loyalty-program":
+        return <MainLoyaltyProgramPage />;
       case "daily-total-report":
         return <DailyTtlReport />;
       case "Details-category":

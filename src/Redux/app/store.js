@@ -80,6 +80,7 @@ import RefundRequestSlice from "../features/RefundRequest/RefundRequestSlice";
 import NewCustomersAddedReportSlice from "../features/Reports/NewCustomersAddedReport/NewCustomersAddedReportSlice";
 import MixAndMatchSliceReducer from "../features/MixAndMatch/mixAndMatchSlice";
 import RegisterClosuresSlice from "../features/Reports/RegisterClosures/RegisterClosuresSlice";
+import loyaltyprogramStoreSliceReducer from "../features/LoyaltyProgramStore/loyaltyProgramStoreSlice";
 const store = configureStore({
   reducer: {
     VendorList: VendorListReducer,
@@ -178,6 +179,7 @@ const store = configureStore({
     RefundRequestList: RefundRequestSlice,
     NewCustomersAddedReport: NewCustomersAddedReportSlice,
     RegisterClosuresReport: RegisterClosuresSlice,
+    LoyaltyProgramStoreData: loyaltyprogramStoreSliceReducer,
   },
 
   //setting setup
