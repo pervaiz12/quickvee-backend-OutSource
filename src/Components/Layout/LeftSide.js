@@ -85,7 +85,9 @@ const ReceiptMainpage = lazy(
 const MainItemSales = lazy(
   () => import("../Reporting/ItemSales/MainItemSales")
 );
-const NewMainItemSales = lazy( () => import("../Reporting/NewItemsales/NewMainItemSales"));
+const NewMainItemSales = lazy(
+  () => import("../Reporting/NewItemsales/NewMainItemSales")
+);
 const NewItemCreatedBetweenMain = lazy(
   () => import("../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain")
 );
@@ -185,6 +187,8 @@ const NewCustomersAddedReportMain = lazy(
   () =>
     import("../Reporting/NewCustomerAddedReport/NewCustomersAddedReportMain")
 );
+const LotteryMain = lazy(() => import("../Lottery/LotteryMain"));
+const AddLottery = lazy(() => import("../Lottery/AddLottery"));
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -357,6 +361,11 @@ const LeftSide = ({ visible }) => {
         return <Brands />;
       case "tags":
         return <Tags />;
+      case "lottery":
+        return <LotteryMain />;
+      case "add-lottery":
+        return <AddLottery />;
+
       case "category-sales-summery-report":
         return <CategorySalesSummeryReport />;
       case "sales-by-hour-report":

@@ -989,6 +989,22 @@ const menuItems = [
         text: "Tag",
         link: "/tags",
       },
+      {
+        id: 1726725862759,
+        icon: (
+          <img
+            src={AttributesIcon}
+            alt="Lottery"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img src={AtriIcon} alt="Lottery" className="h-6 w-10 mt-4 mb-4" />
+        ),
+        text: "Lottery",
+        link: "/inventory/lottery",
+      },
+      
     ],
   },
   {

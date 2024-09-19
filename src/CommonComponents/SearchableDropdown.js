@@ -38,7 +38,7 @@ const SearchableDropdown = ({
   productTitle,
   modalType,
   usingFor,
-  setProductName,
+  setProductName = false,
   optionsLoading = false,
   errorClass,
 }) => {
@@ -53,7 +53,7 @@ const SearchableDropdown = ({
   const handleFilterOptions = (e) => {
     const { value } = e?.target;
     setFilterValue(value);
-    setProductName(value); // for deven
+    typeof(setProductName) === "function" && setProductName(value); // for deven
 
     if (usingFor === "variantProducts") return;
 
