@@ -42,6 +42,7 @@ const AddCategory = ({ seVisible }) => {
     online: 0,
     use_point: 0,
     earn_point: 0,
+    lottery: 0,
     image: "",
   });
 
@@ -145,6 +146,8 @@ const AddCategory = ({ seVisible }) => {
       formData.append("merchant_id", category.merchant_id);
       formData.append("use_point", category.use_point);
       formData.append("earn_point", category.earn_point);
+      formData.append("show_online", category.online);
+      formData.append("is_lottery", category.lottery);
       formData.append("token_id", userTypeData?.token_id);
       formData.append("login_type", userTypeData?.login_type);
 
@@ -285,7 +288,6 @@ const AddCategory = ({ seVisible }) => {
   const back = () => {
     navigate(-1);
   };
-  console.log("defaultList",defaultList)
   return (
     <>
       <div className="box">
@@ -303,7 +305,7 @@ const AddCategory = ({ seVisible }) => {
         </div>
         <div className="q-add-categories-section mb-5">
           {/* <form enctype="multipart/form-data"> */}
-          <SwitchToBackButton 
+          <SwitchToBackButton
             linkTo={"/inventory/category"}
             title={"Add New Category"}
           />
@@ -324,7 +326,7 @@ const AddCategory = ({ seVisible }) => {
             >
               <label for="title">Title</label>
             </div>
-            
+
             <Autocomplete
               id="size-small-standard"
               size="small"
@@ -446,12 +448,19 @@ const AddCategory = ({ seVisible }) => {
 
             <div className="row py-3" style={myStyles}>
               <div className="add-category-checkmark-div">
-                <label className="add-category-checkmark-label mt-2">
+                <label
+                  className={
+                    category.lottery === 1
+                      ? "add-category-checkmark-label mt-2 ondisabled-check"
+                      : "add-category-checkmark-label mt-2"
+                  }
+                >
                   Show Online ?
                   <CheckBoxField
                     checked={category.online === 1}
                     onChangeFun={setCategory}
                     categoryType={"online"}
+                    isDisabled={category.lottery === 1}
                   />
                 </label>
               </div>
@@ -466,12 +475,29 @@ const AddCategory = ({ seVisible }) => {
                 </label>
               </div>
               <div className="add-category-checkmark-div">
-                <label className="add-category-checkmark-label mt-2">
+                <label
+                  className={
+                    category.lottery === 1
+                      ? "add-category-checkmark-label mt-2 ondisabled-check"
+                      : "add-category-checkmark-label mt-2"
+                  }
+                >
                   Earn Loyalty Point ?
                   <CheckBoxField
                     checked={category.earn_point === 1}
                     onChangeFun={setCategory}
                     categoryType={"earn_point"}
+                    isDisabled={category.lottery === 1}
+                  />
+                </label>
+              </div>
+              <div className="add-category-checkmark-div">
+                <label className="add-category-checkmark-label mt-2">
+                  Lottery
+                  <CheckBoxField
+                    checked={category.lottery === 1}
+                    onChangeFun={setCategory}
+                    categoryType={"lottery"}
                   />
                 </label>
               </div>

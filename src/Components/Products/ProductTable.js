@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import SortIcon from "../../Assests/Category/Sorting.svg";
 
-import { Grid, Tooltip, tooltipClasses } from "@mui/material";
 import {
   changeOnlineOrderMethod,
   changeShowStatusProduct,
@@ -34,6 +33,7 @@ import Skeleton from "react-loading-skeleton";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import NoDataFound from "../../reuseableComponents/NoDataFound";
 import ImportImageModal from "./ImportImageModal";
+import { Grid, Tooltip, tooltipClasses } from "@mui/material";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -65,6 +65,26 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
   "& td, & th": {
     border: "none",
+  },
+}));
+
+const BootstrapTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: "#f5f5f9",
+    "&::before": {
+      border: "1px solid #dadde9",
+    },
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 180,
+    fontSize: theme.typography.pxToRem(14),
+    border: "1px solid #dadde9",
+    transform: "translateX(-80px)",
+    left: "-80px",
   },
 }));
 

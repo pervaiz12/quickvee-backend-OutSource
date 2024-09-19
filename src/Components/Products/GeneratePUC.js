@@ -315,7 +315,7 @@ const GeneratePUC = ({
                           class="q_resigter_setting_section"
                           style={{ color: "#000", fontSize: "18px" }}
                         >
-                          Continue selling when out of stock
+                          Continue Selling when Out of stock
                           <input
                             type="checkbox"
                             name="sellOutOfStock"
@@ -563,7 +563,7 @@ const GeneratePUC = ({
                   class="q_resigter_setting_section"
                   style={{ color: "#000", fontSize: "18px" }}
                 >
-                  Continue selling when out of stock
+                  Continue Selling when Out of stock
                   <input
                     type="checkbox"
                     name="sellOutOfStock"

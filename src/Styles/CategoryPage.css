@@ -517,3 +517,7 @@
 .permissionEditBTN {
   width: max-content !important;
 }
+
+.ondisabled-check {
+  opacity: 0.6;
+}

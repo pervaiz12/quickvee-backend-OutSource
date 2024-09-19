@@ -46,7 +46,7 @@ const EditItemOptions = ({
   const labels = [
     "Track Quantity",
     // "Create this item for all linked locations",
-    "Continue selling when out of stock",
+    "Continue Selling when Out of stock",
     "Check ID",
     "Disable",
     "Food Stampable",
