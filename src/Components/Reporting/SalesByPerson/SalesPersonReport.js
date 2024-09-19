@@ -71,10 +71,10 @@ const SalesPersonReport = (props) => {
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
- 
+
   const dispatch = useDispatch();
   const [allSalesByPersonData, setallSalesByPersonData] = useState("");
-  const showNoData = useDelayedNodata( Object.entries(allSalesByPersonData))
+  const showNoData = useDelayedNodata(Object.entries(allSalesByPersonData));
   const AllSalesByPersonDataState = useSelector(
     (state) => state.SalesByPersonList
   );
@@ -292,10 +292,7 @@ const SalesPersonReport = (props) => {
           </>
         ))
       ) : (
-        <Grid sx={{pt:2.5}}>
-          {showNoData && <NoDataFound />}
-        </Grid>
-        
+        <Grid sx={{ pt: 2.5 }}>{showNoData && <NoDataFound />}</Grid>
       )}
 
       {Object.entries(allSalesByPersonData).length > 0 && (
@@ -316,7 +313,9 @@ const SalesPersonReport = (props) => {
             <StyledTableCell align="center">
               <div className="q-category-bottom-report-listing">
                 <div>
-                  <p className="totalReport">${priceFormate(grandTotal.toFixed(2))}</p>
+                  <p className="totalReport">
+                    ${priceFormate(grandTotal.toFixed(2))}
+                  </p>
                 </div>
               </div>
             </StyledTableCell>
