@@ -152,14 +152,18 @@ const EditItemOptions = ({
                       </div>
                       <div class="add-btn check-uncheck-btn-section">
                         <button
-                          className="quic-btn quic-btn-save submit-btn-click"
+                          className={
+                            !selectItems.length
+                              ? "bulk-edit-item-btn quic-btn quic-btn-save submit-btn-click disabled"
+                              : "quic-btn quic-btn-save submit-btn-click bulk-edit-item-btn  normal"
+                          }
                           // onClick={handleSubmitForm}
                           // disabled={isLoading || enbaledSubmit}
-                          style={{
-                            backgroundColor: selectItems?.length
-                              ? "#0A64F9"
-                              : "#878787",
-                          }}
+                          // style={{
+                          //   backgroundColor: selectItems?.length
+                          //     ? "#0A64F9"
+                          //     : "#878787",
+                          // }}
                           onClick={handleCheck}
                           disabled={!selectItems.length}
                         >
@@ -167,14 +171,18 @@ const EditItemOptions = ({
                         </button>
 
                         <button
-                          className="quic-btn quic-btn-save submit-btn-click"
+                          className={
+                            !selectItems.length
+                              ? "bulk-edit-item-btn quic-btn quic-btn-save submit-btn-click disabled"
+                              : "quic-btn quic-btn-save submit-btn-click bulk-edit-item-btn  normal-uncheck"
+                          }
                           // onClick={handleSubmitForm}
                           // disabled={isLoading || enbaledSubmit}
-                          style={{
-                            backgroundColor: selectItems?.length
-                              ? "#0A64F9"
-                              : "#878787",
-                          }}
+                          // style={{
+                          //   backgroundColor: selectItems?.length
+                          //     ? "#0A64F9"
+                          //     : "#878787",
+                          // }}
                           onClick={handleUnCheck}
                           disabled={!selectItems.length}
                         >

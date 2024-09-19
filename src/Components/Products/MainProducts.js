@@ -79,13 +79,11 @@ const MainProducts = () => {
   }, [debouncedValue]);
 
   const changeProductPageUrl = (urlOption, content) => {
-    if (content === 0 || content) {
-      // Get the current search parameters
-
-      // Set or update the new search parameter
+    if (content || content === 0) {
       searchParams.set(urlOption, content);
-
-      // Navigate to the updated URL with all search parameters
+      navigate(`/inventory/products?${searchParams.toString()}`);
+    } else if (urlOption === "search" && !content) {
+      searchParams.delete("search");
       navigate(`/inventory/products?${searchParams.toString()}`);
     } else {
       navigate(location.pathname);
@@ -108,10 +106,10 @@ const MainProducts = () => {
   const handleSearch = (val) => {
     setSearchId(val);
     if (!val) {
-      changeProductPageUrl("search", "");
+      // Scenario 1: When search box has a value, add it to the URL
+      changeProductPageUrl("search", null);
     }
   };
-
   const handleProductUnCheck = (id) => {
     const filterId = productIdList?.filter((existId) => existId !== id);
     setProductIdList(filterId);
@@ -137,11 +135,12 @@ const MainProducts = () => {
       is_media_blank: imageUrl === "all" ? "" : imageUrl,
       listing_type: listingUrl === 0 || listingUrl ? listingUrl : "0",
       offset: 0,
-      limit:
-        JSON.parse(localStorage.getItem("product-focus-data")) &&
-        JSON.parse(localStorage.getItem("product-focus-data"))?.limit
-          ? JSON.parse(localStorage.getItem("product-focus-data"))?.limit
-          : 10,
+      // limit:
+      //   JSON.parse(localStorage.getItem("product-focus-data")) &&
+      //   JSON.parse(localStorage.getItem("product-focus-data"))?.limit
+      //     ? JSON.parse(localStorage.getItem("product-focus-data"))?.limit
+      //     : 10,
+      limit: 10,
       page: 0,
       ...userTypeData,
     };
@@ -211,6 +210,15 @@ const MainProducts = () => {
     productByImages,
     location,
   ]);
+
+  useEffect(() => {
+    // Only set the search box value if the 'search' parameter exists
+    if (!searchUrl) {
+      setSearchId("");
+    } else {
+      setSearchId(searchUrl);
+    }
+  }, [searchUrl]);
 
   const handlefocus = (e) => {};
 

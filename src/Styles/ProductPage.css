@@ -1102,3 +1102,16 @@
   justify-content: end;
   gap: 9px;
 }
+
+.bulk-edit-item-btn.disabled {
+  background-color: #878787 !important;
+  opacity: 0.7;
+}
+
+.bulk-edit-item-btn.normal {
+  background-color: #0a64f9 !important;
+}
+
+.bulk-edit-item-btn.normal-uncheck {
+  background-color: #878787 !important;
+}

@@ -115,47 +115,47 @@ const ProductTable = ({
   }, [ProductsListDataState, ProductsListDataState?.productsData, dispatch]);
 
   /// focus on product when product get edit or open by user.
-  const selectedProductId = useMemo(() => {
-    const productFocusData = JSON.parse(
-      localStorage.getItem("product-focus-data")
-    );
-    return productFocusData?.var_id
-      ? productFocusData?.var_id
-      : productFocusData?.productId;
-  }, []);
+  // const selectedProductId = useMemo(() => {
+  //   const productFocusData = JSON.parse(
+  //     localStorage.getItem("product-focus-data")
+  //   );
+  //   return productFocusData?.var_id
+  //     ? productFocusData?.var_id
+  //     : productFocusData?.productId;
+  // }, []);
 
-  const productIndex = useMemo(() => {
-    if (!selectedProductId || !productList?.length) return -1;
-    return productList.findIndex((item) =>
-      item?.var_id
-        ? item.var_id === selectedProductId
-        : item.id === selectedProductId
-    );
-  }, [selectedProductId, productList]);
+  // const productIndex = useMemo(() => {
+  //   if (!selectedProductId || !productList?.length) return -1;
+  //   return productList.findIndex((item) =>
+  //     item?.var_id
+  //       ? item.var_id === selectedProductId
+  //       : item.id === selectedProductId
+  //   );
+  // }, [selectedProductId, productList]);
 
-  useEffect(() => {
-    let timer;
-    let focusId;
-    if (!hasFocused.current && productIndex !== -1) {
-      const targetElement = document.getElementById(`row-${selectedProductId}`);
+  // useEffect(() => {
+  //   let timer;
+  //   let focusId;
+  //   if (!hasFocused.current && productIndex !== -1) {
+  //     const targetElement = document.getElementById(`row-${selectedProductId}`);
 
-      if (targetElement) {
-        targetElement.classList.add("product-line-highlight-bg");
-        targetElement.scrollIntoView({ block: "center" });
-        hasFocused.current = true;
+  //     if (targetElement) {
+  //       targetElement.classList.add("product-line-highlight-bg");
+  //       targetElement.scrollIntoView({ block: "center" });
+  //       hasFocused.current = true;
 
-        timer = setTimeout(() => {
-          localStorage.removeItem("product-focus-data");
-        }, 500);
+  //       timer = setTimeout(() => {
+  //         localStorage.removeItem("product-focus-data");
+  //       }, 500);
 
-        focusId = setTimeout(() => {
-          targetElement.classList.remove("product-line-highlight-bg");
-        }, 3000);
-      }
-    }
+  //       focusId = setTimeout(() => {
+  //         targetElement.classList.remove("product-line-highlight-bg");
+  //       }, 3000);
+  //     }
+  //   }
 
-    return () => clearTimeout(timer, focusId);
-  }, [productIndex]);
+  //   return () => clearTimeout(timer, focusId);
+  // }, [productIndex]);
 
   const fetchInventoryData = async () => {
     try {
@@ -178,14 +178,14 @@ const ProductTable = ({
 
   useEffect(() => {
     fetchInventoryData();
-    let timer;
-    if (localStorage.getItem("product-focus-data") !== null) {
-      timer = setTimeout(() => {
-        localStorage.removeItem("product-focus-data");
-      }, 600);
-    }
+    // let timer;
+    // if (localStorage.getItem("product-focus-data") !== null) {
+    //   timer = setTimeout(() => {
+    //     localStorage.removeItem("product-focus-data");
+    //   }, 600);
+    // }
 
-    return () => clearTimeout(timer);
+    // return () => clearTimeout(timer);
   }, []);
 
   const checkStatus = (status) => {
@@ -298,11 +298,12 @@ const ProductTable = ({
       is_media_blank: imageUrl === "all" ? "" : imageUrl,
       listing_type: listingUrl === 0 || listingUrl ? listingUrl : "0",
       offset: offset ? offset : 0,
-      limit:
-        JSON.parse(localStorage.getItem("product-focus-data")) &&
-        JSON.parse(localStorage.getItem("product-focus-data"))?.limit
-          ? JSON.parse(localStorage.getItem("product-focus-data"))?.limit
-          : 10,
+      // limit:
+      //   JSON.parse(localStorage.getItem("product-focus-data")) &&
+      //   JSON.parse(localStorage.getItem("product-focus-data"))?.limit
+      //     ? JSON.parse(localStorage.getItem("product-focus-data"))?.limit
+      //     : 10,
+      limit: 10,
       page: 0,
       ...userTypeData,
     };
@@ -386,14 +387,18 @@ const ProductTable = ({
     } else {
       varientTitle = varientName;
     }
+
+    const encodedVarientTitle = encodeURIComponent(varientTitle); // Added this
+    const encodedProductTitle = encodeURIComponent(productData?.title || ""); // Added this
+
     if (
       (selectedListingType === "Variant listing" || +listingUrl === 1) &&
       productData?.isvarient === "1"
     ) {
       return {
         link: `/inventory/products/varient-edit/${id}/${
-          varientName ? varientTitle : null
-        }?var_id=${productData?.var_id}&title=${productData?.title}`,
+          varientName ? encodedVarientTitle : null
+        }?var_id=${productData?.var_id}&title=${encodedProductTitle}`,
         data: {
           offset: productLength,
           limit: productLength,
