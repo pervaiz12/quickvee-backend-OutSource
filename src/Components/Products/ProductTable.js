@@ -4,6 +4,8 @@ import AddIcon from "../../Assests/Category/addIcon.svg";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import SortIcon from "../../Assests/Category/Sorting.svg";
+
+import { Grid, Tooltip, tooltipClasses } from "@mui/material";
 import {
   changeOnlineOrderMethod,
   changeShowStatusProduct,
@@ -104,6 +106,24 @@ const ProductTable = ({
   const [inventoryApproval, setInventoryApproval] = useState();
   const [checkboxState, setCheckboxState] = useState({});
   const [deleteloading, setDeleteloading] = useState(false);
+
+  const BootstrapTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} arrow classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      color: "#f5f5f9",
+      "&::before": {
+        border: "1px solid #dadde9",
+      },
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: "#f5f5f9",
+      color: "rgba(0, 0, 0, 0.87)",
+      maxWidth: 500,
+      fontSize: theme.typography.pxToRem(13),
+      border: "1px solid #dadde9",
+    },
+  }));
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -692,18 +712,27 @@ const ProductTable = ({
                                   )}
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                  <p className="categories-title">
-                                    {product?.category_name
-                                      ? `${(product?.category_name).slice(
-                                          0,
-                                          30
-                                        )} ${
-                                          product?.category_name.length > 30
-                                            ? "..."
-                                            : ""
-                                        }`
-                                      : ""}
-                                  </p>
+                                  <BootstrapTooltip
+                                    placement="bottom-start"
+                                    title={
+                                      <p className="capitalize">
+                                        {product?.category_name}
+                                      </p>
+                                    }
+                                  >
+                                    <p className="categories-title">
+                                      {product?.category_name
+                                        ? `${(product?.category_name).slice(
+                                            0,
+                                            30
+                                          )} ${
+                                            product?.category_name.length > 30
+                                              ? "..."
+                                              : ""
+                                          }`
+                                        : ""}
+                                    </p>
+                                  </BootstrapTooltip>
                                 </StyledTableCell>
                                 <StyledTableCell>
                                   <div className="categories-title">
