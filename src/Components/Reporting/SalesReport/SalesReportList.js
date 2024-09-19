@@ -949,9 +949,9 @@ const SalesReportList = (props) => {
                       className=" BORHeaderRight"
                     ></StyledTableCell>
                     <StyledTableCell sx={{ width: "16.66%" }}>
-                      <p className={getClassName(3400)}>
+                      {/* <p className={getClassName(3400)}>
                         {formatCurrency(3400)}
-                      </p>
+                      </p> */}
                     </StyledTableCell>
                     <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
                     <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
