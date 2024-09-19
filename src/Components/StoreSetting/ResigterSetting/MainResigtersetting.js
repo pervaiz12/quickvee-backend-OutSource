@@ -6,9 +6,11 @@ import CustomHeader from "../../../reuseableComponents/CustomHeader";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 
+
 const MainResigtersetting = () => {
   // const [alertmsg, setAlertMsg] = useState('');
   const { userTypeData } = useAuthDetails();
+
   const [openAlert, setOpenAlert] = useState(true);
   const {
     handleRegisterSettingInput,

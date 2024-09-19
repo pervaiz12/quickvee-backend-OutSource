@@ -359,7 +359,6 @@ const AddNewStocktake = () => {
     setDeleteCategoryId(index);
     setDeleteModalOpen(true);
   };
-
   const confirmDeleteCategory = async () => {
     // Check if the singleStocktakeState object and stocktake_item array are present
     if (

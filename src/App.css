@@ -68,6 +68,23 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+.CircularSTDMedium-18px {
+  font-family: CircularSTDMedium !important;
+  font-size: 18px !important;
+}
+.CircularSTDMedium-15px {
+  font-family: CircularSTDMedium !important;
+  font-size: 15px !important;
+}
+.CircularSTDMedium-55px {
+  font-family: CircularSTDMedium !important;
+  font-size: 55px !important;
+}
+.CircularSTDBook-15px {
+  font-family: CircularSTDBook !important;
+  font-size: 15px !important;
+}
+
 img {
   max-width: unset !important;
 }
@@ -1251,7 +1268,6 @@ div.q_label_details::after {
   padding-right: 0rem;
 }
 
-
 .sticky-box {
   background-color: #fff !important;
   width: 100%;
@@ -1296,6 +1312,6 @@ div.q_label_details::after {
   border-color: black;
 }
 
-.orderSummeryPageOrderStatus svg{
+.orderSummeryPageOrderStatus svg {
   width: 100% !important;
 }

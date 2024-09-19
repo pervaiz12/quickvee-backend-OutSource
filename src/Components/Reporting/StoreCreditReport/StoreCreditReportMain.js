@@ -25,7 +25,7 @@ export default function StoreCreditReportMain() {
   const [totalValueRedeemed, setTotalValueRedeemed] = useState(0);
   const [outStandingsBalance, setOutStandingsBalance] = useState(0);
   const [dataArr, setDataArr] = useState([]);
-  const [searchRecord,setSearchRecord] = useState("")
+  const [searchRecord, setSearchRecord] = useState("");
   const dispatch = useDispatch();
   const StoreCreditReportReduxState = useSelector(
     (state) => state.storeCreditReportList
@@ -54,12 +54,12 @@ export default function StoreCreditReportMain() {
       }
     }
   };
-  function handleSearchInputChange(value){
-    setSearchRecord(value)
+  function handleSearchInputChange(value) {
+    setSearchRecord(value);
   }
   return (
     <>
-      <Grid container sx={{ pt: 2.5 }} className="box_shadow_div ">
+      <Grid container className="box_shadow_div ">
         <Grid item xs={12}>
           <CustomHeader>Detailed Store Credit Report</CustomHeader>
 
