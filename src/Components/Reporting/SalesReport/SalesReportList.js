@@ -329,363 +329,6 @@ const SalesReportList = (props) => {
   return (
     <>
 
-      {/* for New Order Summay start  */}
-
-      {/* Gross Sales */}
-      <Grid container className="box_shadow_div">
-          <Grid item xs={12}>
-                <TableContainer>
-                  <StyledTable
-                    sx={{ minWidth: 500 }}
-                    aria-label="customized table"
-                  >
-                    <TableHead>
-                      <StyledTableCell sx={{ width: "16.66%" }}>
-                        Gross Sales
-                      </StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }}>{formatCurrency(GrossSalesubtotal)}</StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
-                    </TableHead>
-                    <TableBody>
-                      {GrossSaleList?.map((item, index) => (
-                        <StyledTableRow key={index}>
-                          <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""} BORBodyRight`} colSpan={2}>
-                            <div className={`q_sales_trading_data p-0 ${item.name === "Net Sales" ? "totalReport" : ""}`}>
-                              <p>{item.name}</p>
-                            </div>
-                          </StyledTableCell>
-                          {/* <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""} BORBodyRight`}></StyledTableCell> */}
-                          <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""}`} >
-                          <div className={`q_sales_trading_data p-0 ${item.name === "Net Sales" ? "totalReport" : ""}`}>
-                              <p className={getClassName(item.amount)}>{formatCurrency(item.amount)}</p>
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""}`}colSpan={3} ></StyledTableCell>
-                        </StyledTableRow>
-                      ))}
-                    </TableBody>
-                  </StyledTable>
-                </TableContainer>
- 
-          </Grid>
-      </Grid>
-
-      {/* Taxes */}
-          <Grid container className="box_shadow_div">
-            <Grid item xs={12}>
-                <TableContainer>
-                  <StyledTable
-                    sx={{ minWidth: 500 }}
-                    aria-label="customized table"
-                  >
-                    <TableHead className="TaxesTable">
-                      <StyledTableCell colSpan={2} sx={{ width: "33.32%" }}>
-                        Taxes
-                      </StyledTableCell>
-                      <StyledTableCell  colSpan={2} className="TaxesTableHead">
-                       {formatCurrency(NonTaxableSales?.[0]?.taxable_amount)} Non-Taxable Sales</StyledTableCell>
-                    </TableHead>
-                    <TableBody>
-                        {SalesReportData?.taxes?.map((item, index) => {
-                        let TaxableAmountsum = +item.taxable_amount - (+item.refunded_taxable_amount);
-                          return (
-                        <>
-                          <StyledTableRow >
-                              <StyledTableCell  className="BORBodyRight"></StyledTableCell>
-                              <StyledTableCell  className="BORBodyRight "> <p className="font-bold">Current Rate</p></StyledTableCell>
-                              <StyledTableCell  className="BORBodyRight"><p className="font-bold">Taxable Amount</p></StyledTableCell>
-                              <StyledTableCell  ><p className="font-bold">Estimated Sales Tax Due</p></StyledTableCell>
-                          </StyledTableRow >
-
-                          <StyledTableRow key={index}>
-                            <StyledTableCell  className="BORBodyRight" >{item.tax_type}</StyledTableCell>
-                            <StyledTableCell className="BORBodyRight">{item.tax_rate} %</StyledTableCell>
-                            <StyledTableCell className="BORBodyRight">
-                              <p className={getClassName(item.taxable_amount)}>
-                              {formatCurrency(item.taxable_amount)}
-                              </p>
-                            </StyledTableCell>
-                            <StyledTableCell  >
-                              <p className={getClassName(item.refunded_tax)}>
-                              {formatCurrency(item.refunded_tax)}
-                              </p>
-                            </StyledTableCell>
-                          </StyledTableRow>
-
-                          <StyledTableRow >
-                              <StyledTableCell className="BORBodyRight">Refunds</StyledTableCell>
-                              <StyledTableCell  className="BORBodyRight">{item.tax_rate} %</StyledTableCell>
-                              <StyledTableCell  className="BORBodyRight">
-                                <p className="error-message" >
-                                -{formatCurrency(item.refunded_taxable_amount)} 
-                                </p>
-                              </StyledTableCell>
-                              <StyledTableCell >
-                              <p className={getClassName(item.collected_tax)}>
-                                {formatCurrency(item.collected_tax)}
-                                </p>
-                              </StyledTableCell>
-                          </StyledTableRow >
-
-                          <StyledTableRow className="trBG_Color totalBORDERDOWN">
-                            <StyledTableCell  colSpan={2} className="BORBodyRight">
-                            <div className={`q_sales_trading_data p-0  totalReport`}>
-                              <p>Total</p>
-                            </div>
-                            </StyledTableCell>
-                            <StyledTableCell className="BORBodyRight">
-                             <div className={`q_sales_trading_data p-0  totalReport ${getClassName(item.TaxableAmountsum)}` }>
-                              <p>{formatCurrency(TaxableAmountsum)}</p>
-                              </div>
-                            </StyledTableCell>
-                            <StyledTableCell  >
-                             <div className={`q_sales_trading_data p-0  totalReport ${getClassName(item.TaxableAmountsum)}`}>
-                              <p>{formatCurrency(item.estimated_tax_due)}</p>
-                              </div>
-                            </StyledTableCell>
-                          </StyledTableRow >
-                          { index != lastTotalIndexs && (
-                            <StyledTableRow key={`blank-${index}`} className="totalBORDERUPDOWN">
-                              <StyledTableCell colSpan={7}>&nbsp;</StyledTableCell>
-                            </StyledTableRow>
-                          )}
-                          
-                        </>
-                      )})}
-                      <StyledTableRow className=" ">
-                            <StyledTableCell  colSpan={2}  className="BORBodyRight"></StyledTableCell>
-                            <StyledTableCell className="BORBodyRight"><p className="font-bold">Total Tax Collected</p></StyledTableCell>
-                            <StyledTableCell  ><p className="font-bold">{formatCurrency(TotalEstimate)}</p></StyledTableCell>
-                      </StyledTableRow >
-
-                    </TableBody>
-                  </StyledTable>
-                </TableContainer>
- 
-            </Grid>
-      </Grid>
-
-      {/* Other Fees */}
-      <Grid container className="box_shadow_div">
-          <Grid item xs={12}>
-                <TableContainer>
-                  <StyledTable
-                    sx={{ minWidth: 500 }}
-                    aria-label="customized table"
-                  >
-                    <TableHead>
-                      <StyledTableCell  sx={{ width: "16.66%" }}>
-                        Other Fees
-                      </StyledTableCell>
-                      <StyledTableCell  sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
-                      <StyledTableCell  sx={{ width: "16.66%" }}>$3,400.00</StyledTableCell>
-                      <StyledTableCell  sx={{ width: "16.66%" }}></StyledTableCell>
-                      <StyledTableCell  sx={{ width: "16.66%" }}></StyledTableCell>
-                      <StyledTableCell  sx={{ width: "16.66%" }}></StyledTableCell>
-                    </TableHead>
-                    <TableBody>
-                      {OtherFeeList?.map((item, index) => (
-                        <StyledTableRow key={index}>
-                          <StyledTableCell className={` ${item.name === "Total Other Fees" ? "trBG_Color" : ""} BORBodyRight`} colSpan={2}>
-                            <div className={`q_sales_trading_data p-0 ${item.name === "Total Other Fees" ? "totalReport" : ""}`}>
-                              <p>{item.name}</p>
-                            </div>
-                          </StyledTableCell>
-                          
-                          <StyledTableCell className={` ${item.name === "Total Other Fees" ? "trBG_Color" : ""}`} colSpan={4}>
-                          <div className={`q_sales_trading_data p-0 ${item.name === "Total Other Fees" ? "totalReport" : ""}`}>
-                              <p>{formatCurrency(item.amount)}</p>
-                            </div>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      ))}
-                    </TableBody>
-                  </StyledTable>
-                </TableContainer>
- 
-          </Grid>
-      </Grid>
-
-      {/* Total Amount Collected */}
-      <Grid container className="box_shadow_div">
-          <Grid item xs={12}>
-            <TableContainer>
-                <StyledTable >
-                    <TableHead className="totalAmountCollected">
-                      <StyledTableCell sx={{ width: "33.32%" }} className="BORBodyRight">Total Amount Collected</StyledTableCell>
-                      <StyledTableCell sx={{ width: "49.98%" }} >{formatCurrency(TotalAmountCollected)} = Net Sales + Taxes + Other Fees</StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
-                    </TableHead>
-                </StyledTable>
-            </TableContainer>
-          </Grid>
-      </Grid>
-
-      {/* Sales by Tender */}
-      <Grid container className="box_shadow_div">
-            <Grid item xs={12}>
-                <TableContainer>
-                  <StyledTable
-                    sx={{ minWidth: 500 }}
-                    aria-label="customized table"
-                  >
-                    <TableHead>
-                      <StyledTableCell sx={{ width: "16.66%" }} >
-                        Sales by Tender
-                      </StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
-                      <StyledTableCell sx={{ width: "33.32%" }}># of Transactions</StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
-                    </TableHead>
-                    <TableBody>
-                      {/* {SalesByTenderAndCardTypeList?.map((item, index) => ( */}
-                        {Object.entries(sales_by_tender_type)?.map(([key, value]) => (
-                        <StyledTableRow key={key}>
-                          <StyledTableCell className={`  `}>
-                            <div className={`q_sales_trading_data p-0 capitalize`}>
-                            {key?.replace('_', ' ')}
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell  className="BORBodyRight"></StyledTableCell>
-                          <StyledTableCell className={`  BORBodyRight`}>
-                          <div className={`q_sales_trading_data p-0 `}>
-                              <p>{formatCurrency(value.collected)}</p>
-                            </div>
-                          </StyledTableCell>
-                          
-                          <StyledTableCell className={`  `}>
-                          <div className={`q_sales_trading_data p-0 `}>
-                            <p>
-                              {value.transactions}
-                            </p>
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell  colSpan={3}></StyledTableCell>
-                        </StyledTableRow>
-                      ))}
-                      <StyledTableRow >
-                          <StyledTableCell className="trBG_Color">
-                            <div className={`q_sales_trading_data p-0 totalReport`}>
-                                Total
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell className="BORBodyRight trBG_Color"></StyledTableCell>
-                          <StyledTableCell className="BORBodyRight trBG_Color">
-                          <div className={`q_sales_trading_data p-0 totalReport`}>
-                              <p>{formatCurrency(totalCollected)}</p>
-                            </div>
-                          </StyledTableCell>
-                          
-                          <StyledTableCell className="trBG_Color">
-                          <div className={`q_sales_trading_data p-0 totalReport`}>
-                            <p>
-                              {totalTransactions}
-                            </p>
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell  colSpan={3} className="trBG_Color"></StyledTableCell>
-                        </StyledTableRow>
-                    </TableBody>
-                  </StyledTable>
-                </TableContainer>
- 
-            </Grid>
-      </Grid>
-          
-      {/* Payouts */}
-      <Grid container className="box_shadow_div">
-            <Grid item xs={12}>
-                <TableContainer>
-                  <StyledTable
-                    sx={{ minWidth: 500 }}
-                    aria-label="customized table"
-                  >
-                    <TableHead>
-                      <StyledTableCell sx={{ width: "16.66%" }} className=" ">
-                        Payouts
-                      </StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }}  className=" BORHeaderRight"></StyledTableCell>
-                      <StyledTableCell sx={{ width: "33.32%" }}># of Transactions</StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
-                    </TableHead>
-                    <TableBody>
-                      {PayoutsTypeList?.map((item, index) => (
-                        <StyledTableRow key={index}>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} `}>
-                            <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
-                              <p>{item.name}</p>
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} BORBodyRight`}></StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} BORBodyRight`}>
-                          <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
-                              <p>{formatCurrency(item.amount)}</p>
-                            </div>
-                          </StyledTableCell>
-                          
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`}>
-                          <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
-                            <p>
-                              {priceFormate(item.number)}
-                            </p>
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`} colSpan={3}></StyledTableCell>
-                        </StyledTableRow>
-                      ))}
-                    </TableBody>
-                  </StyledTable>
-                </TableContainer>
- 
-            </Grid>
-      </Grid>
-
-
-
-      {/* Last List  */}
-
-      <Grid container className="box_shadow_div">
-          <Grid item xs={12}>
-            <TableContainer>
-                <StyledTable >
-                <TableBody>
-                      {lastList?.map((item, index) => (
-                        <StyledTableRow key={index}>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} BORBodyRight`} sx={{ width: "33.32%" }}>
-                            <div className={`q_sales_trading_data p-0  totalReport`}>
-                              <p>{item.name}</p>
-                            </div>
-                          </StyledTableCell>
-                          
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`} sx={{ width: "49.98%" }}>
-                          <div className={`q_sales_trading_data p-0  totalReport`}>
-                              <p>{formatCurrency(item.amount)}{item.name === "Remaining Cash" ? " = Cash Collected - Total Payout": "" }  </p>
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`} sx={{ width: "16.66%" }}></StyledTableCell>
-                        </StyledTableRow>
-                      ))}
-                    </TableBody>
-                </StyledTable>
-            </TableContainer>
-          </Grid>
-      </Grid>
-     
-
-      {/* for New Order Summay End */}
-
-
-
-
-
-      {/* for new Nodata Found start  */}
-
-
       {SalesReportDataState.loading ? (
         <>
           {/* Gross Sales */}
@@ -730,8 +373,8 @@ const SalesReportList = (props) => {
               </Grid>
           </Grid>
 
-          {/* Taxes */}
-          <Grid container className="box_shadow_div">
+        {/* Taxes */}
+        <Grid container className="box_shadow_div">
             <Grid item xs={12}>
                 <TableContainer>
                   <StyledTable
@@ -813,23 +456,520 @@ const SalesReportList = (props) => {
                 </TableContainer>
  
             </Grid>
+        </Grid>
+
+      {/* Other Fees */}
+      <Grid container className="box_shadow_div">
+          <Grid item xs={12}>
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead>
+                      <StyledTableCell  sx={{ width: "16.66%" }}>
+                        Other Fees
+                      </StyledTableCell>
+                      <StyledTableCell  sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
+                      <StyledTableCell  sx={{ width: "16.66%" }}></StyledTableCell>
+                      <StyledTableCell  sx={{ width: "16.66%" }}></StyledTableCell>
+                      <StyledTableCell  sx={{ width: "16.66%" }}></StyledTableCell>
+                      <StyledTableCell  sx={{ width: "16.66%" }}></StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                        <StyledTableRow >
+                          <StyledTableCell  colSpan={2}><Skeleton /></StyledTableCell>
+                          <StyledTableCell  colSpan={4}><Skeleton /></StyledTableCell>
+                        </StyledTableRow>
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+ 
           </Grid>
+      </Grid>
 
+      {/* Total Amount Collected */}
+      <Grid container className="box_shadow_div">
+          <Grid item xs={12}>
+            <TableContainer>
+                <StyledTable >
+                    <TableHead className="totalAmountCollected">
+                      <StyledTableCell sx={{ width: "33.32%" }} className="BORBodyRight">Total Amount Collected</StyledTableCell>
+                      <StyledTableCell sx={{ width: "49.98%" }} ><Skeleton/> </StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
+                    </TableHead>
+                </StyledTable>
+            </TableContainer>
+          </Grid>
+      </Grid>
 
+      {/* Sales by Tender */}
+      <Grid container className="box_shadow_div">
+            <Grid item xs={12}>
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead>
+                      <StyledTableCell sx={{ width: "16.66%" }} >
+                        Sales by Tender
+                      </StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
+                      <StyledTableCell sx={{ width: "33.32%" }}># of Transactions</StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+
+                        <StyledTableRow >
+                          <StyledTableCell className={`  `}>
+                          <Skeleton/> 
+                          </StyledTableCell>
+                          <StyledTableCell  className="BORBodyRight"></StyledTableCell>
+                          <StyledTableCell className={`  BORBodyRight`}>
+                          <Skeleton/> 
+                          </StyledTableCell>
+                          
+                          <StyledTableCell >
+                          <Skeleton/> 
+                          </StyledTableCell>
+                          <StyledTableCell  colSpan={3}></StyledTableCell>
+                        </StyledTableRow>
+
+                      <StyledTableRow >
+                          <StyledTableCell className="trBG_Color">
+                            <div className={`q_sales_trading_data p-0 totalReport`}>
+                                Total
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell className="BORBodyRight trBG_Color"></StyledTableCell>
+                          <StyledTableCell className="BORBodyRight trBG_Color">
+                            <Skeleton/> 
+                          </StyledTableCell>
+                          <StyledTableCell className="trBG_Color">
+                          <Skeleton/> 
+                          </StyledTableCell>
+                          <StyledTableCell  colSpan={3} className="trBG_Color"></StyledTableCell>
+                        </StyledTableRow>
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+ 
+            </Grid>
+      </Grid>
+
+      {/* Payouts */}
+      <Grid container className="box_shadow_div">
+            <Grid item xs={12}>
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead>
+                      <StyledTableCell sx={{ width: "16.66%" }} className=" ">
+                        Payouts
+                      </StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }}  className=" BORHeaderRight"></StyledTableCell>
+                      <StyledTableCell sx={{ width: "33.32%" }}># of Transactions</StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                      {PayoutsTypeList?.map((item, index) => (
+                        <StyledTableRow key={index}>
+                          <StyledTableCell ><Skeleton/></StyledTableCell>
+                          <StyledTableCell ></StyledTableCell>
+                          <StyledTableCell ><Skeleton/></StyledTableCell>
+                          <StyledTableCell ><Skeleton/> </StyledTableCell>
+                          <StyledTableCell  colSpan={3}></StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+ 
+            </Grid>
+      </Grid>
+
+        {/* Last List  */}
+        <Grid container className="box_shadow_div">
+          <Grid item xs={12}>
+            <TableContainer>
+                <StyledTable >
+                <TableBody>
+                        <StyledTableRow >
+                          <StyledTableCell sx={{ width: "33.32%" }}><Skeleton/></StyledTableCell>
+                          <StyledTableCell sx={{ width: "49.98%" }}><Skeleton/></StyledTableCell>
+                          <StyledTableCell  sx={{ width: "16.66%" }}></StyledTableCell>
+                        </StyledTableRow>
+                    </TableBody>
+                </StyledTable>
+            </TableContainer>
+          </Grid>
+        </Grid>
        
         </>
       ) : SalesReportData && GrossSalesubtotal> 0 ? (
         <>
-          Data Display
+        
+      {/* Gross Sales */}
+      <Grid container className="box_shadow_div">
+          <Grid item xs={12}>
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead>
+                      <StyledTableCell sx={{ width: "16.66%" }}>
+                        Gross Sales
+                      </StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }} ><p className={getClassName(GrossSalesubtotal)}>{formatCurrency(GrossSalesubtotal)}</p></StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }} ></StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                      {GrossSaleList?.map((item, index) => (
+                        <StyledTableRow key={index}>
+                          <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""} BORBodyRight`} colSpan={2}>
+                            <div className={`q_sales_trading_data p-0 ${item.name === "Net Sales" ? "totalReport" : ""}`}>
+                              <p>{item.name}</p>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""}`} >
+                          <div className={`q_sales_trading_data p-0 ${item.name === "Net Sales" ? "totalReport" : ""}`}>
+                              <p className={getClassName(item.amount)}>{formatCurrency(item.amount)}</p>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell className={` ${item.name === "Net Sales" ? "trBG_Color" : ""}`}colSpan={3} ></StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+ 
+          </Grid>
+      </Grid>
+
+      {/* Taxes */}
+          <Grid container className="box_shadow_div">
+            <Grid item xs={12}>
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead className="TaxesTable">
+                      <StyledTableCell colSpan={2} sx={{ width: "33.32%" }}>
+                        Taxes
+                      </StyledTableCell>
+                      <StyledTableCell  colSpan={2} className="TaxesTableHead">
+                       {formatCurrency(NonTaxableSales?.[0]?.taxable_amount)} Non-Taxable Sales</StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                        {SalesReportData?.taxes?.map((item, index) => {
+                        let TaxableAmountsum = +item.taxable_amount - (+item.refunded_taxable_amount);
+                          return (
+                        <>
+                          <StyledTableRow >
+                              <StyledTableCell  className="BORBodyRight"></StyledTableCell>
+                              <StyledTableCell  className="BORBodyRight "> <p className="font-bold">Current Rate</p></StyledTableCell>
+                              <StyledTableCell  className="BORBodyRight"><p className="font-bold">Taxable Amount</p></StyledTableCell>
+                              <StyledTableCell  ><p className="font-bold">Estimated Sales Tax Due</p></StyledTableCell>
+                          </StyledTableRow >
+
+                          <StyledTableRow key={index}>
+                            <StyledTableCell  className="BORBodyRight" >{item.tax_type}</StyledTableCell>
+                            <StyledTableCell className="BORBodyRight">{item.tax_rate} %</StyledTableCell>
+                            <StyledTableCell className="BORBodyRight">
+                              <p className={ getClassName(item.taxable_amount)}>
+                              {formatCurrency(item.taxable_amount)}
+                              </p>
+                            </StyledTableCell>
+                            <StyledTableCell  >
+                              <p className={getClassName(item.refunded_tax)}>
+                              {formatCurrency(item.refunded_tax)}
+                              </p>
+                            </StyledTableCell>
+                          </StyledTableRow>
+
+                          <StyledTableRow >
+                              <StyledTableCell className="BORBodyRight">Refunds</StyledTableCell>
+                              <StyledTableCell  className="BORBodyRight">{item.tax_rate} %</StyledTableCell>
+                              <StyledTableCell  className="BORBodyRight">
+                                <p className={getClassName(item.refunded_taxable_amount)}>
+                                {formatCurrency(item.refunded_taxable_amount)} 
+                                </p>
+                              </StyledTableCell>
+                              <StyledTableCell >
+                              <p className={getClassName(item.collected_tax)}>
+                                {formatCurrency(item.collected_tax)}
+                                </p>
+                              </StyledTableCell>
+                          </StyledTableRow >
+
+                          <StyledTableRow className="trBG_Color totalBORDERDOWN">
+                            <StyledTableCell  colSpan={2} className="BORBodyRight">
+                            <div className={`q_sales_trading_data p-0  totalReport`}>
+                              <p>Total</p>
+                            </div>
+                            </StyledTableCell>
+                            <StyledTableCell className="BORBodyRight">
+                             <div className={`q_sales_trading_data p-0  totalReport ${getClassName(item.TaxableAmountsum)}` }>
+                              <p>{formatCurrency(TaxableAmountsum)}</p>
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell  >
+                             <div className={`q_sales_trading_data p-0  totalReport ${getClassName(item.TaxableAmountsum)}`}>
+                              <p>{formatCurrency(item.estimated_tax_due)}</p>
+                              </div>
+                            </StyledTableCell>
+                          </StyledTableRow >
+                          { index != lastTotalIndexs && (
+                            <StyledTableRow key={`blank-${index}`} className="totalBORDERUPDOWN">
+                              <StyledTableCell colSpan={7}>&nbsp;</StyledTableCell>
+                            </StyledTableRow>
+                          )}
+                          
+                        </>
+                      )})}
+                      <StyledTableRow className=" ">
+                            <StyledTableCell  colSpan={2}  className="BORBodyRight"></StyledTableCell>
+                            <StyledTableCell className="BORBodyRight"><p className="font-bold">Total Tax Collected</p></StyledTableCell>
+                            <StyledTableCell  ><p className="font-bold">{formatCurrency(TotalEstimate)}</p></StyledTableCell>
+                      </StyledTableRow >
+
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+ 
+            </Grid>
+      </Grid>
+
+      {/* Other Fees */}
+      <Grid container className="box_shadow_div">
+          <Grid item xs={12}>
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead>
+                      <StyledTableCell  sx={{ width: "16.66%" }}>
+                        Other Fees
+                      </StyledTableCell>
+                      <StyledTableCell  sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
+                      <StyledTableCell  sx={{ width: "16.66%" }}><p className={getClassName(3400)}>{formatCurrency(3400)}</p></StyledTableCell>
+                      <StyledTableCell  sx={{ width: "16.66%" }}></StyledTableCell>
+                      <StyledTableCell  sx={{ width: "16.66%" }}></StyledTableCell>
+                      <StyledTableCell  sx={{ width: "16.66%" }}></StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                      {OtherFeeList?.map((item, index) => (
+                        <StyledTableRow key={index}>
+                          <StyledTableCell className={` ${item.name === "Total Other Fees" ? "trBG_Color" : ""} BORBodyRight`} colSpan={2}>
+                            <div className={`q_sales_trading_data p-0 ${item.name === "Total Other Fees" ? "totalReport" : ""}`}>
+                              <p>{item.name}</p>
+                            </div>
+                          </StyledTableCell>
+                          
+                          <StyledTableCell className={` ${item.name === "Total Other Fees" ? "trBG_Color" : ""}`} colSpan={4}>
+                          <div className={`q_sales_trading_data p-0 
+                          ${item.name === "Total Other Fees" ? "totalReport" : ""} 
+                          ${getClassName(item.amount)}`}>
+                              <p>{formatCurrency(item.amount)}</p>
+                            </div>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+ 
+          </Grid>
+      </Grid>
+
+      {/* Total Amount Collected */}
+      <Grid container className="box_shadow_div">
+          <Grid item xs={12}>
+            <TableContainer>
+                <StyledTable >
+                    <TableHead className="totalAmountCollected">
+                      <StyledTableCell sx={{ width: "33.32%" }} className="BORBodyRight">Total Amount Collected</StyledTableCell>
+                      <StyledTableCell sx={{ width: "49.98%" }} >
+                        <p> 
+                          <span className={getClassName(TotalAmountCollected)}>{formatCurrency(TotalAmountCollected)} </span> 
+                          = Net Sales + Taxes + Other Fees 
+                        </p>
+                      </StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
+                    </TableHead>
+                </StyledTable>
+            </TableContainer>
+          </Grid>
+      </Grid>
+
+      {/* Sales by Tender */}
+      <Grid container className="box_shadow_div">
+            <Grid item xs={12}>
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead>
+                      <StyledTableCell sx={{ width: "16.66%" }} >
+                        Sales by Tender
+                      </StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
+                      <StyledTableCell sx={{ width: "33.32%" }}># of Transactions</StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                      {/* {SalesByTenderAndCardTypeList?.map((item, index) => ( */}
+                        {Object.entries(sales_by_tender_type)?.map(([key, value]) => (
+                        <StyledTableRow key={key}>
+                          <StyledTableCell className={`  `}>
+                            <div className={`q_sales_trading_data p-0 capitalize`}>
+                            {key?.replace('_', ' ')}
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell  className="BORBodyRight"></StyledTableCell>
+                          <StyledTableCell className={`  BORBodyRight`}>
+                          <div className={`q_sales_trading_data p-0 ${getClassName(value.collected)}`}>
+                              <p>{formatCurrency(value.collected)}</p>
+                            </div>
+                          </StyledTableCell>
+                          
+                          <StyledTableCell className={`  `}>
+                          <div className={`q_sales_trading_data p-0 `}>
+                            <p>
+                              {value.transactions}
+                            </p>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell  colSpan={3}></StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                      <StyledTableRow >
+                          <StyledTableCell className="trBG_Color">
+                            <div className={`q_sales_trading_data p-0 totalReport`}>
+                                Total
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell className="BORBodyRight trBG_Color"></StyledTableCell>
+                          <StyledTableCell className="BORBodyRight trBG_Color">
+                          <div className={`q_sales_trading_data p-0 totalReport ${getClassName(totalCollected)}`}>
+                              <p>{formatCurrency(totalCollected)}</p>
+                            </div>
+                          </StyledTableCell>
+                          
+                          <StyledTableCell className="trBG_Color">
+                          <div className={`q_sales_trading_data p-0 totalReport`}>
+                            <p>
+                              {priceFormate(totalTransactions)}
+                            </p>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell  colSpan={3} className="trBG_Color"></StyledTableCell>
+                        </StyledTableRow>
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+ 
+            </Grid>
+      </Grid>
+          
+      {/* Payouts */}
+      <Grid container className="box_shadow_div">
+            <Grid item xs={12}>
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead>
+                      <StyledTableCell sx={{ width: "16.66%" }} className=" ">
+                        Payouts
+                      </StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }}  className=" BORHeaderRight"></StyledTableCell>
+                      <StyledTableCell sx={{ width: "33.32%" }}># of Transactions</StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                      {PayoutsTypeList?.map((item, index) => (
+                        <StyledTableRow key={index}>
+                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} `}>
+                            <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
+                              <p>{item.name}</p>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} BORBodyRight`}></StyledTableCell>
+                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} BORBodyRight`}>
+                          <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""} ${getClassName(item.amount)}`}>
+                              <p>{formatCurrency(item.amount)}</p>
+                            </div>
+                          </StyledTableCell>
+                          
+                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`}>
+                          <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
+                            <p>
+                              {priceFormate(item.number)}
+                            </p>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`} colSpan={3}></StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+ 
+            </Grid>
+      </Grid>
+
+      {/* Last List  */}
+
+      <Grid container className="box_shadow_div">
+          <Grid item xs={12}>
+            <TableContainer>
+                <StyledTable >
+                <TableBody>
+                      {lastList?.map((item, index) => (
+                        <StyledTableRow key={index}>
+                          <StyledTableCell className=" BORBodyRight" sx={{ width: "33.32%" }}>
+                            <div className={`q_sales_trading_data p-0  `}>
+                              <p>{item.name}</p>
+                            </div>
+                          </StyledTableCell>
+                          
+                          <StyledTableCell className={` `} sx={{ width: "49.98%" }}>
+                          <div className={`q_sales_trading_data p-0 `}>
+                              <p>
+                                <span className={`${getClassName(item.amount)} ` }>{formatCurrency(item.amount)}</span> 
+                                {item.name === "Remaining Cash" ? " = Cash Collected - Total Payout": "" }  </p>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""}`} sx={{ width: "16.66%" }}></StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                </StyledTable>
+            </TableContainer>
+          </Grid>
+      </Grid>
+
         </>
       ) : (
         <NoDataFound />
       )}
 
-
-
-
-      {/* for new Nodata Found End */}
     </>
   );
 };
