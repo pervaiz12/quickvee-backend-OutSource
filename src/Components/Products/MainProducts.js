@@ -337,7 +337,7 @@ const MainProducts = () => {
         dispatch(emptyProduct([]));
         setProductIdList([]);
         if (option !== "All") {
-          // changeProductPageUrl("status", option?.id);
+          changeProductPageUrl("status", option?.id);
         }
         setlistingTypesDropdownVisible(false);
         break;

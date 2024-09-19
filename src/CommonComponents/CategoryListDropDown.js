@@ -94,7 +94,7 @@ const CategoryListDropDown = ({
         if (listFor === "massInventoryUpdate") {
           return;
         }
-        // changeProductPageUrl("category", option?.id ? option?.id : "all");
+        changeProductPageUrl("category", option?.id ? option?.id : "all");
         setCategoryDropdownVisible(false);
         // dispatch(emptyProduct([]));
         let data1 = {
