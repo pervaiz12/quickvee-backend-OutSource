@@ -804,6 +804,7 @@ const menuItems = [
         ],
       },
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
+      { id: 80, text: "New Taxes Reports", link: "/store-reporting/new-taxes-report" },
       {
         id: 4,
         text: "Refunds",

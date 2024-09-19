@@ -60,6 +60,7 @@ const Main = ({ visible }) => {
       {visible === "options" && <Layout visible={visible} />}
       {visible === "taxes" && <Layout visible={visible} />}
       {visible === "taxes-report" && <Layout visible={visible} />}
+      {visible === "new-taxes-report" && <Layout visible={visible} />}
       {visible === "system-access" && <Layout visible={visible} />}
       {visible === "inventory" && <Layout visible={visible} />}
       {visible === "register" && <Layout visible={visible} />}

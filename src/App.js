@@ -558,6 +558,12 @@ function App() {
             />
             <Route
               exact
+              path="/store-reporting/new-taxes-report"
+              element={<Main visible={"new-taxes-report"} />}
+            />
+
+            <Route
+              exact
               path="/store-settings/addemployee"
               element={<Main visible={"addemployee"} />}
             />
