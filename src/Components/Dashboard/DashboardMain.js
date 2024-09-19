@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import DashboardFunctionality from "./dashboardFunctionality";
 import DashboardTables from "./paginationTable";
 import { useAuthDetails } from "./../../Common/cookiesHelper";
+import DateRangeComponent from "../../reuseableComponents/DateRangeComponent";
 const DashboardMain = () => {
   const {
     dashboardCount,
@@ -47,25 +48,36 @@ const DashboardMain = () => {
   // --------------------------------------------------------------------------------------------------------------
   // console.log(AuthDecryptDataDashBoardJSONFormat)
 
+  const handleDateRangeChange = () => {};
+
   return (
     <>
       <div className="q-category-main-page">
         <Welcome />
       </div>
       <div className="q-category-main-page">{/* <MainHeader /> */}</div>
-      <div className="q-category-main-page pb-5">
+      {/* <div className="q-category-main-page pb-5">
         <CardForm dashboardCount={dashboardCount} loadingCount={loadingCount} />
+      </div> */}
+      <div className="pb-5">
+        <div className="box">
+          <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
+        </div>
       </div>
       <div className="q-category-main-page">
-        {/* <NetSales /> */}
-        <DashboardTables
-          dashboardRecord={dashboardRecord}
-          merchant_id={merchant_id}
-          sortByItemName={sortByItemName}
-          loading={loading}
-        />
+        <NetSales />
+        <div className="mb-5">
+          <DashboardTables
+            dashboardRecord={dashboardRecord}
+            merchant_id={merchant_id}
+            sortByItemName={sortByItemName}
+            loading={loading}
+          />
+        </div>
       </div>
-      <div className="q-category-main-page">{/* <SellItems /> */}</div>
+      {/* <div className="q-category-main-page">
+        <SellItems />
+        </div> */}
     </>
   );
 };

@@ -73,6 +73,9 @@ const MainItem = lazy(() => import("../Reporting/ItemType/MainItem"));
 const MainTaxesReport = lazy(
   () => import("../Reporting/Taxes/MainTaxesReport")
 );
+const NewMainTaxesReport = lazy(
+  () => import("../Reporting/NewTaxesReport/MainTaxesReport")
+);
 const CurrentInventoryValue = lazy(
   () => import("../Reporting/CurrentInventoryValue/CurrentInventoryValue")
 );
@@ -315,6 +318,8 @@ const LeftSide = ({ visible }) => {
         return <MainItem />;
       case "taxes-report":
         return <MainTaxesReport />;
+      case "new-taxes-report":
+        return <NewMainTaxesReport />;
       case "current-inventory-value":
         return <CurrentInventoryValue />;
       case "discount-per-sales-person":

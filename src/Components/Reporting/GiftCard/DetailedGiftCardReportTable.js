@@ -100,7 +100,11 @@ export default function DetailedGiftCardReportTable({
   };
   return (
     <>
-      <Grid container className="box_shadow_div">
+      <Grid
+        container
+        className="box_shadow_div"
+        style={{ display: "inlineBlock" }}
+      >
         {GiftCardReportDataState.loading ||
         (GiftCardReportDataState.status && !dataArr.length) ? (
           <SkeletonTable columns={tableRow.map((item) => item.label)} />
