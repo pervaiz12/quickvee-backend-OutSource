@@ -207,18 +207,18 @@ export default function Header() {
           }}
         >
           <MenuItem
-            sx={{ fontFamily: "CircularSTDBook" }}
+            // sx={{ fontFamily: "CircularSTDBook",position:"sticky",top:"0", left:"0",right:"0",zIndex:"99999",background:"#fff" }}
             disableTouchRipple={true}
             className="Searchmarchant"
           >
-            <div>
+            
               <InputBase
                 placeholder="Search..."
                 onChange={handleSearchChange}
                 value={searchText}
                 inputRef={inputRef}
               />
-            </div>
+        
           </MenuItem>
           {displayOptions.map((item, index) => {
             return (

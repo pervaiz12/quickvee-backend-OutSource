@@ -155,7 +155,7 @@ const MainResigtersetting = () => {
                     </label>
                     ) : ("")}
 
-                    <label className="q_resigter_setting_section">
+                    {/* <label className="q_resigter_setting_section">
                       <p
                         className={`${
                           values.shared_lp ? "text-black" : ""
@@ -170,8 +170,7 @@ const MainResigtersetting = () => {
                         onChange={handleRegisterSettingInput}
                       />
                       <span className="checkmark"></span>
-                    </label>
-
+                    </label> */}
                   </ul>
                 </div>
                 <div className="q-resigtersetting-bottom-section mt-8 px-7">

@@ -127,7 +127,7 @@ const PaymentMethodList = ({ data }) => {
                                   {/* {paymentData.card_type} */}
                                   {paymentData.card_type === ""
                                     ? "N/A"
-                                    : paymentData.card_type}
+                                    : paymentData.card_type === '' ? "N/A" :paymentData.card_type}
                                 </p>
                               </StyledTableCell>
                               <StyledTableCell>
