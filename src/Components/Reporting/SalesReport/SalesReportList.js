@@ -192,6 +192,8 @@ const SalesReportList = (props) => {
     const sales_by_tender_type= SalesReportData?.sales_by_tender_type?.data || {};
     const totalCollected = Object.values(sales_by_tender_type)?.reduce((acc, tender) => acc + (tender.collected || 0), 0);
     const totalTransactions = Object.values(sales_by_tender_type)?.reduce((acc, tender) => acc + (tender.transactions || 0), 0);
+    const CashCollectedL = sales_by_tender_type?.cash?.collected || 0;
+    console.log("dv",CashCollectedL)
 
     // for OtherFeeList
     const ServicesCharges = parseFloat(SalesReportData?.other_fees?.breakdown?.convenience_fee) || 0;
@@ -293,7 +295,7 @@ const SalesReportList = (props) => {
   const lastList = [
     {
       name: "Cash Collected",
-      amount: totalCollected,
+      amount: CashCollectedL,
     },
     {
       name: "Total Payout",
@@ -301,7 +303,7 @@ const SalesReportList = (props) => {
     },
     {
       name: "Remaining Cash",
-      amount: totalCollected - (Payoutcashback+Payoutlottery+Payoutlottery_non_scrach+Payoutvendor_payments),
+      amount: CashCollectedL - (Payoutcashback+Payoutlottery+Payoutlottery_non_scrach+Payoutvendor_payments),
     },
 
   ];
@@ -831,7 +833,6 @@ const SalesReportList = (props) => {
                       <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
                     </TableHead>
                     <TableBody>
-                      {/* {SalesByTenderAndCardTypeList?.map((item, index) => ( */}
                         {Object.entries(sales_by_tender_type)?.map(([key, value]) => (
                         <StyledTableRow key={key}>
                           <StyledTableCell className={`  `}>
