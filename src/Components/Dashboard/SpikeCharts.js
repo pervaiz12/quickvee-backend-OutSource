@@ -58,9 +58,9 @@ export default function SpikeCharts({ title, growth, mainOutlet, amount }) {
       </Grid>
       <Grid item xs={12} className="flex items-center ">
         <p className="CircularSTDMedium-55px ">{amount}</p>
-        <Link className="CircularSTDMedium-18px ml-2 pt-5 text-blue-600 underline text-base">
+        {/* <Link className="CircularSTDMedium-18px ml-2 pt-5 text-blue-600 underline text-base">
           View Reports
-        </Link>
+        </Link> */}
       </Grid>
       <Grid item xs={12} className="flex justify-between bg-[#FBFBFB] p-2">
         <p className="CircularSTDMedium-15px">Main Outlet</p>
