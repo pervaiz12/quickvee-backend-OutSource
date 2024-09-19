@@ -88,7 +88,9 @@ const ReceiptMainpage = lazy(
 const MainItemSales = lazy(
   () => import("../Reporting/ItemSales/MainItemSales")
 );
-const NewMainItemSales = lazy( () => import("../Reporting/NewItemsales/NewMainItemSales"));
+const NewMainItemSales = lazy(
+  () => import("../Reporting/NewItemsales/NewMainItemSales")
+);
 const NewItemCreatedBetweenMain = lazy(
   () => import("../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain")
 );
@@ -188,6 +190,10 @@ const NewCustomersAddedReportMain = lazy(
   () =>
     import("../Reporting/NewCustomerAddedReport/NewCustomersAddedReportMain")
 );
+
+const MainLoyaltyProgramPage = lazy(
+  () => import("../StoreSetting/LoyaltyProgram/MainLoyaltyProgram")
+);
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -281,6 +287,8 @@ const LeftSide = ({ visible }) => {
         return <MainResigtersetting />;
       case "system-access":
         return <MainSyastemAccess />;
+      case "loyalty-program":
+        return <MainLoyaltyProgramPage />;
       case "daily-total-report":
         return <DailyTtlReport />;
       case "Details-category":

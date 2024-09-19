@@ -441,6 +441,11 @@ function App() {
               path="/store-settings/system-access"
               element={<Main visible={"system-access"} />}
             />
+            <Route
+              exact
+              path="/store-settings/loyalty-program"
+              element={<Main visible={"loyalty-program"} />}
+            />
 
             <Route
               exact
