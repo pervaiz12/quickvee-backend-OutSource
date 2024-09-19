@@ -154,7 +154,7 @@ const SideMenu = () => {
           text: "Import Data",
           link: "/import-data",
         };
-        console.log("updatedMenuItems",updatedMenuItems)
+        console.log("updatedMenuItems", updatedMenuItems);
         updatedMenuItems.splice(updatedMenuItems.length - 1, 0, newMenuItem);
         const newMenuItemDigit = {
           id: 92,

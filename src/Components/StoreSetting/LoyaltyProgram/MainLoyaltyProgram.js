@@ -10,7 +10,32 @@ export default function LoyaltyProgram() {
     handleModalOpen,
     openAddModel,
     handleCloseAddModal,
-    onDateRangeChange,
+    loyaltyProgramList,
+    inventorySwitch,
+    handleCheckedSwitch,
+    InventorAwardedPoints,
+    handleDollarValue,
+    SwitchList,
+    handleChangeSwitch,
+    handleSaveData,
+    onChangeAddLoyality,
+    addPrmotionName,
+    onChangeDateValid,
+    onChangeStartDate,
+    onChangeEndDate,
+    dateValid,
+    handleSubmitAddLoyalty,
+    errors,
+    enabledPromotionalId,
+    handleCheckedProEnabledSwitch,
+    loader,
+    errorMessageLoyality,
+    loaderSave,
+    dataLoadingApi,
+    onClickEditIcon,
+    updateChecked,
+    handleUpdateLoyalty,
+    handleDeleteLoyalty,
   } = LoyaltyProgramLogic();
   return (
     <>
@@ -54,18 +79,43 @@ export default function LoyaltyProgram() {
             <Switch
               // {...label}
               name="cost_method"
-              // checked={isChecked === "0"}
-              // onChange={handleCheckedSwitch}
+              checked={inventorySwitch}
+              onChange={handleCheckedSwitch}
             />
             {/* )} */}
           </div>
         </Grid>
       </Grid>
-      <LoyaltyPointData handleModalOpen={handleModalOpen} />
+      <LoyaltyPointData
+        handleModalOpen={handleModalOpen}
+        InventorAwardedPoints={InventorAwardedPoints}
+        handleDollarValue={handleDollarValue}
+        loyaltyProgramList={loyaltyProgramList}
+        SwitchList={SwitchList}
+        handleChangeSwitch={handleChangeSwitch}
+        handleSaveData={handleSaveData}
+        errorMessageLoyality={errorMessageLoyality}
+        loaderSave={loaderSave}
+        dataLoadingApi={dataLoadingApi}
+        onClickEditIcon={onClickEditIcon}
+        handleDeleteLoyalty={handleDeleteLoyalty}
+      />
       <AddLoyaltyPointModal
         openAddModel={openAddModel}
         handleCloseAddModal={handleCloseAddModal}
-        onDateRangeChange={onDateRangeChange}
+        onChangeAddLoyality={onChangeAddLoyality}
+        addPrmotionName={addPrmotionName}
+        onChangeStartDate={onChangeStartDate}
+        onChangeEndDate={onChangeEndDate}
+        dateValid={dateValid}
+        handleSubmitAddLoyalty={handleSubmitAddLoyalty}
+        errors={errors}
+        enabledPromotionalId={enabledPromotionalId}
+        handleCheckedProEnabledSwitch={handleCheckedProEnabledSwitch}
+        loader={loader}
+        updateChecked={updateChecked}
+        handleUpdateLoyalty={handleUpdateLoyalty}
+        // InventorAwardedPoints={InventorAwardedPoints}
       />
     </>
   );

@@ -7,35 +7,40 @@ import { useSelector, useDispatch } from "react-redux";
 import DeletIcon from "../../../Assests/Dashboard/delete.svg";
 import Edit from "../../../Assests/Dashboard/edit.svg";
 import dayjs from "dayjs";
-
+import Switch from "@mui/material/Switch";
+import moment from "moment";
+import Skeleton from "react-loading-skeleton";
+import DeleteModal from "../../../reuseableComponents/DeleteModal";
 export default function LoyaltyPointData(props) {
-  //   =========================================
+  // console.log("props.loyaltyProgramList", props.loyaltyProgramList);
+  //   ===============================================
   // const startDate = dayjs("2023-08-22");
   // const endDate = dayjs("2024-08-08");
 
-  // // Calculate the difference in days between the dates
+  // // // Calculate the difference in days between the dates
   // const differenceInDays = endDate.diff(startDate, "day");
 
-  // // Format the dates
+  // // // Format the dates
   // const formattedStartDate = startDate.format("DD MMM, YYYY");
   // const formattedEndDate = endDate.format("DD MMM, YYYY");
   // console.log(formattedStartDate, "formattedStartDate");
   // console.log(formattedEndDate, "formattedStartDate");
   // console.log(differenceInDays, "differenceInDays");
-  const testData = [
-    {
-      id: "1",
-      name: "test 1",
-      date_expire: "2023-08-22",
-      date_valid: "2024-08-20",
-    },
-    {
-      id: "2",
-      name: "test 2",
-      date_expire: "2023-08-14",
-      date_valid: "2024-08-12",
-    },
-  ];
+  // ==================================================
+  // const testData = [
+  //   {
+  //     id: "1",
+  //     name: "test 1",
+  //     date_expire: "2023-08-22",
+  //     date_valid: "2024-08-20",
+  //   },
+  //   {
+  //     id: "2",
+  //     name: "test 2",
+  //     date_expire: "2023-08-14",
+  //     date_valid: "2024-08-12",
+  //   },
+  // ];
 
   // ===========================================
   return (
@@ -53,10 +58,10 @@ export default function LoyaltyPointData(props) {
             <Grid item xs={12}>
               <BasicTextFields
                 type={"text"}
-                // value={orderState?.dayCount}
+                value={props.InventorAwardedPoints?.CurrentDollarSpent}
                 name={"dayCount"}
-                // onChangeFun={handleOrderChange}
-                // disable={!orderState?.enabledFutureOrder}
+                onChangeFun={props.handleDollarValue}
+                disable={true}
                 // onKeyPressFun={handleKeyPress}
                 maxLength={2}
                 // handlePaste={handlePaste}
@@ -73,24 +78,34 @@ export default function LoyaltyPointData(props) {
             <BasicTextFields
               type="text"
               placeholder="$1 ="
+              name="DollarSpent"
               maxLength={8}
-              // name="default_delvery_setup"
               // id="delvery_setup"
-              // value={deleveryChange}
+              // name="default_delvery_setup"
+              value={props.InventorAwardedPoints?.DollarSpent}
+              onChangeFun={props.handleDollarValue}
               // onChangeFun={setDelveryChange}
             />
+            <span className="input-error">
+              {props.errorMessageLoyality.pointAwardedError}
+            </span>
           </Grid>
           <Grid item xs={12} sm={6}>
             <label>Point Redemption Value</label>
             <BasicTextFields
               type="text"
-              placeholder="1 point ="
+              placeholder=""
               maxLength={8}
-              name="default_delvery_setup"
+              name="RedemptionValue"
               // id="delvery_setup"
               // value={delveryRates}
+              value={props.InventorAwardedPoints?.RedemptionValue}
+              onChangeFun={props.handleDollarValue}
               // onChangeFun={setDeleveryRate}
             />
+            <span className="input-error">
+              {props.errorMessageLoyality.PointRedemptionError}
+            </span>
           </Grid>
           <Grid item xs={12} sm={6}>
             <label>Minimum Points Redemption</label>
@@ -98,11 +113,18 @@ export default function LoyaltyPointData(props) {
               type="text"
               placeholder="Minimum Points Redemption"
               maxLength={8}
+              name="MinRedemption"
               // name="default_delvery_setup"
               // id="delvery_setup"
               // value={delveryRates}
+              value={props.InventorAwardedPoints?.MinRedemption}
+              onChangeFun={props.handleDollarValue}
+
               // onChangeFun={setDeleveryRate}
             />
+            <span className="input-error">
+              {props.errorMessageLoyality.MinimumPointRedemptionError}
+            </span>
           </Grid>
         </Grid>
         <Grid container spacing={3} sx={{ px: 2.5, pb: 2.5 }}>
@@ -115,7 +137,7 @@ export default function LoyaltyPointData(props) {
           >
             <Grid item>
               <div>
-                <span>Coupon</span>
+                <span>Loyalty</span>
               </div>
             </Grid>
             <Grid item>
@@ -123,7 +145,7 @@ export default function LoyaltyPointData(props) {
               //    to={`/coupons/add`}
               >
                 <p onClick={() => props.handleModalOpen()}>
-                  Add New Coupon <img src={AddIcon} alt="add-icon" />
+                  Add New Loyalty <img src={AddIcon} alt="add-icon" />
                 </p>
               </Link>
             </Grid>
@@ -133,67 +155,178 @@ export default function LoyaltyPointData(props) {
         {/* --------------list here */}
         <Grid container spacing={3} sx={{ p: 2.5 }}>
           {/* --------------list here */}
-          {testData?.map((res, index) => (
-            <Grid item xs={12} sm={6}>
-              <Grid
-                container
-                key={index}
-                className={`q_copuon_header w-full ${1 == 1 ? "active" : ""}`}
-              >
-                <Grid item xs={12}>
+          {Array.isArray(props.SwitchList) && props.SwitchList?.length > 0
+            ? props.SwitchList?.map((res, index) => (
+                <Grid item xs={12} sm={6} key={index}>
                   <Grid
                     container
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    sx={{ p: 1 }}
+                    // 1 == 1 ? "active" : ""
+                    className={`q_copuon_header w-full ${1 == 1 ? "" : ""}`}
                   >
-                    <Grid item>
-                      <div style={{ padding: 0 }} className="q_coupon_code">
-                        <p>test</p>
-                      </div>
-                    </Grid>
-                    <Grid item>
-                      <Grid container spacing={1}>
+                    <Grid item xs={12}>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{ p: 1, borderBottom: "1px solid #0000001f" }}
+                      >
                         <Grid item>
-                          <Link
-
-                          // to={`/coupons/edit-coupons/${coupons.id}`}
+                          <div
+                            style={{ padding: 0 }}
+                            className="q_discount_coupon_Code"
                           >
-                            <span
-                            // to={`/coupons/edit-coupons/${coupons.id}`}
-                            // onClick={()=> {handleEditCoupon(coupons.id)}}
-                            >
-                              <img
-                                src={Edit}
-                                alt=""
-                                className="h-8 w-8  cursor-pointer"
-                              />
-                            </span>
-                          </Link>
+                            <p>{res?.promotion_name}</p>
+                          </div>
                         </Grid>
+
                         <Grid item>
-                          <img
-                            src={DeletIcon}
-                            alt="delet"
-                            className="h-8 w-8 delet-icon"
-                            onClick={
-                              () => ""
-                              //   handleDeleteCoupon(coupons.id)
-                            }
-                          />
+                          <Grid container spacing={1}>
+                            <Grid item>
+                              <Link
+                                onClick={() =>
+                                  props.onClickEditIcon(res?.promotion_id)
+                                }
+                              >
+                                <span>
+                                  <img
+                                    src={Edit}
+                                    alt=""
+                                    className="h-8 w-8  cursor-pointer"
+                                  />
+                                </span>
+                              </Link>
+                            </Grid>
+                            <Grid item>
+                              <img
+                                src={DeletIcon}
+                                alt="delete"
+                                className="h-8 w-8 delet-icon"
+                                onClick={() =>
+                                  props.handleDeleteLoyalty(res?.promotion_id)
+                                }
+                              />
+                            </Grid>
+                          </Grid>
                         </Grid>
                       </Grid>
+                      {/* ======== */}
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{ p: 1 }}
+                      >
+                        <Grid item>
+                          <div
+                            style={{ padding: 0 }}
+                            className="q_coupon_deatails_validtimes"
+                          >
+                            <p>Bonus Point Promotion</p>
+                          </div>
+                        </Grid>
+                        <Grid
+                          item
+                          style={{ padding: 0 }}
+                          className="q_coupon_deatails_validtimes"
+                        >
+                          <p className="q_date_details">
+                            $1= {res?.bonus_points}
+                          </p>
+                        </Grid>
+                      </Grid>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{ p: 1 }}
+                      >
+                        <Grid item>
+                          <div
+                            style={{ padding: 0 }}
+                            className="q_coupon_deatails_validtimes"
+                          >
+                            <p>Validity Dates</p>
+                          </div>
+                        </Grid>
+                        <Grid
+                          item
+                          style={{ padding: 0 }}
+                          className="q_coupon_deatails_validtimes"
+                        >
+                          <p className="q_date_details">
+                            {moment(res.start_date).format("MMM D, YYYY")} -{" "}
+                            {moment(res.end_date).format("MMM D, YYYY")}{" "}
+                          </p>
+                        </Grid>
+                      </Grid>
+                      {/* = */}
+                      {/* ============ */}
+                      <Grid container>
+                        <Grid item xs={12}>
+                          <div className="q_coupon_status_btn">
+                            <p>Enable/Disable</p>
+
+                            <Switch
+                              checked={
+                                res?.enable_promotion
+                                // : false
+                              }
+                              onChange={() =>
+                                props.handleChangeSwitch(res?.promotion_id)
+                              }
+                              sx={{
+                                "& .MuiSwitch-switchBase.Mui-checked": {
+                                  color: "#0A64F9",
+                                },
+                                "& .MuiSwitch-track": {
+                                  backgroundColor: "#0A64F9",
+                                },
+                              }}
+                            />
+                          </div>
+                        </Grid>
+                      </Grid>
+                      {/* =========== */}
                     </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            </Grid>
-          ))}
+              ))
+            : ""}
+        </Grid>
+        <Grid container sx={{ display: "block" }}>
+          <div className="q-add-categories-section-middle-footer">
+            <button
+              className="quic-btn quic-btn-save"
+              disabled={props.loaderSave}
+              onClick={props.handleSaveData}
+            >
+              {" "}
+              {props.loaderSave ? (
+                <>
+                  <CircularProgress color={"inherit"} width={15} size={15} />
+                  Add
+                </>
+              ) : (
+                <>Add</>
+              )}
+            </button>
+          </div>
         </Grid>
 
         {/* </Grid> */}
       </Grid>
+      <DeleteModal
+        headerText="Loyalty Program"
+        otherMSG=""
+        // open={deleteModalOpen}
+        onClose={() => {
+          // setDeleteModalOpen(false);
+        }}
+        // onConfirm={confirmDeleteCategory}
+      />
     </>
   );
 }
