@@ -2,7 +2,8 @@ import { Grid } from "@mui/material";
 import React from "react";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 
-export default function LotteryForm() {
+export default function LotteryForm({
+  formValues,handleInputChanges,formError}) {
   return (
     <Grid container spacing={2}>
       <Grid item sx={{ px: 2.5 }} className="">
@@ -10,51 +11,51 @@ export default function LotteryForm() {
       </Grid>
       <Grid item xs={12}>
         <div className=" qvrowmain ">
-          <label htmlFor="email">Lottery Name</label>
+          <label htmlFor="title">Lottery Name</label>
         </div>
         <BasicTextFields
           sx={{ mt: 0.5 }}
-          type={"email"}
-          name="email"
-          // value={vendor.email}
+          type={"text"}
+          name="title"
+          value={formValues.title}
           placeholder="Lottery Name"
-          // onChangeFun={inputChange}
+          onChangeFun={handleInputChanges}
         />
-        {/* {errorMessage.email && (
-          <span className="error">{errorMessage.email}</span>
-        )} */}
+        {formError.title && (
+          <span className="error">{formError.title}</span>
+        )}
       </Grid>
       <Grid item xs={12} md={6}>
         <div className=" qvrowmain ">
-          <label htmlFor="email">Price ($)</label>
+          <label htmlFor="price">Price ($)</label>
         </div>
         <BasicTextFields
           sx={{ mt: 0.5 }}
           type={"email"}
-          name="email"
-          // value={vendor.email}
+          name="price"
+          value={formValues.price}
           placeholder="Price ($)"
-          // onChangeFun={inputChange}
+          onChangeFun={handleInputChanges}
         />
-        {/* {errorMessage.email && (
-          <span className="error">{errorMessage.email}</span>
-        )} */}
+        {formError.price && (
+          <span className="error">{formError.price}</span>
+        )}
       </Grid>
       <Grid item xs={12} md={6}>
         <div className=" qvrowmain ">
-          <label htmlFor="email">Quantity</label>
+          <label htmlFor="quantity">Quantity</label>
         </div>
         <BasicTextFields
           sx={{ mt: 0.5 }}
-          type={"email"}
-          name="email"
-          // value={vendor.email}
+          type={"text"}
+          name="quantity"
+          value={formValues.quantity}
           placeholder="Quantity"
-          // onChangeFun={inputChange}
+          onChangeFun={handleInputChanges}
         />
-        {/* {errorMessage.email && (
-          <span className="error">{errorMessage.email}</span>
-        )} */}
+        {formError.quantity && (
+          <span className="error">{formError.quantity}</span>
+        )}
       </Grid>
     </Grid>
   );

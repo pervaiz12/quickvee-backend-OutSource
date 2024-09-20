@@ -307,7 +307,7 @@ const MainProducts = () => {
         dispatch(emptyProduct([]));
         setProductIdList([]);
         if (option !== "All") {
-          changeProductPageUrl("status", option?.id);
+          // changeProductPageUrl("status", option?.id);
         }
         setlistingTypesDropdownVisible(false);
         break;
@@ -322,7 +322,7 @@ const MainProducts = () => {
           setSelectedListingType("Select listing");
         }
         setSelectedListingTypeValue(option);
-        changeProductPageUrl("listingType", option?.id);
+        // changeProductPageUrl("listingType", option?.id);
         setSearchId("");
         setProductIdList([]);
         setlistingTypesDropdownVisible(false);
@@ -335,10 +335,10 @@ const MainProducts = () => {
         setProductByImages(option?.title);
         setlistingTypesDropdownVisible(false);
         console.log("option?.id", option?.id);
-        changeProductPageUrl(
-          "filterBy",
-          option?.id === "1" ? "all" : option?.id
-        );
+        // changeProductPageUrl(
+        //   "filterBy",
+        //   option?.id === "1" ? "all" : option?.id
+        // );
 
       default:
         break;

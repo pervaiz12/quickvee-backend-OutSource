@@ -12,6 +12,7 @@ import React from "react";
 import sortIcon from "../../Assests/Category/SortingW.svg";
 import { useSelector } from "react-redux";
 import NoDataFound from "../../reuseableComponents/NoDataFound";
+import { Link } from "react-router-dom";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -49,10 +50,10 @@ const tableRow = [
 ];
 export default function LotteryList() {
   const ProductsListDataState = useSelector((state) => state.productsListData);
-  const filteredList = ProductsListDataState.productsData.filter(
-    (product) => product.is_lottery === "1"
+  const filteredData = ProductsListDataState?.productsData?.filter(
+    (product) => product?.is_lottery === "1"
   );
-  console.log("filteredList", filteredList);
+  console.table("filteredData: ", filteredData);
   return (
     <>
       <TableContainer>
@@ -74,14 +75,41 @@ export default function LotteryList() {
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {filteredList.length > 0 &&
-              filteredList?.map((product, index) => (
-                <StyledTableRow key={index}>
-                  <StyledTableCell>
-                    <p>{product.title}</p>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
+            {ProductsListDataState?.productsData?.length > 0 &&
+              ProductsListDataState?.productsData?.map(
+                (product, index) =>
+                  product?.is_lottery === "1" && (
+                    <StyledTableRow key={index}>
+                      <StyledTableCell>
+                        <Link
+                          state={{
+                            EditProductData: {
+                              title: product?.title,
+                              price: product?.price,
+                              quantity: product?.quantity,
+                              collection: [product?.cotegory],
+                              upc: product?.upc,
+                              trackqnty: product?.trackqnty,
+                              is_lottery: "1",
+                            },
+                          }}
+                          to={"/inventory/lottery/add-lottery"}
+                        >
+                          <p>{product?.title}</p>
+                        </Link>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{product?.quantity}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{product?.upc}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{product?.price}</p>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )
+              )}
           </TableBody>
         </StyledTable>
       </TableContainer>

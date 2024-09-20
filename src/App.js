@@ -441,6 +441,11 @@ function App() {
               path="/store-settings/system-access"
               element={<Main visible={"system-access"} />}
             />
+            <Route
+              exact
+              path="/store-settings/loyalty-program"
+              element={<Main visible={"loyalty-program"} />}
+            />
 
             <Route
               exact
@@ -573,6 +578,12 @@ function App() {
               path="/store-reporting/taxes-report"
               element={<Main visible={"taxes-report"} />}
             />
+            <Route
+              exact
+              path="/store-reporting/new-taxes-report"
+              element={<Main visible={"new-taxes-report"} />}
+            />
+
             <Route
               exact
               path="/store-settings/addemployee"

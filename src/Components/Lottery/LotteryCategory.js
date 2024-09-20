@@ -7,13 +7,19 @@ import PasswordShow from "../../Common/passwordShow";
 import { fetchCategoryList } from "../../Redux/features/Product/ProductSlice";
 import SearchableDropdown from "../../CommonComponents/SearchableDropdown";
 
-export default function LotteryCategory() {
+export default function LotteryCategory({
+  categoryList,
+  setCategoryList,
+  formValues,
+  setFormValues,
+  formError,
+  setFormError
+}) {
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
     PasswordShow();
   const dispatch = useDispatch();
-  const [categoryList, setCategoryList] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState([]);
+
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -32,7 +38,7 @@ export default function LotteryCategory() {
           fetchCategoryList(inventoryData)
         ).unwrap();
         if (response?.result.length > 0) {
-          setCategoryList(response?.result || []); // Update category list
+          setCategoryList(response?.result?.filter((product)=> product?.is_lottery === "1") || []); // Update collection list
         }
       } catch (err) {
         if (err.status === 401 || err.response?.status === 401) {
@@ -42,7 +48,7 @@ export default function LotteryCategory() {
           getNetworkError();
         } else {
           console.error("Error in fetching data:", err);
-          setError("Failed to fetch category list"); // Update error state
+          setError("Failed to fetch collection list"); // Update error state
         }
       }
     };
@@ -50,15 +56,25 @@ export default function LotteryCategory() {
     fetchCategoryListData(); // Call the async function
   }, []);
 
-  // Handle selecting a category from dropdown
+  // Handle selecting a collection from dropdown
   const handleSelectProductOptions = (selectedOption) => {
+    setFormValues((prevState) => ({
+      ...prevState,
+      collection: [...prevState.collection, selectedOption],
+    }));
 
-    setSelectedCategory((prevState) => [...prevState, selectedOption]);
+    setFormError((prevState) => ({
+      ...prevState,
+      collection: null,
+    }))
   };
 
   // Handle deleting selected option
   const handleDeleteSelectedOption = (id) => {
-    setSelectedCategory(selectedCategory.filter((option)=>option.id !== id))
+   setFormValues((prevState)=>({
+    ...prevState,
+    collection: prevState.collection.filter((collection) => collection.id !== id),
+   }))
   };
 
   // Handle error update
@@ -73,19 +89,22 @@ export default function LotteryCategory() {
           <div className="">
             <div className="q-add-categories-single-input">
               <SearchableDropdown
-                title="Category"
-                keyName="Category"
+                title="collection"
+                keyName="collection"
                 name="title"
-                optionList={categoryList} // Pass the fetched category list
+                optionList={categoryList} // Pass the fetched collection list
                 handleSelectProductOptions={handleSelectProductOptions}
                 handleDeleteSelectedOption={handleDeleteSelectedOption}
-                selectedOption={selectedCategory}
+                selectedOption={formValues.collection}
                 // error={error}
                 // handleUpdateError={handleUpdateError}
-                placeholder="Search Category"
+                placeholder="Search collection"
               />
             </div>
           </div>
+          {formError.collection && (
+          <span className="error">{formError.collection}</span>
+        )}
         </Grid>
       </Grid>
     </>

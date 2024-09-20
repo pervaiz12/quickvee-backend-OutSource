@@ -557,7 +557,7 @@ const AutoPo = ({
     if (isCheckvalidDate == "Invalid Date") {
       setPurchaseInfoErrors((prev) => ({
         ...prev,
-        stockDate: "Invalid Stock Due",
+        stockDate: "The stock due is invalid.",
       }));
       return true;
     } else {
@@ -620,6 +620,7 @@ const AutoPo = ({
               upc: prod.upc,
               note: prod.notes,
               title: prod.title,
+              external_id:  prod?.external_id ?  prod?.external_id : "",
             }));
 
             const orderItemsObject = orderItems?.reduce((acc, curr, index) => {

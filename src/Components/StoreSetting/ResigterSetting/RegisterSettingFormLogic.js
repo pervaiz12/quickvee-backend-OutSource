@@ -117,6 +117,18 @@ const RegisterSettingFormLogic = () => {
         parseInt(registerData.shared_lp) === 1
           ? true
           : false,
+      upload_paxlog:
+      registerData &&
+      registerData.upload_paxlog &&
+        parseInt(registerData.upload_paxlog) === 1
+          ? true
+          : false,
+      shared_lp:
+      registerData &&
+      registerData.shared_lp &&
+        parseInt(registerData.shared_lp) === 1
+          ? true
+          : false,
     }));
   }, [registerData]);
 

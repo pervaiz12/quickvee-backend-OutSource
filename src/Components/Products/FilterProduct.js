@@ -53,13 +53,13 @@ const FilterProduct = ({
 
   const listingTypeList = [
     {
-      // id: "0",
       id: 0,
+      // id: "0",
       title: "Product listing",
     },
     {
-      // id: "1",
       id: 1,
+      // id: "1",
       title: "Variant listing",
     },
   ];
@@ -244,6 +244,7 @@ const FilterProduct = ({
               <SelectDropDown
                 sx={{ pt: 0.5 }}
                 heading={"Select listing"}
+                // heading={"Select listing"}
                 title={"title"}
                 listItem={listingTypeList}
                 selectedOption={selectedListingType}

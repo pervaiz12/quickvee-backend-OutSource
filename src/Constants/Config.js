@@ -201,7 +201,8 @@ module.exports = Object.freeze({
 
   //  Sales Report List API
   // SALES_REPORT_LIST: "vendor_report_api/sales_report",
-  SALES_REPORT_LIST: "ReportingReactapi/new_sale_overview",
+  // SALES_REPORT_LIST: "ReportingReactapi/new_sale_overview",
+  SALES_REPORT_LIST: "Sale_summary_api/new_sale_overview",
   // tip report list api
   TIP_REPORT_LIST: "ReportingReactapi/tip_report",
   //coupon report api
@@ -375,9 +376,12 @@ module.exports = Object.freeze({
   TRANSFER_INVENTORY: "Product_api_react/transfer_inventory",
   NEW_CUSTOMER_ADDED_REPORT: "ReportingReactapi/new_customer_added_report",
   REFUND_EMAIL_STATUS_CHANGE: "Order_list_api/refund_email_status_change",
+  LOYALITY_PROGRAM_STORE_LIST: "LoyaltyProgramReactAPI/loyalty_program",
+  SAVE_LOYALITY_PROGRAM: "LoyaltyProgramReactAPI/save_loyalty_program",
+  ADD_LOYALITY_PROGRAM: "LoyaltyProgramReactAPI/add_bouns_point_promotions",
 });
 
-// All api calls are initialized in this component for this application
+// All api calls are initialized in this component for this application ADD_LOYALITY_PROGRAM BASE_URL
 //remove unwanted and credentials of other app
 
 // module.exports = Object.freeze({

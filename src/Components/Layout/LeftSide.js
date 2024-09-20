@@ -73,6 +73,9 @@ const MainItem = lazy(() => import("../Reporting/ItemType/MainItem"));
 const MainTaxesReport = lazy(
   () => import("../Reporting/Taxes/MainTaxesReport")
 );
+const NewMainTaxesReport = lazy(
+  () => import("../Reporting/NewTaxesReport/MainTaxesReport")
+);
 const CurrentInventoryValue = lazy(
   () => import("../Reporting/CurrentInventoryValue/CurrentInventoryValue")
 );
@@ -187,6 +190,10 @@ const NewCustomersAddedReportMain = lazy(
   () =>
     import("../Reporting/NewCustomerAddedReport/NewCustomersAddedReportMain")
 );
+
+const MainLoyaltyProgramPage = lazy(
+  () => import("../StoreSetting/LoyaltyProgram/MainLoyaltyProgram")
+);
 const LotteryMain = lazy(() => import("../Lottery/LotteryMain"));
 const AddLottery = lazy(() => import("../Lottery/AddLottery"));
 const LeftSide = ({ visible }) => {
@@ -282,6 +289,8 @@ const LeftSide = ({ visible }) => {
         return <MainResigtersetting />;
       case "system-access":
         return <MainSyastemAccess />;
+      case "loyalty-program":
+        return <MainLoyaltyProgramPage />;
       case "daily-total-report":
         return <DailyTtlReport />;
       case "Details-category":
@@ -308,6 +317,8 @@ const LeftSide = ({ visible }) => {
         return <MainItem />;
       case "taxes-report":
         return <MainTaxesReport />;
+      case "new-taxes-report":
+        return <NewMainTaxesReport />;
       case "current-inventory-value":
         return <CurrentInventoryValue />;
       case "discount-per-sales-person":
