@@ -196,7 +196,7 @@ const SideMenu = () => {
         };
 
         const updatedTest = updatedMenuItems.map((item) => {
-          if (item.id === 10 && item.dropdownItems) {
+          if (item.id === 9 && item.dropdownItems) {
             return {
               ...item,
               dropdownItems: [...item.dropdownItems, newMenuItemDigit],
