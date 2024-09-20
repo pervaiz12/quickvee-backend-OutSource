@@ -183,23 +183,43 @@ const SalesReportList = (props) => {
 
 
     // for payouts
-    const Payoutcashback = parseFloat(SalesReportData?.payouts?.cash_back) || 0;
-    const Payoutlottery= parseFloat(SalesReportData?.payouts?.lottery) || 0;
-    const Payoutlottery_non_scrach= parseFloat(SalesReportData?.payouts?.lottery_non_scrach) || 0;
-    const Payoutvendor_payments= parseFloat(SalesReportData?.payouts?.vendor_payments) || 0;
-    
+    // const Payoutcashback = parseFloat(SalesReportData?.payouts?.cash_back) || 0;
+    // const Payoutlottery= parseFloat(SalesReportData?.payouts?.lottery) || 0;
+    // const Payoutlottery_non_scrach= parseFloat(SalesReportData?.payouts?.lottery_non_scrach) || 0;
+    // const Payoutvendor_payments= parseFloat(SalesReportData?.payouts?.vendor_payments) || 0;
+
+    const PayoutCashback = {
+      pay_out: parseFloat(SalesReportData?.payouts?.cash_back?.pay_out) || 0,
+      transactions: parseInt(SalesReportData?.payouts?.cash_back?.transactions) || 0
+    };
+
+    const Payoutlottery = {
+      pay_out: parseFloat(SalesReportData?.payouts?.lottery?.pay_out) || 0,
+      transactions: parseInt(SalesReportData?.payouts?.lottery?.transactions) || 0
+    };
+
+    const Payoutlottery_non_scrach = {
+      pay_out: parseFloat(SalesReportData?.payouts?.lottery_non_scrach?.pay_out) || 0,
+      transactions: parseInt(SalesReportData?.payouts?.lottery_non_scrach?.transactions) || 0
+    };
+
+    const Payoutvendor_payments = {
+      pay_out: parseFloat(SalesReportData?.payouts?.vendor_payments?.pay_out) || 0,
+      transactions: parseInt(SalesReportData?.payouts?.vendor_payments?.transactions) || 0
+    };
+
     // for sales_by_tender_type
     const sales_by_tender_type= SalesReportData?.sales_by_tender_type?.data || {};
     const totalCollected = Object.values(sales_by_tender_type)?.reduce((acc, tender) => acc + (tender.collected || 0), 0);
     const totalTransactions = Object.values(sales_by_tender_type)?.reduce((acc, tender) => acc + (tender.transactions || 0), 0);
     const CashCollectedL = sales_by_tender_type?.cash?.collected || 0;
-    console.log("dv",CashCollectedL)
 
     // for OtherFeeList
     const ServicesCharges = parseFloat(SalesReportData?.other_fees?.breakdown?.convenience_fee) || 0;
     const DeliveryFees = parseFloat(SalesReportData?.other_fees?.breakdown?.delivery_fee) || 0;
     const NonCashAdjustmentFees = parseFloat(SalesReportData?.other_fees?.breakdown?.cash_discounting) || 0;
     const Tip = parseFloat(SalesReportData?.other_fees?.breakdown?.tip) || 0;
+    const Cashbackfee = parseFloat(SalesReportData?.other_fees?.breakdown?.cash_back_fee) || 0;
 
     // for new Data Array End
 
@@ -207,23 +227,24 @@ const SalesReportList = (props) => {
   const PayoutsTypeList = [
     {
       name: "Cash Back",
-      amount: Payoutcashback,
-      number: 5,
+      amount: PayoutCashback?.pay_out,
+      number: PayoutCashback?.transactions,
     },
     {
       name: "Lottery",
-      amount: Payoutlottery,
-      number: 3,
+      amount: Payoutlottery?.pay_out,
+      number: Payoutlottery?.transactions,
     },
     {
       name: "Lottery - Non-Scratchers",
-      amount: Payoutlottery_non_scrach,
-      number: 120,
+      amount: Payoutlottery_non_scrach?.pay_out,
+      number: Payoutlottery_non_scrach?.transactions,
     },
     {
       name: "Vendor Payout",
       amount: Payoutvendor_payments,
-      number: 4,
+      amount: Payoutvendor_payments?.pay_out,
+      number: Payoutvendor_payments?.transactions,
     },
     // {
     //   name: "Checks Cashed",
@@ -232,8 +253,8 @@ const SalesReportList = (props) => {
     // },
     {
       name: "Total",
-      amount: (Payoutcashback+Payoutlottery+Payoutlottery_non_scrach+Payoutvendor_payments),
-      number: 135,
+      amount: (PayoutCashback?.pay_out+Payoutlottery?.pay_out+Payoutlottery_non_scrach?.pay_out+Payoutvendor_payments?.pay_out),
+      number: (PayoutCashback?.transactions+Payoutlottery?.transactions+Payoutlottery_non_scrach?.transactions+Payoutvendor_payments?.transactions),
     },
   ];
 
@@ -273,7 +294,7 @@ const SalesReportList = (props) => {
     },
     {
       name: "Cash Back Fees",
-      amount: 50,
+      amount: Cashbackfee,
     },
     {
       name: "Tips",
@@ -285,7 +306,7 @@ const SalesReportList = (props) => {
     // },
     {
       name: "Total Other Fees",
-      amount: (ServicesCharges+DeliveryFees+NonCashAdjustmentFees+Tip+50),
+      amount: (ServicesCharges+DeliveryFees+NonCashAdjustmentFees+Tip+Cashbackfee),
     },
   ];
 
@@ -299,23 +320,14 @@ const SalesReportList = (props) => {
     },
     {
       name: "Total Payout",
-      amount: (Payoutcashback+Payoutlottery+Payoutlottery_non_scrach+Payoutvendor_payments),
+      amount: (PayoutCashback?.pay_out+Payoutlottery?.pay_out+Payoutlottery_non_scrach?.pay_out+Payoutvendor_payments?.pay_out),
     },
     {
       name: "Remaining Cash",
-      amount: CashCollectedL - (Payoutcashback+Payoutlottery+Payoutlottery_non_scrach+Payoutvendor_payments),
+      amount: CashCollectedL - (PayoutCashback?.pay_out+Payoutlottery?.pay_out+Payoutlottery_non_scrach?.pay_out+Payoutvendor_payments?.pay_out),
     },
 
   ];
-
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
-
-  const getTextColor = (value) => {
-    return value < 0 ? { color: "red" } : {};
-  };
 
   const formatCurrency = (amount) => {
     const formattedAmount = Math.abs(amount).toLocaleString("en-US", {
@@ -686,32 +698,33 @@ const SalesReportList = (props) => {
 
                           <StyledTableRow key={index}>
                             <StyledTableCell  className="BORBodyRight" >{item.tax_type}</StyledTableCell>
-                            <StyledTableCell className="BORBodyRight">{item.tax_rate} %</StyledTableCell>
+                            <StyledTableCell className="BORBodyRight">{parseFloat(item.tax_rate).toFixed(3)} %</StyledTableCell>
                             <StyledTableCell className="BORBodyRight">
                               <p className={ getClassName(item.taxable_amount)}>
                               {formatCurrency(item.taxable_amount)}
                               </p>
                             </StyledTableCell>
-                            <StyledTableCell  >
-                              <p className={getClassName(item.refunded_tax)}>
-                              {formatCurrency(item.refunded_tax)}
-                              </p>
-                            </StyledTableCell>
+                            <StyledTableCell >
+                              <p className={getClassName(item.collected_tax)}>
+                                {formatCurrency(item.collected_tax)}
+                                </p>
+                              </StyledTableCell>
                           </StyledTableRow>
 
                           <StyledTableRow >
                               <StyledTableCell className="BORBodyRight">Refunds</StyledTableCell>
-                              <StyledTableCell  className="BORBodyRight">{item.tax_rate} %</StyledTableCell>
+                              <StyledTableCell  className="BORBodyRight">{parseFloat(item.tax_rate).toFixed(3)} %</StyledTableCell>
                               <StyledTableCell  className="BORBodyRight">
                                 <p className={getClassName(item.refunded_taxable_amount)}>
                                 {formatCurrency(item.refunded_taxable_amount)} 
                                 </p>
                               </StyledTableCell>
-                              <StyledTableCell >
-                              <p className={getClassName(item.collected_tax)}>
-                                {formatCurrency(item.collected_tax)}
-                                </p>
-                              </StyledTableCell>
+                              
+                              <StyledTableCell  >
+                              <p className={getClassName(item.refunded_tax)}>
+                              {formatCurrency(item.refunded_tax)}
+                              </p>
+                            </StyledTableCell>
                           </StyledTableRow >
 
                           <StyledTableRow className="trBG_Color totalBORDERDOWN">
