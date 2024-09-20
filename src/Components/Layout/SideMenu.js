@@ -716,11 +716,11 @@ const menuItems = [
           //   link: "/store-reporting/discount-per-sales-report",
           // },
 
-          {
-            id: 105,
-            text: "New Item Sales Report",
-            link: "/store-reporting/new-item-sales-report",
-          },
+          // {
+          //   id: 105,
+          //   text: "New Item Sales Report",
+          //   link: "/store-reporting/new-item-sales-report",
+          // },
         ],
       },
       {
@@ -813,7 +813,11 @@ const menuItems = [
         ],
       },
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
-      { id: 80, text: "New Taxes Reports", link: "/store-reporting/new-taxes-report" },
+      // {
+      //   id: 80,
+      //   text: "New Taxes Reports",
+      //   link: "/store-reporting/new-taxes-report",
+      // },
       {
         id: 4,
         text: "Refunds",
@@ -882,8 +886,11 @@ const menuItems = [
       { id: 87, text: "Tip Report", link: "/store-reporting/tip-report" },
       { id: 88, text: "Coupon Report", link: "/store-reporting/coupon-report" },
       // { id: 1726033807930, text: "Shift Summary", link: "/store-reporting/shift-summary" },
-      { id: 1726123837135, text: "Register Closures", link: "/store-reporting/register-closures" },
-
+      // {
+      //   id: 1726123837135,
+      //   text: "Register Closures",
+      //   link: "/store-reporting/register-closures",
+      // },
 
       // {
       //   id: 89,
@@ -1083,25 +1090,25 @@ const menuItems = [
     text: "Coupons",
     link: "/coupons",
   },
-  {
-    id: 9,
-    icon: (
-      <img
-        src={MixMatchIcon}
-        alt="mix-match-icon"
-        className="h-6 w-10 mt-4 mb-4"
-      />
-    ),
-    activeIcon: (
-      <img
-        src={MixMatchIcon1}
-        alt="mix-match-icon-1"
-        className="h-6 w-10 mt-4 mb-4 "
-      />
-    ),
-    text: "Mix N' Match Pricing",
-    link: "/mix-and-match",
-  },
+  // {
+  //   id: 9,
+  //   icon: (
+  //     <img
+  //       src={MixMatchIcon}
+  //       alt="mix-match-icon"
+  //       className="h-6 w-10 mt-4 mb-4"
+  //     />
+  //   ),
+  //   activeIcon: (
+  //     <img
+  //       src={MixMatchIcon1}
+  //       alt="mix-match-icon-1"
+  //       className="h-6 w-10 mt-4 mb-4 "
+  //     />
+  //   ),
+  //   text: "Mix N' Match Pricing",
+  //   link: "/mix-and-match",
+  // },
   {
     id: 10,
     icon: (
@@ -1181,11 +1188,11 @@ const menuItems = [
       { id: 69, text: "Register Settings", link: "/store-settings/register" },
       // { id: 70, text: "Quick Add", link: "/store-settings/quick-add" },
       { id: 71, text: "System Access", link: "/store-settings/system-access" },
-      {
-        id: 107,
-        text: "Loyalty Program",
-        link: "/store-settings/loyalty-program",
-      },
+      // {
+      //   id: 107,
+      //   text: "Loyalty Program",
+      //   link: "/store-settings/loyalty-program",
+      // },
     ],
   },
   // {

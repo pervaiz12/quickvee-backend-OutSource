@@ -83,7 +83,7 @@ export default function DetailedGiftCardReportTable({
 
   const tableRow = [
     { type: "str", name: "number", label: "Gift Card Number" },
-    { type: "str", name: "created_at", label: "Date Sold" },
+    // { type: "str", name: "created_at", label: "Date Sold" },
     { type: "num", name: "total_debit", label: "Total Sold" },
     { type: "num", name: "total_credit", label: "Total Redeemed" },
     { type: "num", name: "total_balance", label: "Balance" },
@@ -137,9 +137,9 @@ export default function DetailedGiftCardReportTable({
                             <StyledTableCell>
                               <p>{item.number}</p>
                             </StyledTableCell>
-                            <StyledTableCell>
+                            {/* <StyledTableCell>
                               <p>{formatDateTime(item.created_at) || "-"}</p>
-                            </StyledTableCell>
+                            </StyledTableCell> */}
                             <StyledTableCell>
                               <p>${priceFormate(item.total_debit)}</p>
                             </StyledTableCell>
@@ -157,7 +157,7 @@ export default function DetailedGiftCardReportTable({
                         <StyledTableCell className="trBG_Color">
                           <p className="report-sort totalReport">Total</p>
                         </StyledTableCell>
-                        <StyledTableCell className="trBG_Color"></StyledTableCell>
+                        {/* <StyledTableCell className="trBG_Color"></StyledTableCell> */}
                         <StyledTableCell className="trBG_Color">
                           <p className="report-title totalReport">
                             <p>${priceFormate(totalValueIssued || "0.00")}</p>

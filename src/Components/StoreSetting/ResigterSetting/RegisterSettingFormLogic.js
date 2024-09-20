@@ -37,7 +37,7 @@ const RegisterSettingFormLogic = () => {
     // discount_prompt: "",
     denomination: "",
     upload_paxlog: "",
-    shared_lp: "",
+    // shared_lp: "",
     errors: {
       regi_setting: "",
       ebt_type: "",
@@ -49,7 +49,7 @@ const RegisterSettingFormLogic = () => {
       // discount_prompt: "",
       denomination: "",
       upload_paxlog: "",
-      shared_lp: "",
+      // shared_lp: "",
     },
   });
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
@@ -111,12 +111,12 @@ const RegisterSettingFormLogic = () => {
         parseInt(registerData.upload_paxlog) === 1
           ? true
           : false,
-      shared_lp:
-        registerData &&
-        registerData.shared_lp &&
-        parseInt(registerData.shared_lp) === 1
-          ? true
-          : false,
+      // shared_lp:
+      //   registerData &&
+      //   registerData.shared_lp &&
+      //   parseInt(registerData.shared_lp) === 1
+      //     ? true
+      //     : false,
     }));
   }, [registerData]);
 
@@ -149,20 +149,20 @@ const RegisterSettingFormLogic = () => {
         break;
       case "upload_paxlog":
         let newuploadpaxlog = parseInt(event.target.value) === 1 ? 0 : 1;
-          setValues((prevValues) => ({
-            ...prevValues,
-            errors,
-            [fieldName]: newuploadpaxlog,
-          }));
+        setValues((prevValues) => ({
+          ...prevValues,
+          errors,
+          [fieldName]: newuploadpaxlog,
+        }));
         break;
-      case "shared_lp":
-          let newsharedlp = parseInt(event.target.value) === 1 ? 0 : 1;
-            setValues((prevValues) => ({
-              ...prevValues,
-              errors,
-              [fieldName]: newsharedlp,
-            }));
-        break;
+      // case "shared_lp":
+      //   let newsharedlp = parseInt(event.target.value) === 1 ? 0 : 1;
+      //   setValues((prevValues) => ({
+      //     ...prevValues,
+      //     errors,
+      //     [fieldName]: newsharedlp,
+      //   }));
+      //   break;
 
       case "regi_setting[]":
         let regi_settingsArray = values.regi_setting
@@ -232,7 +232,7 @@ const RegisterSettingFormLogic = () => {
         barcode_msg: values.barcode_msg,
         denomination: values.denomination === true ? "1" : "0",
         upload_paxlog: values.upload_paxlog === true ? "1" : "0",
-        shared_lp: values.shared_lp === true ? "1" : "0",
+        // shared_lp: values.shared_lp === true ? "1" : "0",
         token_id: userTypeData?.token_id,
         login_type: userTypeData?.login_type,
       };
@@ -279,7 +279,7 @@ const RegisterSettingFormLogic = () => {
     showModal,
     setShowModal,
     scrollRef,
-    loader
+    loader,
   };
 };
 
