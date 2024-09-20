@@ -164,7 +164,7 @@ export default function LoyaltyProgramLogic() {
             );
           }
         );
-        console.log("activePromotions", activePromotions);
+
         const totalBonusPoints = activePromotions?.reduce((acc, promotion) => {
           return acc + parseFloat(promotion.bonus_points);
         }, 0);
@@ -203,7 +203,7 @@ export default function LoyaltyProgramLogic() {
         });
       }
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
+      if (error?.status == 401 || error?.response?.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
