@@ -195,10 +195,10 @@ const RegisterClosuresMain = lazy(
 );
 const RegisterClosuresSummery = lazy(
   () => import("../Reporting/RegisterClosures/RegisterClosureSummery")
-)
+);
 const RegisterClosuresTransactions = lazy(
   () => import("../Reporting/RegisterClosures/RegisterClosureTransactions")
-)
+);
 
 const MainLoyaltyProgramPage = lazy(
   () => import("../StoreSetting/LoyaltyProgram/MainLoyaltyProgram")
@@ -296,7 +296,7 @@ const LeftSide = ({ visible }) => {
         return <MainResigtersetting />;
       case "system-access":
         return <MainSyastemAccess />;
-      case "loyalty-program":
+      case "StoreSettingloyalty-program":
         return <MainLoyaltyProgramPage />;
       case "daily-total-report":
         return <DailyTtlReport />;
@@ -372,8 +372,8 @@ const LeftSide = ({ visible }) => {
         return <RegisterClosuresMain />;
       case "register-closures-summery":
         return <RegisterClosuresSummery />;
-        case "register-closures-transactions":
-          return <RegisterClosuresTransactions />;
+      case "register-closures-transactions":
+        return <RegisterClosuresTransactions />;
       case "drop-cash-report":
         return <DropCashMain />;
 

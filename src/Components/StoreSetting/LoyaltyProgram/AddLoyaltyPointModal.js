@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Modal } from "@mui/material";
+import { Box, FormControl, Modal } from "@mui/material";
 import { CircularProgress, Grid } from "@mui/material";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import CrossIcon from "../../../Assests/Dashboard/cross.svg";
@@ -7,6 +7,7 @@ import DatePickerSelect from "./DatePickerSelect";
 import Switch from "@mui/material/Switch";
 import { padding } from "@mui/system";
 import dayjs from "dayjs";
+import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 const myStyles = {
   width: "60%",
   position: "absolute",
@@ -20,6 +21,7 @@ const stylePadding = {
 };
 
 export default function AddLoyaltyPointModal(props) {
+  function onDateRangeChange() {}
   return (
     <Modal
       open={props.openAddModel}
@@ -123,8 +125,12 @@ export default function AddLoyaltyPointModal(props) {
               </span>
             </Grid>
             {/* ===========date ===============*/}
+            <Grid>
+              {/* <DateRangeComponent onDateRangeChange={onDateRangeChange} /> */}
+            </Grid>
             <Grid item xs={12} sm={6}>
               <label>Start Date</label>
+
               <DatePickerSelect
                 name="startDate"
                 minDate={dayjs()}
@@ -132,6 +138,7 @@ export default function AddLoyaltyPointModal(props) {
                 onChange={props.onChangeStartDate}
                 format="YYYY-DD-MM"
               />
+
               <span className="input-error">{props.errors.startDateError}</span>
             </Grid>
             <Grid item xs={12} sm={6}>

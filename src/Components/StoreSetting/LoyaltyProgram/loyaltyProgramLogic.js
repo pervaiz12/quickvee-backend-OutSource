@@ -12,9 +12,12 @@ import {
   SAVE_LOYALITY_PROGRAM,
   BASE_URL,
   ADD_LOYALITY_PROGRAM,
+  DELETE_LOYALTY_PROGRAM,
 } from "../../../Constants/Config";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
-
+// import dayjs from "dayjs";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+dayjs.extend(isSameOrBefore);
 export default function LoyaltyProgramLogic() {
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
@@ -70,8 +73,11 @@ export default function LoyaltyProgramLogic() {
   const [updateBonusTest, setUpdateBonusTest] = useState("");
   // ---------------- edit loyality----------------------
   // ---------------- delete loyality--------------------
-  const [deleteTableId, setDeleteTableId] = useState(null);
+  const [deleteTableId, setDeleteTableId] = useState("");
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteLoader, setDeleteLoader] = useState(false);
+  const [alertModalClosed, setAlertModalClosed] = useState(false);
+  const [showAlertMessage, setShowAlertMessage] = useState("");
   // ---------------- delete loyality--------------------
 
   // =========================listing stage end ===================
@@ -135,9 +141,30 @@ export default function LoyaltyProgramLogic() {
         let currentPointFloat = !!currentPointAwarder
           ? parseFloat(currentPointAwarder)
           : "";
+        // const activePromotions = result?.promotion_array?.filter(
+        //   (promotion) => promotion.enable_promotion === true
+        // );
+        // const activePromotions = result?.promotion_array?.filter(
+        //   (promotion) => {
+        //     const startDate = dayjs(promotion?.start_date);
+        //     const currentDate = dayjs(); // Get the current date
+        //     return (
+        //       promotion?.enable_promotion === true &&
+        //       startDate?.isSameOrBefore(currentDate, "day")
+        //     );
+        //   }
+        // );
         const activePromotions = result?.promotion_array?.filter(
-          (promotion) => promotion.enable_promotion === true
+          (promotion) => {
+            const startDate = dayjs(promotion?.start_date).startOf("day"); // Start of the promotion date
+            const currentDate = dayjs().startOf("day"); // Current date at the start of the day
+            return (
+              promotion?.enable_promotion === true &&
+              startDate.isSame(currentDate, "day")
+            );
+          }
         );
+        console.log("activePromotions", activePromotions);
         const totalBonusPoints = activePromotions?.reduce((acc, promotion) => {
           return acc + parseFloat(promotion.bonus_points);
         }, 0);
@@ -145,7 +172,7 @@ export default function LoyaltyProgramLogic() {
         // =====================================
         setInventoryAwardedPoints({
           CurrentDollarSpent: !!totalPointsPerDollar
-            ? totalPointsPerDollar
+            ? totalPointsPerDollar.toFixed(2)
             : "",
           DollarSpent: !!result?.points_per_dollar
             ? result?.points_per_dollar
@@ -176,7 +203,12 @@ export default function LoyaltyProgramLogic() {
         });
       }
     } catch (error) {
-      console.log(error);
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
   const handleModalOpen = () => {
@@ -236,7 +268,12 @@ export default function LoyaltyProgramLogic() {
     // Check if the promotion has expired
     if (currentDate.isAfter(endDate) && !currentDate.isSame(endDate, "day")) {
       if (promotion.enable_promotion === false) {
-        alert("This promotion has expired and cannot be enabled.");
+        setShowAlertMessage(
+          "This promotion has expired and cannot be enabled."
+        );
+        setAlertModalClosed(true);
+        handleShowAlertModal();
+        // alert("This promotion has expired and cannot be enabled.");
         return false; // Do not allow enabling the expired promotion
       }
     }
@@ -314,7 +351,7 @@ export default function LoyaltyProgramLogic() {
     }
     if (InventorAwardedPoints?.MinRedemption == "") {
       errorMessage.MinimumPointRedemptionError =
-        "MinimumPointRedemption is required";
+        "Minimum Point Redemption is required";
       isError = true;
     }
     setErrorMessageLoyality(errorMessage);
@@ -328,43 +365,55 @@ export default function LoyaltyProgramLogic() {
     e.preventDefault();
     let iserror = validateError();
     if (iserror) {
-      const data = {
-        merchant_id: merchantIds,
-        admin_id: adminIds,
-        enable_loyalty: inventorySwitch ? "1" : "0",
-        current_points: InventorAwardedPoints?.CurrentDollarSpent,
-        points_per_dollar: InventorAwardedPoints?.DollarSpent,
-        redemption_value: InventorAwardedPoints?.RedemptionValue,
-        min_points_redemption: InventorAwardedPoints?.MinRedemption,
-        enable_promotion_id: enabledSwitchId.join(","),
-        token_id: tokenId,
-        login_type: tokenType,
-      };
-      setLoaderSave(true);
-      let response = await axios.post(BASE_URL + SAVE_LOYALITY_PROGRAM, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      try {
+        const data = {
+          merchant_id: merchantIds,
+          admin_id: adminIds,
+          enable_loyalty: inventorySwitch ? "1" : "0",
+          current_points: InventorAwardedPoints?.CurrentDollarSpent,
+          points_per_dollar: InventorAwardedPoints?.DollarSpent,
+          redemption_value: InventorAwardedPoints?.RedemptionValue,
+          min_points_redemption: InventorAwardedPoints?.MinRedemption,
+          enable_promotion_id: enabledSwitchId.join(","),
+          token_id: tokenId,
+          login_type: tokenType,
+        };
+        setLoaderSave(true);
+        let response = await axios.post(
+          BASE_URL + SAVE_LOYALITY_PROGRAM,
+          data,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-      setLoaderSave(false);
+        setLoaderSave(false);
 
-      if (response?.data?.status == true) {
-        ToastifyAlert("Updated Successfully", "success");
-        setErrorMessageLoyality({
-          pointAwardedError: "",
-          PointRedemptionError: "",
-          MinimumPointRedemptionError: "",
-        });
-        setErrorMessageLoyality({
-          pointAwardedError: "",
-          PointRedemptionError: "",
-          MinimumPointRedemptionError: "",
-        });
-        setSwitchList([]);
-        setEnabledSwitchId([]);
-        getLoyaltyProgramStoreData(dataNew);
+        if (response?.data?.status == true) {
+          ToastifyAlert("Updated Successfully", "success");
+          setErrorMessageLoyality({
+            pointAwardedError: "",
+            PointRedemptionError: "",
+            MinimumPointRedemptionError: "",
+          });
+          setErrorMessageLoyality({
+            pointAwardedError: "",
+            PointRedemptionError: "",
+            MinimumPointRedemptionError: "",
+          });
+          setSwitchList([]);
+          setEnabledSwitchId([]);
+          getLoyaltyProgramStoreData(dataNew);
+        }
+      } catch (error) {
+        // console.log("error", error);
+        if (error?.response?.status == 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
       }
     }
   };
@@ -388,15 +437,19 @@ export default function LoyaltyProgramLogic() {
     let isErrorCheck = false;
     const start = new Date(dateValid.startDate);
     const end = new Date(dateValid?.endDate);
+    console.log("dateValid?.endDate", dateValid?.endDate);
     if (addPrmotionName.promotionName == "") {
+      console.log("1");
       isError.BonusPointError = "PromotionName is required";
       isErrorCheck = true;
     }
     if (addPrmotionName?.DollarSpent == "") {
+      console.log("2");
       isError.BonusPointAwardError = "DollarSpent is required";
       isErrorCheck = true;
     }
     if (dateValid.startDate == null) {
+      console.log("3");
       isError.startDateError = "Start Date is required";
       isErrorCheck = true;
     }
@@ -404,11 +457,24 @@ export default function LoyaltyProgramLogic() {
       isError.EndDateError = "End Date is required";
       isErrorCheck = true;
     }
-    if (start > end) {
+    if (
+      dateValid?.endDate !== null &&
+      dateValid.startDate !== null &&
+      start.getTime() > end.getTime()
+    ) {
+      console.log("5");
       isError.EndDateError =
-        "End Date should be equal or greater than Start Date";
+        "End Date should be equal to or greater than Start Date";
       isErrorCheck = true;
     }
+    // if (
+    //   (dateValid?.endDate !== null || dateValid.startDate !== null) &&
+    //   start > end
+    // ) {
+    //   isError.EndDateError =
+    //     "End Date should be equal or greater than Start Date";
+    //   isErrorCheck = true;
+    // }
     setErrors(isError);
     if (isErrorCheck) {
       return false;
@@ -427,7 +493,7 @@ export default function LoyaltyProgramLogic() {
     const formattedValue = CurrencyInputHelperFun(numericValue);
     if (name == "DollarSpent") {
       errorData.BonusPointAwardError =
-        formattedValue == "" ? "DollarSpent is required" : "";
+        formattedValue == "" ? "Dollar Spent is required" : "";
       setPromotionName((prev) => ({
         ...prev,
         DollarSpent: formattedValue,
@@ -435,7 +501,7 @@ export default function LoyaltyProgramLogic() {
     }
     if (name == "promotionName") {
       errorData.BonusPointError =
-        value.trim() == "" ? "PromotionName is required" : "";
+        value.trim() == "" ? "Promotion Name is required" : "";
       setPromotionName((prev) => ({
         ...prev,
         promotionName: value,
@@ -463,13 +529,13 @@ export default function LoyaltyProgramLogic() {
       setDateValid((prev) => ({
         ...prev,
         startDate: dateFormat,
+        endDate: null,
       }));
     }
     setErrors(errorData);
   };
 
   const onChangeEndDate = (date) => {
-    console.log(date);
     let errorData = { ...errors };
     const currentDate = dayjs();
     const selectedDate = dayjs(date);
@@ -568,6 +634,7 @@ export default function LoyaltyProgramLogic() {
           setLoader(false);
           if (response?.data?.status == true) {
             ToastifyAlert("Added Successfully", "success");
+            setUpdateChecked(false);
 
             setErrors({
               BonusPointError: "",
@@ -681,53 +748,67 @@ export default function LoyaltyProgramLogic() {
 
   // -------------------------------- Edit Loyality program-----------------------------
   // ---------------------------------delete start here------------
+  const handleClosedModal = () => {
+    setDeleteModalOpen(false);
+    setDeleteTableId("");
+  };
   const handleDeleteLoyalty = async (tableData) => {
-    console.log("tableData", tableData);
-    // setDeleteTableId(tableData);
-    // setDeleteModalOpen(true);
+    setDeleteTableId(tableData);
+    setDeleteModalOpen(true);
   };
   const confirmDeleteCategory = async () => {
-    // if (deleteTableId) {
-    //   try {
-    //     const { token, ...otherUserData } = userTypeData;
-    //     const delVendor = {
-    //       merchant_id: deleteTableId.merchant_id,
-    //       id: deleteTableId.id,
-    //       ...otherUserData,
-    //     };
-    //     setDeleteModalOpen(false);
-    //     setDeleteLoader(true);
-    //     setDeletedId(deleteTableId.id);
-    //     const response = await axios.post(
-    //       BASE_URL + DELETE_SINGLE_STORE,
-    //       delVendor,
-    //       {
-    //         headers: {
-    //           "Content-Type": "multipart/form-data",
-    //           Authorization: `Bearer ${token}`,
-    //         },
-    //       }
-    //     );
-    //     if (response) {
-    //       setDeleteLoader(false);
-    //       setDeletedId("");
-    //       dispatch(getVerifiedMerchant(data_verified));
-    //     } else {
-    //       setDeleteLoader(false);
-    //       setDeletedId("");
-    //       console.error(response);
-    //     }
-    //   } catch (error) {
-    //     if (error.status == 401 || error.response.status === 401) {
-    //       getUnAutherisedTokenMessage();
-    //       handleCoockieExpire();
-    //     } else if (error.status == "Network Error") {
-    //       getNetworkError();
-    //     }
-    //   }
-    // }
-    // setDeleteModalOpen(false);
-    // setDeleteTableId(null);
+    if (deleteTableId) {
+      try {
+        setDeleteLoader(true);
+        let data = {
+          promotion_id: deleteTableId,
+          merchant_id: merchantIds,
+          token_id: tokenId,
+          login_type: tokenType,
+        };
+
+        const response = await axios.post(
+          BASE_URL + DELETE_LOYALTY_PROGRAM,
+          data,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("response", response);
+        if (response?.data?.status == true) {
+          setDeleteTableId("");
+          ToastifyAlert("Deleted Successfully", "success");
+          setDeleteLoader(false);
+          // setDeletedId("");
+          // dispatch(getVerifiedMerchant(data_verified));
+        } else {
+          setDeleteTableId("");
+          setDeleteLoader(false);
+          // setDeletedId("");
+        }
+      } catch (error) {
+        // if (error.status == 401 || error.response.status === 401) {
+        //   getUnAutherisedTokenMessage();
+        //   handleCoockieExpire();
+        // } else if (error.status == "Network Error") {
+        //   getNetworkError();
+        // }
+      }
+    }
+    getLoyaltyProgramStoreData(dataNew);
+    setDeleteModalOpen(false);
+    setDeleteTableId("");
+  };
+
+  const handleShowAlertModal = () => {
+    setAlertModalClosed(true);
+  };
+  const handleCloseAlertModal = () => {
+    setShowAlertMessage("");
+    setAlertModalClosed(false);
   };
 
   // ---------------------------------delete end here -------------
@@ -761,5 +842,14 @@ export default function LoyaltyProgramLogic() {
     updateChecked,
     handleUpdateLoyalty,
     handleDeleteLoyalty,
+    deleteModalOpen,
+    handleClosedModal,
+    confirmDeleteCategory,
+    deleteLoader,
+    deleteTableId,
+    showAlertMessage,
+    handleShowAlertModal,
+    handleCloseAlertModal,
+    alertModalClosed,
   };
 }

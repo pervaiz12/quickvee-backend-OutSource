@@ -11,6 +11,8 @@ import Switch from "@mui/material/Switch";
 import moment from "moment";
 import Skeleton from "react-loading-skeleton";
 import DeleteModal from "../../../reuseableComponents/DeleteModal";
+import SmallLoader from "../../../Assests/Loader/loading-Animation.gif";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 export default function LoyaltyPointData(props) {
   // console.log("props.loyaltyProgramList", props.loyaltyProgramList);
   //   ===============================================
@@ -137,7 +139,7 @@ export default function LoyaltyPointData(props) {
           >
             <Grid item>
               <div>
-                <span>Loyalty</span>
+                <span>Bonus Point Promotions</span>
               </div>
             </Grid>
             <Grid item>
@@ -145,7 +147,8 @@ export default function LoyaltyPointData(props) {
               //    to={`/coupons/add`}
               >
                 <p onClick={() => props.handleModalOpen()}>
-                  Add New Loyalty <img src={AddIcon} alt="add-icon" />
+                  Add Bonus point Promotions{" "}
+                  <img src={AddIcon} alt="add-icon" />
                 </p>
               </Link>
             </Grid>
@@ -155,13 +158,14 @@ export default function LoyaltyPointData(props) {
         {/* --------------list here */}
         <Grid container spacing={3} sx={{ p: 2.5 }}>
           {/* --------------list here */}
-          {Array.isArray(props.SwitchList) && props.SwitchList?.length > 0
-            ? props.SwitchList?.map((res, index) => (
-                <Grid item xs={12} sm={6} key={index}>
+          {props.dataLoadingApi ? (
+            <>
+              {[1, 2, 3, 4].map((coupons, index) => (
+                <Grid item xs={12} sm={6}>
                   <Grid
                     container
-                    // 1 == 1 ? "active" : ""
-                    className={`q_copuon_header w-full ${1 == 1 ? "" : ""}`}
+                    key={index}
+                    className={`q_copuon_header w-full`}
                   >
                     <Grid item xs={12}>
                       <Grid
@@ -169,35 +173,166 @@ export default function LoyaltyPointData(props) {
                         direction="row"
                         justifyContent="space-between"
                         alignItems="center"
-                        sx={{ p: 1, borderBottom: "1px solid #0000001f" }}
+                        sx={{ p: 1 }}
+                      >
+                        <Grid item>
+                          <div style={{ padding: 0 }} className="q_coupon_code">
+                            <p>
+                              <Skeleton />
+                            </p>
+                          </div>
+                        </Grid>
+                        <Grid item>
+                          <Grid container spacing={1}>
+                            <Grid item>
+                              <div
+                                style={{ padding: 0 }}
+                                className="q_coupon_code"
+                              >
+                                <p>
+                                  <Skeleton />
+                                </p>
+                              </div>
+                            </Grid>
+                            <Grid item>
+                              <div
+                                style={{ padding: 0 }}
+                                className="q_coupon_code"
+                              >
+                                <p>
+                                  <Skeleton />
+                                </p>
+                              </div>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                      <Grid container sx={{ px: 1 }}>
+                        <Grid item xs={12}>
+                          <div
+                            style={{ paddingLeft: "0 !important" }}
+                            className="q_discount_coupon_Code"
+                          >
+                            <div className="">
+                              <Skeleton />
+                            </div>
+                          </div>
+                        </Grid>
+                      </Grid>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{ p: 1 }}
                       >
                         <Grid item>
                           <div
                             style={{ padding: 0 }}
-                            className="q_discount_coupon_Code"
+                            className="q_coupon_deatails_validtimes"
                           >
-                            <p>{res?.promotion_name}</p>
+                            <p>
+                              {" "}
+                              <Skeleton />
+                            </p>
                           </div>
                         </Grid>
+                        <Grid
+                          item
+                          style={{ padding: 0 }}
+                          className="q_coupon_deatails_validtimes"
+                        >
+                          <p className="q_date_details">
+                            <Skeleton />
+                          </p>
+                        </Grid>
+                      </Grid>
 
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{ px: 1 }}
+                      >
+                        <Grid
+                          item
+                          sx={{ p: 0 }}
+                          className="q_coupon_discountCode"
+                        >
+                          <p>
+                            {" "}
+                            <Skeleton />
+                          </p>
+                        </Grid>
                         <Grid item>
-                          <Grid container spacing={1}>
-                            <Grid item>
-                              <Link
-                                onClick={() =>
-                                  props.onClickEditIcon(res?.promotion_id)
-                                }
-                              >
-                                <span>
-                                  <img
-                                    src={Edit}
-                                    alt=""
-                                    className="h-8 w-8  cursor-pointer"
-                                  />
-                                </span>
-                              </Link>
-                            </Grid>
-                            <Grid item>
+                          <Skeleton />
+                        </Grid>
+                      </Grid>
+                      <Grid container>
+                        <Grid item xs={12}>
+                          <div className="q_coupon_status_btn">
+                            <p>
+                              <Skeleton />
+                            </p>
+
+                            <Skeleton />
+                          </div>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              ))}
+            </>
+          ) : Array.isArray(props.SwitchList) &&
+            props.SwitchList?.length > 0 ? (
+            props.SwitchList?.map((res, index) => (
+              <Grid item xs={12} sm={6} key={index}>
+                <Grid
+                  container
+                  // 1 == 1 ? "active" : ""
+                  className={`q_copuon_header w-full ${1 == 1 ? "" : ""}`}
+                >
+                  <Grid item xs={12}>
+                    <Grid
+                      container
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      sx={{ p: 1, borderBottom: "1px solid #0000001f" }}
+                    >
+                      <Grid item>
+                        <div
+                          style={{ padding: 0 }}
+                          className="q_discount_coupon_Code"
+                        >
+                          <p>{res?.promotion_name}</p>
+                        </div>
+                      </Grid>
+
+                      <Grid item>
+                        <Grid container spacing={1}>
+                          <Grid item>
+                            <Link
+                              onClick={() =>
+                                props.onClickEditIcon(res?.promotion_id)
+                              }
+                            >
+                              <span>
+                                <img
+                                  src={Edit}
+                                  alt=""
+                                  className="h-8 w-8  cursor-pointer"
+                                />
+                              </span>
+                            </Link>
+                          </Grid>
+                          <Grid item>
+                            {res?.promotion_id == props.deleteTableId &&
+                            props.deleteLoader ? (
+                              <img src={SmallLoader} alt="loading" />
+                            ) : (
                               <img
                                 src={DeletIcon}
                                 alt="delete"
@@ -206,95 +341,101 @@ export default function LoyaltyPointData(props) {
                                   props.handleDeleteLoyalty(res?.promotion_id)
                                 }
                               />
-                            </Grid>
+                            )}
                           </Grid>
                         </Grid>
                       </Grid>
-                      {/* ======== */}
-                      <Grid
-                        container
-                        direction="row"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        sx={{ p: 1 }}
-                      >
-                        <Grid item>
-                          <div
-                            style={{ padding: 0 }}
-                            className="q_coupon_deatails_validtimes"
-                          >
-                            <p>Bonus Point Promotion</p>
-                          </div>
-                        </Grid>
-                        <Grid
-                          item
-                          style={{ padding: 0 }}
-                          className="q_coupon_deatails_validtimes"
-                        >
-                          <p className="q_date_details">
-                            $1= {res?.bonus_points}
-                          </p>
-                        </Grid>
-                      </Grid>
-                      <Grid
-                        container
-                        direction="row"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        sx={{ p: 1 }}
-                      >
-                        <Grid item>
-                          <div
-                            style={{ padding: 0 }}
-                            className="q_coupon_deatails_validtimes"
-                          >
-                            <p>Validity Dates</p>
-                          </div>
-                        </Grid>
-                        <Grid
-                          item
-                          style={{ padding: 0 }}
-                          className="q_coupon_deatails_validtimes"
-                        >
-                          <p className="q_date_details">
-                            {moment(res.start_date).format("MMM D, YYYY")} -{" "}
-                            {moment(res.end_date).format("MMM D, YYYY")}{" "}
-                          </p>
-                        </Grid>
-                      </Grid>
-                      {/* = */}
-                      {/* ============ */}
-                      <Grid container>
-                        <Grid item xs={12}>
-                          <div className="q_coupon_status_btn">
-                            <p>Enable/Disable</p>
-
-                            <Switch
-                              checked={
-                                res?.enable_promotion
-                                // : false
-                              }
-                              onChange={() =>
-                                props.handleChangeSwitch(res?.promotion_id)
-                              }
-                              sx={{
-                                "& .MuiSwitch-switchBase.Mui-checked": {
-                                  color: "#0A64F9",
-                                },
-                                "& .MuiSwitch-track": {
-                                  backgroundColor: "#0A64F9",
-                                },
-                              }}
-                            />
-                          </div>
-                        </Grid>
-                      </Grid>
-                      {/* =========== */}
                     </Grid>
+                    {/* ======== */}
+                    <Grid
+                      container
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      sx={{ p: 1 }}
+                    >
+                      <Grid item>
+                        <div
+                          style={{ padding: 0 }}
+                          className="q_coupon_deatails_validtimes"
+                        >
+                          <p>Bonus Point Promotion</p>
+                        </div>
+                      </Grid>
+                      <Grid
+                        item
+                        style={{ padding: 0 }}
+                        className="q_coupon_deatails_validtimes"
+                      >
+                        <p className="q_date_details">
+                          $1= {res?.bonus_points}
+                        </p>
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      container
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      sx={{ p: 1 }}
+                    >
+                      <Grid item>
+                        <div
+                          style={{ padding: 0 }}
+                          className="q_coupon_deatails_validtimes"
+                        >
+                          <p>Validity Dates</p>
+                        </div>
+                      </Grid>
+                      <Grid
+                        item
+                        style={{ padding: 0 }}
+                        className="q_coupon_deatails_validtimes"
+                      >
+                        <p className="q_date_details">
+                          {moment(res.start_date).format("MMM D, YYYY")} -{" "}
+                          {moment(res.end_date).format("MMM D, YYYY")}{" "}
+                        </p>
+                      </Grid>
+                    </Grid>
+                    {/* = */}
+                    {/* ============ */}
+                    <Grid container>
+                      <Grid item xs={12}>
+                        <div className="q_coupon_status_btn">
+                          <p>Enable/Disable</p>
+
+                          <Switch
+                            checked={
+                              res?.enable_promotion
+                              // : false
+                            }
+                            onChange={() =>
+                              props.handleChangeSwitch(res?.promotion_id)
+                            }
+                            sx={{
+                              "& .MuiSwitch-switchBase.Mui-checked": {
+                                color: "#0A64F9",
+                              },
+                              "& .MuiSwitch-track": {
+                                backgroundColor: "#0A64F9",
+                              },
+                            }}
+                          />
+                        </div>
+                      </Grid>
+                    </Grid>
+                    {/* =========== */}
                   </Grid>
                 </Grid>
-              ))
-            : ""}
+              </Grid>
+            ))
+          ) : (
+            ""
+          )}
+          {Array.isArray(props.SwitchList) &&
+            props.SwitchList?.length == 0 &&
+            !props.dataLoadingApi && <NoDataFound table={true} />}
         </Grid>
         <Grid container sx={{ display: "block" }}>
           <div className="q-add-categories-section-middle-footer">
@@ -307,10 +448,10 @@ export default function LoyaltyPointData(props) {
               {props.loaderSave ? (
                 <>
                   <CircularProgress color={"inherit"} width={15} size={15} />
-                  Add
+                  Save
                 </>
               ) : (
-                <>Add</>
+                <>Save</>
               )}
             </button>
           </div>
@@ -321,11 +462,9 @@ export default function LoyaltyPointData(props) {
       <DeleteModal
         headerText="Loyalty Program"
         otherMSG=""
-        // open={deleteModalOpen}
-        onClose={() => {
-          // setDeleteModalOpen(false);
-        }}
-        // onConfirm={confirmDeleteCategory}
+        open={props.deleteModalOpen}
+        onClose={props.handleClosedModal}
+        onConfirm={props.confirmDeleteCategory}
       />
     </>
   );
