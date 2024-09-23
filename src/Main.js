@@ -46,6 +46,9 @@ const Main = ({ visible }) => {
       {visible === "add-vendors" && <Layout visible={visible} />}
       {visible === "timesheet" && <Layout visible={visible} />}
       {visible === "category-edit-cat" && <Layout visible={visible} />}
+      {visible === "StoreSettingloyalty-program" && (
+        <Layout visible={visible} />
+      )}
       {/* {visible === "product-edit-cat" && <Layout visible={visible} />} */}
       {visible === "toptraders" && <Layout visible={visible} />}
       {visible === "product-edit" && <Layout visible={visible} />}
