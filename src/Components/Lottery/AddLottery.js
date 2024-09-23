@@ -5,10 +5,16 @@ import LotteryForm from "./LotteryForm";
 import LotteryCategory from "./LotteryCategory";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import { useDispatch } from "react-redux";
-import { addProduct } from "../../Redux/features/Product/ProductSlice";
+import {
+  addProduct,
+  editProductData,
+  fetchProductsDataById,
+} from "../../Redux/features/Product/ProductSlice";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import PasswordShow from "../../Common/passwordShow";
+import CurrencyInputHelperFun from "../../helperFunctions/CurrencyInputHelperFun";
 
 const characters = "0123456789";
 function generateString(length) {
@@ -22,11 +28,16 @@ function generateString(length) {
 export default function AddLottery() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { EditProductData } = location.state || {};
-  console.log("EditProductData", EditProductData);
+  const path = location.pathname;
+  const pathSegments = path.split("/");
+  const action = pathSegments[3];
+  const { id } = useParams();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const dispatch = useDispatch();
   const [categoryList, setCategoryList] = useState([]);
+  const [fetchDataLoading, setFetchDataLoading] = useState(false);
+  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
+    PasswordShow();
   const [formValues, setFormValues] = useState({
     title: "",
     price: "",
@@ -36,18 +47,59 @@ export default function AddLottery() {
     trackqnty: "1",
     is_lottery: "1",
   });
-  console.log("formValues", formValues);
+
+  const fetchProductDataById = async () => {
+    setFetchDataLoading(true);
+    const formData = new FormData();
+    formData.append(
+      "merchant_id",
+      LoginGetDashBoardRecordJson?.data?.merchant_id
+    );
+    formData.append("id", id);
+    formData.append("login_type", userTypeData?.login_type);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("token", userTypeData?.token);
+
+    if (!!id) {
+      try {
+        const res = await dispatch(fetchProductsDataById(formData)).unwrap();
+        if (res?.message === "Success") {
+          // setProductData(res?.data?.productdata);
+          setFormValues({
+            title: res?.data?.productdata.title,
+            price: res?.data?.productdata.price,
+            quantity: res?.data?.productdata.quantity,
+            collection: [],
+            upc: res?.data?.productdata.upc,
+            trackqnty: res?.data?.productdata?.trackqnty,
+            is_lottery: "1",
+            productid: res?.data?.productdata?.id,
+          });
+          setCollectionForEditProductData(
+            res?.data?.productdata?.cotegory.split(",") || []
+          );
+        }
+      } catch (error) {
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
+      } finally {
+        setFetchDataLoading(false);
+      }
+    }
+  };
+
   const [loader, setLoader] = useState(false);
   const [formError, setFormError] = useState({});
+  const [collectionForEditProductData, setCollectionForEditProductData] =
+    useState([]);
 
   useEffect(() => {
-    if (EditProductData) {
-      setFormValues({
-        ...EditProductData,
-        collection: EditProductData.collection || [],
-      });
-    }
-  }, [EditProductData]);
+    fetchProductDataById();
+  }, [location]);
 
   const handleGenerateUPC = () => {
     setFormValues((prevState) => ({
@@ -59,19 +111,22 @@ export default function AddLottery() {
       upc: null,
     }));
   };
-  const handleInputUPC = (event) => {
-    setFormValues((prevState) => ({
-      ...prevState,
-      upc: event.target.value,
-    }));
-  };
 
   function handleInputChanges(event) {
     const { name, value, type, checked } = event.target;
-    console.log(checked);
+
+    const formattedValue = 
+    name === "price" 
+      ? CurrencyInputHelperFun(value) 
+      : name === "quantity" 
+        ? value.replace(/[^\d]/g, "") 
+        : value;
+
+
     setFormValues((prevState) => ({
       ...prevState,
-      [name]: type === "checkbox" ? (checked === true ? "1" : "0") : value,
+      [name]:
+        type === "checkbox" ? (checked === true ? "1" : "0") : formattedValue,
     }));
     setFormError((prevErrors) => {
       const newErrors = { ...prevErrors };
@@ -123,7 +178,7 @@ export default function AddLottery() {
   async function handleSubmit() {
     // Validate the form
     const validationErrors = validateForm();
-    console.log("formValues: 1", formValues);
+
     // If there are validation errors, update the error state and stop submission
     if (Object.keys(validationErrors).length > 0) {
       setFormError(validationErrors);
@@ -175,8 +230,11 @@ export default function AddLottery() {
         formdata.append(i, data[i]);
       }
 
-      const response = await dispatch(addProduct(formdata)).unwrap();
-      console.log("response: ", response);
+      const response =
+        action === "update-lottery"
+          ? await dispatch(editProductData(formdata)).unwrap()
+          : await dispatch(addProduct(formdata)).unwrap();
+  
       if (response.data.status === true) {
         ToastifyAlert(response.data.message, "success");
         navigate(-1);
@@ -195,7 +253,14 @@ export default function AddLottery() {
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
-              <SwitchToBackButton title={"Add New Lottery"} linkTo={-1} />
+              <SwitchToBackButton
+                title={
+                  action === "update-lottery"
+                    ? "Edit Lottery"
+                    : "Add New Lottery"
+                }
+                linkTo={-1}
+              />
             </Grid>
             <Grid item xs={12} sx={{ p: 2.5 }}>
               <LotteryForm
@@ -212,6 +277,7 @@ export default function AddLottery() {
                 setCategoryList={setCategoryList}
                 formValues={formValues}
                 setFormValues={setFormValues}
+                collectionForEditProductData={collectionForEditProductData}
               />
             </Grid>
             <Grid

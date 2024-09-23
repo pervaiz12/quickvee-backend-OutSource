@@ -375,8 +375,8 @@ const LeftSide = ({ visible }) => {
       case "lottery":
         return <LotteryMain />;
       case "add-lottery":
+      case "update-lottery":
         return <AddLottery />;
-
       case "category-sales-summery-report":
         return <CategorySalesSummeryReport />;
       case "sales-by-hour-report":

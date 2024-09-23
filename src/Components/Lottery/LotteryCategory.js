@@ -13,8 +13,10 @@ export default function LotteryCategory({
   formValues,
   setFormValues,
   formError,
-  setFormError
+  setFormError,
+  collectionForEditProductData,
 }) {
+ 
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
     PasswordShow();
@@ -38,7 +40,20 @@ export default function LotteryCategory({
           fetchCategoryList(inventoryData)
         ).unwrap();
         if (response?.result.length > 0) {
-          setCategoryList(response?.result?.filter((product)=> product?.is_lottery === "1") || []); // Update collection list
+          const lotteryProducts = response.result.filter(
+            (product) => product.is_lottery === "1"
+          );
+          setCategoryList(lotteryProducts); // Update collection list
+        
+          const sortedLotteryProducts = response?.result?.filter(
+            (product) => collectionForEditProductData.includes(product.id) // Compare product.id with each ID in the array
+          ); 
+          setFormValues((prevState) => {
+            return {
+              ...prevState,
+              collection: sortedLotteryProducts ||[], 
+            };
+          });
         }
       } catch (err) {
         if (err.status === 401 || err.response?.status === 401) {
@@ -54,7 +69,7 @@ export default function LotteryCategory({
     };
 
     fetchCategoryListData(); // Call the async function
-  }, []);
+  }, [collectionForEditProductData]);
 
   // Handle selecting a collection from dropdown
   const handleSelectProductOptions = (selectedOption) => {
@@ -66,15 +81,17 @@ export default function LotteryCategory({
     setFormError((prevState) => ({
       ...prevState,
       collection: null,
-    }))
+    }));
   };
 
   // Handle deleting selected option
   const handleDeleteSelectedOption = (id) => {
-   setFormValues((prevState)=>({
-    ...prevState,
-    collection: prevState.collection.filter((collection) => collection.id !== id),
-   }))
+    setFormValues((prevState) => ({
+      ...prevState,
+      collection: prevState.collection.filter(
+        (collection) => collection.id !== id
+      ),
+    }));
   };
 
   // Handle error update
@@ -103,8 +120,8 @@ export default function LotteryCategory({
             </div>
           </div>
           {formError.collection && (
-          <span className="error">{formError.collection}</span>
-        )}
+            <span className="error">{formError.collection}</span>
+          )}
         </Grid>
       </Grid>
     </>

@@ -8,11 +8,13 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import sortIcon from "../../Assests/Category/SortingW.svg";
 import { useSelector } from "react-redux";
 import NoDataFound from "../../reuseableComponents/NoDataFound";
 import { Link } from "react-router-dom";
+import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
+import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -43,76 +45,87 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const tableRow = [
-  { type: "", name: "", label: "Lottery Name" },
-  { type: "", name: "", label: "Quantity" },
-  { type: "", name: "", label: "UPC" },
-  { type: "", name: "", label: "Price" },
+  { type: "str", name: "title", label: "Lottery Name" },
+  { type: "num", name: "quantity", label: "Quantity" },
+  { type: "num", name: "upc", label: "UPC" },
+  { type: "num", name: "price", label: "Price" },
 ];
 export default function LotteryList() {
   const ProductsListDataState = useSelector((state) => state.productsListData);
-  const filteredData = ProductsListDataState?.productsData?.filter(
-    (product) => product?.is_lottery === "1"
-  );
-  console.table("filteredData: ", filteredData);
+  const [arr, setArr] = React.useState([]);
+  const [sortOrder, setSortOrder] = useState("asc");
+  // Use useEffect to update arr whenever ProductsListDataState changes
+  useEffect(() => {
+    setArr(
+      ProductsListDataState?.productsData?.filter(
+        (product) => product?.is_lottery == "1"
+      )
+    );
+  }, [ProductsListDataState]);
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder, sortIcon } = SortTableItemsHelperFun(
+      arr,
+      type,
+      name,
+      sortOrder
+    );
+    setArr(sortedItems);
+    setSortOrder(newOrder);
+  };
+  console.log(ProductsListDataState);
   return (
     <>
-      <TableContainer>
-        <StyledTable aria-label="customized table">
-          <TableHead>
-            <StyledTableRow>
-              {tableRow.map((item, index) => (
-                <StyledTableCell key={index}>
-                  <button
-                    className="flex items-center"
-                    //   onClick={() => sortByItemName(item.type, item.name)}
-                  >
-                    <p>{item.label}</p>
-                    <img src={sortIcon} alt="" className="pl-1" />
-                  </button>
-                  {}
-                </StyledTableCell>
-              ))}
-            </StyledTableRow>
-          </TableHead>
-          <TableBody>
-            {ProductsListDataState?.productsData?.length > 0 &&
-              ProductsListDataState?.productsData?.map(
-                (product, index) =>
-                  product?.is_lottery === "1" && (
-                    <StyledTableRow key={index}>
-                      <StyledTableCell>
-                        <Link
-                          state={{
-                            EditProductData: {
-                              title: product?.title,
-                              price: product?.price,
-                              quantity: product?.quantity,
-                              collection: [product?.cotegory],
-                              upc: product?.upc,
-                              trackqnty: product?.trackqnty,
-                              is_lottery: "1",
-                            },
-                          }}
-                          to={"/inventory/lottery/add-lottery"}
-                        >
-                          <p>{product?.title}</p>
-                        </Link>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{product?.quantity}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{product?.upc}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{product?.price}</p>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  )
-              )}
-          </TableBody>
-        </StyledTable>
-      </TableContainer>
+      {ProductsListDataState?.loading || ProductsListDataState?.productsData.length === 0 && !arr?.length === 0 ? (
+        <SkeletonTable columns={tableRow.map((item) => item.label)} />
+      ) : (
+        <TableContainer>
+          <StyledTable aria-label="customized table">
+            <TableHead>
+              <StyledTableRow>
+                {tableRow.map((item, index) => (
+                  <StyledTableCell key={index}>
+                    <button
+                      className="flex items-center"
+                      onClick={() => sortByItemName(item.type, item.name)}
+                    >
+                      <p>{item.label}</p>
+                      <img src={sortIcon} alt="" className="pl-1" />
+                    </button>
+                    {}
+                  </StyledTableCell>
+                ))}
+              </StyledTableRow>
+            </TableHead>
+            <TableBody>
+              {arr?.length > 0 &&
+                arr?.map(
+                  (product, index) =>
+                    product?.is_lottery === "1" && (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell>
+                          <Link
+                            to={`/inventory/lottery/update-lottery/${product?.id}`}
+                          >
+                            <p className="text-[#0A64F9] ">{product?.title}</p>
+                          </Link>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{product?.quantity}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{product?.upc}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{product?.price}</p>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    )
+                )}
+            </TableBody>
+          </StyledTable>
+        </TableContainer>
+      )}
+      {!ProductsListDataState?.loading && !arr.length && <NoDataFound  />} 
     </>
   );
 }

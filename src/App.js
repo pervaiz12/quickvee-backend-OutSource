@@ -731,6 +731,7 @@ function App() {
             <Route exact path="/tags" element={<Main visible={"tags"} />} />
             <Route exact path="/inventory/lottery" element={<Main visible={"lottery"} />} />
             <Route exact path="/inventory/lottery/add-lottery" element={<Main visible={"add-lottery"} />} />
+            <Route exact path="/inventory/lottery/update-lottery/:id" element={<Main visible={"update-lottery"} />} />
           </Route>
 
           {/* ------------------------Superadmin---------------- */}
