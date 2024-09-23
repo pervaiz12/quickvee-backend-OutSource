@@ -51,7 +51,6 @@ export default function BasicTextFields({
         onFocus={onFocusData}
         autoComplete={false}
         onPaste={handlePaste}
-        
       />
     </FormControl>
   );

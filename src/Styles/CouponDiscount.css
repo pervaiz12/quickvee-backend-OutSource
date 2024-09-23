@@ -456,6 +456,16 @@ input:checked + .slider:before {
   /* margin: 5px 0 15px 0; */
 }
 
+.q-add-coupon-single-input .input_area.read-only-input-field input {
+  background-color: #eee;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.q-add-coupon-single-input .input_area.read-only-input-field input:hover {
+  opacity: 0.7;
+}
+
 .q_coupon_calculation_amount > label {
   color: #818181;
   font-size: 14px;

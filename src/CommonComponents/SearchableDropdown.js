@@ -40,6 +40,7 @@ const SearchableDropdown = ({
   usingFor,
   setProductName,
   optionsLoading = false,
+  errorClass,
 }) => {
   const location = useLocation();
   const { checkLength } = Validation();
@@ -310,7 +311,7 @@ const SearchableDropdown = ({
         )}
       </div>
       {error?.[keyName] ? (
-        <span className="error-alert">{error[keyName]}</span>
+        <span className={`error-alert ${errorClass}`}>{error[keyName]}</span>
       ) : (
         ""
       )}

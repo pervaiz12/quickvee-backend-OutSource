@@ -181,3 +181,36 @@ table.dataTable tbody td {
     margin-top: 0.5rem;
 }
 /* for new table css End */
+
+
+
+.trBG_ColorSaleSummary{
+    background-color: #F8F8F8 !important;
+}
+.BORHeaderRight{
+    border-right: 1px solid #444E51 !important;
+}
+.BORBodyRight{
+    /* border-right: 1px solid #E8E8E8 !important; */
+    border-right: 1px solid #cdcdcd !important;
+}
+.BORREMOVE{
+    border-right: none !important;
+}
+
+.totalAmountCollected th{
+    background-color: #0A64F9 !important;
+}
+
+
+.TaxesTable .TaxesTableHead{
+    background-color: #FFC400 !important;
+    color: #000000 !important;
+}
+.totalBORDERUPDOWN{
+    border-bottom:  1px solid #000000 !important;
+    border-top:  1px solid #000000 !important;
+}
+.totalBORDERDOWN{
+    border-bottom:  1px solid #000000 !important;
+}

@@ -46,6 +46,9 @@ const Main = ({ visible }) => {
       {visible === "add-vendors" && <Layout visible={visible} />}
       {visible === "timesheet" && <Layout visible={visible} />}
       {visible === "category-edit-cat" && <Layout visible={visible} />}
+      {visible === "StoreSettingloyalty-program" && (
+        <Layout visible={visible} />
+      )}
       {/* {visible === "product-edit-cat" && <Layout visible={visible} />} */}
       {visible === "toptraders" && <Layout visible={visible} />}
       {visible === "product-edit" && <Layout visible={visible} />}
@@ -63,6 +66,7 @@ const Main = ({ visible }) => {
       {visible === "options" && <Layout visible={visible} />}
       {visible === "taxes" && <Layout visible={visible} />}
       {visible === "taxes-report" && <Layout visible={visible} />}
+      {visible === "new-taxes-report" && <Layout visible={visible} />}
       {visible === "system-access" && <Layout visible={visible} />}
       {visible === "inventory" && <Layout visible={visible} />}
       {visible === "register" && <Layout visible={visible} />}

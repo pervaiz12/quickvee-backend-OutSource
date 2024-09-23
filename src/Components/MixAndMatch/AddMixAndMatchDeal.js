@@ -338,7 +338,10 @@ const AddMixAndMatchDeal = () => {
                 </div>
                 <div className="q-add-coupon-single-input mb-6">
                   <label htmlFor="description">Description</label>
-                  <div className="input_area" style={{ marginBottom: "0px" }}>
+                  <div
+                    className="input_area read-only-input-field"
+                    style={{ marginBottom: "0px" }}
+                  >
                     <BasicTextFields
                       type={"text"}
                       value={dealInfo.description}
@@ -443,6 +446,7 @@ const AddMixAndMatchDeal = () => {
                         usingFor="variantProducts"
                         setProductName={setProductName}
                         optionsLoading={optionsLoading}
+                        errorClass="error-message"
                       />
                     </div>
                   </Grid>

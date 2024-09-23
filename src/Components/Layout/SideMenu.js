@@ -818,6 +818,7 @@ const menuItems = [
         ],
       },
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
+      { id: 80, text: "New Taxes Reports", link: "/store-reporting/new-taxes-report" },
       {
         id: 4,
         text: "Refunds",
@@ -1182,6 +1183,11 @@ const menuItems = [
       { id: 69, text: "Register Settings", link: "/store-settings/register" },
       // { id: 70, text: "Quick Add", link: "/store-settings/quick-add" },
       { id: 71, text: "System Access", link: "/store-settings/system-access" },
+      {
+        id: 107,
+        text: "Loyalty Program",
+        link: "/store-settings/loyalty-program",
+      },
     ],
   },
   // {

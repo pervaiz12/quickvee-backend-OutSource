@@ -550,7 +550,7 @@ const ModifyPurchaseOrder = () => {
           issuedDateLessThanDefaultIssuedDate
             ? `Issued Date cannot be older than ${getDate()}`
             : essueDateCheck == "Invalid Date"
-              ? "Issued Date is required or Invalid"
+              ? "The issued date is required or invalid."
               : issuedDateIsFine == false
                 ? `Issued Date cannot be older than present date`
                 : "",
@@ -595,6 +595,11 @@ const ModifyPurchaseOrder = () => {
         setPurchaseInfo((prev) => prev);
     }
   };
+
+  useEffect(() => {
+    productOptions(" ");
+  }, [selectedProducts.length]);
+
 
   // generating product options once user searches any product name
   const productOptions = async (inputValue) => {
@@ -844,7 +849,7 @@ const ModifyPurchaseOrder = () => {
     if (isCheckvalidDate == "Invalid Date") {
       setPurchaseInfoErrors((prev) => ({
         ...prev,
-        stockDate: "Invalid Stock Due",
+        stockDate: "The stock due is invalid.",
       }));
       return true;
     } else {

@@ -74,6 +74,9 @@ const MainItem = lazy(() => import("../Reporting/ItemType/MainItem"));
 const MainTaxesReport = lazy(
   () => import("../Reporting/Taxes/MainTaxesReport")
 );
+const NewMainTaxesReport = lazy(
+  () => import("../Reporting/NewTaxesReport/MainTaxesReport")
+);
 const CurrentInventoryValue = lazy(
   () => import("../Reporting/CurrentInventoryValue/CurrentInventoryValue")
 );
@@ -86,7 +89,9 @@ const ReceiptMainpage = lazy(
 const MainItemSales = lazy(
   () => import("../Reporting/ItemSales/MainItemSales")
 );
-const NewMainItemSales = lazy( () => import("../Reporting/NewItemsales/NewMainItemSales"));
+const NewMainItemSales = lazy(
+  () => import("../Reporting/NewItemsales/NewMainItemSales")
+);
 const NewItemCreatedBetweenMain = lazy(
   () => import("../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain")
 );
@@ -186,6 +191,10 @@ const NewCustomersAddedReportMain = lazy(
   () =>
     import("../Reporting/NewCustomerAddedReport/NewCustomersAddedReportMain")
 );
+
+const MainLoyaltyProgramPage = lazy(
+  () => import("../StoreSetting/LoyaltyProgram/MainLoyaltyProgram")
+);
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -279,6 +288,8 @@ const LeftSide = ({ visible }) => {
         return <MainResigtersetting />;
       case "system-access":
         return <MainSyastemAccess />;
+      case "StoreSettingloyalty-program":
+        return <MainLoyaltyProgramPage />;
       case "daily-total-report":
         return <DailyTtlReport />;
       case "Details-category":
@@ -305,6 +316,8 @@ const LeftSide = ({ visible }) => {
         return <MainItem />;
       case "taxes-report":
         return <MainTaxesReport />;
+      case "new-taxes-report":
+        return <NewMainTaxesReport />;
       case "current-inventory-value":
         return <CurrentInventoryValue />;
       case "discount-per-sales-person":

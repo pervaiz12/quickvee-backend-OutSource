@@ -131,7 +131,7 @@ const AddPo = ({ seVisible }) => {
         issuedDate: issuedDateLessThanPresentDate
           ? "Issued Date cannot be older than present date"
           : essueDateCheck == "Invalid Date"
-            ? "Issued Date is required or Invalid"
+            ? "The issued date is required or invalid."
             : "",
         stockDate: "",
       }));
@@ -198,7 +198,7 @@ const AddPo = ({ seVisible }) => {
                   listItem={
                     allVendors?.vendorListData?.[0]?.filter(option => option.enabled === "1").length > 0
                       ? allVendors.vendorListData[0]?.filter(option => option.enabled === "1")
-                      : [{ name: "No Option", disabled: true }]
+                      : [{ name: "No option", disabled: true }]
                   }
                   onClickHandler={handleVendorClick}
                   title={"name"}

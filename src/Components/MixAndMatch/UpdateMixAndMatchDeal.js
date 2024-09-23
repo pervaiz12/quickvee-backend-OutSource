@@ -453,22 +453,15 @@ const UpdateMixAndMatchDeal = () => {
 
               <div className="q-add-coupon-single-input mb-6">
                 <label htmlFor="description">Description</label>
-                {/* <textarea
-                  className="mt-1"
-                  id="description"
-                  name="description"
-                  rows="4"
-                  cols="50"
-                  value={updatedDeal.description}
-                  onChange={handleInputChange}
-                ></textarea> */}
-                <div className="input_area" style={{ marginBottom: "0px" }}>
+                <div
+                  className="input_area read-only-input-field"
+                  style={{ marginBottom: "0px" }}
+                >
                   <BasicTextFields
                     type={"text"}
                     value={updatedDeal.description}
                     name="description"
                     readOnly={true}
-                    // disable={true}
                   />
                 </div>
               </div>
@@ -570,6 +563,7 @@ const UpdateMixAndMatchDeal = () => {
                       usingFor="variantProducts"
                       setProductName={setProductName}
                       optionsLoading={optionsLoading}
+                      errorClass="error-message"
                     />
                   </div>
                 </Grid>
