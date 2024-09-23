@@ -106,7 +106,7 @@ export default function LotteryList() {
                           <Link
                             to={`/inventory/lottery/update-lottery/${product?.id}`}
                           >
-                            <p className="text-[#0A64F9] ">{product?.title}</p>
+                            <span className="text-[#0A64F9] ">{product?.title}</span>
                           </Link>
                         </StyledTableCell>
                         <StyledTableCell>
