@@ -154,17 +154,27 @@ export default function LoyaltyProgramLogic() {
         //     );
         //   }
         // );
+        // const activePromotions = result?.promotion_array?.filter(
+        //   (promotion) => {
+        //     const startDate = dayjs(promotion?.start_date).startOf("day"); // Start of the promotion date
+        //     const currentDate = dayjs().startOf("day"); // Current date at the start of the day
+        //     return (
+        //       promotion?.enable_promotion === true &&
+        //       startDate.isSame(currentDate, "day")
+        //     );
+        //   }
+        // );
         const activePromotions = result?.promotion_array?.filter(
           (promotion) => {
-            const startDate = dayjs(promotion?.start_date).startOf("day"); // Start of the promotion date
-            const currentDate = dayjs().startOf("day"); // Current date at the start of the day
+            const startDate = dayjs(promotion?.start_date).startOf("day");
+            const endDate = dayjs(promotion?.end_date).endOf("day");
+            const currentDate = dayjs().startOf("day");
             return (
               promotion?.enable_promotion === true &&
-              startDate.isSame(currentDate, "day")
+              currentDate.isBetween(startDate, endDate, null, "[]") // Current date is between start and end date (inclusive)
             );
           }
         );
-
         const totalBonusPoints = activePromotions?.reduce((acc, promotion) => {
           return acc + parseFloat(promotion.bonus_points);
         }, 0);
@@ -437,24 +447,24 @@ export default function LoyaltyProgramLogic() {
     let isErrorCheck = false;
     const start = new Date(dateValid.startDate);
     const end = new Date(dateValid?.endDate);
-    console.log("dateValid?.endDate", dateValid?.endDate);
+
     if (addPrmotionName.promotionName == "") {
-      console.log("1");
       isError.BonusPointError = "PromotionName is required";
       isErrorCheck = true;
     }
     if (addPrmotionName?.DollarSpent == "") {
-      console.log("2");
       isError.BonusPointAwardError = "DollarSpent is required";
       isErrorCheck = true;
     }
     if (dateValid.startDate == null) {
-      console.log("3");
       isError.startDateError = "Start Date is required";
       isErrorCheck = true;
     }
     if (dateValid?.endDate == null) {
       isError.EndDateError = "End Date is required";
+      isErrorCheck = true;
+    } else if (dayjs(dateValid.endDate).isBefore(dayjs(), "day")) {
+      isError.EndDateError = "Invalid Date";
       isErrorCheck = true;
     }
     if (
@@ -462,19 +472,10 @@ export default function LoyaltyProgramLogic() {
       dateValid.startDate !== null &&
       start.getTime() > end.getTime()
     ) {
-      console.log("5");
       isError.EndDateError =
         "End Date should be equal to or greater than Start Date";
       isErrorCheck = true;
     }
-    // if (
-    //   (dateValid?.endDate !== null || dateValid.startDate !== null) &&
-    //   start > end
-    // ) {
-    //   isError.EndDateError =
-    //     "End Date should be equal or greater than Start Date";
-    //   isErrorCheck = true;
-    // }
     setErrors(isError);
     if (isErrorCheck) {
       return false;
@@ -483,6 +484,14 @@ export default function LoyaltyProgramLogic() {
     }
   };
   const handleCheckedProEnabledSwitch = () => {
+    //   const currentDate = dayjs().startOf("day"); // Current date at the start of the day
+    // const startDate = dayjs(dateValid?.startDate).startOf("day");
+    // const endDate = dayjs(dateValid?.endDate).endOf("day");
+    // if (endDate.isBefore(currentDate)) {
+    //   console.log("End date cannot be in the past.");
+    //   return; // Prevent further actions if endDate is in the past
+    // }
+
     setEnabledPromotionalId(!enabledPromotionalId);
   };
   // console.log("enabledPromotionalId", enabledPromotionalId);
@@ -777,7 +786,6 @@ export default function LoyaltyProgramLogic() {
             },
           }
         );
-        console.log("response", response);
         if (response?.data?.status == true) {
           setDeleteTableId("");
           ToastifyAlert("Deleted Successfully", "success");
