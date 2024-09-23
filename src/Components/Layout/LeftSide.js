@@ -191,9 +191,21 @@ const NewCustomersAddedReportMain = lazy(
   () =>
     import("../Reporting/NewCustomerAddedReport/NewCustomersAddedReportMain")
 );
+const RegisterClosuresMain = lazy(
+  () => import("../Reporting/RegisterClosures/RegisterClosuresMain")
+);
+const RegisterClosuresSummery = lazy(
+  () => import("../Reporting/RegisterClosures/RegisterClosureSummery")
+);
+const RegisterClosuresTransactions = lazy(
+  () => import("../Reporting/RegisterClosures/RegisterClosureTransactions")
+);
 
 const MainLoyaltyProgramPage = lazy(
   () => import("../StoreSetting/LoyaltyProgram/MainLoyaltyProgram")
+);
+const MainLotteryReport = lazy(
+  () => import("../Reporting/LotteryPayoutReport/LotteryPayoutMain")
 );
 const LeftSide = ({ visible }) => {
   useEffect(() => {
@@ -289,6 +301,7 @@ const LeftSide = ({ visible }) => {
       case "system-access":
         return <MainSyastemAccess />;
       case "StoreSettingloyalty-program":
+      case "StoreSettingloyalty-program":
         return <MainLoyaltyProgramPage />;
       case "daily-total-report":
         return <DailyTtlReport />;
@@ -360,6 +373,12 @@ const LeftSide = ({ visible }) => {
         return <TipReportMain />;
       case "coupon-report":
         return <CouponReportMain />;
+      case "register-closures":
+        return <RegisterClosuresMain />;
+      case "register-closures-summery":
+        return <RegisterClosuresSummery />;
+      case "register-closures-transactions":
+        return <RegisterClosuresTransactions />;
       case "drop-cash-report":
         return <DropCashMain />;
 
@@ -369,6 +388,8 @@ const LeftSide = ({ visible }) => {
         return <SalesReportMain />;
       case "new-sales-report":
         return <MainSalesReport />;
+      case "lottery-payout-report":
+        return <MainLotteryReport />;
       case "brands":
         return <Brands />;
       case "tags":

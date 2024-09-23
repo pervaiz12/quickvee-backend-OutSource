@@ -42,6 +42,7 @@ const EditCategory = ({ productId, seVisible }) => {
     show_online: "",
     use_point: "",
     earn_point: "",
+    lottery: "",
     image: "",
   });
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
@@ -89,6 +90,7 @@ const EditCategory = ({ productId, seVisible }) => {
           description: res[0].description,
           merchant_id: res[0].merchant_id,
           show_online: res[0].show_online === "1" ? 1 : 0,
+          lottery: res[0].is_lottery === "1" ? 1 : 0,
           use_point:
             res[0].use_point === "1" ? 1 : res[0].use_point === "0" ? 0 : 0,
           earn_point:
@@ -132,7 +134,6 @@ const EditCategory = ({ productId, seVisible }) => {
     if (file) {
       const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
       if (!allowedExtensions.exec(file.name)) {
-
         showModal("Only jpeg, png, jpg files can be uploaded");
       } else {
         const reader = new FileReader();
@@ -160,6 +161,7 @@ const EditCategory = ({ productId, seVisible }) => {
     formData.append("merchant_id", category.merchant_id);
     formData.append("show_online", category.show_online);
     formData.append("use_point", category.use_point);
+    formData.append("is_lottery", category.lottery ? category.lottery : 0);
     formData.append("earn_point", category.earn_point);
     formData.append("token_id", userTypeData?.token_id);
     formData.append("login_type", userTypeData?.login_type);
@@ -247,8 +249,6 @@ const EditCategory = ({ productId, seVisible }) => {
     }
     return null;
   };
-
-
 
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [deleteCategoryIMG, setDeleteCategoryIMG] = useState(null);
@@ -368,7 +368,7 @@ const EditCategory = ({ productId, seVisible }) => {
 
         <div className="q-add-categories-section">
           <form>
-            <SwitchToBackButton 
+            <SwitchToBackButton
               linkTo={"/inventory/category"}
               title={"Edit Category"}
             />
@@ -502,6 +502,32 @@ const EditCategory = ({ productId, seVisible }) => {
               <div className="row py-3" style={myStyles}>
                 {renderRemoveBannerButton()}
                 <div className="add-category-checkmark-div">
+                  <label
+                    className={
+                      category.lottery === 1
+                        ? "add-category-checkmark-label mt-2 ondisabled-check"
+                        : "add-category-checkmark-label mt-2"
+                    }
+                  >
+                    Show Online
+                    <input
+                      type="checkbox"
+                      checked={category.show_online === 1}
+                      onChange={(e) =>
+                        setCategory((prevValue) => ({
+                          ...prevValue,
+                          show_online: e.target.checked ? 1 : 0,
+                        }))
+                      }
+                      disabled={category.lottery === 1}
+                      className={
+                        category.lottery === 1 ? "ondisabled-check" : ""
+                      }
+                    />
+                    <span className="add-category-checkmark"></span>
+                  </label>
+                </div>
+                <div className="add-category-checkmark-div">
                   <label className="add-category-checkmark-label mt-2">
                     Use Loyalty Point ?
                     <input
@@ -518,7 +544,13 @@ const EditCategory = ({ productId, seVisible }) => {
                   </label>
                 </div>
                 <div className="add-category-checkmark-div">
-                  <label className="add-category-checkmark-label mt-2">
+                  <label
+                    className={
+                      category.lottery === 1
+                        ? "add-category-checkmark-label mt-2 ondisabled-check"
+                        : "add-category-checkmark-label mt-2"
+                    }
+                  >
                     Earn Loyalty Point ?
                     <input
                       type="checkbox"
@@ -527,6 +559,29 @@ const EditCategory = ({ productId, seVisible }) => {
                         setCategory((prevValue) => ({
                           ...prevValue,
                           earn_point: e.target.checked ? 1 : 0,
+                        }))
+                      }
+                      disabled={category.lottery === 1}
+                      className={
+                        category.lottery === 1 ? "ondisabled-check" : ""
+                      }
+                    />
+                    <span className="add-category-checkmark"></span>
+                  </label>
+                </div>
+
+                <div className="add-category-checkmark-div">
+                  <label className="add-category-checkmark-label mt-2">
+                    Lottery
+                    <input
+                      type="checkbox"
+                      checked={category.lottery === 1}
+                      onChange={(e) =>
+                        setCategory((prevValue) => ({
+                          ...prevValue,
+                          ["show_online"]: 0,
+                          ["earn_point"]: 0,
+                          lottery: e.target.checked ? 1 : 0,
                         }))
                       }
                     />

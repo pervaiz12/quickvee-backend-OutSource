@@ -211,7 +211,9 @@ const SearchableDropdown = ({
                       <div
                         className="item"
                         key={
-                          option.isvarient === "1" ? option.var_id : option?.id
+                          option?.isvarient === "1"
+                            ? option?.var_id
+                            : option?.id
                         }
                       >
                         <span>{option?.[name]}</span>

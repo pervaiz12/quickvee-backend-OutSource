@@ -92,6 +92,28 @@ h3 {
   font-family: "CircularSTDMedium";
 }
 
+.CircularSTDMedium-16px{
+  font-family: "CircularSTDMedium";
+  font-size: 16px;
+}
+.CircularSTDBook-15px{
+  font-family: CircularSTDBook;
+  font-size: 15px;
+}
+.CircularSTDBook-13px{
+  font-family: CircularSTDBook !important;
+  font-size: 13px !important;
+}
+
+.CircularSTDBook-12px{
+  font-family: CircularSTDBook !important;
+  font-size: 12px !important;
+}
+
+.CircularBold-13px{
+  font-family: CircularBold !important;
+  font-size: 13px !important;
+}
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;

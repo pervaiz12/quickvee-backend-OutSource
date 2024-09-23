@@ -35,7 +35,7 @@ const initialState = {
   fetchCategoryListLoading: false,
   fetchTaxListLoading: false,
 };
-// let cancelTokenSource;
+let cancelTokenSource;
 let activeRequests = 0;
 
 // Generate pening , fulfilled and rejected action type
@@ -68,12 +68,12 @@ export const fetchProductsData = createAsyncThunk(
   "products/fetchProductsData",
   async (data, { rejectWithValue }) => {
     // Cancel the previous request if it exists
-    // if (cancelTokenSource) {
-    //   cancelTokenSource.cancel("Previous request canceled");
-    // }
+    if (cancelTokenSource) {
+      cancelTokenSource.cancel("Previous request canceled");
+    }
 
-    // // Create a new cancel token
-    // cancelTokenSource = axios.CancelToken.source();
+    // Create a new cancel token
+    cancelTokenSource = axios.CancelToken.source();
     try {
       const { token, ...dataNew } = data;
       const response = await axios.post(BASE_URL + PRODUCTS_LIST, dataNew, {
@@ -81,7 +81,7 @@ export const fetchProductsData = createAsyncThunk(
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
-        // cancelToken: cancelTokenSource.token,
+        cancelToken: cancelTokenSource.token,
       });
       // console.log("api products: ", response.data);
 
@@ -1114,6 +1114,11 @@ const productsSlice = createSlice({
           productIds.add(product.title);
         }
       });
+      // JSON.parse(localStorage.getItem("product-focus-data")) &&
+      // JSON.parse(localStorage.getItem("product-focus-data"))?.offset
+      //   ? (state.offset =
+      //       JSON.parse(localStorage.getItem("product-focus-data"))?.offset + 10)
+      //   : (state.offset += 10);
       state.offset += 10;
       state.hasMore = action?.payload?.length > 0;
       state.error = "";

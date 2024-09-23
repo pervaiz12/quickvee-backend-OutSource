@@ -505,7 +505,11 @@ export default function Verified({ setVisible, setMerchantId }) {
                           <StyledTableRow key={data.id}>
                             <StyledTableCell>
                               <div className="flex cursor-default">
-                                <BootstrapTooltip title={<p className="capitalize">{data.name}</p>}>
+                                <BootstrapTooltip
+                                  title={
+                                    <p className="capitalize">{data.name}</p>
+                                  }
+                                >
                                   <div className="text-[#000000] order_method capitalize">
                                     {data.name.length < 18
                                       ? data.name
@@ -538,13 +542,9 @@ export default function Verified({ setVisible, setMerchantId }) {
                               </div>
                               <div className="text-[#818181] flex">
                                 {data.ipv4 && (
-                                  <img
-                                    src={ipLogo}
-                                    alt=""
-                                    className="pe-1"
-                                  />
+                                  <img src={ipLogo} alt="" className="pe-1" />
                                 )}{" "}
-                              <p> {data.ipv4 || ""}</p>
+                                <p> {data.ipv4 || ""}</p>
                               </div>
                             </StyledTableCell>
                             <StyledTableCell>

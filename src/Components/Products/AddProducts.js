@@ -28,7 +28,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { Box } from "@mui/material";
 import * as yup from "yup";
 import AlertModal from "../../CommonComponents/AlertModal";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../../Constants/Config";
 import Loader from "../../CommonComponents/Loader";
 
@@ -39,6 +39,7 @@ import PasswordShow from "../../Common/passwordShow";
 import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 import SearchableDropdown from "../../CommonComponents/SearchableDropdown";
 import CreatableDropdown from "../../CommonComponents/CreatableDropdown";
+const EditItemOptions = lazy(() => import("./EditItemOptions"));
 const VariantAttributes = lazy(() => import("./VariantAttributes"));
 const GeneratePUC = lazy(() => import("./GeneratePUC"));
 const EditPage = lazy(() => import("./EditPage"));
@@ -55,6 +56,7 @@ const AddProducts = () => {
 
   const [fetchDataLoading, setFetchDataLoading] = useState(false);
   const location = useLocation();
+  localStorage.setItem("product-focus-data", JSON.stringify(location?.state));
   const varientPageParamas = new URLSearchParams(location.search);
 
   // find add or edit url
@@ -139,6 +141,11 @@ const AddProducts = () => {
   const [singleVarientPageLoading, setSingleVarientPageLoading] =
     useState(false);
   const [varientName, setVarientName] = useState("");
+  const [itemModal, setItemModal] = useState(false);
+
+  const handleOpenItemOption = () => {
+    setItemModal((prev) => !prev);
+  };
 
   // close alert
   const handleCloseAlertModal = () => {
@@ -289,6 +296,25 @@ const AddProducts = () => {
         ]);
       }
     }
+  };
+
+  const handleCheckAllCheckBoxesOnName = (names, value) => {
+    let updatedCheckBoxData = formValue?.map((item) => {
+      const title = Object.keys(item)[0];
+
+      // Iterate over the names array and update each key in the object
+      let updatedItem = { ...item[title] };
+      names.forEach((name) => {
+        updatedItem[name] = value;
+      });
+
+      return {
+        ...item,
+        [title]: updatedItem,
+      };
+    });
+
+    setFormValue(updatedCheckBoxData);
   };
 
   const handleOnBlurAttributes = (e) => {
@@ -747,6 +773,7 @@ const AddProducts = () => {
 
     return () => {
       dispatch(emptyProduct([]));
+      // localStorage.removeItem("product-focus-data");
     };
   }, []);
 
@@ -1814,8 +1841,18 @@ const AddProducts = () => {
   };
 
   const fetchSingleVarientData = async () => {
-    const id = varientPageParamas.get("var_id");
-    const title = varientPageParamas.get("title");
+    const queryString = location.search.split("?var_id=")[1]
+      ? location.search.split("?var_id=")[1]
+      : location.hash.split("?var_id=")[1];
+    const id = queryString?.split("&")[0]; // Extracts the var_id value
+
+    // Extract the title by finding "title=" in the URL
+    const title = location.search.split("title=")[1]
+      ? location.search.split("title=")[1]
+      : location.hash.split("title=")[1];
+    // const title = titleQueryString ? titleQueryString.split("&")[0] : "";
+    // const id = varientPageParamas.get("var_id");
+    // const title = varientPageParamas.get("title");
     const formData = new FormData();
     setSingleVarientPageLoading(true);
 
@@ -2528,6 +2565,7 @@ const AddProducts = () => {
     }));
   };
 
+  const lastUrl = location?.state?.from || "/inventory/products";
   // varient form onchange validation function
   return (
     <div className="box ">
@@ -2553,6 +2591,11 @@ const AddProducts = () => {
               varientName={varientName}
             />
           </Suspense>
+          <EditItemOptions
+            handleOpenItemOption={handleOpenItemOption}
+            itemModal={itemModal}
+            handleCheckAllCheckBoxesOnName={handleCheckAllCheckBoxesOnName}
+          />
           {/* alert modal */}
           <AlertModal
             openAlertModal={openAlertModal}
@@ -2565,11 +2608,12 @@ const AddProducts = () => {
             style={{ overflow: "unset", marginBottom: "110px" }}
           >
             <div className="q-add-categories-section">
-              <SwitchToBackButton
-                linkTo={"/inventory/products"}
-                title={`${isProductEdit ? "Edit" : "Add"} Product`}
-              />
-
+              <div class="product-title">
+                <SwitchToBackButton
+                  linkTo={lastUrl}
+                  title={`${isProductEdit ? "Edit" : "Add"} Product`}
+                />
+              </div>
               <div
                 style={{ padding: 0 }}
                 className="q-add-categories-section-middle-form mt-1"
@@ -2907,7 +2951,6 @@ const AddProducts = () => {
                     />
                   </Suspense>
                 </div>
-
                 <div className="box sticky-box fixed-bottom">
                   <div className="variant-attributes-container">
                     {/* Your existing JSX for variant attributes */}
@@ -2931,8 +2974,15 @@ const AddProducts = () => {
                           <button
                             className="quic-btn quic-btn-bulk-edit"
                             onClick={() => handleCloseEditModal("bulk-edit")}
+                            style={{ marginRight: "10px" }}
                           >
                             Bulk Edit
+                          </button>
+                          <button
+                            className="quic-btn quic-btn-bulk-edit"
+                            onClick={() => handleOpenItemOption()}
+                          >
+                            Bulk Edit Item Options
                           </button>
                         </div>
                       ) : (
@@ -2956,30 +3006,41 @@ const AddProducts = () => {
                             Insert
                           </button>
                         ) : (
-                          <button
-                            className="quic-btn quic-btn-update submit-btn-click"
-                            onClick={handleSubmitForm}
-                            disabled={isLoading || enbaledSubmit}
-                            style={{ backgroundColor: "#0A64F9" }}
-                          >
-                            {isLoading || enbaledSubmit ? (
-                              <Box className="loader-box">
-                                <CircularProgress />
-                              </Box>
-                            ) : (
-                              ""
-                            )}
-                            Update
-                          </button>
+                          <>
+                            <button
+                              className="quic-btn quic-btn-update submit-btn-click"
+                              onClick={handleSubmitForm}
+                              disabled={isLoading || enbaledSubmit}
+                              style={{ backgroundColor: "#0A64F9" }}
+                            >
+                              {isLoading || enbaledSubmit ? (
+                                <Box className="loader-box">
+                                  <CircularProgress />
+                                </Box>
+                              ) : (
+                                ""
+                              )}
+                              Update
+                            </button>
+                          </>
                         )}
-                        <button
+                        {/* <button
                           className="quic-btn quic-btn-cancle"
                           onClick={() => {
-                            navigate("/inventory/products");
+                            navigateToUrl(lastUrl);
                           }}
                         >
                           Cancel
-                        </button>
+                        </button> */}
+                        <Link
+                          className="quic-btn quic-btn-cancle"
+                          // onClick={() => {
+                          //   navigateToUrl(lastUrl);
+                          // }}
+                          to={lastUrl}
+                        >
+                          Cancel
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -3059,14 +3120,28 @@ const AddProducts = () => {
                     )}
                     Update
                   </button>
-                  <button
+                  {/* <button
                     className="quic-btn quic-btn-cancle"
                     onClick={() => {
-                      navigate("/inventory/products");
+                      navigateToUrl(lastUrl);
                     }}
                     style={{ marginLeft: "20px" }}
                   >
                     Cancel
+                  </button> */}
+                  <button
+                    style={{ marginLeft: "10px", backgroundColor: "#878787" }}
+                    className="quic-btn quic-btn-save"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Link
+                      // onClick={() => {
+                      //   navigateToUrl(lastUrl);
+                      // }}
+                      to={lastUrl}
+                    >
+                      Cancel
+                    </Link>
                   </button>
                 </div>
               </div>

@@ -741,10 +741,12 @@ const InventoryMerge = () => {
         style={{ overflow: "unset", marginBottom: "110px" }}
       >
         <div className="q-add-categories-section">
-          <SwitchToBackButton
-            linkTo={"/inventory/products"}
-            title="Inventory Merge"
-          />
+          <div class="product-title">
+            <SwitchToBackButton
+              linkTo={"/inventory/products"}
+              title="Inventory Merge"
+            />
+          </div>
 
           <div
             style={{ padding: 0 }}

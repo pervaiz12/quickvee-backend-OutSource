@@ -59,9 +59,6 @@ const MainProducts = () => {
     useState(false);
   const [categoryId, setCategoryId] = useState("all");
 
-  const [searchId, setSearchId] = useState(""); // State to track search ID
-  const debouncedValue = useDebounce(searchId, 500);
-
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
@@ -71,18 +68,26 @@ const MainProducts = () => {
   const statusUrl = searchParams.get("status")?.trim().toLowerCase();
   const listingUrl = searchParams.get("listingType")?.trim().toLowerCase();
   const imageUrl = searchParams.get("filterBy")?.trim().toLowerCase();
+  const searchUrl = searchParams.get("search")?.trim().toLowerCase();
+  const [searchId, setSearchId] = useState(searchUrl ? searchUrl : ""); // State to track search ID
+  const debouncedValue = useDebounce(searchId, 500);
+
+  useEffect(() => {
+    if (debouncedValue) {
+      changeProductPageUrl("search", debouncedValue);
+    }
+  }, [debouncedValue]);
 
   const changeProductPageUrl = (urlOption, content) => {
-    // console.log("urloptions", urlOption, content);
-    // if (content === 0 || content) {
-    //   // Get the current search parameters
-    //   // Set or update the new search parameter
-    //   searchParams.set(urlOption, content);
-    //   // Navigate to the updated URL with all search parameters
-    //   navigate(`/inventory/products?${searchParams.toString()}`);
-    // } else {
-    //   navigate(location.pathname);
-    // }
+    if (content || content === 0) {
+      searchParams.set(urlOption, content);
+      navigate(`/inventory/products?${searchParams.toString()}`);
+    } else if (urlOption === "search" && !content) {
+      searchParams.delete("search");
+      navigate(`/inventory/products?${searchParams.toString()}`);
+    } else {
+      navigate(location.pathname);
+    }
   };
 
   const handleDeleteProduct = async (id) => {
@@ -94,14 +99,17 @@ const MainProducts = () => {
   const handleCategoryChange = (catId) => {
     setProductIdList([]);
     setSearchId("");
+    searchParams.delete("search");
     setCategoryId(catId);
   };
 
   const handleSearch = (val) => {
     setSearchId(val);
-    // changeProductPageUrl("search", val);
+    if (!val) {
+      // Scenario 1: When search box has a value, add it to the URL
+      changeProductPageUrl("search", null);
+    }
   };
-
   const handleProductUnCheck = (id) => {
     const filterId = productIdList?.filter((existId) => existId !== id);
     setProductIdList(filterId);
@@ -115,18 +123,23 @@ const MainProducts = () => {
     let data = {
       merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       format: "json",
-      category_id: categoryId === "All" ? "all" : categoryId,
-      show_status: selectedStatus,
-      // category_id: categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
-      // show_status: statusUrl === 0 || statusUrl ? statusUrl : "all",
-      name: debouncedValue,
-      is_media_blank: productByImages === "All" ? "" : 1,
-      listing_type: selectedListingTypeValue?.id
-        ? selectedListingTypeValue?.id
-        : 0,
-      // is_media_blank: imageUrl === "all" ? "" : imageUrl,
-      // listing_type: listingUrl === 0 || listingUrl ? listingUrl : "0",
+      // category_id: categoryId === "All" ? "all" : categoryId,
+      // show_status: selectedStatus,
+      category_id: categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
+      show_status: statusUrl === 0 || statusUrl ? statusUrl : "all",
+      name: searchUrl,
+      // is_media_blank: productByImages === "All" ? "" : 1,
+      // listing_type: selectedListingTypeValue?.id
+      //   ? selectedListingTypeValue?.id
+      //   : 0,
+      is_media_blank: imageUrl === "all" ? "" : imageUrl,
+      listing_type: listingUrl === 0 || listingUrl ? listingUrl : "0",
       offset: 0,
+      // limit:
+      //   JSON.parse(localStorage.getItem("product-focus-data")) &&
+      //   JSON.parse(localStorage.getItem("product-focus-data"))?.limit
+      //     ? JSON.parse(localStorage.getItem("product-focus-data"))?.limit
+      //     : 10,
       limit: 10,
       page: 0,
       ...userTypeData,
@@ -198,6 +211,15 @@ const MainProducts = () => {
     location,
   ]);
 
+  useEffect(() => {
+    // Only set the search box value if the 'search' parameter exists
+    if (!searchUrl) {
+      setSearchId("");
+    } else {
+      setSearchId(searchUrl);
+    }
+  }, [searchUrl]);
+
   const handlefocus = (e) => {};
 
   const toggleDropdown = (dropdown) => {
@@ -219,14 +241,20 @@ const MainProducts = () => {
   const handleOptionClick = (option, dropdown, value) => {
     switch (dropdown) {
       case "del_pic":
-        setSelectedEmployee(option.title);
         setdel_picDropdownVisible(false);
-
+        console.log(option);
+        if (option === "Select") {
+          setSelectedEmployee("Select");
+          return;
+        }
         if (window.confirm("Are you sure you want to update?")) {
           dispatch(emptyProduct([]));
           setSearchId("");
+          searchParams.delete("search");
           handleOptionClick([]);
           setProductIdList([]);
+          console.log(option);
+          setSelectedEmployee(option.title);
           let type_date = {
             merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
             id: option.id,
@@ -242,18 +270,18 @@ const MainProducts = () => {
                     let del_pic_data = {
                       merchant_id:
                         LoginGetDashBoardRecordJson?.data?.merchant_id,
-                      category_id: categoryId === "All" ? "all" : categoryId,
-                      show_status: selectedStatus,
-                      // category_id:
-                      //   categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
-                      // show_status:
-                      //   statusUrl === 0 || statusUrl ? statusUrl : "all",
-                      name: searchId,
-                      is_media_blank: productByImages === "All" ? "" : 1,
-                      listing_type: selectedListingTypeValue,
-                      // is_media_blank: imageUrl === "all" ? "" : imageUrl,
-                      // listing_type:
-                      //   listingUrl === 0 || listingUrl ? listingUrl : "0",
+                      // category_id: categoryId === "All" ? "all" : categoryId,
+                      // show_status: selectedStatus,
+                      category_id:
+                        categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
+                      show_status:
+                        statusUrl === 0 || statusUrl ? statusUrl : "all",
+                      name: searchUrl,
+                      // is_media_blank: productByImages === "All" ? "" : 1,
+                      // listing_type: selectedListingTypeValue,
+                      is_media_blank: imageUrl === "all" ? "" : imageUrl,
+                      listing_type:
+                        listingUrl === 0 || listingUrl ? listingUrl : "0",
                       offset: 0,
                       limit: 10,
                       page: 0,
@@ -291,15 +319,17 @@ const MainProducts = () => {
               }
             }
           }
-          setSelectedEmployee("Select");
+          // setSelectedEmployee("Select");
           setdel_picDropdownVisible(false);
         } else {
           console.log("No");
+          setSelectedEmployee("Select");
         }
 
         break;
       case "status":
         setSearchId("");
+        searchParams.delete("search");
         handleOptionClick([]);
         setSelectedStatus(option.id);
         setSelectedStatusValue(option.title);
@@ -307,11 +337,13 @@ const MainProducts = () => {
         dispatch(emptyProduct([]));
         setProductIdList([]);
         if (option !== "All") {
-          // changeProductPageUrl("status", option?.id);
+          changeProductPageUrl("status", option?.id);
         }
         setlistingTypesDropdownVisible(false);
         break;
       case "listingType":
+        setSearchId("");
+        searchParams.delete("search");
         dispatch(emptyProduct([]));
         handleOptionClick([]);
         if (option.id === 0) {
@@ -322,8 +354,7 @@ const MainProducts = () => {
           setSelectedListingType("Select listing");
         }
         setSelectedListingTypeValue(option);
-        // changeProductPageUrl("listingType", option?.id);
-        setSearchId("");
+        changeProductPageUrl("listingType", option?.id);
         setProductIdList([]);
         setlistingTypesDropdownVisible(false);
         break;
@@ -332,13 +363,13 @@ const MainProducts = () => {
         handleOptionClick([]);
         setProductIdList([]);
         setSearchId("");
+        searchParams.delete("search");
         setProductByImages(option?.title);
         setlistingTypesDropdownVisible(false);
-        console.log("option?.id", option?.id);
-        // changeProductPageUrl(
-        //   "filterBy",
-        //   option?.id === "1" ? "all" : option?.id
-        // );
+        changeProductPageUrl(
+          "filterBy",
+          option?.id === "0" ? "all" : option?.id
+        );
 
       default:
         break;

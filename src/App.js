@@ -558,11 +558,11 @@ function App() {
               path="/store-reporting/recorder-inventory"
               element={<Main visible={"recorder-inventory"} />}
             />
-            <Route
+            {/* <Route
               exact
               path="/store-reporting/shift-summary"
               element={<Main visible={"shift-summary"} />}
-            />
+            /> */}
             <Route
               exact
               path="/store-reporting/payment-method-details"
@@ -632,6 +632,26 @@ function App() {
               exact
               path="/store-reporting/coupon-report"
               element={<Main visible={"coupon-report"} />}
+            />
+            <Route
+              exact
+              path="/store-reporting/register-closures"
+              element={<Main visible={"register-closures"} />}
+            />
+            <Route
+              exact
+              path="/store-reporting/register-closures/register-closures-summery"
+              element={<Main visible={"register-closures-summery"} />}
+            />
+            <Route
+              exact
+              path="/store-reporting/register-closures/register-closures-transactions"
+              element={<Main visible={"register-closures-transactions"} />}
+            />
+            <Route
+              exact
+              path="/store-reporting/lottery-payout-report"
+              element={<Main visible={"lottery-payout-report"} />}
             />
             {/*  category sales summery report*/}
             <Route

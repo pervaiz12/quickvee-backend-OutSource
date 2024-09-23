@@ -30,10 +30,8 @@ const EditPage = ({
   fetchProductDataById,
   isVarientEdit,
   fetchSingleVarientData,
-  varientName
+  varientName,
 }) => {
-  console.log("productData index edit", varientIndex);
-
   const [value, setValue] = React.useState("");
   const handleChange = useCallback((event, newValue) => {
     setValue(newValue);
@@ -117,7 +115,7 @@ const EditPage = ({
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >
-        <Box className="product-edit-modal custom-scroll" >
+        <Box className="product-edit-modal custom-scroll">
           <div class="cancel-btn" onClick={handleCloseEditModal}>
             <img src={CloseIcon} className="cancel-image" />
           </div>

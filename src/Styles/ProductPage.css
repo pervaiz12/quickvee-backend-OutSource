@@ -983,3 +983,135 @@
   font-size: 16px;
   color: #ccc;
 }
+
+.product-error-note {
+  color: #000;
+  font-size: 12px;
+  font-family: CircularSTDBook;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-left: 7px;
+  border: 1px solid #0a64f9;
+  padding: 5px 9px;
+  border-radius: 6px;
+  box-sizing: border-box;
+  position: relative;
+  background-color: #fff;
+  cursor: default;
+}
+
+.product-error-note::before {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-bottom: 1px solid #0a64f9;
+  border-right: 1px solid #0a64f9;
+  left: -6px;
+  transform: rotate(-224deg);
+  background-color: #fff;
+}
+
+.product-error-note svg {
+  color: #c1c1c1;
+  font-size: 21px;
+  cursor: pointer;
+}
+
+.product-title .product-heading-title span {
+  width: 150px;
+}
+
+.product-line-highlight-bg {
+  background-color: rgb(208 225 255) !important;
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.checkbox-for-all-form .modal-title-tab .MuiTabs-scroller {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px;
+  box-sizing: border-box;
+}
+
+.checkbox-for-all-form .modal-title-tab .MuiTabs-scroller button {
+  color: #0a64f9;
+  font-size: 19px;
+  text-transform: capitalize;
+  font-weight: 600;
+  font-family: CircularSTDBook;
+  cursor: default;
+}
+
+.checkbox-for-all-form .modal-title-tab .MuiTabs-scroller button span {
+  display: none;
+}
+
+.checkbox-for-all-form .modal-title-tab .MuiTabs-scroller .MuiTabs-indicator {
+  display: none;
+}
+.checkbox-for-all-form .checkbox-item-options {
+  box-sizing: border-box;
+}
+.checkbox-for-all-form .checkbox-item-options .options {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 3%;
+}
+
+.checkbox-for-all-form .checkbox-item-options .options .label {
+  width: 47%;
+  margin-bottom: 30px;
+  justify-content: unset !important;
+  font-size: 18px !important;
+}
+
+.checkbox-for-all-form .checkbox-item-options .options .label label {
+  display: unset;
+}
+
+.item-edit-modal {
+  width: 60%;
+  background-color: #fff;
+  position: relative;
+  border-radius: 7px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.item-edit-modal .cancel-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.check-uncheck-btn-section {
+  display: flex;
+  justify-content: end;
+  gap: 9px;
+}
+
+.bulk-edit-item-btn.disabled {
+  background-color: #878787 !important;
+  opacity: 0.7;
+}
+
+.bulk-edit-item-btn.normal {
+  background-color: #0a64f9 !important;
+}
+
+.bulk-edit-item-btn.normal-uncheck {
+  background-color: #878787 !important;
+}

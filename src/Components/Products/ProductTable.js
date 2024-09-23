@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import SortIcon from "../../Assests/Category/Sorting.svg";
+
 import {
   changeOnlineOrderMethod,
   changeShowStatusProduct,
@@ -32,6 +33,7 @@ import Skeleton from "react-loading-skeleton";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import NoDataFound from "../../reuseableComponents/NoDataFound";
 import ImportImageModal from "./ImportImageModal";
+import { Grid, Tooltip, tooltipClasses } from "@mui/material";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -66,6 +68,26 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+const BootstrapTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: "#f5f5f9",
+    "&::before": {
+      border: "1px solid #dadde9",
+    },
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 180,
+    fontSize: theme.typography.pxToRem(14),
+    border: "1px solid #dadde9",
+    transform: "translateX(-80px)",
+    left: "-80px",
+  },
+}));
+
 const ProductTable = ({
   selectedListingType,
   selectedListingTypeValue,
@@ -78,11 +100,13 @@ const ProductTable = ({
   productIdList,
   productByImages,
 }) => {
+  const hasFocused = useRef(false);
   const searchCategory = new URLSearchParams(window.location.search);
   const categoryUrl = searchCategory.get("category");
   const statusUrl = searchCategory.get("status");
   const listingUrl = searchCategory.get("listingType");
   const imageUrl = searchCategory.get("filterBy");
+  const searchUrl = searchCategory.get("search")?.trim().toLowerCase();
   let listing_type = 0;
   const ProductsListDataState = useSelector((state) => state.productsListData);
 
@@ -103,6 +127,24 @@ const ProductTable = ({
   const [checkboxState, setCheckboxState] = useState({});
   const [deleteloading, setDeleteloading] = useState(false);
 
+  const BootstrapTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} arrow classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      color: "#f5f5f9",
+      "&::before": {
+        border: "1px solid #dadde9",
+      },
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: "#f5f5f9",
+      color: "rgba(0, 0, 0, 0.87)",
+      maxWidth: 500,
+      fontSize: theme.typography.pxToRem(13),
+      border: "1px solid #dadde9",
+    },
+  }));
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (ProductsListDataState?.productsData?.length) {
@@ -111,6 +153,49 @@ const ProductTable = ({
       setproductsList([]);
     }
   }, [ProductsListDataState, ProductsListDataState?.productsData, dispatch]);
+
+  /// focus on product when product get edit or open by user.
+  // const selectedProductId = useMemo(() => {
+  //   const productFocusData = JSON.parse(
+  //     localStorage.getItem("product-focus-data")
+  //   );
+  //   return productFocusData?.var_id
+  //     ? productFocusData?.var_id
+  //     : productFocusData?.productId;
+  // }, []);
+
+  // const productIndex = useMemo(() => {
+  //   if (!selectedProductId || !productList?.length) return -1;
+  //   return productList.findIndex((item) =>
+  //     item?.var_id
+  //       ? item.var_id === selectedProductId
+  //       : item.id === selectedProductId
+  //   );
+  // }, [selectedProductId, productList]);
+
+  // useEffect(() => {
+  //   let timer;
+  //   let focusId;
+  //   if (!hasFocused.current && productIndex !== -1) {
+  //     const targetElement = document.getElementById(`row-${selectedProductId}`);
+
+  //     if (targetElement) {
+  //       targetElement.classList.add("product-line-highlight-bg");
+  //       targetElement.scrollIntoView({ block: "center" });
+  //       hasFocused.current = true;
+
+  //       timer = setTimeout(() => {
+  //         localStorage.removeItem("product-focus-data");
+  //       }, 500);
+
+  //       focusId = setTimeout(() => {
+  //         targetElement.classList.remove("product-line-highlight-bg");
+  //       }, 3000);
+  //     }
+  //   }
+
+  //   return () => clearTimeout(timer, focusId);
+  // }, [productIndex]);
 
   const fetchInventoryData = async () => {
     try {
@@ -133,6 +218,14 @@ const ProductTable = ({
 
   useEffect(() => {
     fetchInventoryData();
+    // let timer;
+    // if (localStorage.getItem("product-focus-data") !== null) {
+    //   timer = setTimeout(() => {
+    //     localStorage.removeItem("product-focus-data");
+    //   }, 600);
+    // }
+
+    // return () => clearTimeout(timer);
   }, []);
 
   const checkStatus = (status) => {
@@ -228,7 +321,7 @@ const ProductTable = ({
     if (productList.length > 0) {
       page = productList.length / 10;
     }
-    if (selectedListingType == "Variant listing") {
+    if (selectedListingType == "Variant listing" || +listingUrl === 1) {
       listing_type = 1;
     } else {
       listing_type = 0;
@@ -237,22 +330,39 @@ const ProductTable = ({
     let data1 = {
       merchant_id,
       format: "json",
-      category_id: categoryId === "All" ? "all" : categoryId,
-      show_status: selectedStatus,
-      // category_id: categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
-      // show_status: statusUrl === 0 || statusUrl ? statusUrl : "all",
-      name: debouncedValue,
-      is_media_blank: productByImages === "All" ? "" : 1,
-      listing_type: selectedListingTypeValue?.id
-        ? selectedListingTypeValue?.id
-        : 0,
-      // is_media_blank: imageUrl === "all" ? "" : imageUrl,
-      // listing_type: listingUrl === 0 || listingUrl ? listingUrl : "0",
-      offset,
+      // category_id: categoryId === "All" ? "all" : categoryId,
+      // show_status: selectedStatus,
+      category_id: categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
+      show_status: statusUrl === 0 || statusUrl ? statusUrl : "all",
+      name: searchUrl,
+      is_media_blank: imageUrl === "all" ? "" : imageUrl,
+      listing_type: listingUrl === 0 || listingUrl ? listingUrl : "0",
+      offset: offset ? offset : 0,
+      // limit:
+      //   JSON.parse(localStorage.getItem("product-focus-data")) &&
+      //   JSON.parse(localStorage.getItem("product-focus-data"))?.limit
+      //     ? JSON.parse(localStorage.getItem("product-focus-data"))?.limit
+      //     : 10,
       limit: 10,
       page: 0,
       ...userTypeData,
     };
+
+    // if (
+    //   JSON.parse(localStorage.getItem("product-focus-data")) &&
+    //   JSON.parse(localStorage.getItem("product-focus-data"))?.offset
+    // ) {
+    //   const data = {
+    //     ...JSON.parse(localStorage.getItem("product-focus-data")),
+    //     offset: offset
+    //       ? offset
+    //       : JSON.parse(localStorage.getItem("product-focus-data"))?.offset,
+    //     limit: ProductsListDataState?.productsData?.length
+    //       ? ProductsListDataState?.productsData?.length
+    //       : JSON.parse(localStorage.getItem("product-focus-data"))?.limit,
+    //   };
+    //   localStorage.setItem("product-focus-data", JSON.stringify(data));
+    // }
 
     try {
       await dispatch(fetchProductsData(data1)).unwrap();
@@ -309,7 +419,7 @@ const ProductTable = ({
     }
   };
 
-  const handleNavigate = (id, varientName, productData) => {
+  const handleNavigate = (id, varientName, productData, productLength) => {
     let varientTitle = "";
     if (varientName?.includes("/")) {
       const splitVarient = varientName?.split("/");
@@ -317,18 +427,36 @@ const ProductTable = ({
     } else {
       varientTitle = varientName;
     }
+
+    const encodedVarientTitle = encodeURIComponent(varientTitle); // Added this
+    const encodedProductTitle = encodeURIComponent(productData?.title || ""); // Added this
+
     if (
-      selectedListingType === "Variant listing" &&
+      (selectedListingType === "Variant listing" || +listingUrl === 1) &&
       productData?.isvarient === "1"
     ) {
       return {
         link: `/inventory/products/varient-edit/${id}/${
-          varientName ? varientTitle : null
-        }?var_id=${productData?.var_id}&title=${productData?.title}`,
+          varientName ? encodedVarientTitle : null
+        }?var_id=${productData?.var_id}&title=${encodedProductTitle}`,
+        data: {
+          offset: productLength,
+          limit: productLength,
+          productId: productData?.var_id ? productData?.var_id : id,
+          variantName: varientName,
+          from: window.location.href,
+        },
       };
     } else {
       return {
         link: `/inventory/products/edit/${id}`,
+        data: {
+          offset: productLength,
+          limit: productLength,
+          productId: productData?.var_id ? productData?.var_id : id,
+          variantName: varientName,
+          from: window.location.href,
+        },
       };
     }
   };
@@ -428,7 +556,12 @@ const ProductTable = ({
           <div className="">
             <div className="q-category-bottom-header">
               <span>Products</span>
-              <Link to="/inventory/products/add">
+              <Link
+                to="/inventory/products/add"
+                state={{
+                  from: window.location.href,
+                }}
+              >
                 <p className="">
                   Add New Product
                   <img src={AddIcon} alt="add-icon" />
@@ -472,6 +605,7 @@ const ProductTable = ({
                     >
                       <TableHead>
                         {selectedListingType === "Variant listing" ||
+                        +listingUrl === 1 ||
                         LoginGetDashBoardRecordJson?.login_type !==
                           "superadmin" ? (
                           ""
@@ -490,11 +624,12 @@ const ProductTable = ({
                           Images
                         </StyledTableCell>
                         {userTypeData?.login_type === "superadmin" &&
-                        selectedListingType !== "Variant listing" ? (
+                        +listingUrl === 0 ? (
                           <StyledTableCell>Import Image</StyledTableCell>
                         ) : null}
 
-                        {selectedListingType === "Variant listing" ? (
+                        {selectedListingType === "Variant listing" ||
+                        +listingUrl === 1 ? (
                           ""
                         ) : (
                           <StyledTableCell>Delete</StyledTableCell>
@@ -509,7 +644,8 @@ const ProductTable = ({
                             const navigateData = handleNavigate(
                               product.id,
                               getVarientName[1],
-                              product
+                              product,
+                              productList?.length
                             );
                             return (
                               // <Draggable
@@ -520,11 +656,18 @@ const ProductTable = ({
                               //   {(provided) => (
                               <StyledTableRow
                                 key={product?.id}
+                                id={`row-${
+                                  product?.var_id
+                                    ? product?.var_id
+                                    : product?.id
+                                }`}
+                                loading="lazy"
                                 // ref={provided.innerRef}
                                 // {...provided.draggableProps}
                                 // {...provided.dragHandleProps}
                               >
                                 {selectedListingType === "Variant listing" ||
+                                +listingUrl === 1 ||
                                 LoginGetDashBoardRecordJson?.login_type !==
                                   "superadmin" ? (
                                   ""
@@ -565,36 +708,51 @@ const ProductTable = ({
                                     <Link
                                       // target="_blank"
                                       to={navigateData?.link}
+                                      state={navigateData?.data}
                                     >
                                       {product.title}
                                     </Link>
                                   </p>
-                                </StyledTableCell>
-                                {/* <StyledTableCell>
-                                  {+product?.isvarient === 1 ? (
-                                    <p
-                                      className="categories-title"
-                                      style={{ cursor: "pointer" }}
-                                    >
-                                      {product?.no_of_var}
-                                    </p>
+                                  {+listingUrl === 0 ? (
+                                    +product?.isvarient === 1 ? (
+                                      <p
+                                        className="categories-title"
+                                        style={{
+                                          cursor: "pointer",
+                                          fontSize: "13px",
+                                        }}
+                                      >
+                                        {product?.no_of_var} variants
+                                      </p>
+                                    ) : (
+                                      ""
+                                    )
                                   ) : (
                                     ""
                                   )}
-                                </StyledTableCell> */}
+                                </StyledTableCell>
                                 <StyledTableCell>
-                                  <p className="categories-title">
-                                    {product?.category_name
-                                      ? `${(product?.category_name).slice(
-                                          0,
-                                          30
-                                        )} ${
-                                          product?.category_name.length > 30
-                                            ? "..."
-                                            : ""
-                                        }`
-                                      : ""}
-                                  </p>
+                                  <BootstrapTooltip
+                                    placement="bottom-start"
+                                    title={
+                                      <p className="capitalize">
+                                        {product?.category_name}
+                                      </p>
+                                    }
+                                  >
+                                    <p className="categories-title">
+                                      {product?.category_name
+                                        ? `${(product?.category_name).slice(
+                                            0,
+                                            30
+                                          )} ${
+                                            product?.category_name.length > 30
+                                              ? "..."
+                                              : ""
+                                          }`
+                                        : ""}
+                                    </p>
+                                  </BootstrapTooltip>
                                 </StyledTableCell>
                                 <StyledTableCell>
                                   <div className="categories-title">
@@ -745,6 +903,7 @@ const ProductTable = ({
                                               <img
                                                 key={index}
                                                 className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
+                                                loading="lazy"
                                                 src={
                                                   BASE_URL +
                                                   `upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
@@ -790,7 +949,7 @@ const ProductTable = ({
                                   </div>
                                 </StyledTableCell>
                                 {userTypeData?.login_type === "superadmin" &&
-                                selectedListingType !== "Variant listing" ? (
+                                +listingUrl === 0 ? (
                                   <>
                                     <StyledTableCell>
                                       <ImportImageModal
@@ -801,7 +960,8 @@ const ProductTable = ({
                                   </>
                                 ) : null}
 
-                                {selectedListingType === "Variant listing" ? (
+                                {selectedListingType === "Variant listing" ||
+                                +listingUrl === 1 ? (
                                   ""
                                 ) : (
                                   <StyledTableCell>

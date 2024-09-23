@@ -79,6 +79,7 @@ import GiftCardReportSlice from "../features/Reports/GiftCard/GiftCardReportSlic
 import RefundRequestSlice from "../features/RefundRequest/RefundRequestSlice";
 import NewCustomersAddedReportSlice from "../features/Reports/NewCustomersAddedReport/NewCustomersAddedReportSlice";
 import MixAndMatchSliceReducer from "../features/MixAndMatch/mixAndMatchSlice";
+import RegisterClosuresSlice from "../features/Reports/RegisterClosures/RegisterClosuresSlice";
 import loyaltyprogramStoreSliceReducer from "../features/LoyaltyProgramStore/loyaltyProgramStoreSlice";
 const store = configureStore({
   reducer: {
@@ -177,6 +178,7 @@ const store = configureStore({
     DetailedLoyaltyPointsReport: DetailedLoyaltyPointsReportSlice,
     RefundRequestList: RefundRequestSlice,
     NewCustomersAddedReport: NewCustomersAddedReportSlice,
+    RegisterClosuresReport: RegisterClosuresSlice,
     LoyaltyProgramStoreData: loyaltyprogramStoreSliceReducer,
   },
 

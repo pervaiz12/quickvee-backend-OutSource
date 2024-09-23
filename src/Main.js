@@ -108,6 +108,11 @@ const Main = ({ visible }) => {
       {visible === "new-sales-report" && <Layout visible={visible} />}
       {visible === "tip-report" && <Layout visible={visible} />}
       {visible === "coupon-report" && <Layout visible={visible} />}
+      {visible === "register-closures" && <Layout visible={visible} />}
+      {visible === "register-closures-summery" && <Layout visible={visible} />}
+      {visible === "register-closures-transactions" && (
+        <Layout visible={visible} />
+      )}
       {visible === "drop-cash-report" && <Layout visible={visible} />}
       {visible === "pay-in-report" && <Layout visible={visible} />}
 
@@ -126,6 +131,7 @@ const Main = ({ visible }) => {
         <Layout visible={visible} />
       )}
       {visible === "new-customers-added-report" && <Layout visible={visible} />}
+      {visible === "lottery-payout-report" && <Layout visible={visible} />}
 
       {/* multip user layout */}
       {visible === "multimerchant" && <IndexAllUsers />}
