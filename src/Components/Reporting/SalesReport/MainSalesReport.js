@@ -79,7 +79,7 @@ const MainSalesReport = () => {
         <div className="box">
           <div className="" style={{ overflow: "unset" }}>
             <div className="mb6_border">
-              <div
+              {/* <div
                 onClick={() => handleTabClick("Summary")}
                 className={`${
                   activeTab === "Summary"
@@ -88,7 +88,7 @@ const MainSalesReport = () => {
                 } orderfilter`}
               >
                 Summary
-              </div>
+              </div> */}
               <div
                 onClick={() => handleTabClick("Salesbyhour")}
                 className={`${
@@ -123,7 +123,7 @@ const MainSalesReport = () => {
             ) : activeTab === "Salesbyhour" ? (
                 <MainSalesbyHour/>
             ): (
-              "individual"
+              "Individual"
             )}
           </div>
         </div>
