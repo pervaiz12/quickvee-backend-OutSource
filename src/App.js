@@ -615,6 +615,13 @@ function App() {
               path="/store-reporting/sales-report"
               element={<Main visible={"sales-report"} />}
             />
+
+            <Route
+              exact
+              path="/store-reporting/new-sales-report"
+              element={<Main visible={"new-sales-report"} />}
+            />
+
             <Route
               exact
               path="/store-reporting/tip-report"
@@ -640,6 +647,11 @@ function App() {
               exact
               path="/store-reporting/register-closures/register-closures-transactions"
               element={<Main visible={"register-closures-transactions"} />}
+            />
+            <Route
+              exact
+              path="/store-reporting/lottery-payout-report"
+              element={<Main visible={"lottery-payout-report"} />}
             />
             {/*  category sales summery report*/}
             <Route
@@ -744,6 +756,9 @@ function App() {
             />
             <Route exact path="/brands" element={<Main visible={"brands"} />} />
             <Route exact path="/tags" element={<Main visible={"tags"} />} />
+            <Route exact path="/inventory/lottery" element={<Main visible={"lottery"} />} />
+            <Route exact path="/inventory/lottery/add-lottery" element={<Main visible={"add-lottery"} />} />
+            <Route exact path="/inventory/lottery/update-lottery/:id" element={<Main visible={"update-lottery"} />} />
           </Route>
 
           {/* ------------------------Superadmin---------------- */}
