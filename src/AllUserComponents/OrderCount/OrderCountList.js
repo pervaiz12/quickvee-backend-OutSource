@@ -69,7 +69,7 @@ const OrderCountList = () => {
     console.log(end);
     if (start && end && new Date(start) > new Date(end)) {
       setError("Please Enter Vaild Start Date and End Date");
-    } else {
+    } else {  
       setError("");
     }
   };
@@ -163,141 +163,6 @@ const OrderCountList = () => {
 
   return (
     <>
-      {/* <div className="box">
-            <div className="q-category-bottom-detail-section">
-                <div className="">
-                    <div className="q-category-bottom-header">
-                        <div className="q_details_header ml-2">Order Count</div>
-                    </div>
-                </div>
-
-                <div className="q-order-page-container ml-8">
-                    <div className="q-order-page-filter">
-                        <label className="q-details-page-label" htmlFor="OrderStatusFilter">
-                            Order Status
-                        </label>
-                        <div className="custom-dropdown">
-                            <div
-                                className="custom-dropdown-header"
-                                onClick={() => toggleDropdown("OrderStatus")}
-                            >
-                                <span className="selected-option mt-1">
-                                    {selectedOrderStatus}
-                                </span>
-                                <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                            </div>
-                            {orderStatusDropdownVisible && (
-                                <div className="dropdown-content ">
-                                    <div onClick={() => handleOptionClick("Paid", "OrderStatus")}>
-                                        Paid
-                                    </div>
-                                    <div
-                                        onClick={() => handleOptionClick("Unpaid", "OrderStatus")}
-                                    >
-                                        Unpaid
-                                    </div>
-                                    <div
-                                        onClick={() => handleOptionClick("All", "OrderStatus")}
-                                    >
-                                        All
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="q-order-page-filter">
-                        <label className="q-details-page-label" htmlFor="orderTypeFilter">
-                            Order Source
-                        </label>
-                        <div className="custom-dropdown">
-                            <div
-                                className="custom-dropdown-header"
-                                onClick={() => toggleDropdown("orderType")}
-                            >
-                                <span className="selected-option mt-1">
-                                    {selectedOrderType}
-                                </span>
-                                <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                            </div>
-                            {orderTypeDropdownVisible && (
-                                <div className="dropdown-content">
-                                    <div onClick={() => handleOptionClick("Online", "orderType")}>
-                                        Online
-                                    </div>
-                                    <div
-                                        onClick={() => handleOptionClick("Offline", "orderType")}
-                                    >
-                                        Offline
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="q-category-bottom-detail-section mt-5 pb-5">
-                <div className="store-setting-flex">
-                    <div className="store-setting-flex-child">
-                        <label className="q-details-page-label" htmlFor="OrderStatusFilter">
-                            Start Date
-                        </label>
-                        <div className="store-setting-input-div pt-2">
-                            <input
-                                type="date"
-                                className="store-setting-alert-input"
-                                value={selectedStartDate}
-                                onChange={IsStartDatetoggleInput}
-                            />
-                            {error && (
-                                <p
-                                    style={{
-                                        fontSize: "14px",
-                                        color: "red",
-                                        fontFamily: "CircularSTDBook !important",
-                                    }}
-                                >
-                                    {error}
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                    <div className="store-setting-flex-child">
-                        <label className="q-details-page-label" htmlFor="OrderStatusFilter">
-                            End Date
-                        </label>
-                        <div className="store-setting-input-div pt-2">
-                            <input
-                                type="date"
-                                className="store-setting-alert-input"
-                                value={selectedEndDate}
-                                onChange={IsEndDatetoggleInput}
-                            />
-                            {error && (
-                                <p
-                                    style={{
-                                        fontSize: "14px",
-                                        color: "red",
-                                        fontFamily: "CircularSTDBook !important",
-                                    }}
-                                >
-                                    {error}
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                </div>
-                <div 
-                    style={{
-                       paddingLeft:"2rem",
-                    }}>
-                    <button className="save_btn" onClick={handleSubmitData}>
-                        Export
-                    </button>
-                </div>
-            </div>
-            </div> */}
 
       <div className="box_shadow_div_order">
         <Grid item className="q-category-bottom-header" xs={12}>
@@ -338,25 +203,7 @@ const OrderCountList = () => {
         <div className="px-6  ">
           <Grid container spacing={4} className="">
             <Grid item xs={6}>
-              {/* <div className="store-setting-input-div pt-2">
-                            <input
-                                type="date"
-                                className="store-setting-alert-input"
-                                value={selectedStartDate}
-                                onChange={IsStartDatetoggleInput}
-                            />
-                            {error && (
-                                <p
-                                    style={{
-                                        fontSize: "14px",
-                                        color: "red",
-                                        fontFamily: "CircularSTDBook !important",
-                                    }}
-                                >
-                                    {error}
-                                </p>
-                            )}
-                        </div> */}
+
               <label>Start Date</label>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer className="" components={["DatePicker"]}>
@@ -391,26 +238,7 @@ const OrderCountList = () => {
               </LocalizationProvider>
             </Grid>
             <Grid item xs={6}>
-              {/* <label> End Date</label>
-                            <div className="store-setting-input-div pt-2">
-                            <input
-                                type="date"
-                                className="store-setting-alert-input"
-                                value={selectedEndDate}
-                                onChange={IsEndDatetoggleInput}
-                            />
-                            {error && (
-                                <p
-                                    style={{
-                                        fontSize: "14px",
-                                        color: "red",
-                                        fontFamily: "CircularSTDBook !important",
-                                    }}
-                                >
-                                    {error}
-                                </p>
-                            )}
-                        </div> */}
+
               <label>End Date</label>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DatePicker"]}>

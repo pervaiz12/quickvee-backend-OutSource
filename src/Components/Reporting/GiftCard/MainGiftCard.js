@@ -44,8 +44,8 @@ export default function MainGiftCard() {
             gift_card_number: Boolean(debouncedValue.trim())
               ? debouncedValue
               : null,
-            // start_date: selectedDateRange.start_date,
-            // end_date: selectedDateRange.end_date,
+            start_date: selectedDateRange.start_date,
+            end_date: selectedDateRange.end_date,
             ...userTypeData,
           };
 
@@ -114,11 +114,17 @@ export default function MainGiftCard() {
         </Grid>
       </Grid>
 
-      {/* <Grid container sx={{ overflow: "unset" }} className="box_shadow_div">
-        <Grid xs={12}>
-          <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
-        </Grid>
-      </Grid> */}
+      {!searchRecord && (
+        <>
+          <Grid container sx={{ overflow: "unset" }} className="box_shadow_div">
+            <Grid xs={12}>
+              <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
+            </Grid>
+          </Grid>
+        </>
+      )}
+
+     
 
       <Grid item xs={12}>
         <Grid container sx={{ px: 0.5 }} spacing={2}>
