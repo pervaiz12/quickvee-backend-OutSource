@@ -81,7 +81,7 @@ export default function LoyaltyPointData(props) {
               type="text"
               placeholder="$1 ="
               name="DollarSpent"
-              maxLength={8}
+              maxLength={9}
               // id="delvery_setup"
               // name="default_delvery_setup"
               value={props.InventorAwardedPoints?.DollarSpent}
@@ -97,7 +97,7 @@ export default function LoyaltyPointData(props) {
             <BasicTextFields
               type="text"
               placeholder=""
-              maxLength={8}
+              maxLength={9}
               name="RedemptionValue"
               // id="delvery_setup"
               // value={delveryRates}
@@ -114,7 +114,7 @@ export default function LoyaltyPointData(props) {
             <BasicTextFields
               type="text"
               placeholder="Minimum Points Redemption"
-              maxLength={8}
+              maxLength={9}
               name="MinRedemption"
               // name="default_delvery_setup"
               // id="delvery_setup"
@@ -147,7 +147,7 @@ export default function LoyaltyPointData(props) {
               //    to={`/coupons/add`}
               >
                 <p onClick={() => props.handleModalOpen()}>
-                  Add Bonus point Promotions{" "}
+                  Add Bonus Point Promotions{" "}
                   <img src={AddIcon} alt="add-icon" />
                 </p>
               </Link>

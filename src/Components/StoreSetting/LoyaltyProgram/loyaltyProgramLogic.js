@@ -183,7 +183,7 @@ export default function LoyaltyProgramLogic() {
         setInventoryAwardedPoints({
           CurrentDollarSpent: !!totalPointsPerDollar
             ? totalPointsPerDollar.toFixed(2)
-            : "",
+            : "0.0",
           DollarSpent: !!result?.points_per_dollar
             ? result?.points_per_dollar
             : "",
@@ -225,6 +225,7 @@ export default function LoyaltyProgramLogic() {
     setAddModel(true);
   };
   const handleCloseAddModal = () => {
+    setEnabledPromotionalId(false);
     setAddModel(false);
     setUpdateChecked(false);
     setIds("");
@@ -449,11 +450,11 @@ export default function LoyaltyProgramLogic() {
     const end = new Date(dateValid?.endDate);
 
     if (addPrmotionName.promotionName == "") {
-      isError.BonusPointError = "PromotionName is required";
+      isError.BonusPointError = "Promotion Name is required";
       isErrorCheck = true;
     }
     if (addPrmotionName?.DollarSpent == "") {
-      isError.BonusPointAwardError = "DollarSpent is required";
+      isError.BonusPointAwardError = "Dollar Spent is required";
       isErrorCheck = true;
     }
     if (dateValid.startDate == null) {
@@ -586,7 +587,7 @@ export default function LoyaltyProgramLogic() {
       } else {
         setErrors((prev) => ({
           ...prev,
-          BonusPointError: "PromotionName is exists",
+          BonusPointError: "Promotion Name is exists",
         }));
 
         isValidate = true;

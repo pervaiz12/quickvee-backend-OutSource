@@ -113,7 +113,7 @@ export default function AddLoyaltyPointModal(props) {
               <BasicTextFields
                 type="text"
                 // placeholder=""
-                maxLength={8}
+                maxLength={9}
                 name="DollarSpent"
                 // name="default_delvery_setup"
                 // id="delvery_setup"

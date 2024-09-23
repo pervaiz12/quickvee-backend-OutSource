@@ -813,7 +813,11 @@ const menuItems = [
         ],
       },
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
-      { id: 80, text: "New Taxes Reports", link: "/store-reporting/new-taxes-report" },
+      {
+        id: 80,
+        text: "New Taxes Reports",
+        link: "/store-reporting/new-taxes-report",
+      },
       {
         id: 4,
         text: "Refunds",
@@ -882,8 +886,17 @@ const menuItems = [
       { id: 87, text: "Tip Report", link: "/store-reporting/tip-report" },
       { id: 88, text: "Coupon Report", link: "/store-reporting/coupon-report" },
       // { id: 1726033807930, text: "Shift Summary", link: "/store-reporting/shift-summary" },
-      { id: 1726123837135, text: "Register Closures", link: "/store-reporting/register-closures" },
+      {
+        id: 1726123837135,
+        text: "Register Closures",
+        link: "/store-reporting/register-closures",
+      },
 
+      {
+        id: 115,
+        text: "Lottery Payout Report",
+        link: "/store-reporting/lottery-payout-report",
+      },
 
       // {
       //   id: 89,

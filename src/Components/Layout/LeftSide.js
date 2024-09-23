@@ -203,6 +203,9 @@ const RegisterClosuresTransactions = lazy(
 const MainLoyaltyProgramPage = lazy(
   () => import("../StoreSetting/LoyaltyProgram/MainLoyaltyProgram")
 );
+const MainLotteryReport = lazy(
+  () => import("../Reporting/LotteryPayoutReport/LotteryPayoutMain")
+);
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -381,6 +384,8 @@ const LeftSide = ({ visible }) => {
         return <PayInMain />;
       case "sales-report":
         return <SalesReportMain />;
+      case "lottery-payout-report":
+        return <MainLotteryReport />;
       case "brands":
         return <Brands />;
       case "tags":

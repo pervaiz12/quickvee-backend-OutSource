@@ -641,6 +641,11 @@ function App() {
               path="/store-reporting/register-closures/register-closures-transactions"
               element={<Main visible={"register-closures-transactions"} />}
             />
+            <Route
+              exact
+              path="/store-reporting/lottery-payout-report"
+              element={<Main visible={"lottery-payout-report"} />}
+            />
             {/*  category sales summery report*/}
             <Route
               path="/store-reporting/category-sales-summery-report"
