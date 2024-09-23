@@ -68,7 +68,7 @@ const MainProducts = () => {
   const statusUrl = searchParams.get("status")?.trim().toLowerCase();
   const listingUrl = searchParams.get("listingType")?.trim().toLowerCase();
   const imageUrl = searchParams.get("filterBy")?.trim().toLowerCase();
-  const searchUrl = searchParams.get("search")?.trim().toLowerCase();
+  const searchUrl = searchParams.get("search")?.toLowerCase();
   const [searchId, setSearchId] = useState(searchUrl ? searchUrl : ""); // State to track search ID
   const debouncedValue = useDebounce(searchId, 500);
 
@@ -127,7 +127,7 @@ const MainProducts = () => {
       // show_status: selectedStatus,
       category_id: categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
       show_status: statusUrl === 0 || statusUrl ? statusUrl : "all",
-      name: searchUrl,
+      name: searchUrl?.trim(),
       // is_media_blank: productByImages === "All" ? "" : 1,
       // listing_type: selectedListingTypeValue?.id
       //   ? selectedListingTypeValue?.id
@@ -276,7 +276,7 @@ const MainProducts = () => {
                         categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
                       show_status:
                         statusUrl === 0 || statusUrl ? statusUrl : "all",
-                      name: searchUrl,
+                      name: searchUrl?.trim(),
                       // is_media_blank: productByImages === "All" ? "" : 1,
                       // listing_type: selectedListingTypeValue,
                       is_media_blank: imageUrl === "all" ? "" : imageUrl,

@@ -106,7 +106,7 @@ const ProductTable = ({
   const statusUrl = searchCategory.get("status");
   const listingUrl = searchCategory.get("listingType");
   const imageUrl = searchCategory.get("filterBy");
-  const searchUrl = searchCategory.get("search")?.trim().toLowerCase();
+  const searchUrl = searchCategory.get("search")?.toLowerCase();
   let listing_type = 0;
   const ProductsListDataState = useSelector((state) => state.productsListData);
 
@@ -334,7 +334,7 @@ const ProductTable = ({
       // show_status: selectedStatus,
       category_id: categoryUrl === 0 || categoryUrl ? categoryUrl : "all",
       show_status: statusUrl === 0 || statusUrl ? statusUrl : "all",
-      name: searchUrl,
+      name: searchUrl?.trim(),
       is_media_blank: imageUrl === "all" ? "" : imageUrl,
       listing_type: listingUrl === 0 || listingUrl ? listingUrl : "0",
       offset: offset ? offset : 0,
