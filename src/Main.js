@@ -121,6 +121,11 @@ const Main = ({ visible }) => {
       )}
       {visible === "brands" && <Layout visible={visible} />}
       {visible === "tags" && <Layout visible={visible} />}
+      {visible === "lottery" && <Layout visible={visible} />}
+      {visible === "add-lottery" && <Layout visible={visible} />}
+      {visible === "update-lottery" && <Layout visible={visible} />}
+     
+      
       {visible === "category-sales-summery-report" && (
         <Layout visible={visible} />
       )}
