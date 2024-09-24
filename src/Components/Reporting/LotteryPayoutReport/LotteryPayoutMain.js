@@ -5,8 +5,13 @@ import LotteryPayoutLogic from "./LotteryPayoutLogic";
 import LotteryPayoutTable from "./Table/LotteryPayoutTable";
 
 export default function LotteryPayoutMain() {
-  const { onDateRangeChange, getAllLatteryData, apiLoader } =
-    LotteryPayoutLogic();
+  const {
+    onDateRangeChange,
+    getAllLatteryData,
+    apiLoader,
+    merchant_id,
+    setAllLatteryData,
+  } = LotteryPayoutLogic();
   return (
     <>
       <Grid
@@ -32,7 +37,12 @@ export default function LotteryPayoutMain() {
       <Grid item xs={12}>
         {/* <Grid container>
           <Grid item xs={12}> */}
-        <LotteryPayoutTable apiLoader={apiLoader} />
+        <LotteryPayoutTable
+          apiLoader={apiLoader}
+          getAllLatteryData={getAllLatteryData}
+          merchant_id={merchant_id}
+          setAllLatteryData={setAllLatteryData}
+        />
         {/* </Grid>
         </Grid> */}
       </Grid>
