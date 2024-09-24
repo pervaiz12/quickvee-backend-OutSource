@@ -837,6 +837,33 @@ export default function PaymentCalDetails() {
                             ) : (
                               ""
                             )}
+
+                            {couponDetails.total_lottery_payout > 0 ? (
+                                <p className="" style={{color:"#F55353"}}>
+                                  Lottery Payout
+                                  <span>
+                                    - $
+                                    {parseFloat(
+                                      couponDetails.total_lottery_payout
+                                    ).toFixed(2)}
+                                  </span>
+                                </p>
+                              ) : (
+                                ""
+                              )}
+                              {couponDetails.total_scratcher_payout > 0 ? (
+                                <p className="" style={{color:"#F55353"}}>
+                                  Scratcher Payout
+                                  <span>
+                                    - $
+                                    {parseFloat(
+                                      couponDetails.total_scratcher_payout
+                                    ).toFixed(2)}
+                                  </span>
+                                </p>
+                              ) : (
+                                ""
+                              )}
                             {couponDetails.gift_card_amount > 0 ? (
                               <p className="">
                                 Gift Card Applied
@@ -923,6 +950,20 @@ export default function PaymentCalDetails() {
                                         paymentMethod.toLowerCase() === "cash"
                                       ) {
                                         paymentMethodDisplay = "Paid via Cash";
+                                      } 
+                                      let payment = parseFloat(orderSummeryData.order_detail.amt);
+                                      // Adjust payment based on store credit
+                                      if (couponDetails.store_credit_amt_spent > 0) {
+                                        payment -= parseFloat(couponDetails.store_credit_amt_spent);
+                                      }
+                                      if (couponDetails.total_lottery_payout > 0) {
+                                        payment -= parseFloat(couponDetails.total_lottery_payout);
+                                      }
+                                      if (couponDetails.total_scratcher_payout > 0) {
+                                        payment -= parseFloat(couponDetails.total_scratcher_payout);
+                                      }
+                                      if(payment < 0){
+                                        return
                                       }
 
                                       return (
@@ -930,20 +971,20 @@ export default function PaymentCalDetails() {
                                           {paymentMethodDisplay}
                                           <span>
                                             {(() => {
-                                              let payment = parseFloat(
-                                                orderSummeryData.order_detail
-                                                  .amt
-                                              );
+                                              // let payment = parseFloat(
+                                              //   orderSummeryData.order_detail
+                                              //     .amt
+                                              // );
 
-                                              // Adjust payment based on store credit
-                                              if (
-                                                couponDetails.store_credit_amt_spent >
-                                                0
-                                              ) {
-                                                payment -= parseFloat(
-                                                  couponDetails.store_credit_amt_spent
-                                                );
-                                              }
+                                              // // Adjust payment based on store credit
+                                              // if (
+                                              //   couponDetails.store_credit_amt_spent >
+                                              //   0
+                                              // ) {
+                                              //   payment -= parseFloat(
+                                              //     couponDetails.store_credit_amt_spent
+                                              //   );
+                                              // }
 
                                               // Format and return payment amount
                                               return `$${payment.toFixed(2)}`;
