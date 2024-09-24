@@ -178,8 +178,9 @@ const SalesReportList = (props) => {
     const TotalAmountCollected = parseFloat(SalesReportData?.total_amount_collected) || 0;
 
     // for Taxes 
-    const TotalEstimate = SalesReportData?.taxes?.reduce((sum, tax) => sum + parseFloat(tax.estimated_tax_due || 0), 0)
-    const NonTaxableSales = SalesReportData?.taxes?.filter((item) => item?.tax_type === "Non-Taxable");
+    const NONTaxable = parseFloat(SalesReportData?.non_taxable_total) || 0;
+    const TotalEstimate = SalesReportData?.taxes?.reduce((sum, tax) => sum + (parseFloat(tax.total_collected_tax || 0) - parseFloat(tax.total_refunded_tax || 0)), 0)
+
 
 
     // for payouts
@@ -682,11 +683,12 @@ const SalesReportList = (props) => {
                         Taxes
                       </StyledTableCell>
                       <StyledTableCell  colSpan={2} className="TaxesTableHead">
-                       {formatCurrency(NonTaxableSales?.[0]?.taxable_amount)} Non-Taxable Sales</StyledTableCell>
+                       {formatCurrency(NONTaxable)} Non-Taxable Sales</StyledTableCell>
                     </TableHead>
                     <TableBody>
                         {SalesReportData?.taxes?.map((item, index) => {
-                        let TaxableAmountsum = +item.taxable_amount - (+item.refunded_taxable_amount);
+                        let TaxableAmountsum = +item.total_taxable_amount - (+item.total_refunded_taxable_amount);
+                        let EstimatedTax = +item.total_collected_tax - (+item.total_refunded_tax);
                           return (
                         <>
                           <StyledTableRow >
@@ -697,32 +699,33 @@ const SalesReportList = (props) => {
                           </StyledTableRow >
 
                           <StyledTableRow key={index}>
+                            
                             <StyledTableCell  className="BORBodyRight" >{item.tax_type}</StyledTableCell>
-                            <StyledTableCell className="BORBodyRight">{parseFloat(item.tax_rate).toFixed(3)} %</StyledTableCell>
+                            <StyledTableCell className="BORBodyRight">{!!item.tax_rate  ? parseFloat(item.tax_rate).toFixed(3) : "0.000"} %</StyledTableCell>
                             <StyledTableCell className="BORBodyRight">
-                              <p className={ getClassName(item.taxable_amount)}>
-                              {formatCurrency(item.taxable_amount)}
+                              <p className={ getClassName(item.total_taxable_amount)}>
+                              {formatCurrency(item.total_taxable_amount)}
                               </p>
                             </StyledTableCell>
                             <StyledTableCell >
-                              <p className={getClassName(item.collected_tax)}>
-                                {formatCurrency(item.collected_tax)}
+                              <p className={getClassName(item.total_collected_tax)}>
+                                {formatCurrency(item.total_collected_tax)}
                                 </p>
                               </StyledTableCell>
                           </StyledTableRow>
 
                           <StyledTableRow >
                               <StyledTableCell className="BORBodyRight">Refunds</StyledTableCell>
-                              <StyledTableCell  className="BORBodyRight">{parseFloat(item.tax_rate).toFixed(3)} %</StyledTableCell>
+                              <StyledTableCell  className="BORBodyRight">{ !!item.tax_rate  ? parseFloat(item.tax_rate).toFixed(3) : "0.000" } %</StyledTableCell>
                               <StyledTableCell  className="BORBodyRight">
-                                <p className={getClassName(item.refunded_taxable_amount)}>
-                                {formatCurrency(item.refunded_taxable_amount)} 
+                                <p className={getClassName(item.total_refunded_taxable_amount)}>
+                                {formatCurrency(item.total_refunded_taxable_amount)} 
                                 </p>
                               </StyledTableCell>
                               
                               <StyledTableCell  >
-                              <p className={getClassName(item.refunded_tax)}>
-                              {formatCurrency(item.refunded_tax)}
+                              <p className={getClassName(item.total_refunded_tax)}>
+                              {formatCurrency(item.total_refunded_tax)}
                               </p>
                             </StyledTableCell>
                           </StyledTableRow >
@@ -734,13 +737,13 @@ const SalesReportList = (props) => {
                             </div>
                             </StyledTableCell>
                             <StyledTableCell className="BORBodyRight">
-                             <div className={`q_sales_trading_data p-0  totalReport ${getClassName(item.TaxableAmountsum)}` }>
+                             <div className={`q_sales_trading_data p-0  totalReport ${getClassName(TaxableAmountsum)}` }>
                               <p>{formatCurrency(TaxableAmountsum)}</p>
                               </div>
                             </StyledTableCell>
                             <StyledTableCell  >
-                             <div className={`q_sales_trading_data p-0  totalReport ${getClassName(item.TaxableAmountsum)}`}>
-                              <p>{formatCurrency(item.estimated_tax_due)}</p>
+                             <div className={`q_sales_trading_data p-0  totalReport ${getClassName(EstimatedTax)}`}>
+                              <p>{formatCurrency(EstimatedTax)}</p>
                               </div>
                             </StyledTableCell>
                           </StyledTableRow >

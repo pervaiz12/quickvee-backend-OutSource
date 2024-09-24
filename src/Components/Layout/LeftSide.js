@@ -12,7 +12,7 @@ const MainEmployeeSalesPerCategory = lazy(
 const MainGiftCard = lazy(() => import("../Reporting/GiftCard/MainGiftCard"));
 const InventoryMerge = lazy(() => import("../Products/InventoryMerge"));
 
-const DashboardMain = lazy(() => import("../Dashboard/DashboardMain"));
+const DashboardMain = lazy(() => import("../Dashboard/NewDashboardMain"));
 const MainOrder = lazy(() => import("./../Orders/MainOrder"));
 const MainPurchase = lazy(() => import("../PurchaseOrders/MainPurchase"));
 const MainAttributes = lazy(() => import("../Attributes/MainAttributes"));

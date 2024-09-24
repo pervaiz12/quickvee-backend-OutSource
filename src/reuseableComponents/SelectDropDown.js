@@ -34,7 +34,6 @@ const SelectDropDown = ({
   name,
   disabled = false,
 }) => {
-  console.log("xzvxc",listItem)
   return (
     <>
       <FormControl sx={{ ...sx }} disabled={disabled} fullWidth>
