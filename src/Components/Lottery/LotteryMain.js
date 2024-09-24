@@ -37,7 +37,6 @@ export default function LotteryMain() {
     try {
       const response = await dispatch(fetchProductsData(data)).unwrap();
       // Handle response if needed
-      console.log("lottery response",response)
     } catch (error) {
       if (error?.status == 401 || error?.response?.status === 401) {
         getUnAutherisedTokenMessage();

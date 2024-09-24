@@ -54,6 +54,7 @@ export default function LoyaltyProgram() {
         justifyContent="space-between"
         alignItems="center"
         className="box_shadow_div"
+        
       >
         <Grid
           container
@@ -131,6 +132,36 @@ export default function LoyaltyProgram() {
         handleUpdateLoyalty={handleUpdateLoyalty}
         // InventorAwardedPoints={InventorAwardedPoints}
       />
+      <div className="fixed-bottom">
+        <div
+          className="box_shadow_div"
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginBottom: 0,
+            paddingRight: 20,
+          }}
+        >
+          <button
+            class="save_btn attributeUpdateBTN mt-5 mb-5"
+            onClick={handleSaveData}
+          >
+            {loaderSave ? (
+              <>
+                <CircularProgress
+                  color={"inherit"}
+                  className="loaderIcon"
+                  width={15}
+                  size={15}
+                />{" "}
+                Save{" "}
+              </>
+            ) : (
+              "Save"
+            )}
+          </button>
+        </div>
+      </div>
       <AlertModal
         headerText={showAlertMessage}
         open={alertModalClosed}

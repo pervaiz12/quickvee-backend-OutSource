@@ -7,6 +7,8 @@ import BasicTextFields from "../../reuseableComponents/TextInputField";
 import { useDispatch } from "react-redux";
 import {
   addProduct,
+  checkProductTitle,
+  checkUpcCodeSingle,
   editProductData,
   fetchProductsDataById,
 } from "../../Redux/features/Product/ProductSlice";
@@ -15,6 +17,8 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PasswordShow from "../../Common/passwordShow";
 import CurrencyInputHelperFun from "../../helperFunctions/CurrencyInputHelperFun";
+import { checkUniqueUpcCode } from "./checkUniqueUpcCode";
+import { CheckUniqueProductTitle } from "./CheckUniqueProductTitle";
 
 const characters = "0123456789";
 function generateString(length) {
@@ -25,12 +29,14 @@ function generateString(length) {
   }
   return result;
 }
+
 export default function AddLottery() {
   const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname;
   const pathSegments = path.split("/");
   const action = pathSegments[3];
+
   const { id } = useParams();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const dispatch = useDispatch();
@@ -47,6 +53,12 @@ export default function AddLottery() {
     trackqnty: "1",
     is_lottery: "1",
   });
+  const [existedTitleAndUpc, setExistedTitleAndUpc] = useState({
+    title: "",
+    upc: "",
+  });
+
+  let titleTimeoutId;
 
   const fetchProductDataById = async () => {
     setFetchDataLoading(true);
@@ -74,6 +86,10 @@ export default function AddLottery() {
             trackqnty: res?.data?.productdata?.trackqnty,
             is_lottery: "1",
             productid: res?.data?.productdata?.id,
+          });
+          setExistedTitleAndUpc({
+            title: res?.data?.productdata?.title,
+            upc: res?.data?.productdata?.upc,
           });
           setCollectionForEditProductData(
             res?.data?.productdata?.cotegory.split(",") || []
@@ -112,16 +128,46 @@ export default function AddLottery() {
     }));
   };
 
-  function handleInputChanges(event) {
+  async function handleInputChanges(event) {
     const { name, value, type, checked } = event.target;
 
-    const formattedValue = 
-    name === "price" 
-      ? CurrencyInputHelperFun(value) 
-      : name === "quantity" 
-        ? value.replace(/[^\d]/g, "") 
-        : value;
+    if (name === "title") {
+      if (action !== "update-lottery" || existedTitleAndUpc?.title !== value) {
+        CheckUniqueProductTitle(
+          value,
+          formValues,
+          LoginGetDashBoardRecordJson,
+          userTypeData,
+          titleTimeoutId,
+          dispatch,
+          setFormError,
+          checkProductTitle
+        );
+      }
+    }
 
+    if (name === "upc") {
+      if (action !== "update-lottery" || existedTitleAndUpc?.upc !== value) {
+        checkUniqueUpcCode(
+          value,
+          name,
+          LoginGetDashBoardRecordJson,
+          action,
+          id,
+          userTypeData,
+          titleTimeoutId,
+          dispatch,
+          checkUpcCodeSingle,
+          setFormError
+        );
+      }
+    }
+    const formattedValue =
+      name === "price"
+        ? CurrencyInputHelperFun(value)
+        : name === "quantity"
+          ? value.replace(/[^\d]/g, "")
+          : value;
 
     setFormValues((prevState) => ({
       ...prevState,
@@ -149,6 +195,9 @@ export default function AddLottery() {
     if (!formValues.title) {
       errors.title = "Product name is required";
     }
+    if (formError.title === "title already exists") {
+      errors.title = "title already exists";
+    }
 
     // Check if price is provided and is a valid number
     if (!formValues.price || isNaN(formValues.price) || formValues.price <= 0) {
@@ -171,6 +220,9 @@ export default function AddLottery() {
     if (!formValues.upc) {
       errors.upc = "upc is required";
     }
+    if (formError.upc === "upc already exists") {
+      errors.upc = "upc already exists";
+    }
 
     return errors;
   }
@@ -178,13 +230,13 @@ export default function AddLottery() {
   async function handleSubmit() {
     // Validate the form
     const validationErrors = validateForm();
-
     // If there are validation errors, update the error state and stop submission
     if (Object.keys(validationErrors).length > 0) {
       setFormError(validationErrors);
       setLoader(false);
       return;
     }
+
     // Proceed with form submission logic, e.g., API call
     try {
       setLoader(true);
@@ -234,7 +286,7 @@ export default function AddLottery() {
         action === "update-lottery"
           ? await dispatch(editProductData(formdata)).unwrap()
           : await dispatch(addProduct(formdata)).unwrap();
-  
+
       if (response.data.status === true) {
         ToastifyAlert(response.data.message, "success");
         navigate(-1);

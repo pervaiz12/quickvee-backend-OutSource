@@ -7,8 +7,8 @@ import { FormControl, TextField } from "@mui/material";
 
 export default function DatePickerSelect(props) {
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <FormControl fullWidth components={["DatePicker"]}>
+    <LocalizationProvider  dateAdapter={AdapterDayjs}>
+      <FormControl fullWidth sx={{mt:0.5}} components={["DatePicker"]}>
         <DatePicker
           minDate={props.minDate}
           onChange={props.onChange}

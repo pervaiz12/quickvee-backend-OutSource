@@ -94,6 +94,7 @@ export default function AddLoyaltyPointModal(props) {
             <Grid item xs={12} sm={6}>
               <label>Bonus Point Promotion Name</label>
               <BasicTextFields
+              sx={{ mt: 0.5 }}
                 type="text"
                 // placeholder="$1 ="
                 maxLength={15}
@@ -111,6 +112,7 @@ export default function AddLoyaltyPointModal(props) {
             <Grid item xs={12} sm={6}>
               <label>Bonus Points Awarded Per Dollar Spent</label>
               <BasicTextFields
+              sx={{ mt: 0.5 }}
                 type="text"
                 // placeholder=""
                 maxLength={9}
@@ -132,6 +134,7 @@ export default function AddLoyaltyPointModal(props) {
               <label>Start Date</label>
 
               <DatePickerSelect
+                
                 name="startDate"
                 minDate={dayjs()}
                 value={dayjs(props.dateValid?.startDate)}
