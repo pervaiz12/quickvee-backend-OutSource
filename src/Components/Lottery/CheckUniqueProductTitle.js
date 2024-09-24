@@ -7,7 +7,9 @@ export function CheckUniqueProductTitle(
   dispatch,
   setFormError,
   checkProductTitle,
+  setLoader
 ) {
+  setLoader(true)
   const formData = new FormData();
   formData.append("title", value);
   formData.append("id", formValues?.id);
@@ -36,5 +38,6 @@ export function CheckUniqueProductTitle(
       // Handle any errors from the API call
       console.error("Error:", error);
     }
+    setLoader(false)
   }, 500);
 }

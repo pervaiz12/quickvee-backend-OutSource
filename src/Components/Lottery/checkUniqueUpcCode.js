@@ -8,18 +8,19 @@ export function checkUniqueUpcCode(
   titleTimeoutId,
   dispatch,
   checkUpcCodeSingle,
-  setFormError
+  setFormError,
+  setLoader
 ) {
-
-    const data = {
-      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-      upc: value.trim(),
-      product_id: action === "update-lottery" ? id : "",
-      ...userTypeData,
-    };
-    clearTimeout(titleTimeoutId);
-    // Call the API after one second
-    titleTimeoutId = setTimeout(async () => {
+  setLoader(true)
+  const data = {
+    merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+    upc: value.trim(),
+    product_id: action === "update-lottery" ? id : "",
+    ...userTypeData,
+  };
+  clearTimeout(titleTimeoutId);
+  // Call the API after one second
+  titleTimeoutId = setTimeout(async () => {
       try {
         const res = await dispatch(checkUpcCodeSingle(data)).unwrap();
         console.log("res", res);
@@ -35,6 +36,6 @@ export function checkUniqueUpcCode(
         // Handle any errors from the API call
         console.error("Error:", error);
       }
+      setLoader(false)
     }, 500);
-  
 }

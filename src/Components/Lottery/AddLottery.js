@@ -141,7 +141,8 @@ export default function AddLottery() {
           titleTimeoutId,
           dispatch,
           setFormError,
-          checkProductTitle
+          checkProductTitle,
+          setLoader
         );
       }
     }
@@ -158,7 +159,9 @@ export default function AddLottery() {
           titleTimeoutId,
           dispatch,
           checkUpcCodeSingle,
-          setFormError
+          setFormError,
+          setLoader
+          
         );
       }
     }
