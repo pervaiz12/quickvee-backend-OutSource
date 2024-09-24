@@ -356,12 +356,14 @@ input[type="number"] {
 }
 
 .custom-tooltip {
-  background-color: white;
-  border: 1px solid #ccc;
+  width: 15rem;
+  color: #ffffff;
   padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transform: translateY(10px);
-  /* Adjust the value as needed */
+  background: #253338 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 4px;
+  opacity: 1;
 }
 
 .custom-box {

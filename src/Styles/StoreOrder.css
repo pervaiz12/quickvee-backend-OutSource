@@ -84,3 +84,7 @@
     font-family: CircularSTDMedium !important;
     font-size: 15px;
 }
+
+.recharts-rectangle{
+    border-radius: 0.75rem;
+}

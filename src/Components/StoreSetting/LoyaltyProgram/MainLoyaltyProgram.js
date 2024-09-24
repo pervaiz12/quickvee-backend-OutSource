@@ -4,6 +4,7 @@ import Switch from "@mui/material/Switch";
 import LoyaltyPointData from "./LoyaltyPointData";
 import LoyaltyProgramLogic from "./loyaltyProgramLogic";
 import AddLoyaltyPointModal from "./AddLoyaltyPointModal";
+import AlertModal from "../../../reuseableComponents/AlertModal";
 
 export default function LoyaltyProgram() {
   const {
@@ -36,6 +37,14 @@ export default function LoyaltyProgram() {
     updateChecked,
     handleUpdateLoyalty,
     handleDeleteLoyalty,
+    deleteModalOpen,
+    handleClosedModal,
+    confirmDeleteCategory,
+    deleteLoader,
+    deleteTableId,
+    showAlertMessage,
+    alertModalClosed,
+    handleCloseAlertModal,
   } = LoyaltyProgramLogic();
   return (
     <>
@@ -99,6 +108,11 @@ export default function LoyaltyProgram() {
         dataLoadingApi={dataLoadingApi}
         onClickEditIcon={onClickEditIcon}
         handleDeleteLoyalty={handleDeleteLoyalty}
+        deleteModalOpen={deleteModalOpen}
+        handleClosedModal={handleClosedModal}
+        confirmDeleteCategory={confirmDeleteCategory}
+        deleteLoader={deleteLoader}
+        deleteTableId={deleteTableId}
       />
       <AddLoyaltyPointModal
         openAddModel={openAddModel}
@@ -116,6 +130,11 @@ export default function LoyaltyProgram() {
         updateChecked={updateChecked}
         handleUpdateLoyalty={handleUpdateLoyalty}
         // InventorAwardedPoints={InventorAwardedPoints}
+      />
+      <AlertModal
+        headerText={showAlertMessage}
+        open={alertModalClosed}
+        onClose={handleCloseAlertModal}
       />
     </>
   );

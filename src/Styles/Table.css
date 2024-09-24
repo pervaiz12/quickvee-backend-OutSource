@@ -158,18 +158,30 @@ table.dataTable tbody td {
 .totalAmountCollected th{
     background-color: #0A64F9 !important;
 }
-
-
-.TaxesTable .TaxesTableHead{
-    background-color: #FFC400 !important;
-    color: #000000 !important;
+.BORHeaderLeft{
+    border-left: 1px solid #444E51 !important;
 }
-.totalBORDERUPDOWN{
-    border-bottom:  1px solid #000000 !important;
-    border-top:  1px solid #000000 !important;
+.BORBodyLeft{
+    /* border-right: 1px solid #E8E8E8 !important; */
+    border-left: 1px solid #cdcdcd !important;
 }
 .totalBORDERDOWN{
     border-bottom:  1px solid #000000 !important;
+}
+
+.Graph-dropdown-content{
+    position: absolute;
+    right: 2rem;
+    background-color: #fff;
+    box-shadow: 0 0px 7px rgb(225 225 225);
+    border: 1px solid #ddd;
+    z-index: 2;
+    font-size: 12px;
+    cursor: pointer;
+    color: #707070;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 0.5rem;
 }
 /* for new table css End */
 

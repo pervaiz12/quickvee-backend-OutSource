@@ -638,6 +638,11 @@ const menuItems = [
             link: "/store-reporting/sales-report",
           },
           {
+            id: 108,
+            text: "Sales Report",
+            link: "/store-reporting/new-sales-report",
+          },
+          {
             id: 77,
             text: "Item Sales",
             link: "/store-reporting/item-sales",
@@ -716,11 +721,11 @@ const menuItems = [
           //   link: "/store-reporting/discount-per-sales-report",
           // },
 
-          {
-            id: 105,
-            text: "New Item Sales Report",
-            link: "/store-reporting/new-item-sales-report",
-          },
+          // {
+          //   id: 105,
+          //   text: "New Item Sales Report",
+          //   link: "/store-reporting/new-item-sales-report",
+          // },
         ],
       },
       {
@@ -813,7 +818,11 @@ const menuItems = [
         ],
       },
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
-      { id: 80, text: "New Taxes Reports", link: "/store-reporting/new-taxes-report" },
+      {
+        id: 80,
+        text: "New Taxes Reports",
+        link: "/store-reporting/new-taxes-report",
+      },
       {
         id: 4,
         text: "Refunds",
@@ -882,8 +891,17 @@ const menuItems = [
       { id: 87, text: "Tip Report", link: "/store-reporting/tip-report" },
       { id: 88, text: "Coupon Report", link: "/store-reporting/coupon-report" },
       // { id: 1726033807930, text: "Shift Summary", link: "/store-reporting/shift-summary" },
-      { id: 1726123837135, text: "Register Closures", link: "/store-reporting/register-closures" },
+      {
+        id: 1726123837135,
+        text: "Register Closures",
+        link: "/store-reporting/register-closures",
+      },
 
+      {
+        id: 115,
+        text: "Lottery Payout Report",
+        link: "/store-reporting/lottery-payout-report",
+      },
 
       // {
       //   id: 89,
@@ -993,6 +1011,22 @@ const menuItems = [
         text: "Tag",
         link: "/tags",
       },
+      {
+        id: 1726725862759,
+        icon: (
+          <img
+            src={AttributesIcon}
+            alt="Lottery"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img src={AtriIcon} alt="Lottery" className="h-6 w-10 mt-4 mb-4" />
+        ),
+        text: "Lottery",
+        link: "/inventory/lottery",
+      },
+      
     ],
   },
   {

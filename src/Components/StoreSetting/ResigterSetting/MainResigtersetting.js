@@ -6,7 +6,6 @@ import CustomHeader from "../../../reuseableComponents/CustomHeader";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 
-
 const MainResigtersetting = () => {
   // const [alertmsg, setAlertMsg] = useState('');
   const { userTypeData } = useAuthDetails();
@@ -21,7 +20,7 @@ const MainResigtersetting = () => {
     // setShowModal,
     // scrollRef,,
     setsubmitmessage,
-    loader
+    loader,
   } = RegisterSettingFormLogic();
 
   useEffect(() => {
@@ -138,24 +137,27 @@ const MainResigtersetting = () => {
                       />
                       <span className="checkmark"></span>
                     </label>
-                    {userTypeData?.login_type?.toString()?.toLowerCase() == "superadmin" ? (
-                    <label className="q_resigter_setting_section">
-                      <p
-                        className={`${
-                          values.upload_paxlog ? "text-black" : ""
-                        } `}
-                      >
-                        Upload Paxlog
-                      </p>
-                      <input
-                        type="checkbox"
-                        name="upload_paxlog"
-                        checked={values.upload_paxlog}
-                        onChange={handleRegisterSettingInput}
-                      />
-                      <span className="checkmark"></span>
-                    </label>
-                    ) : ("")}
+                    {userTypeData?.login_type?.toString()?.toLowerCase() ==
+                    "superadmin" ? (
+                      <label className="q_resigter_setting_section">
+                        <p
+                          className={`${
+                            values.upload_paxlog ? "text-black" : ""
+                          } `}
+                        >
+                          Upload Paxlog
+                        </p>
+                        <input
+                          type="checkbox"
+                          name="upload_paxlog"
+                          checked={values.upload_paxlog}
+                          onChange={handleRegisterSettingInput}
+                        />
+                        <span className="checkmark"></span>
+                      </label>
+                    ) : (
+                      ""
+                    )}
 
                     <label className="q_resigter_setting_section">
                       <p
@@ -322,13 +324,13 @@ const MainResigtersetting = () => {
                         <span className="checkmark_section"></span>
                       </label>
                       <label className="q_setting_radio_resigter">
-                       <p
-                         className={`${
-                          values.barcode_msg === "5" ? "text-black" : ""
-                        } `}
-                       >
-                        Full Enter, Prompt
-                        </p> 
+                        <p
+                          className={`${
+                            values.barcode_msg === "5" ? "text-black" : ""
+                          } `}
+                        >
+                          Full Enter, Prompt
+                        </p>
                         <input
                           type="radio"
                           name="barcode_msg"
@@ -378,7 +380,6 @@ const MainResigtersetting = () => {
                         : ""}
                     </span>
                   </div>
-                 
                 </div>
               </div>
             </div>
@@ -388,10 +389,7 @@ const MainResigtersetting = () => {
 
       {/* payment method */}
 
-
-
       <div className="q-resigtersetting-main-page">
-
         <div className="fixed-bottom">
           <div
             className="q-resigtersetting-main-page text-end  box_shadow_div"
@@ -403,13 +401,13 @@ const MainResigtersetting = () => {
               disabled={loader}
             >
               {loader ? (
-                    <>
-                      <CircularProgress color={"inherit"} width={15} size={15} />{" "}
-                      Update
-                    </>
-                  ) : (
-                    "Update"
-                  )}
+                <>
+                  <CircularProgress color={"inherit"} width={15} size={15} />{" "}
+                  Update
+                </>
+              ) : (
+                "Update"
+              )}
             </button>
           </div>
         </div>

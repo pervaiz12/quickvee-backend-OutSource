@@ -50,15 +50,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-
-
-
 export default function PaymentCalDetails() {
-
-
-
-
-
   const Navigate = useNavigate();
   const OrderSummeryDetails = useSelector((state) => state.orderSummeryList);
   const [orderSummeryloader, setOrderSummeryloader] = useState(true);
@@ -77,8 +69,6 @@ export default function PaymentCalDetails() {
   const [imageLoading, setImageLoading] = useState(true);
   const location = useLocation();
 
-
-
   const isMobile = useMediaQuery("(max-width:480px)");
   const { merchant_id, order_id } = useParams();
 
@@ -86,9 +76,7 @@ export default function PaymentCalDetails() {
   const data = {
     merchant_id: merchant_id,
     order_id: order_id,
-
   };
-
 
   // dynamic requierd---------------------
   useEffect(() => {
@@ -111,7 +99,7 @@ export default function PaymentCalDetails() {
 
       setRefund(refund);
       setNonrefund(non_refund);
-      console.log("OrderSummeryDetails",OrderSummeryDetails)
+      console.log("OrderSummeryDetails", OrderSummeryDetails);
       if (OrderSummeryDetails.orderSummeryDetails.id_card_detail) {
         const originalDateString =
           OrderSummeryDetails.orderSummeryDetails.id_card_detail.i_card_ex_date;
@@ -130,19 +118,20 @@ export default function PaymentCalDetails() {
           DateOfBirthAccessor("");
         }
       }
-      console.log(OrderSummeryDetails?.orderSummeryDetails?.order_detail?.coupon_code)
-      if(!!OrderSummeryDetails?.orderSummeryDetails?.order_detail?.coupon_code)
-      {
-
+      console.log(
+        OrderSummeryDetails?.orderSummeryDetails?.order_detail?.coupon_code
+      );
+      if (
+        !!OrderSummeryDetails?.orderSummeryDetails?.order_detail?.coupon_code
+      ) {
         CouponData(
           OrderSummeryDetails?.orderSummeryDetails?.order_detail?.coupon_code
         );
       }
-        setPaymentMethod(
-          OrderSummeryDetails?.orderSummeryDetails?.order_detail?.payment_id
-        );
-
-    } 
+      setPaymentMethod(
+        OrderSummeryDetails?.orderSummeryDetails?.order_detail?.payment_id
+      );
+    }
   }, [
     OrderSummeryDetails,
     OrderSummeryDetails.loading,
@@ -150,7 +139,6 @@ export default function PaymentCalDetails() {
     OrderSummeryDetails.orderSummeryDetails,
   ]);
   function DateOfBirthAccessor(method) {
-
     if (method !== "") {
       const originalDate = new Date(method);
       const formattedDate = format(originalDate, "dd MMM yyyy");
@@ -219,7 +207,6 @@ export default function PaymentCalDetails() {
     transform: "translate(-50%, -50%)",
   };
 
-
   const getPaymentMethod = (orderSummeryData) => {
     const groupedPayments = orderSummeryData?.split_payments?.reduce(
       (acc, payment) => {
@@ -234,7 +221,7 @@ export default function PaymentCalDetails() {
       },
       {}
     );
-  
+
     return Object.keys(groupedPayments).map((key) => ({
       pay_type: key,
       total_amount: groupedPayments[key].toFixed(2),
@@ -246,9 +233,11 @@ export default function PaymentCalDetails() {
       (acc, payment) => {
         let { card_type, pay_amount } = payment;
         if (card_type) {
-         
           // card_type === "Debit/" || card_type === "Credit/"
-          if ( card_type.startsWith("Debit/") || card_type.startsWith("Credit/") )  {
+          if (
+            card_type.startsWith("Debit/") ||
+            card_type.startsWith("Credit/")
+          ) {
             card_type = "Credit Card";
           }
           if (!acc[card_type]) {
@@ -260,7 +249,7 @@ export default function PaymentCalDetails() {
       },
       {}
     );
-  
+
     // Filter out empty or undefined card types
     const result = Object.keys(groupedPayments)
       .filter((key) => key) // Ensure card_type is not empty
@@ -268,12 +257,11 @@ export default function PaymentCalDetails() {
         card_type: key,
         total_amount: groupedPayments[key].toFixed(2),
       }));
-  
+
     return result;
   };
   return (
     <>
-
       {OrderSummeryDetails?.loading ? (
         <div style={setPositionLoader}>
           <div className="loaderarea">
@@ -282,141 +270,144 @@ export default function PaymentCalDetails() {
         </div>
       ) : (
         <>
-          <div className="headerSummery">
-
-          </div>
+          <div className="headerSummery"></div>
 
           <div className="mainSection">
             <div className="MidMainSection">
               <div className="LeftMidMainSection">
-                {
-                  orderSummeryData &&
-                  orderSummeryData.order_detail &&
-                  orderSummeryData.order_detail.is_online === "0" ? (
-                      ""
-                  ):(
-                     <div className="left-font-header">
-                      <h1 className="orderSummery_head">Order Status</h1>
-                      <div className="container">
-                        <div className="row justify-content-center ">
-                          <div className="col-12 order-status-svg">
-                            <OrderSummery_pickup_delivery_status
-                              orderSummeryData={orderSummeryData}
-                            />
-                          </div>
+                {orderSummeryData &&
+                orderSummeryData.order_detail &&
+                orderSummeryData.order_detail.is_online === "0" ? (
+                  ""
+                ) : (
+                  <div className="left-font-header">
+                    <h1 className="orderSummery_head">Order Status</h1>
+                    <div className="container">
+                      <div className="row justify-content-center ">
+                        <div className="col-12 order-status-svg">
+                          <OrderSummery_pickup_delivery_status
+                            orderSummeryData={orderSummeryData}
+                          />
                         </div>
                       </div>
                     </div>
-                  )
-                }
-                 <h1 className="orderSummery_head">
-                        {/* {orderSummeryData &&
+                  </div>
+                )}
+                <h1 className="orderSummery_head">
+                  {/* {orderSummeryData &&
                           orderSummeryData.order_detail &&
                           orderSummeryData.order_detail.order_method.toLowerCase() ===
                           "pickup"
                           ? "Pickup"
                           : "Delivery"} */}
-                          {orderSummeryData &&
-                            orderSummeryData.order_detail &&
-                            orderSummeryData.order_detail.is_online === "0"
-                              ? "In-Store Order"
-                              : orderSummeryData.order_detail?.order_method.toLowerCase() === "pickup"
-                                ? "Pickup"
-                                : "Delivery"}
-                        {orderSummeryData.future_order_data &&
-                          orderSummeryData?.future_order_data !== "NOW" ? (
-                          <>
-                            <div
-                              style={{ marginTop: "0px" }}
-                              className="OrderSummeryItemDiv"
-                            >
-                              <p>
-                                Future Order -{" "}
-                                {formatDate(orderSummeryData?.future_order_data)}
-                              </p>
-                            </div>
-                          </>
-                        ) : null}
-                      </h1>
+                  {orderSummeryData &&
+                  orderSummeryData.order_detail &&
+                  orderSummeryData.order_detail.is_online === "0"
+                    ? "In-Store Order"
+                    : orderSummeryData.order_detail?.order_method.toLowerCase() ===
+                        "pickup"
+                      ? "Pickup"
+                      : "Delivery"}
+                  {orderSummeryData.future_order_data &&
+                  orderSummeryData?.future_order_data !== "NOW" ? (
+                    <>
+                      <div
+                        style={{ marginTop: "0px" }}
+                        className="OrderSummeryItemDiv"
+                      >
+                        <p>
+                          Future Order -{" "}
+                          {formatDate(orderSummeryData?.future_order_data)}
+                        </p>
+                      </div>
+                    </>
+                  ) : null}
+                </h1>
                 <div className="deliverySection">
                   {nonrefund && nonrefund.length > 0 && (
                     <>
                       <div className="OrderSummeryProductArea">
                         {nonrefund?.length
                           ? nonrefund?.map((result) => {
-                            return (
-                              <div
-                                className="OrderSummeryProductDiv"
-                                key={result?.line_item_id}
-                              >
-                                <div className="OrderSummeryProductR">
-                                  <div className="OrderSummeryProductL">
-                                    <img
-                                      onError={(e) => {
-                                        e.target.src = ProductDefaultImage;
-                                      }}
-                                      alt=""
-                                      src={
-                                        result?.img
-                                          ? result.img.split(",")[0]
-                                          : ProductDefaultImage
-                                      }
-                                      className="deliveryImageSize"
-                                      onLoad={() => setImageLoading(false)}
-                                    ></img>
-                                  </div>
-                                  <div className="OrderSummeryProductRTop">
-                                    <h4>{result?.name}</h4>
-                                  </div>
-                                  <div className="OrderSummeryProductRBottom">
-                                    <div className="OrderSummeryProductRBottomL">
-                                      <span>
-                                        $
-                                        {parseFloat(result?.price).toFixed(2)}
-                                      </span>
+                              return (
+                                <div
+                                  className="OrderSummeryProductDiv"
+                                  key={result?.line_item_id}
+                                >
+                                  <div className="OrderSummeryProductR">
+                                    <div className="OrderSummeryProductL">
+                                      <img
+                                        onError={(e) => {
+                                          e.target.src = ProductDefaultImage;
+                                        }}
+                                        alt=""
+                                        src={
+                                          result?.img
+                                            ? result.img.split(",")[0]
+                                            : ProductDefaultImage
+                                        }
+                                        className="deliveryImageSize"
+                                        onLoad={() => setImageLoading(false)}
+                                      ></img>
                                     </div>
-                                    <div className="OrderSummeryProductRBottomM">
-                                      {result?.is_refunded === "1"
-                                        ? `X${result?.refund_qty}`
-                                        : `X${result?.qty}`}
+                                    <div className="OrderSummeryProductRTop">
+                                      <h4>{result?.name}</h4>
                                     </div>
-                                    <div className="OrderSummeryProductRBottomR">
-                                      <span>
-                                        $
+                                    <div className="OrderSummeryProductRBottom">
+                                      <div className="OrderSummeryProductRBottomL">
+                                        <span>
+                                          $
+                                          {parseFloat(result?.price).toFixed(2)}
+                                        </span>
+                                      </div>
+                                      <div className="OrderSummeryProductRBottomM">
                                         {result?.is_refunded === "1"
-                                          ? parseFloat(
-                                            (result?.refund_qty *
-                                            result?.price) - result?.discount_amt
-                                          ).toFixed(2)
-                                          : parseFloat(
-                                            (result?.qty * result?.price) - result?.discount_amt
-                                          ).toFixed(2)}
-                                      </span>
-                                    </div>
-                                    {  +result?.discount_amt > 0 ? (
+                                          ? `X${result?.refund_qty}`
+                                          : `X${result?.qty}`}
+                                      </div>
+                                      <div className="OrderSummeryProductRBottomR">
+                                        <span>
+                                          $
+                                          {result?.is_refunded === "1"
+                                            ? parseFloat(
+                                                result?.refund_qty *
+                                                  result?.price -
+                                                  result?.discount_amt
+                                              ).toFixed(2)
+                                            : parseFloat(
+                                                result?.qty * result?.price -
+                                                  result?.discount_amt
+                                              ).toFixed(2)}
+                                        </span>
+                                      </div>
+                                      {+result?.discount_amt > 0 ? (
                                         <>
                                           <div className="OrderSummeryProductRBottomL itemDiscountContainer">
-                                              <h4>Item dicount</h4>
+                                            <h4>Item dicount</h4>
                                           </div>
                                           <div className="OrderSummeryProductRBottomR itemDiscountContainer discoutCONTAMT">
                                             <h4>
-                                              -${result?.is_refunded === "1"
+                                              -$
+                                              {result?.is_refunded === "1"
                                                 ? parseFloat(
-                                                  result?.refund_qty *
-                                                  result?.discount_amt
-                                                ).toFixed(2)
+                                                    result?.refund_qty *
+                                                      result?.discount_amt
+                                                  ).toFixed(2)
                                                 : parseFloat(
-                                                  result?.qty * result?.discount_amt
-                                                ).toFixed(2)}
+                                                    result?.qty *
+                                                      result?.discount_amt
+                                                  ).toFixed(2)}
                                             </h4>
                                           </div>
                                         </>
-                                      ) : ("") }
+                                      ) : (
+                                        ""
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            );
-                          })
+                              );
+                            })
                           : ""}
                       </div>
                     </>
@@ -432,46 +423,46 @@ export default function PaymentCalDetails() {
                       <div className="OrderSummeryProductArea">
                         {refund?.length
                           ? refund?.map((result) => {
-                            return (
-                              <div
-                                className="OrderSummeryProductDiv"
-                                key={result?.line_item_id}
-                              >
-                                <div className="OrderSummeryProductR">
-                                  <div className="OrderSummeryProductL">
-                                    <img
-                                      alt=""
-                                      onError={(e) => {
-                                        e.target.src = ProductDefaultImage;
-                                      }}
-                                      src={
-                                        result?.img
-                                          ? result.img.split(",")[0]
-                                          : ProductDefaultImage
-                                      }
-                                      className="deliveryImageSize"
-                                    ></img>
-                                  </div>
-                                  <div className="OrderSummeryProductRTop">
-                                    <h4>{result?.name}</h4>
-                                  </div>
-                                  <div className="OrderSummeryProductRBottom">
-                                    <div className="OrderSummeryProductRBottomL">
-                                      <span>
-                                        $
-                                        {parseFloat(result?.price).toFixed(2)}
-                                      </span>
+                              return (
+                                <div
+                                  className="OrderSummeryProductDiv"
+                                  key={result?.line_item_id}
+                                >
+                                  <div className="OrderSummeryProductR">
+                                    <div className="OrderSummeryProductL">
+                                      <img
+                                        alt=""
+                                        onError={(e) => {
+                                          e.target.src = ProductDefaultImage;
+                                        }}
+                                        src={
+                                          result?.img
+                                            ? result.img.split(",")[0]
+                                            : ProductDefaultImage
+                                        }
+                                        className="deliveryImageSize"
+                                      ></img>
                                     </div>
-                                    <div className="OrderSummeryProductRBottomM">
-                                      {/* {result?.is_refunded === '1'
+                                    <div className="OrderSummeryProductRTop">
+                                      <h4>{result?.name}</h4>
+                                    </div>
+                                    <div className="OrderSummeryProductRBottom">
+                                      <div className="OrderSummeryProductRBottomL">
+                                        <span>
+                                          $
+                                          {parseFloat(result?.price).toFixed(2)}
+                                        </span>
+                                      </div>
+                                      <div className="OrderSummeryProductRBottomM">
+                                        {/* {result?.is_refunded === '1'
                                           ? `X${result?.refund_qty}`
                                           : `X${result?.qty}`} */}
-                                      {`X${result?.refund_qty}`}
-                                    </div>
-                                    <div className="OrderSummeryProductRBottomR">
-                                      <span>
-                                        $
-                                        {/* {result?.is_refunded === '1'
+                                        {`X${result?.refund_qty}`}
+                                      </div>
+                                      <div className="OrderSummeryProductRBottomR">
+                                        <span>
+                                          $
+                                          {/* {result?.is_refunded === '1'
                                             ? parseFloat(
                                                 result?.refund_qty *
                                                   result?.price,
@@ -479,33 +470,38 @@ export default function PaymentCalDetails() {
                                             : parseFloat(
                                                 result?.qty * result?.price,
                                               ).toFixed(2)} */}
-                                        {parseFloat(
-                                          result?.refund_qty * result?.price - result?.discount_amt
-                                        ).toFixed(2)}
-                                      </span>
-                                    </div>
-                                    {  +result?.discount_amt > 0 ? (
+                                          {parseFloat(
+                                            result?.refund_qty * result?.price -
+                                              result?.discount_amt
+                                          ).toFixed(2)}
+                                        </span>
+                                      </div>
+                                      {+result?.discount_amt > 0 ? (
                                         <>
                                           <div className="OrderSummeryProductRBottomL itemDiscountContainer">
-                                              <h4>Item dicount</h4>
+                                            <h4>Item dicount</h4>
                                           </div>
                                           <div className="OrderSummeryProductRBottomR itemDiscountContainer discoutCONTAMT">
                                             <h4>
-                                              -${result?.is_refunded === "1"
+                                              -$
+                                              {result?.is_refunded === "1"
                                                 ? parseFloat(
-                                                  result?.refund_qty *
-                                                  result?.discount_amt
-                                                ).toFixed(2)
+                                                    result?.refund_qty *
+                                                      result?.discount_amt
+                                                  ).toFixed(2)
                                                 : parseFloat(
-                                                  result?.qty * result?.discount_amt
-                                                ).toFixed(2)}
+                                                    result?.qty *
+                                                      result?.discount_amt
+                                                  ).toFixed(2)}
                                             </h4>
                                           </div>
                                         </>
-                                      ) : ("") }
+                                      ) : (
+                                        ""
+                                      )}
+                                    </div>
                                   </div>
-                                </div>
-                                {/* <div className="OrderSummeryProductRBottomM">
+                                  {/* <div className="OrderSummeryProductRBottomM">
                                     {result?.is_refunded === '1'
                                       ? `X${result?.refund_qty}`
                                       : `X${result?.qty}`}
@@ -522,9 +518,9 @@ export default function PaymentCalDetails() {
                                           ).toFixed(2)}
                                     </span>
                                   </div> */}
-                              </div>
-                            );
-                          })
+                                </div>
+                              );
+                            })
                           : ""}
                       </div>
                     </>
@@ -552,23 +548,23 @@ export default function PaymentCalDetails() {
                             ).toFixed(2)}
                         </span>
                       </p>
-                      {
-                        orderSummeryData.order_detail?.cash_discounting > 0 ?
-                      <p>
-                        NCA
-                        <span>
-                          $
-                          {orderSummeryData &&
-                            orderSummeryData.order_detail &&
-                            parseFloat(
-                              orderSummeryData.order_detail?.cash_discounting
-                            ).toFixed(2)}
-                        </span>
-                      </p>
-                      :""
-                      }
+                      {orderSummeryData.order_detail?.cash_discounting > 0 ? (
+                        <p>
+                          NCA
+                          <span>
+                            $
+                            {orderSummeryData &&
+                              orderSummeryData.order_detail &&
+                              parseFloat(
+                                orderSummeryData.order_detail?.cash_discounting
+                              ).toFixed(2)}
+                          </span>
+                        </p>
+                      ) : (
+                        ""
+                      )}
                       {orderSummeryData?.order_detail?.del_fee ||
-                        parseFloat(orderSummeryData?.order_detail?.del_fee) >
+                      parseFloat(orderSummeryData?.order_detail?.del_fee) >
                         0 ? (
                         " "
                       ) : (
@@ -578,84 +574,77 @@ export default function PaymentCalDetails() {
                             $
                             {parseFloat(
                               orderSummeryData &&
-                              orderSummeryData.order_detail &&
-                              orderSummeryData.order_detail.del_fee
+                                orderSummeryData.order_detail &&
+                                orderSummeryData.order_detail.del_fee
                             ).toFixed(2)}
                           </span>
                         </p>
                       )}
-                      
+
                       {
-                      //  !!orderSummeryData.order_detail?.discount && +orderSummeryData.order_detail?.discount > 0
-                       !!couponDetails?.coupon_code && couponDetails?.coupon_code_amt > 0 ? (
-                        // couponDetails?.coupon_code_amt + couponDetails?.loyalty_point_amt_spent > 0 ? (
-<>
-<p>
-                        {couponDetails?.coupon_code === "Discount" ?(
-                            <>
-                            {couponDetails?.coupon_code}
-                            </>
-                          ):(
-                            <>
-                             Coupon ({couponDetails?.coupon_code})
-                            </>
-                          )
-                        }
-                        <span>
-                          - $
-                          {couponDetails &&
-                            couponDetails?.coupon_code_amt &&
-                            parseFloat(
-                              couponDetails?.coupon_code_amt
-                            ).toFixed(2)}
-                        </span>
-                      </p>
-</>
-                        ):(
-                      <>
-                      {couponDetails.coupon_code !== "" &&
-                        !!couponDetails.coupon_code_amt ? (
-                        <p>
-                          Coupon ({couponDetails.coupon_code})
-                          <span>
-                            $
-                            {parseFloat(couponDetails.coupon_code_amt).toFixed(
-                              2
+                        //  !!orderSummeryData.order_detail?.discount && +orderSummeryData.order_detail?.discount > 0
+                        !!couponDetails?.coupon_code &&
+                        couponDetails?.coupon_code_amt > 0 ? (
+                          // couponDetails?.coupon_code_amt + couponDetails?.loyalty_point_amt_spent > 0 ? (
+                          <>
+                            <p>
+                              {couponDetails?.coupon_code === "Discount" ? (
+                                <>{couponDetails?.coupon_code}</>
+                              ) : (
+                                <>Coupon ({couponDetails?.coupon_code})</>
+                              )}
+                              <span>
+                                - $
+                                {couponDetails &&
+                                  couponDetails?.coupon_code_amt &&
+                                  parseFloat(
+                                    couponDetails?.coupon_code_amt
+                                  ).toFixed(2)}
+                              </span>
+                            </p>
+                          </>
+                        ) : (
+                          <>
+                            {couponDetails.coupon_code !== "" &&
+                            !!couponDetails.coupon_code_amt ? (
+                              <p>
+                                Coupon ({couponDetails.coupon_code})
+                                <span>
+                                  $
+                                  {parseFloat(
+                                    couponDetails.coupon_code_amt
+                                  ).toFixed(2)}
+                                </span>
+                              </p>
+                            ) : (
+                              ""
                             )}
-                          </span>
-                        </p>
-                      ) : (
-                        ""
-                      )}
-</>
+                          </>
                         )
                       }
 
-
-                  {orderSummeryData.order_detail?.loyalty_point_spent !== "" &&
-                        +orderSummeryData.order_detail?.loyalty_point_spent > 0 ? (
+                      {orderSummeryData.order_detail?.loyalty_point_spent !==
+                        "" &&
+                      +orderSummeryData.order_detail?.loyalty_point_spent >
+                        0 ? (
                         <p>
                           Points Applied ()
                           <span>
                             $
-                            {parseFloat( orderSummeryData.order_detail?.loyalty_point_spent).toFixed(
-                              2
-                            )}
+                            {parseFloat(
+                              orderSummeryData.order_detail?.loyalty_point_spent
+                            ).toFixed(2)}
                           </span>
                         </p>
                       ) : (
                         ""
                       )}
 
-
-
-
-                   
                       {orderSummeryData &&
                         orderSummeryData.order_detail &&
                         orderSummeryData.order_detail.con_fee &&
                         parseFloat(orderSummeryData.order_detail.con_fee) >
-                        0 && (
+                          0 && (
                           <p>
                             Convenience Fee
                             <span>
@@ -666,32 +655,30 @@ export default function PaymentCalDetails() {
                             </span>
                           </p>
                         )}
-                      {
-                        +orderSummeryData?.order_detail?.tax > 0 ? (
-                          <>
+                      {+orderSummeryData?.order_detail?.tax > 0 ? (
+                        <>
                           <p>
-                        Sales Tax (
-                        {orderSummeryData &&
-                          orderSummeryData.order_detail &&
-                          orderSummeryData.order_detail.tax_rate}
-                        %)
-                        <span>
-                          $
-                          {orderSummeryData &&
-                            orderSummeryData?.order_detail &&
-                            orderSummeryData?.order_detail?.tax &&
-                            parseFloat(
-                              orderSummeryData?.order_detail?.tax
-                            ).toFixed(2)}
-                        </span>
-                      </p>
-                          </>
-                        ):(
-                         ""
-                        )
-                      }
+                            Sales Tax (
+                            {orderSummeryData &&
+                              orderSummeryData.order_detail &&
+                              orderSummeryData.order_detail.tax_rate}
+                            %)
+                            <span>
+                              $
+                              {orderSummeryData &&
+                                orderSummeryData?.order_detail &&
+                                orderSummeryData?.order_detail?.tax &&
+                                parseFloat(
+                                  orderSummeryData?.order_detail?.tax
+                                ).toFixed(2)}
+                            </span>
+                          </p>
+                        </>
+                      ) : (
+                        ""
+                      )}
                       {orderSummeryData?.order_detail?.tip &&
-                        parseFloat(orderSummeryData?.order_detail?.tip) > 0 ? (
+                      parseFloat(orderSummeryData?.order_detail?.tip) > 0 ? (
                         <p>
                           Tip{" "}
                           <span>
@@ -706,14 +693,14 @@ export default function PaymentCalDetails() {
                       )}
                       {orderSummeryData?.order_detail?.other_taxes_desc
                         ? getOtherTaxes(
-                          JSON.parse(
-                            orderSummeryData?.order_detail?.other_taxes_desc
+                            JSON.parse(
+                              orderSummeryData?.order_detail?.other_taxes_desc
+                            )
                           )
-                        )
                         : ""}
                       {orderSummeryData &&
-                        orderSummeryData.order_detail &&
-                        orderSummeryData.order_detail.is_refunded == "1" ? (
+                      orderSummeryData.order_detail &&
+                      orderSummeryData.order_detail.is_refunded == "1" ? (
                         <p className="yellowclr">
                           Refunded Amount
                           <span>
@@ -747,12 +734,18 @@ export default function PaymentCalDetails() {
                                   couponDetails.gift_card_amount
                                 );
                               }
-                              if (+orderSummeryData.order_detail?.cash_back_amt > 0) {
+                              if (
+                                +orderSummeryData.order_detail?.cash_back_amt >
+                                0
+                              ) {
                                 grandTotal += parseFloat(
                                   orderSummeryData.order_detail?.cash_back_amt
                                 );
                               }
-                              if (+orderSummeryData.order_detail?.cash_back_fee > 0) {
+                              if (
+                                +orderSummeryData.order_detail?.cash_back_fee >
+                                0
+                              ) {
                                 grandTotal += parseFloat(
                                   orderSummeryData.order_detail?.cash_back_fee
                                 );
@@ -766,11 +759,12 @@ export default function PaymentCalDetails() {
                                   orderSummeryData.order_detail.refund_amount
                                 );
                               }
-                              return `$${parseFloat(grandTotal) <= 0.02 &&
-                                  orderSummeryData?.order_detail?.m_status === "7"
+                              return `$${
+                                parseFloat(grandTotal) <= 0.02 &&
+                                orderSummeryData?.order_detail?.m_status === "7"
                                   ? "0.00"
                                   : grandTotal.toFixed(2)
-                                }`;
+                              }`;
                             })()}
                           </span>
                         </p>
@@ -815,234 +809,217 @@ export default function PaymentCalDetails() {
                         couponDetails.store_credit_amt_spent > 0 ||
                         orderSummeryData?.order_detail ||
                         couponDetails.loyalty_point_earned > 0) && (
-                          <Accordion
-                            // style={{}}
-                            className="moreordersummary"
+                        <Accordion
+                          // style={{}}
+                          className="moreordersummary"
+                        >
+                          <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            className="moreordersummary-container ps-0"
                           >
-                            <AccordionSummary
-                              expandIcon={<ExpandMoreIcon />}
-                              className="moreordersummary-container ps-0"
-                            >
-                              <p className="blackclr pb-0"> View Details</p>
-                            </AccordionSummary>
-                            <AccordionDetails className="dropOrdersummary">
-                              {couponDetails.loyalty_point_spent > 0 ? (
-                                <p className="">
-                                  Points Applied (
+                            <p className="blackclr pb-0"> View Details</p>
+                          </AccordionSummary>
+                          <AccordionDetails className="dropOrdersummary">
+                            {couponDetails.loyalty_point_spent > 0 ? (
+                              <p className="">
+                                Points Applied (
+                                {parseFloat(
+                                  couponDetails.loyalty_point_spent
+                                ).toFixed(2)}
+                                )
+                                <span>
+                                  - $
                                   {parseFloat(
-                                    couponDetails.loyalty_point_spent
+                                    couponDetails.loyalty_point_amt_spent
                                   ).toFixed(2)}
-                                  )
-                                  <span>
-                                    - $
-                                    {parseFloat(
-                                      couponDetails.loyalty_point_amt_spent
-                                    ).toFixed(2)}
-                                  </span>
-                                </p>
-                              ) : (
-                                ""
-                              )}
-
-                              {couponDetails.total_lottery_payout > 0 ? (
-                                <p className="" style={{color:"#F55353"}}>
-                                  Lottery Payout
-                                  <span>
-                                    - $
-                                    {parseFloat(
-                                      couponDetails.total_lottery_payout
-                                    ).toFixed(2)}
-                                  </span>
-                                </p>
-                              ) : (
-                                ""
-                              )}
-                              {couponDetails.total_scratcher_payout > 0 ? (
-                                <p className="" style={{color:"#F55353"}}>
-                                  Scratcher Payout
-                                  <span>
-                                    - $
-                                    {parseFloat(
-                                      couponDetails.total_scratcher_payout
-                                    ).toFixed(2)}
-                                  </span>
-                                </p>
-                              ) : (
-                                ""
-                              )}
-                              {couponDetails.gift_card_amount > 0 ? (
-                                <p className="">
-                                  Gift Card Applied
-                                   {/* (
+                                </span>
+                              </p>
+                            ) : (
+                              ""
+                            )}
+                            {couponDetails.gift_card_amount > 0 ? (
+                              <p className="">
+                                Gift Card Applied
+                                {/* (
                                   {parseFloat(
                                     couponDetails?.gift_card_number
                                   ).toFixed(2)}
                                   ) */}
-                                  <span>
-                                    - $
-                                    {parseFloat(
-                                      couponDetails?.gift_card_amount
-                                    ).toFixed(2)}
-                                  </span>
-                                </p>
-                              ) : (
-                                ""
-                              )}
-                              {
-                                orderSummeryData.split_payments?.length > 0 ?(
-                                  <>
-                                   { getPaymentMethod(orderSummeryData)?.map((op) => {
-                                      return (
-                                        <>
-                                          <p  style={{ textTransform: 'capitalize'}}>{op?.pay_type}
+                                <span>
+                                  - $
+                                  {parseFloat(
+                                    couponDetails?.gift_card_amount
+                                  ).toFixed(2)}
+                                </span>
+                              </p>
+                            ) : (
+                              ""
+                            )}
+                            {orderSummeryData.split_payments?.length > 0 ? (
+                              <>
+                                {getPaymentMethod(orderSummeryData)?.map(
+                                  (op) => {
+                                    return (
+                                      <>
+                                        <p
+                                          style={{
+                                            textTransform: "capitalize",
+                                          }}
+                                        >
+                                          {op?.pay_type}
                                           <span> ${op?.total_amount}</span>
-                                          </p>
-                                        </>
-                                      );
-                                    })}
-                                    { getPaymentMethodEBT(orderSummeryData)?.map((op) => {
-                                      const formattedCardType = op?.card_type
-                                      ?.replace('CashEbt/', 'Cash EBT')
-                                      ?.replace('FoodEbt/', 'Food EBT');
-                                      return (
-                                        <>
-                                          <p  style={{ textTransform: 'capitalize'}}>{formattedCardType}
+                                        </p>
+                                      </>
+                                    );
+                                  }
+                                )}
+                                {getPaymentMethodEBT(orderSummeryData)?.map(
+                                  (op) => {
+                                    const formattedCardType = op?.card_type
+                                      ?.replace("CashEbt/", "Cash EBT")
+                                      ?.replace("FoodEbt/", "Food EBT");
+                                    return (
+                                      <>
+                                        <p
+                                          style={{
+                                            textTransform: "capitalize",
+                                          }}
+                                        >
+                                          {formattedCardType}
                                           <span> ${op?.total_amount}</span>
-                                          </p>
-                                        </>
-                                      );
-                                    })}
-                                  </>
-                                ):(
-                                  <>
-                                 {orderSummeryData &&
+                                        </p>
+                                      </>
+                                    );
+                                  }
+                                )}
+                              </>
+                            ) : (
+                              <>
+                                {orderSummeryData &&
                                 orderSummeryData.order_detail ? (
-                                <p className="">
-                                  {/* {paymentMethod &&
+                                  <p className="">
+                                    {/* {paymentMethod &&
                                     paymentMethod.toLowerCase() === "cash"
                                     ? "Paid via Cash"
                                     : "Paid via Card"} */}
-                                  {/* <span> */}
-                                  {(() => {
-                                    const { card_type } = orderSummeryData.order_detail;
-                                    let paymentMethodDisplay = 'Paid via Card'; // Default message
+                                    {/* <span> */}
+                                    {(() => {
+                                      const { card_type } =
+                                        orderSummeryData.order_detail;
+                                      let paymentMethodDisplay =
+                                        "Paid via Card"; // Default message
 
-                                    // Check if card_type exists and adjust display text
-                                    if (card_type) {
-                                      if (card_type.startsWith('CashEbt/')) {
-                                        paymentMethodDisplay = 'Cash EBT';
-                                      } else if (card_type.startsWith('FoodEbt/')) {
-                                        paymentMethodDisplay = 'Food EBT';
+                                      // Check if card_type exists and adjust display text
+                                      if (card_type) {
+                                        if (card_type.startsWith("CashEbt/")) {
+                                          paymentMethodDisplay = "Cash EBT";
+                                        } else if (
+                                          card_type.startsWith("FoodEbt/")
+                                        ) {
+                                          paymentMethodDisplay = "Food EBT";
+                                        }
+                                      } else if (
+                                        paymentMethod &&
+                                        paymentMethod.toLowerCase() === "cash"
+                                      ) {
+                                        paymentMethodDisplay = "Paid via Cash";
                                       }
-                                    } else if (paymentMethod && paymentMethod.toLowerCase() === 'cash') {
-                                      paymentMethodDisplay = 'Paid via Cash';
-                                    }
 
-                                    let payment = parseFloat(orderSummeryData.order_detail.amt);
-                                    // Adjust payment based on store credit
-                                    if (couponDetails.store_credit_amt_spent > 0) {
-                                      payment -= parseFloat(couponDetails.store_credit_amt_spent);
-                                    }
-                                    if (couponDetails.total_lottery_payout > 0) {
-                                      payment -= parseFloat(couponDetails.total_lottery_payout);
-                                    }
-                                    if (couponDetails.total_scratcher_payout > 0) {
-                                      payment -= parseFloat(couponDetails.total_scratcher_payout);
-                                    }
-                                    if(payment < 0){
-                                      return
-                                    }
+                                      return (
+                                        <>
+                                          {paymentMethodDisplay}
+                                          <span>
+                                            {(() => {
+                                              let payment = parseFloat(
+                                                orderSummeryData.order_detail
+                                                  .amt
+                                              );
 
-                                    return (
-                                      <>
-                                        {paymentMethodDisplay}
-                                        <span>
-                                          {(() => {
-                                            // let payment = parseFloat(orderSummeryData.order_detail.amt);
-                                            // // Adjust payment based on store credit
-                                            // if (couponDetails.store_credit_amt_spent > 0) {
-                                            //   payment -= parseFloat(couponDetails.store_credit_amt_spent);
-                                            // }
-                                            // if (couponDetails.total_lottery_payout > 0) {
-                                            //   payment -= parseFloat(couponDetails.total_lottery_payout);
-                                            // }
-                                            // if (couponDetails.total_scratcher_payout > 0) {
-                                            //   payment -= parseFloat(couponDetails.total_scratcher_payout);
-                                            // }
+                                              // Adjust payment based on store credit
+                                              if (
+                                                couponDetails.store_credit_amt_spent >
+                                                0
+                                              ) {
+                                                payment -= parseFloat(
+                                                  couponDetails.store_credit_amt_spent
+                                                );
+                                              }
 
-                                            // Format and return payment amount
-                                            return `$${payment.toFixed(2)}`;
-                                          })()}
-                                        </span>
-                                      </>
-                                    );
-                                  })()}
-                                </p>
-                              ) : (
-                                ""
-                              )}
-                                  </>
-                                )
-                              }
+                                              // Format and return payment amount
+                                              return `$${payment.toFixed(2)}`;
+                                            })()}
+                                          </span>
+                                        </>
+                                      );
+                                    })()}
+                                  </p>
+                                ) : (
+                                  ""
+                                )}
+                              </>
+                            )}
 
-                              {couponDetails.store_credit_amt_spent > 0 ? (
-                                <p className="">
-                                  Paid via Store Credit{" "}
-                                  <span>
-                                    $
-                                    {parseFloat(
-                                      couponDetails.store_credit_amt_spent
-                                    ).toFixed(2)}
-                                  </span>
-                                </p>
-                              ) : (
-                                ""
-                              )}
-                              
+                            {couponDetails.store_credit_amt_spent > 0 ? (
+                              <p className="">
+                                Paid via Store Credit{" "}
+                                <span>
+                                  $
+                                  {parseFloat(
+                                    couponDetails.store_credit_amt_spent
+                                  ).toFixed(2)}
+                                </span>
+                              </p>
+                            ) : (
+                              ""
+                            )}
 
-                              {couponDetails?.loyalty_point_earned > 0 ? (
-                                <p className="yellowclr">
-                                  {" "}
-                                  Points Awarded{" "}
-                                  <span>
-                                    {parseFloat(
-                                      couponDetails?.loyalty_point_earned
-                                    ).toFixed(2)}
-                                  </span>
-                                </p>
-                              ) : (
-                                ""
-                              )}
+                            {couponDetails?.loyalty_point_earned > 0 ? (
+                              <p className="yellowclr">
+                                {" "}
+                                Points Awarded{" "}
+                                <span>
+                                  {parseFloat(
+                                    couponDetails?.loyalty_point_earned
+                                  ).toFixed(2)}
+                                </span>
+                              </p>
+                            ) : (
+                              ""
+                            )}
 
-                              {+orderSummeryData.order_detail?.cash_back_amt > 0 ? (
-                                <p className="">
-                                  {" "}
-                                  Cashback Amount{" "}
-                                  <span>
-                                    ${parseFloat(
-                                      orderSummeryData.order_detail?.cash_back_amt
-                                    ).toFixed(2)}
-                                  </span>
-                                </p>
-                              ) : (
-                                ""
-                              )}
-                              {+orderSummeryData.order_detail.cash_back_fee > 0 ? (
-                                <p className="">
-                                  {" "}
-                                  Cashback Fee{" "}
-                                  <span>
-                                    ${parseFloat(
-                                      orderSummeryData.order_detail.cash_back_fee
-                                    ).toFixed(2)}
-                                  </span>
-                                </p>
-                              ) : (
-                                ""
-                              )}
-                            </AccordionDetails>
-                          </Accordion>
-                        )}
+                            {+orderSummeryData.order_detail?.cash_back_amt >
+                            0 ? (
+                              <p className="">
+                                {" "}
+                                Cashback Amount{" "}
+                                <span>
+                                  $
+                                  {parseFloat(
+                                    orderSummeryData.order_detail?.cash_back_amt
+                                  ).toFixed(2)}
+                                </span>
+                              </p>
+                            ) : (
+                              ""
+                            )}
+                            {+orderSummeryData.order_detail.cash_back_fee >
+                            0 ? (
+                              <p className="">
+                                {" "}
+                                Cashback Fee{" "}
+                                <span>
+                                  $
+                                  {parseFloat(
+                                    orderSummeryData.order_detail.cash_back_fee
+                                  ).toFixed(2)}
+                                </span>
+                              </p>
+                            ) : (
+                              ""
+                            )}
+                          </AccordionDetails>
+                        </Accordion>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -1107,8 +1084,8 @@ export default function PaymentCalDetails() {
                     </span>
                   </p>
                   {orderSummeryData &&
-                    orderSummeryData.order_detail &&
-                    orderSummeryData.order_detail?.card_num ? (
+                  orderSummeryData.order_detail &&
+                  orderSummeryData.order_detail?.card_num ? (
                     <p>
                       Card Number (Last 4 Digit)
                       <span>
@@ -1116,7 +1093,7 @@ export default function PaymentCalDetails() {
                           orderSummeryData.order_detail &&
                           orderSummeryData.order_detail?.card_num &&
                           formatCardNumber(
-                            orderSummeryData.order_detail?.card_num,
+                            orderSummeryData.order_detail?.card_num
                           )}
                       </span>
                     </p>
@@ -1143,11 +1120,12 @@ export default function PaymentCalDetails() {
                               orderSummeryData.order_detail.refund_amount
                             );
                           }
-                          return `$${parseFloat(grandTotal) <= 0.02 &&
-                              orderSummeryData?.order_detail?.m_status === "7"
+                          return `$${
+                            parseFloat(grandTotal) <= 0.02 &&
+                            orderSummeryData?.order_detail?.m_status === "7"
                               ? "0.00"
                               : parseFloat(grandTotal).toFixed(2)
-                            }`;
+                          }`;
                         })()}
                       </span>
                     </p>
@@ -1157,59 +1135,61 @@ export default function PaymentCalDetails() {
                 </div>
                 {/* <div className="orderSummeryCustomerDetailsArea">
                   <h1 className="orderSummery_head">Customer Details</h1> */}
-                  {orderSummeryData &&
-                    orderSummeryData.order_detail &&
-                    orderSummeryData.order_detail?.order_method.toLowerCase() ===
-                    "pickup" && (orderSummeryData.order_detail.billing_name ||
-                      orderSummeryData.order_detail.customer_phone ||
-                      orderSummeryData.order_detail.delivery_phn ||
-                      orderSummeryData.order_detail.customer_email ||
-                      orderSummeryData.order_detail.email) &&  (
-                      <div className="orderSummeryCustomerDetailsArea">
-                        <h1 className="orderSummery_head">Customer Details</h1>
-                        <div className="orderSummeryCustomerDetailsInner">
-                          <h5>
-                            {orderSummeryData &&
-                              orderSummeryData.order_detail &&
-                              orderSummeryData.order_detail?.billing_name}{" "}
-                          </h5>
-                          <p className="flex items-center">
-                            {orderSummeryData.order_detail &&
-                              !!orderSummeryData.order_detail.customer_phone || !!orderSummeryData.order_detail.delivery_phn ? (
-                              <div className="pe-1">
-                                <img src={imagePhone} alt="Pickup phone" />
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                            <div>
-                                {orderSummeryData.order_detail.customer_phone ||
-                                orderSummeryData.order_detail.delivery_phn}
+                {orderSummeryData &&
+                  orderSummeryData.order_detail &&
+                  orderSummeryData.order_detail?.order_method.toLowerCase() ===
+                    "pickup" &&
+                  (orderSummeryData.order_detail.billing_name ||
+                    orderSummeryData.order_detail.customer_phone ||
+                    orderSummeryData.order_detail.delivery_phn ||
+                    orderSummeryData.order_detail.customer_email ||
+                    orderSummeryData.order_detail.email) && (
+                    <div className="orderSummeryCustomerDetailsArea">
+                      <h1 className="orderSummery_head">Customer Details</h1>
+                      <div className="orderSummeryCustomerDetailsInner">
+                        <h5>
+                          {orderSummeryData &&
+                            orderSummeryData.order_detail &&
+                            orderSummeryData.order_detail?.billing_name}{" "}
+                        </h5>
+                        <p className="flex items-center">
+                          {(orderSummeryData.order_detail &&
+                            !!orderSummeryData.order_detail.customer_phone) ||
+                          !!orderSummeryData.order_detail.delivery_phn ? (
+                            <div className="pe-1">
+                              <img src={imagePhone} alt="Pickup phone" />
                             </div>
-                          </p>
-                          <p className="flex items-center">
-                          {orderSummeryData.order_detail &&
-                              !!orderSummeryData.order_detail.customer_email || !!orderSummeryData.order_detail.email ? (
-                              <div className="pe-1">
-                                <img src={emailLogo} alt="Email" />
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                            <div>
-                                {orderSummeryData.order_detail.customer_email ||
-                                orderSummeryData.order_detail.email}
+                          ) : (
+                            ""
+                          )}
+                          <div>
+                            {orderSummeryData.order_detail.customer_phone ||
+                              orderSummeryData.order_detail.delivery_phn}
+                          </div>
+                        </p>
+                        <p className="flex items-center">
+                          {(orderSummeryData.order_detail &&
+                            !!orderSummeryData.order_detail.customer_email) ||
+                          !!orderSummeryData.order_detail.email ? (
+                            <div className="pe-1">
+                              <img src={emailLogo} alt="Email" />
                             </div>
-
-                          </p>
-                        </div>
+                          ) : (
+                            ""
+                          )}
+                          <div>
+                            {orderSummeryData.order_detail.customer_email ||
+                              orderSummeryData.order_detail.email}
+                          </div>
+                        </p>
                       </div>
-                    )}
-                  {orderSummeryData &&
-                    orderSummeryData.order_detail &&
-                    orderSummeryData.order_detail.order_method.toLowerCase() ===
-                    "delivery"  && (
-                      <div className="orderSummeryCustomerDetailsArea">
+                    </div>
+                  )}
+                {orderSummeryData &&
+                  orderSummeryData.order_detail &&
+                  orderSummeryData.order_detail.order_method.toLowerCase() ===
+                    "delivery" && (
+                    <div className="orderSummeryCustomerDetailsArea">
                       <h1 className="orderSummery_head">Customer Details</h1>
                       <div className="orderSummeryCustomerDetailsInner">
                         <h5>
@@ -1222,8 +1202,8 @@ export default function PaymentCalDetails() {
                         </h5>
                         <p className="flex items-center">
                           {orderSummeryData &&
-                            orderSummeryData.order_detail &&
-                            orderSummeryData.order_detail.delivery_addr ? (
+                          orderSummeryData.order_detail &&
+                          orderSummeryData.order_detail.delivery_addr ? (
                             <img src={imageAddress} alt="delivery address" />
                           ) : (
                             ""
@@ -1231,8 +1211,8 @@ export default function PaymentCalDetails() {
                           {""}
                           {orderSummeryData && orderSummeryData.order_detail
                             ? removeHtmlTags(
-                              orderSummeryData.order_detail.delivery_addr
-                            )
+                                orderSummeryData.order_detail.delivery_addr
+                              )
                             : ""}
                         </p>
                         <p className="flex items-center">
@@ -1243,94 +1223,96 @@ export default function PaymentCalDetails() {
                             orderSummeryData.order_detail.delivery_phn}
                         </p>
                       </div>
-                      </div>
-                    )}
+                    </div>
+                  )}
                 {/* </div> */}
 
-
-                    <div className="orderSummeryIdentification">
-                    {orderSummeryData?.id_card_detail &&
-                    ( (orderSummeryData.id_card_detail.i_card_number &&
-                      orderSummeryData.id_card_detail.i_card_number !== "verify_non_id_person") ||
+                <div className="orderSummeryIdentification">
+                  {orderSummeryData?.id_card_detail &&
+                    ((orderSummeryData.id_card_detail.i_card_number &&
+                      orderSummeryData.id_card_detail.i_card_number !==
+                        "verify_non_id_person") ||
                       dateFormat ||
                       (dateOfBirth && dateOfBirth !== "31 Dec 1969")) && (
-                        <>
-                      <h1 className="orderSummery_head">
-                        {orderSummeryData.order_detail?.is_online === "0"
-                          ? "Identification Details" : "Identification Card"}
+                      <>
+                        <h1 className="orderSummery_head">
+                          {orderSummeryData.order_detail?.is_online === "0"
+                            ? "Identification Details"
+                            : "Identification Card"}
                         </h1>
-                      <div className="orderSummeryRightTopC">
-                        {orderSummeryData.id_card_detail &&
+                        <div className="orderSummeryRightTopC">
+                          {orderSummeryData.id_card_detail &&
                           orderSummeryData.id_card_detail.i_card_number ? (
-                          <p>
-                            ID Number
-                            <span>
-                              {orderSummeryData &&
-                                orderSummeryData.id_card_detail &&
-                                orderSummeryData.id_card_detail.i_card_number}
-                            </span>
-                          </p>
-                        ) : ("")}
-                        {orderSummeryData.id_card_detail && dateFormat ? (
-                          <p>
-                            Expiration Date
-                            <span>
-                              {orderSummeryData &&
-                                orderSummeryData.id_card_detail &&
-                                dateFormat}
-                            </span>
-                          </p>
-                        ) : ("")}
-                        {orderSummeryData &&
-                          orderSummeryData.id_card_detail &&
-                          dateOfBirth &&
-                          dateOfBirth !== "31 Dec 1969" && ( // Add a condition here to check if dateOfBirth is not '31 Dec 1969'
-                            <p className="orderSumeryText">
-                              Date Of Birth <span>{dateOfBirth}</span>
+                            <p>
+                              ID Number
+                              <span>
+                                {orderSummeryData &&
+                                  orderSummeryData.id_card_detail &&
+                                  orderSummeryData.id_card_detail.i_card_number}
+                              </span>
                             </p>
-                        )}
-                      </div>
+                          ) : (
+                            ""
+                          )}
+                          {orderSummeryData.id_card_detail && dateFormat ? (
+                            <p>
+                              Expiration Date
+                              <span>
+                                {orderSummeryData &&
+                                  orderSummeryData.id_card_detail &&
+                                  dateFormat}
+                              </span>
+                            </p>
+                          ) : (
+                            ""
+                          )}
+                          {orderSummeryData &&
+                            orderSummeryData.id_card_detail &&
+                            dateOfBirth &&
+                            dateOfBirth !== "31 Dec 1969" && ( // Add a condition here to check if dateOfBirth is not '31 Dec 1969'
+                              <p className="orderSumeryText">
+                                Date Of Birth <span>{dateOfBirth}</span>
+                              </p>
+                            )}
+                        </div>
                       </>
-                      )}
-                      { orderSummeryData &&
-                      orderSummeryData.order_detail &&
-                      orderSummeryData.order_detail.is_online === "0" ? (
-                          ""
-                      ):(
-                          <div className="ordersummaryR_div_file">
-                            <label className="photo_area">
-                              <div
-                                id="img_container"
-                                data-toggle="modal"
-                                data-target="#id_cart_popup_front_side"
-                                onClick={handleClickOpen}
-                              >
-                                {/* {console.log('orderSummeryData: ', orderSummeryData)} */}
-                                {/* `https://sandbox.quickvee.com/upload/customer/id_proof/${orderSummeryData.id_card_detail.i_card_front_img}` */}
-                                <img
-                                  src={
-                                    orderSummeryData &&
-                                      orderSummeryData.id_card_detail &&
-                                      orderSummeryData.id_card_detail.image_url
-                                      ? orderSummeryData.id_card_detail?.image_url
-                                      : ""
-                                  }
-                                  alt=""
-                                  className="id-cart-image"
-                                ></img>
-                              </div>
-                            </label>
-                            <div className="photo_area_text">
-                              <span>Front Side</span>
-                              <div className="custom-file"></div>
-                            </div>
-                          </div>
-                        )
-                      }
-                  </div>
-                 
+                    )}
+                  {orderSummeryData &&
+                  orderSummeryData.order_detail &&
+                  orderSummeryData.order_detail.is_online === "0" ? (
+                    ""
+                  ) : (
+                    <div className="ordersummaryR_div_file">
+                      <label className="photo_area">
+                        <div
+                          id="img_container"
+                          data-toggle="modal"
+                          data-target="#id_cart_popup_front_side"
+                          onClick={handleClickOpen}
+                        >
+                          {/* {console.log('orderSummeryData: ', orderSummeryData)} */}
+                          {/* `https://sandbox.quickvee.com/upload/customer/id_proof/${orderSummeryData.id_card_detail.i_card_front_img}` */}
+                          <img
+                            src={
+                              orderSummeryData &&
+                              orderSummeryData.id_card_detail &&
+                              orderSummeryData.id_card_detail.image_url
+                                ? orderSummeryData.id_card_detail?.image_url
+                                : ""
+                            }
+                            alt=""
+                            className="id-cart-image"
+                          ></img>
+                        </div>
+                      </label>
+                      <div className="photo_area_text">
+                        <span>Front Side</span>
+                        <div className="custom-file"></div>
+                      </div>
+                    </div>
+                  )}
+                </div>
 
-               
                 <br></br>
                 <br></br>
                 {/* <div className='order-summery-right-header'>
@@ -1513,8 +1495,11 @@ export default function PaymentCalDetails() {
                 >
                   <div className="basic-modal">
                     <div id="modal-modal-title">
-                      <span>{orderSummeryData.order_detail?.is_online === "0"
-                          ? "Identification Details" : "Identification Card"}</span>
+                      <span>
+                        {orderSummeryData.order_detail?.is_online === "0"
+                          ? "Identification Details"
+                          : "Identification Card"}
+                      </span>
                       <CloseIcon
                         onClick={handleClose}
                         className="modal-close-icon"
@@ -1531,8 +1516,8 @@ export default function PaymentCalDetails() {
                       <img
                         src={
                           orderSummeryData &&
-                            orderSummeryData.id_card_detail &&
-                            orderSummeryData.id_card_detail.image_url
+                          orderSummeryData.id_card_detail &&
+                          orderSummeryData.id_card_detail.image_url
                             ? orderSummeryData.id_card_detail?.image_url
                             : ""
                         }

@@ -46,6 +46,9 @@ const Main = ({ visible }) => {
       {visible === "add-vendors" && <Layout visible={visible} />}
       {visible === "timesheet" && <Layout visible={visible} />}
       {visible === "category-edit-cat" && <Layout visible={visible} />}
+      {visible === "StoreSettingloyalty-program" && (
+        <Layout visible={visible} />
+      )}
       {/* {visible === "product-edit-cat" && <Layout visible={visible} />} */}
       {visible === "toptraders" && <Layout visible={visible} />}
       {visible === "product-edit" && <Layout visible={visible} />}
@@ -102,6 +105,7 @@ const Main = ({ visible }) => {
       {visible === "edit-vendor" && <Layout visible={visible} />}
       {visible === "vendor-details" && <Layout visible={visible} />}
       {visible === "sales-report" && <Layout visible={visible} />}
+      {visible === "new-sales-report" && <Layout visible={visible} />}
       {visible === "tip-report" && <Layout visible={visible} />}
       {visible === "coupon-report" && <Layout visible={visible} />}
       {visible === "register-closures" && <Layout visible={visible} />}
@@ -117,6 +121,11 @@ const Main = ({ visible }) => {
       )}
       {visible === "brands" && <Layout visible={visible} />}
       {visible === "tags" && <Layout visible={visible} />}
+      {visible === "lottery" && <Layout visible={visible} />}
+      {visible === "add-lottery" && <Layout visible={visible} />}
+      {visible === "update-lottery" && <Layout visible={visible} />}
+     
+      
       {visible === "category-sales-summery-report" && (
         <Layout visible={visible} />
       )}
@@ -127,6 +136,7 @@ const Main = ({ visible }) => {
         <Layout visible={visible} />
       )}
       {visible === "new-customers-added-report" && <Layout visible={visible} />}
+      {visible === "lottery-payout-report" && <Layout visible={visible} />}
 
       {/* multip user layout */}
       {visible === "multimerchant" && <IndexAllUsers />}

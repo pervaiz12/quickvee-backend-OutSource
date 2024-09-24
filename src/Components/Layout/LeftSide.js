@@ -2,6 +2,7 @@ import React, { useEffect, lazy, Suspense } from "react";
 import MainMixAndMatch from "../MixAndMatch/MainMixAndMatch";
 import AddMixAndMatchDeal from "../MixAndMatch/AddMixAndMatchDeal";
 import UpdateMixAndMatchDeal from "../MixAndMatch/UpdateMixAndMatchDeal";
+import MainSalesReport from "../Reporting/SalesReport/MainSalesReport";
 const DropCashMain = lazy(() => import("../Reporting/DropCash/DropCashMain"));
 const PayInMain = lazy(() => import("../Reporting/PayIn/PayInMain"));
 const MainEmployeeSalesPerCategory = lazy(
@@ -195,14 +196,21 @@ const RegisterClosuresMain = lazy(
 );
 const RegisterClosuresSummery = lazy(
   () => import("../Reporting/RegisterClosures/RegisterClosureSummery")
-)
+);
+
 const RegisterClosuresTransactions = lazy(
   () => import("../Reporting/RegisterClosures/RegisterClosureTransactions")
-)
+);
+
 
 const MainLoyaltyProgramPage = lazy(
   () => import("../StoreSetting/LoyaltyProgram/MainLoyaltyProgram")
 );
+const MainLotteryReport = lazy(
+  () => import("../Reporting/LotteryPayoutReport/LotteryPayoutMain")
+);
+const LotteryMain = lazy(() => import("../Lottery/LotteryMain"));
+const AddLottery = lazy(() => import("../Lottery/AddLottery"));
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -296,7 +304,8 @@ const LeftSide = ({ visible }) => {
         return <MainResigtersetting />;
       case "system-access":
         return <MainSyastemAccess />;
-      case "loyalty-program":
+      case "StoreSettingloyalty-program":
+
         return <MainLoyaltyProgramPage />;
       case "daily-total-report":
         return <DailyTtlReport />;
@@ -372,8 +381,8 @@ const LeftSide = ({ visible }) => {
         return <RegisterClosuresMain />;
       case "register-closures-summery":
         return <RegisterClosuresSummery />;
-        case "register-closures-transactions":
-          return <RegisterClosuresTransactions />;
+      case "register-closures-transactions":
+        return <RegisterClosuresTransactions />;
       case "drop-cash-report":
         return <DropCashMain />;
 
@@ -381,10 +390,19 @@ const LeftSide = ({ visible }) => {
         return <PayInMain />;
       case "sales-report":
         return <SalesReportMain />;
+      case "new-sales-report":
+        return <MainSalesReport />;
+      case "lottery-payout-report":
+        return <MainLotteryReport />;
       case "brands":
         return <Brands />;
       case "tags":
         return <Tags />;
+      case "lottery":
+        return <LotteryMain />;
+      case "add-lottery":
+      case "update-lottery":
+        return <AddLottery />;
       case "category-sales-summery-report":
         return <CategorySalesSummeryReport />;
       case "sales-by-hour-report":

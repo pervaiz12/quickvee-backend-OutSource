@@ -14,6 +14,7 @@ export default function DashboardFunctionality() {
   const [dashboardRecord, setDashboardRecord] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [loadingCount, setLoadingCount] = React.useState(false);
+
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
 
@@ -29,7 +30,7 @@ export default function DashboardFunctionality() {
     ...newData,
     merchant_id: merchant_id,
   };
-  console.log(data);
+  // console.log(data);
   let countRecord = 0;
   let countCardData = 0;
   const getDashboardCountRecord = async (source) => {
@@ -77,7 +78,7 @@ export default function DashboardFunctionality() {
         cancelToken: source.token,
       });
       if (response?.data?.status == true) {
-        console.log(response?.data?.data);
+        // console.log(response?.data?.data);
         setDashboardRecord(response?.data?.data);
         // setDashboardCount(response?.data);
       } else {
@@ -126,12 +127,12 @@ export default function DashboardFunctionality() {
         console.error("Error fetching data:", error);
       }
     };
-    fetchData();
-    const interval = setInterval(fetchData, 5000);
-    return () => {
-      clearInterval(interval);
-      source.cancel("Operation canceled due to merchant_id change.");
-    };
+    // fetchData();
+    // const interval = setInterval(fetchData, 60000);
+    // return () => {
+    //   clearInterval(interval);
+    //   source.cancel("Operation canceled due to merchant_id change.");
+    // };
     // return () => clearInterval(interval);
   }, [merchant_id]);
   return {

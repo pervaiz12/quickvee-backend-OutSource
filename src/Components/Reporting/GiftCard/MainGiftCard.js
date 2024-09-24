@@ -65,9 +65,9 @@ export default function MainGiftCard() {
     getGiftCardTableData();
   }, [merchant_id, debouncedValue, selectedDateRange]);
 
-  useEffect(() => {
-    console.log("selectedDateRange: ", selectedDateRange);
-  }, [selectedDateRange]);
+  // useEffect(() => {
+  //   console.log("selectedDateRange: ", selectedDateRange);
+  // }, [selectedDateRange]);
 
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
@@ -114,11 +114,17 @@ export default function MainGiftCard() {
         </Grid>
       </Grid>
 
-      <Grid container sx={{ overflow: "unset" }} className="box_shadow_div">
-        <Grid xs={12}>
-          <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
-        </Grid>
-      </Grid>
+      {!searchRecord && (
+        <>
+          <Grid container sx={{ overflow: "unset" }} className="box_shadow_div">
+            <Grid xs={12}>
+              <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
+            </Grid>
+          </Grid>
+        </>
+      )}
+
+     
 
       <Grid item xs={12}>
         <Grid container sx={{ px: 0.5 }} spacing={2}>
