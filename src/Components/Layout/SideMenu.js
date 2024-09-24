@@ -196,7 +196,7 @@ const SideMenu = () => {
         };
 
         const updatedTest = updatedMenuItems.map((item) => {
-          if (item.id === 9 && item.dropdownItems) {
+          if (item.id === 10 && item.dropdownItems) {
             return {
               ...item,
               dropdownItems: [...item.dropdownItems, newMenuItemDigit],
@@ -1117,25 +1117,25 @@ const menuItems = [
     text: "Coupons",
     link: "/coupons",
   },
-  // {
-  //   id: 9,
-  //   icon: (
-  //     <img
-  //       src={MixMatchIcon}
-  //       alt="mix-match-icon"
-  //       className="h-6 w-10 mt-4 mb-4"
-  //     />
-  //   ),
-  //   activeIcon: (
-  //     <img
-  //       src={MixMatchIcon1}
-  //       alt="mix-match-icon-1"
-  //       className="h-6 w-10 mt-4 mb-4 "
-  //     />
-  //   ),
-  //   text: "Mix N' Match Pricing",
-  //   link: "/mix-and-match",
-  // },
+  {
+    id: 9,
+    icon: (
+      <img
+        src={MixMatchIcon}
+        alt="mix-match-icon"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={MixMatchIcon1}
+        alt="mix-match-icon-1"
+        className="h-6 w-10 mt-4 mb-4 "
+      />
+    ),
+    text: "Mix N' Match Pricing",
+    link: "/mix-and-match",
+  },
   {
     id: 10,
     icon: (
@@ -1215,11 +1215,11 @@ const menuItems = [
       { id: 69, text: "Register Settings", link: "/store-settings/register" },
       // { id: 70, text: "Quick Add", link: "/store-settings/quick-add" },
       { id: 71, text: "System Access", link: "/store-settings/system-access" },
-      // {
-      //   id: 107,
-      //   text: "Loyalty Program",
-      //   link: "/store-settings/loyalty-program",
-      // },
+      {
+        id: 107,
+        text: "Loyalty Program",
+        link: "/store-settings/loyalty-program",
+      },
     ],
   },
   // {
