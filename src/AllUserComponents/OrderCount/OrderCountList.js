@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { BASE_URL, EXPORT_ORDER_COUNT_DATA } from "../../Constants/Config";
 import axios from "axios";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
-import { CircularProgress, Grid } from "@mui/material";
+import { CircularProgress, FormControl, Grid } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -64,13 +64,38 @@ const OrderCountList = () => {
     }
   };
 
+  // const validateDates = (start, end) => {
+  //   console.log(start);
+  //   console.log(end);
+  //   if (start && end && new Date(start) > new Date(end)) {
+  //     setError("Please Enter Vaild Start Date and End Date");
+  //   } else {  
+  //     setError("");
+  //   }
+  // };
+
   const validateDates = (start, end) => {
-    console.log(start);
-    console.log(end);
-    if (start && end && new Date(start) > new Date(end)) {
-      setError("Please Enter Vaild Start Date and End Date");
-    } else {  
-      setError("");
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    if (startDate > endDate) {
+      setError("Start date cannot be after end date.");
+      return false;
+    }
+    else if(dayjs(end).diff(dayjs(start), "day") > 60) {
+      console.log("Date Diff",dayjs(end).diff(dayjs(start), "day"))
+      setError("Start Date cannot be more than 60 days before End Date.");
+      return false;
+    }
+    // const differenceInTime = endDate.getTime() - startDate.getTime();
+    // const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+    // console.log("differenceInDays",differenceInDays)
+    // if (differenceInDays > 60) {
+    //   setError("The date range cannot exceed 60 days.");
+    //   return false;
+    // }
+    else{
+      setError(""); // Clear error if validation passes
+      return true;
     }
   };
   const { userTypeData } = useAuthDetails();
@@ -78,7 +103,9 @@ const OrderCountList = () => {
     PasswordShow();
 
   const handleSubmitData = async () => {
-    console.log("Dzvxc");
+    if (!validateDates(selectedStartDate, selectedEndDate)) {
+      return; // Stop if validation fails
+    }
     if (
       selectedStartDate &&
       selectedEndDate &&
@@ -103,7 +130,7 @@ const OrderCountList = () => {
         token_id: userTypeData.token_id,
         login_type: userTypeData.login_type,
       };
-      console.log(data);
+      // console.log(data);
       try {
         setLoader(true);
         const response = await axios.post(
@@ -157,8 +184,19 @@ const OrderCountList = () => {
   };
 
   const handleDateChange = (setter) => (newValue) => {
+    // setter(newValue.format("YYYY-MM-DD"));
+    // validateDates(selectedStartDate, selectedEndDate);
+
     setter(newValue.format("YYYY-MM-DD"));
-    validateDates(selectedStartDate, selectedEndDate);
+    const start = setter === setSelectedStartDate ? newValue.format("YYYY-MM-DD") : selectedStartDate;
+    const end = setter === setSelectedEndDate ? newValue.format("YYYY-MM-DD") : selectedEndDate;
+    if (!dayjs(start).isValid() || !dayjs(end).isValid()) {
+      setError("Invalid date. Please select a valid date.");
+      return;
+    }else (
+      setError("")
+    )
+    validateDates(start, end);
   };
 
   return (
@@ -206,7 +244,7 @@ const OrderCountList = () => {
 
               <label>Start Date</label>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer className="" components={["DatePicker"]}>
+                <FormControl fullWidth className="" components={["DatePicker"]}>
                   <DatePicker
                     // sx={{pt:0.2}}
 
@@ -234,14 +272,14 @@ const OrderCountList = () => {
                     }}
                     className="orderCount_StartDate date-picker-font"
                   />
-                </DemoContainer>
+                </FormControl>
               </LocalizationProvider>
             </Grid>
             <Grid item xs={6}>
 
               <label>End Date</label>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker"]}>
+                <FormControl fullWidth components={["DatePicker"]}>
                   <DatePicker
                     style={{ border: "none" }} // Remove border
                     size="small"
@@ -271,7 +309,7 @@ const OrderCountList = () => {
                     }}
                     className="orderCount_StartDate date-picker-font"
                   />
-                </DemoContainer>
+                </FormControl>
               </LocalizationProvider>
             </Grid>
           </Grid>

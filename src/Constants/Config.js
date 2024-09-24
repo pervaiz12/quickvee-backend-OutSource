@@ -201,8 +201,8 @@ module.exports = Object.freeze({
 
   //  Sales Report List API
   // SALES_REPORT_LIST: "vendor_report_api/sales_report",
-  SALES_REPORT_LIST: "ReportingReactapi/new_sale_overview",
-  // SALES_REPORT_LIST: "Sale_summary_api/new_sale_overview",
+  // SALES_REPORT_LIST: "ReportingReactapi/new_sale_overview",
+  SALES_REPORT_LIST: "Sale_summary_api/new_sale_overview",
   // tip report list api
   TIP_REPORT_LIST: "ReportingReactapi/tip_report",
   //coupon report api
