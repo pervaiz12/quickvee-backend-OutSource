@@ -85,7 +85,7 @@ const SalesReportList = (props) => {
         try {
           await dispatch(fetchSalesReportData(data)).unwrap();
         } catch (error) {
-          if (error.status == 401 || error.response.status === 401) {
+          if (error?.status == 401 || error?.response?.status === 401) {
             getUnAutherisedTokenMessage();
             handleCoockieExpire();
           } else if (error.status == "Network Error") {
@@ -210,10 +210,10 @@ const SalesReportList = (props) => {
     };
 
     // for sales_by_tender_type
-    const sales_by_tender_type= SalesReportData?.sales_by_tender_type?.data || {};
-    const totalCollected = Object.values(sales_by_tender_type)?.reduce((acc, tender) => acc + (tender.collected || 0), 0);
+    const sales_by_tender_type= SalesReportData?.sales_by_tender_type || {};
+    const totalCollected = Object.values(sales_by_tender_type)?.reduce((acc, tender) => acc + (parseFloat(tender.collected  || 0) ) - (parseFloat(tender.refunds  || 0) ) , 0);
     const totalTransactions = Object.values(sales_by_tender_type)?.reduce((acc, tender) => acc + (tender.transactions || 0), 0);
-    const CashCollectedL = sales_by_tender_type?.cash?.collected || 0;
+    const CashCollectedL = (sales_by_tender_type?.cash?.collected - sales_by_tender_type?.cash?.refunds) || 0;
 
     // for OtherFeeList
     const ServicesCharges = parseFloat(SalesReportData?.other_fees?.breakdown?.convenience_fee) || 0;
@@ -853,13 +853,14 @@ const SalesReportList = (props) => {
                         <StyledTableRow key={key}>
                           <StyledTableCell className={`  `}>
                             <div className={`q_sales_trading_data p-0 capitalize`}>
-                            {key?.replace('_', ' ')}
+                            {/* {key?.replace('_', ' ')} */}
+                            {key?.split('_')[0].concat(' ' ,key?.split('_')[1] &&  key?.split('_')[1]?.trim()?.toLowerCase() === "ebt"  ?  key?.split('_')[1].toUpperCase() : key?.split('_')[1] ?  key?.split('_')[1]?.charAt(0)?.toUpperCase() + key?.split('_')[1]?.slice(1):'')}
                             </div>
                           </StyledTableCell>
                           <StyledTableCell  className="BORBodyRight"></StyledTableCell>
                           <StyledTableCell className={`  BORBodyRight`}>
-                          <div className={`q_sales_trading_data p-0 ${getClassName(value.collected)}`}>
-                              <p>{formatCurrency(value.collected)}</p>
+                          <div className={`q_sales_trading_data p-0 ${getClassName(value.collected-value.refunds)}`}>
+                              <p>{formatCurrency(value.collected-value.refunds)}</p>
                             </div>
                           </StyledTableCell>
                           
