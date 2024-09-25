@@ -202,7 +202,6 @@ const RegisterClosuresTransactions = lazy(
   () => import("../Reporting/RegisterClosures/RegisterClosureTransactions")
 );
 
-
 const MainLoyaltyProgramPage = lazy(
   () => import("../StoreSetting/LoyaltyProgram/MainLoyaltyProgram")
 );
@@ -211,6 +210,9 @@ const MainLotteryReport = lazy(
 );
 const LotteryMain = lazy(() => import("../Lottery/LotteryMain"));
 const AddLottery = lazy(() => import("../Lottery/AddLottery"));
+const DashboardChartViewReports = lazy(
+  () => import("../Dashboard/DashboardChartViewReports")
+);
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -220,6 +222,10 @@ const LeftSide = ({ visible }) => {
     switch (visible) {
       case "dashboard":
         return <DashboardMain />;
+
+      case "dashboard-chart-view-reports":
+        return <DashboardChartViewReports />;
+
       case "order":
         return <MainOrder />;
       case "category":
@@ -305,7 +311,6 @@ const LeftSide = ({ visible }) => {
       case "system-access":
         return <MainSyastemAccess />;
       case "StoreSettingloyalty-program":
-
         return <MainLoyaltyProgramPage />;
       case "daily-total-report":
         return <DailyTtlReport />;

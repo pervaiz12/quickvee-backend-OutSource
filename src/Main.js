@@ -18,6 +18,7 @@ const Main = ({ visible }) => {
 
       {/* signle user layout */}
       {visible === "dashboard" && <Layout visible={visible} />}
+      {visible === "dashboard-chart-view-reports" && <Layout visible={visible} />}
       {visible === "order" && <Layout visible={visible} />}
       {visible === "category" && <Layout visible={visible} />}
       {visible === "add-category" && <Layout visible={visible} />}

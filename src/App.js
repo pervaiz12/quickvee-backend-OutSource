@@ -201,6 +201,9 @@ function App() {
           <Route element={<ProtectedRoute visible="manager" />}>
             {/* <Route exact path="/manager" element={<Main visible={"manager"} />} /> */}
             <Route index path="/" element={<Main visible={"dashboard"} />} />
+            <Route index path="/dashboard-chart-view-reports" element={<Main visible={"dashboard-chart-view-reports"} />} />
+
+            
             <Route exact path="/order" element={<Main visible={"order"} />} />
             <Route
               exact

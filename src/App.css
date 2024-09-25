@@ -85,6 +85,17 @@ input::-webkit-inner-spin-button {
   font-size: 15px !important;
 }
 
+.CircularSTDBook-14px {
+  font-family: CircularSTDBook !important;
+  font-size: 14px !important;
+}
+.CircularRegular-15px {
+  font-family: CircularRegular !important;
+  font-size: 15px !important;
+}
+
+
+
 img {
   max-width: unset !important;
 }
