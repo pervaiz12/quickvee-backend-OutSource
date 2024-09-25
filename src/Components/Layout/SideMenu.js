@@ -729,6 +729,11 @@ const menuItems = [
         ],
       },
       {
+        id: 80,
+        text: "New Sale Report",
+        link: "/store-reporting/new-sale-report",
+      },
+      {
         id: 2,
         text: "Inventory Reports",
         dropDownItems: [

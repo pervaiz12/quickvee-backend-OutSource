@@ -94,6 +94,7 @@ const SalesbyTable = (props) => {
         </div>
       </div>
 
+      <div className=" mb-12">
        <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
       <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
         <Table sx={{ minWidth: 500 }} aria-label="shift summary table">
@@ -131,7 +132,7 @@ const SalesbyTable = (props) => {
           <TableBody>
                 <TableRow>
                     <StickyTableCell className="whitespace-nowrap BORBodyRight">Sales Count</StickyTableCell>
-                    {Array(25).fill(100).map((value, index) => (
+                    {Array(25).fill(0).map((value, index) => (
                             <StyledTableCell key={index} className="whitespace-nowrap">
                                 {value}
                             </StyledTableCell>
@@ -140,7 +141,7 @@ const SalesbyTable = (props) => {
                 </TableRow>
                 <TableRow>
                     <StickyTableCell className="whitespace-nowrap BORBodyRight">Net Sales </StickyTableCell>
-                    {Array(25).fill(100).map((value, index) => (
+                    {Array(25).fill("$0.00").map((value, index) => (
                             <StyledTableCell key={index} className="whitespace-nowrap">
                                 {value}
                             </StyledTableCell>
@@ -149,16 +150,16 @@ const SalesbyTable = (props) => {
                 </TableRow>
                 <TableRow>
                     <StickyTableCell className="whitespace-nowrap BORBodyRight">Cost of good sold</StickyTableCell>
-                    {Array(25).fill(100).map((value, index) => (
+                    {Array(25).fill("$0.00").map((value, index) => (
                             <StyledTableCell key={index} className="whitespace-nowrap">
-                                {100}
+                                {value}
                             </StyledTableCell>
                         ))}
                     <StickyTableCellR className="whitespace-nowrap BORBodyLeft">$940.40</StickyTableCellR>
                 </TableRow>
                 <TableRow>
                     <StickyTableCell className="whitespace-nowrap BORBodyRight">Gross profit</StickyTableCell>
-                    {Array(25).fill(100).map((value, index) => (
+                    {Array(25).fill("$0.00").map((value, index) => (
                             <StyledTableCell key={index} className="whitespace-nowrap">
                                 {value}
                             </StyledTableCell>
@@ -167,7 +168,7 @@ const SalesbyTable = (props) => {
                 </TableRow>
                 <TableRow>
                     <StickyTableCell className="whitespace-nowrap BORBodyRight">Margin (%)</StickyTableCell>
-                    {Array(25).fill(100).map((value, index) => (
+                    {Array(25).fill("$0.00").map((value, index) => (
                             <StyledTableCell key={index} className="whitespace-nowrap">
                                 {value}
                             </StyledTableCell>
@@ -176,7 +177,7 @@ const SalesbyTable = (props) => {
                 </TableRow>
                 <TableRow>
                     <StickyTableCell className="whitespace-nowrap BORBodyRight">Tax</StickyTableCell>
-                    {Array(25).fill(100).map((value, index) => (
+                    {Array(25).fill("$0.00").map((value, index) => (
                             <StyledTableCell key={index} className="whitespace-nowrap">
                                 {value}
                             </StyledTableCell>
@@ -188,6 +189,7 @@ const SalesbyTable = (props) => {
         </Table>
       </div>
     </TableContainer>
+      </div>
     </>
   );
 };
