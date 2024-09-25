@@ -4,6 +4,7 @@ import Grid from "@mui/system/Unstable_Grid/Grid";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import downloadIcon from "../../Assests/Dashboard/download.svg";
 import DashDateRangeComponent from "../../reuseableComponents/DashDateRangeComponent";
+import VerticalBarChart from "../Dashboard/VerticalBarChart";
 
 const NewSalesReportMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
@@ -80,31 +81,42 @@ const NewSalesReportMain = () => {
     }
   };
 
-
   return (
     <>
-      <Grid
-        container
-        sx={{ padding: 2.5, mt: 3.6 }}
-        className="box_shadow_div "
-      >
+      <Grid container sx={{ padding: 2.5, mt: 3.6 }} className="box_shadow_div">
         <Grid item xs={12}>
-          <Grid container direction="row" justifyContent="space-between" alignItems="center" >
-            <Grid item sx={{display:"flex", gap:2}}>
-              <h1 style={{ marginBottom: 0 }} className="heading content-center whitespace-nowrap">
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Grid item sx={{ display: "flex", gap: 2 }}>
+              <h1
+                style={{ marginBottom: 0 }}
+                className="heading content-center whitespace-nowrap"
+              >
                 Sales Report
               </h1>
-                <SelectDropDown
-                  sx={{ pt: 0.5,width:"22.7rem"  }}
-                  listItem={selectReportList}
-                  onClickHandler={handleOptionClick}
-                  selectedOption={selectedReportList}
-                  dropdownFor={"reportList"}
-                  title={"title"}
-                />
+              <SelectDropDown
+                sx={{ pt: 0.5, width: "22.7rem" }}
+                listItem={selectReportList}
+                onClickHandler={handleOptionClick}
+                selectedOption={selectedReportList}
+                dropdownFor={"reportList"}
+                title={"title"}
+              />
             </Grid>
 
-              <Grid item sx={{ display: "flex", alignItems: "center", gap: 0.5,cursor:"pointer" }}>
+            <Grid
+              item
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 0.5,
+                cursor: "pointer",
+              }}
+            >
               <h1 className="text-[#0A64F9] text-[16px]">Export report</h1>
               <img
                 style={{ height: "30px", width: "30px" }}
@@ -118,6 +130,14 @@ const NewSalesReportMain = () => {
       <Grid container sx={{ paddingY: 3.7 }}>
         <Grid item xs={12}>
           <DashDateRangeComponent onDateRangeChange={onDateRangeChange} />
+        </Grid>
+      </Grid>
+      <Grid container direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+        <Grid item  xs={12} md={6}>
+          <VerticalBarChart />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <VerticalBarChart />
         </Grid>
       </Grid>
     </>
