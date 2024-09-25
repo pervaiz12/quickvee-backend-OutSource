@@ -28,7 +28,6 @@ export default function LotteryPayoutLogic() {
           },
         }
       );
-      console.log("response", response);
       if (response?.data?.status == true) {
         setApiLoader(false);
         setAllLatteryData(response?.data?.lottery_data);
@@ -37,8 +36,15 @@ export default function LotteryPayoutLogic() {
         setAllLatteryData([]);
       }
     } catch (e) {
-      console.log(e);
+      console.log("error", e);
     }
   };
-  return { onDateRangeChange, getAllLatteryData, apiLoader };
+  return {
+    onDateRangeChange,
+    getAllLatteryData,
+    apiLoader,
+    getAllLatteryData,
+    merchant_id,
+    setAllLatteryData,
+  };
 }
