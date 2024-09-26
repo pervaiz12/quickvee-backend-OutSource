@@ -293,7 +293,7 @@ const DashDateRangeComponent = ({
             </Grid>
 
           <Grid item alignSelf={"center"} xs={12} sm={6} md={3}>
-            <div className="pt-4">
+            <div className="pt-4" style={{float:"inline-end"}}>
               <button onClick={handleSearch} className="save_btn">
                 Search
               </button>

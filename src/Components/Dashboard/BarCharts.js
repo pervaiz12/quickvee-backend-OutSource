@@ -15,6 +15,16 @@ import BlueArrowUp from '../../Assests/Filter/blueARROWup.svg';
 import { priceFormate } from "../../hooks/priceFormate";
 
 const dataByHourly = [
+  { name: "12:00 AM", pv: 4800, uv: 500 ,amt: 1300, gp: 900, mar: 4300, tax: 300},
+  { name: "1:00 AM", pv: 1000, uv: 50 ,amt: 100, gp: 2800, mar: 2800, tax: 1300},
+  { name: "2:00 AM", pv: 1800, uv: 2150 ,amt: 4000, gp: 1900, mar: 1440, tax: 1800},
+  { name: "3:00 AM", pv: 1500, uv: 4500 ,amt: 3200, gp: 3300, mar: 3000, tax: 2100},
+  { name: "4:00 AM", pv: 3000, uv: 500 ,amt: 1700, gp: 1500, mar: 1500, tax: 3500},
+  { name: "5:00 AM", pv: 3800, uv: 2500 ,amt: 1500, gp: 3500, mar: 200, tax: 3300},
+  { name: "6:00 AM", pv: 4300, uv: 500 ,amt: 1400, gp: 1500, mar: 1000, tax: 2800},
+  { name: "7:00 AM", pv: 2800, uv: 100 ,amt: 1600, gp: 1380, mar: 4800, tax: 3100},
+  { name: "8:00 AM", pv: 3800, uv: 500 ,amt: 1900, gp: 180, mar: 200, tax: 3500},
+
   { name: "9:00 AM", pv: 2400, uv: 50 ,amt: 1700, gp: 4500, mar: 4000, tax: 3000},
   { name: "10:00 AM", pv: 1398, uv: 2150 ,amt: 3200, gp: 1600, mar: 3000, tax: 1500},
   { name: "11:00 AM", pv: 4000, uv: 50 ,amt: 2500, gp: 150, mar: 2400, tax: 30},
