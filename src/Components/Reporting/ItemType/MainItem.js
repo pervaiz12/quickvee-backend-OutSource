@@ -3,13 +3,13 @@ import ItemsCategories from "./ItemsCategories";
 
 
 
-const MainItem = () => {
+const MainItem = ({hide}) => {
   return (
     <>
    
       <div className="q-order-main-page">
         <div className="box">
-        <ItemsCategories />
+        <ItemsCategories hide={hide} />
       </div>
       </div>
       

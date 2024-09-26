@@ -7,7 +7,8 @@ import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
-const DailyTtlReport = () => {
+import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
+const DailyTtlReport = ({ hide }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const [filteredData, setFilteredData] = useState([]);
@@ -50,14 +51,13 @@ const DailyTtlReport = () => {
       }
       const updatedData = {
         ...data,
-        
+
         order_env: orderEnvValue,
         order_typ: orderTypValue,
       };
 
       setFilteredData(updatedData);
     } else {
-      
       console.error("Invalid data format:", data);
     }
   };
@@ -118,9 +118,9 @@ const DailyTtlReport = () => {
     <>
       <Grid container sx={{ pb: 2.5 }} className="box_shadow_div ">
         <Grid item xs={12}>
-          <CustomHeader>Daily Total Report</CustomHeader>
+          {!hide && <CustomHeader>Daily Total Report</CustomHeader>}
 
-          <Grid container sx={{px:2.5,pt:1}}>
+          <Grid container sx={{ px: 2.5, pt: 1 }}>
             <Grid item xs={12}>
               <h1 className="heading">Filter By</h1>
             </Grid>
@@ -157,7 +157,11 @@ const DailyTtlReport = () => {
       </Grid>
       <Grid container>
         <Grid xs={12}>
-          <DateRangeComponent onDateRangeChange={handleDataFiltered} />
+          {hide ? (
+            <DashDateRangeComponent onDateRangeChange={handleDataFiltered} />
+          ) : (
+            <DateRangeComponent onDateRangeChange={handleDataFiltered} />
+          )}
         </Grid>
       </Grid>
 

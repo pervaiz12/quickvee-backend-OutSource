@@ -172,6 +172,7 @@ const SalesReportList = (props) => {
     const Discounts = parseFloat(SalesReportData?.gross_sales?.discount) || 0;
     const NetSales = parseFloat(SalesReportData?.gross_sales?.net_sales) || 0;
     const Refunds = parseFloat(SalesReportData?.gross_sales?.refund) || 0;
+    const StoreRefunds = parseFloat(SalesReportData?.gross_sales?.store_credit_refund) || 0;
     const GrossSalesubtotal = parseFloat(SalesReportData?.gross_sales?.subtotal) || 0;
     
     // for  TotalAmountCollected
@@ -272,6 +273,10 @@ const SalesReportList = (props) => {
     {
       name: "Refunds",
       amount: Refunds,
+    },
+    {
+      name: "Store Credit Refunds",
+      amount: StoreRefunds,
     },
     {
       name: "Net Sales",
