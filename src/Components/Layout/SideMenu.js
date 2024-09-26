@@ -629,109 +629,109 @@ const menuItems = [
     link: "/reporting",
     className: "flex items-center gap-2",
     dropdownItems: [
-      {
-        id: 1,
-        text: "Sales Reports",
-        dropDownItems: [
-          {
-            id: 61,
-            text: "Sales Summary",
-            link: "/store-reporting/sales-report",
-          },
-          {
-            id: 108,
-            text: "Sales Report",
-            link: "/store-reporting/new-sales-report",
-          },
-          {
-            id: 77,
-            text: "Item Sales",
-            link: "/store-reporting/item-sales",
-          },
-          {
-            id: 98,
-            text: "Category Sales Summary Report",
-            link: "/store-reporting/category-sales-summery-report",
-          },
-          {
-            id: 62,
-            text: "Daily Total Report",
-            link: "/store-reporting/daily-total-report",
-          },
-          {
-            id: 63,
-            text: "Detailed Category Sale",
-            link: "/store-reporting/Details-category",
-          },
-          {
-            id: 64,
-            text: "Detailed Sales Person Report",
-            link: "/store-reporting/report-sales-person",
-          },
-          {
-            id: 100,
-            text: "Detailed Store Credit Report",
-            link: "/store-reporting/store-credit-report",
-          },
-          {
-            id: 96,
-            text: "Drop Cash Report",
-            link: "/store-reporting/drop-cash-report",
-          },
-          {
-            id: 102,
-            text: "Gift Card Report",
-            link: "/store-reporting/gift-card-report",
-          },
+      // {
+      //   id: 1,
+      //   text: "Sales Reports",
+      //   dropDownItems: [
+      //     {
+      //       id: 61,
+      //       text: "Sales Summary",
+      //       link: "/store-reporting/sales-report",
+      //     },
+      //     {
+      //       id: 108,
+      //       text: "Sales Report",
+      //       link: "/store-reporting/new-sales-report",
+      //     },
+      //     {
+      //       id: 77,
+      //       text: "Item Sales",
+      //       link: "/store-reporting/item-sales",
+      //     },
+      //     {
+      //       id: 98,
+      //       text: "Category Sales Summary Report",
+      //       link: "/store-reporting/category-sales-summery-report",
+      //     },
+      //     {
+      //       id: 62,
+      //       text: "Daily Total Report",
+      //       link: "/store-reporting/daily-total-report",
+      //     },
+      //     {
+      //       id: 63,
+      //       text: "Detailed Category Sale",
+      //       link: "/store-reporting/Details-category",
+      //     },
+      //     {
+      //       id: 64,
+      //       text: "Detailed Sales Person Report",
+      //       link: "/store-reporting/report-sales-person",
+      //     },
+      //     {
+      //       id: 100,
+      //       text: "Detailed Store Credit Report",
+      //       link: "/store-reporting/store-credit-report",
+      //     },
+      //     {
+      //       id: 96,
+      //       text: "Drop Cash Report",
+      //       link: "/store-reporting/drop-cash-report",
+      //     },
+      //     {
+      //       id: 102,
+      //       text: "Gift Card Report",
+      //       link: "/store-reporting/gift-card-report",
+      //     },
 
-          {
-            id: 79,
-            text: "Order Type",
-            link: "/store-reporting/order-type",
-          },
-          {
-            id: 97,
-            text: "Pay In Report",
-            link: "/store-reporting/pay-in-report",
-          },
-          {
-            id: 78,
-            text: "Payment Method Details",
-            link: "/store-reporting/payment-method-details",
-          },
-          {
-            id: 90,
-            text: "Product Profitability Report",
-            link: "/store-reporting/item-sale-profit-report",
-          },
-          // {
-          //   id: 99,
-          //   text: "Sales by Hour Report",
-          //   link: "/store-reporting/sales-by-hour-report",
-          // },
+      //     {
+      //       id: 79,
+      //       text: "Order Type",
+      //       link: "/store-reporting/order-type",
+      //     },
+      //     {
+      //       id: 97,
+      //       text: "Pay In Report",
+      //       link: "/store-reporting/pay-in-report",
+      //     },
+      //     {
+      //       id: 78,
+      //       text: "Payment Method Details",
+      //       link: "/store-reporting/payment-method-details",
+      //     },
+      //     {
+      //       id: 90,
+      //       text: "Product Profitability Report",
+      //       link: "/store-reporting/item-sale-profit-report",
+      //     },
+      //     // {
+      //     //   id: 99,
+      //     //   text: "Sales by Hour Report",
+      //     //   link: "/store-reporting/sales-by-hour-report",
+      //     // },
 
-          {
-            id: 69,
-            text: "Top Sellers",
-            link: "/store-reporting/overall-top",
-          },
+      //     {
+      //       id: 69,
+      //       text: "Top Sellers",
+      //       link: "/store-reporting/overall-top",
+      //     },
 
-          // {
-          //   id: 78,
-          //   text: "Discount Per Sales Report",
-          //   link: "/store-reporting/discount-per-sales-report",
-          // },
+      //     // {
+      //     //   id: 78,
+      //     //   text: "Discount Per Sales Report",
+      //     //   link: "/store-reporting/discount-per-sales-report",
+      //     // },
 
-          // {
-          //   id: 105,
-          //   text: "New Item Sales Report",
-          //   link: "/store-reporting/new-item-sales-report",
-          // },
-        ],
-      },
+      //     // {
+      //     //   id: 105,
+      //     //   text: "New Item Sales Report",
+      //     //   link: "/store-reporting/new-item-sales-report",
+      //     // },
+      //   ],
+      // },
       {
         id: 80,
-        text: "New Sale Report",
+        text: "Sales Report",
         link: "/store-reporting/new-sale-report/sales-summary",
       },
       {
