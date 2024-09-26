@@ -712,7 +712,7 @@ function App() {
 
             <Route
               exact
-              path="/store-reporting/new-sale-report"
+              path="/store-reporting/new-sale-report/:selectedReport"
               element={<Main visible={"new-sale-report"} />}
             />
 

@@ -66,76 +66,53 @@ const CustomYAxisTick = ({ x, y, payload }) => {
 };
 
 const data = [
-  { name: "Product dd", popularity: 120, color: "#FF7700" },
-  { name: "Product n", popularity: 90, color: "#0A64F9" },
-  { name: "Product C", popularity: 150, color: "#FF7700" },
-  { name: "Product D", popularity: 80, color: "#0A64F9" },
-  { name: "Product E", popularity: 170, color: "#FF7700" },
+  { name: "Product dd", popularity: 20, color: "#FF7700" },
+  { name: "Product n", popularity: 12, color: "#0A64F9" },
+  { name: "Product C", popularity: 10, color: "#FF7700" },
+  { name: "Product D", popularity: 7, color: "#0A64F9" },
 ];
 
-export default function VerticalBarChart() {
+export default function VerticalBarChart({title,color}) {
   return (
-    // <Grid container sx={{ padding: 2.5, mt: 3.6 }} className="">
-    //   <Grid item xs={6}>
-    <ResponsiveContainer sx={{mt:0}} className="box_shadow_div" width="100%" height={250}>
-      <BarChart
-        data={data}
-        layout="vertical" // Vertical layout
-        barCategoryGap="40%" // Gap between individual bars
-        margin={{ top: 20, right: 30, bottom: 20, left: 20 }}
-      >
-        <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-        <YAxis
-          type="category"
-          dataKey="name"
-          axisLine={false}
-          tick={<CustomYAxisTick />} // Use the custom tick component
-        />
-        <XAxis
-          type="number"
-          axisLine={false}
-          ticks={[0, 50, 100, 150, 200]} // Custom tick values for popularity
-          domain={[0, 200]} // Set domain to cover the popularity range
-        />
-        <Tooltip />
-        {/* Render bars with dynamic colors */}
-        <Bar dataKey="popularity" name="Popularity">
-          {data.map((entry) => (
-            <Cell key={entry.name} fill={entry.color} />
-          ))}
-        </Bar>
-      </BarChart>
-    </ResponsiveContainer>
-    // </Grid>
-    // {/* <Grid item xs={6}>
-    //   <ResponsiveContainer width="100%" height={400}>
-    //     <BarChart
-    //       data={data}
-    //       layout="vertical" // Vertical layout
-    //       barCategoryGap="40%" // Gap between individual bars
-    //       margin={{ top: 20, right: 30, bottom: 20, left: 20 }}
-    //     >
-    //       <CartesianGrid strokeDasharray="3 3" />
-    //       <YAxis
-    //         type="category"
-    //         dataKey="name"
-    //         tick={<CustomYAxisTick />} // Use the custom tick component
-    //       />
-    //       <XAxis
-    //         type="number"
-    //         ticks={[0, 50, 100, 150, 200]} // Custom tick values for popularity
-    //         domain={[0, 200]} // Set domain to cover the popularity range
-    //       />
-    //       <Tooltip />
-
-    //       <Bar dataKey="popularity" name="Popularity">
-    //         {data.map((entry) => (
-    //           <Cell key={entry.name} fill={entry.color} />
-    //         ))}
-    //       </Bar>
-    //     </BarChart>
-    //   </ResponsiveContainer>
-    // </Grid> */}
-    // </Grid>
+    <Grid container sx={{ mt: 0 }} className="box_shadow_div">
+      <Grid item xs={12}>
+        <Grid item xs={12} sx={{ p: 2.5 }} className="flex justify-between border-b-2">
+          <p className="CircularSTDMedium-18px">{title}</p>
+          {/* <div className="flex items-center gap-1">
+            <FaCaretUp className="text-[#1EC285]" />
+            <p className="CircularSTDBook-15px text-[#1EC285]">{`${growth} Up Previous month`}</p>
+          </div> */}
+        </Grid>
+        <ResponsiveContainer sx={{ mt: 0 }} width="100%" height={250}>
+          <BarChart
+            data={data}
+            layout="vertical" // Vertical layout
+            barCategoryGap="40%" // Gap between individual bars
+            margin={{ top: 20, right: 30, bottom: 20, left: 40 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+            <YAxis
+              type="category"
+              dataKey="name"
+              axisLine={false}
+              tick={<CustomYAxisTick />} // Use the custom tick component
+            />
+            <XAxis
+              type="number"
+              axisLine={false}
+              ticks={[0, 10, 20, 30, 40]} // Custom tick values for popularity
+              domain={[0, 40]} // Set domain to cover the popularity range
+            />
+            <Tooltip />
+            {/* Render bars with dynamic colors */}
+            <Bar dataKey="popularity" name="Popularity">
+              {data.map((entry) => (
+                <Cell key={entry.name} fill={color} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </Grid>
+    </Grid>
   );
 }

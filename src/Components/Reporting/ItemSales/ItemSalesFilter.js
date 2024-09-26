@@ -9,7 +9,7 @@ import CustomHeader from "../../../reuseableComponents/CustomHeader";
 import PasswordShow from "../../../Common/passwordShow";
 import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
 
-const ItemSalesFilter = ({ onFilterDataChange,searchItems, setSearchRecord,debouncedValue }) => {
+const ItemSalesFilter = ({ onFilterDataChange,searchItems, setSearchRecord,debouncedValue,hide }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
@@ -126,7 +126,10 @@ const ItemSalesFilter = ({ onFilterDataChange,searchItems, setSearchRecord,debou
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
+          {!hide && (
+            
           <CustomHeader>Item Sales</CustomHeader>
+          )}
           <Grid item xs={12}  sx={{ px: 2.5,py:2.5 }}>
               <InputTextSearch
                 placeholder="Search by Items Name"

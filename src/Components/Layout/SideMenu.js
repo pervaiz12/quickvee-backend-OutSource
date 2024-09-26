@@ -224,8 +224,9 @@ const SideMenu = () => {
 
   function getFirstTwoSegmentsPath(pathname) {
     // console.log("getFirstTwoSegmentsPath",pathname)
-    const segments = pathname.split("/").filter(Boolean);
-    return "/" + segments.slice(0, 2).join("/");
+    const segments = pathname?.split("/").filter(Boolean);
+   
+    return "/" + segments?.slice(0, 2).join("/");
   }
   function getFirstTwoSegmentsPathIsStoreAvtive(pathname) {
     // console.log("getFirstTwoSegmentsPath",pathname)
@@ -385,7 +386,7 @@ const DropdownMenuItem = ({
   const isTabletNav = useMediaQuery("(max-width:1024px)");
   useEffect(() => {
     const foundItem = item?.dropdownItems?.find(
-      (item) => item?.link === getFirstTwoSegmentsPath(activeItem)
+      (item) => getFirstTwoSegmentsPath(item?.link) === getFirstTwoSegmentsPath(activeItem)
     );
 
     if (foundItem) {
@@ -463,18 +464,18 @@ const DropdownMenuItem = ({
           {isMenuOpenRedux ? (
             <div
               className={`w-full flex items-center cursor-pointer ${
-                getFirstTwoSegmentsPath(activeItem) === dropDownItem
+                getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem)
                   ? "bg-[#414F54]"
                   : ""
               }`}
             >
-              {getFirstTwoSegmentsPath(activeItem) === dropDownItem ||
+              {getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem) ||
               hoveredItem === item.id
                 ? item.activeIcon
                 : item.icon}
               <p
                 className={`ml-2 menu-item DropDown-memu text-[14px] flex-auto Admin_std ${
-                  getFirstTwoSegmentsPath(activeItem) === dropDownItem
+                  getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem)
                     ? "activeTab"
                     : ""
                 }`}
@@ -484,7 +485,7 @@ const DropdownMenuItem = ({
               {currentDropDownItem === item.id ? (
                 <FaChevronUp
                   className={`quickarrow_icon ml-4 me-5 text-${
-                    (getFirstTwoSegmentsPath(activeItem) === dropDownItem ||
+                    (getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem) ||
                       hoveredItem === item.id) &&
                     "[#FFC400]"
                   }`}
@@ -492,7 +493,7 @@ const DropdownMenuItem = ({
               ) : (
                 <FaChevronDown
                   className={`quickarrow_icon ml-4 me-5 text-${
-                    (getFirstTwoSegmentsPath(activeItem) === dropDownItem ||
+                    (getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem) ||
                       hoveredItem === item.id) &&
                     "[#FFC400]"
                   }`}
@@ -508,7 +509,7 @@ const DropdownMenuItem = ({
                   HandleDropdownIconClick(item.id);
                 }}
               >
-                {getFirstTwoSegmentsPath(activeItem) === dropDownItem ||
+                {getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem) ||
                 hoveredItem === item.id
                   ? item.activeIcon
                   : item.icon}
@@ -731,7 +732,7 @@ const menuItems = [
       {
         id: 80,
         text: "New Sale Report",
-        link: "/store-reporting/new-sale-report",
+        link: "/store-reporting/new-sale-report/sales-summary",
       },
       {
         id: 2,
