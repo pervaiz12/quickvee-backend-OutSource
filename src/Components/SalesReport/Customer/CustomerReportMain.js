@@ -19,6 +19,7 @@ import {
   import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
   import { priceFormate } from "../../../hooks/priceFormate";
   import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
   
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -101,6 +102,14 @@ import {
     const onDateRangeChange = (dateRange) => {
       setSelectedDateRange(dateRange);
     };
+
+
+
+    const [searchRecord, setSearchRecord] = useState("");
+    const handleSearchInputChange = (value) => {
+      setSearchRecord(value);
+  
+    };
     return (
       <>
        
@@ -129,6 +138,19 @@ import {
   
         <Grid container className="box_shadow_div">
           <Grid item xs={12}>
+            <Grid container sx={{ padding: 2.5 }}>
+              <Grid item xs={12}>
+                <InputTextSearch
+                  className=""
+                  type="text"
+                  value={searchRecord}
+                  handleChange={handleSearchInputChange}
+                  placeholder="Search..."
+                  autoComplete="off"
+                />
+              </Grid>
+          </Grid>
+
             <TableContainer>
               <Table sx={{ minWidth: 700 }} aria-label="customized table">
                 <TableHead>

@@ -65,11 +65,13 @@ const TipReportList = (props) => {
     if (props && props.selectedDateRange) {
       const startDateData = props.selectedDateRange.start_date;
       const endDateData = props.selectedDateRange.end_date;
+      const emp_id = props.filteredData.emp_id;
 
       let data = {
         merchant_id,
         start_date: startDateData,
         end_date: endDateData,
+        emp_id: emp_id,
         ...userTypeData,
       };
 
