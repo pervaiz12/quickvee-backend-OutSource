@@ -18,7 +18,7 @@ const CustomGrid = styled(Grid)(({ theme }) => ({
   },
 }));
 
-const MainCatedetails = () => {
+const MainCatedetails = ({ hide }) => {
   const [filteredData, setFilteredData] = useState({ category_id: "all" });
   const {
     LoginGetDashBoardRecordJson,
@@ -169,7 +169,7 @@ const MainCatedetails = () => {
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           <Grid container>
-            <CustomHeader>Category Sale Report</CustomHeader>
+            {!hide && <CustomHeader>Category Sale Report</CustomHeader> }
           </Grid>
           <Grid container sx={{ px: 2.5, pt: 1 }}>
             <Grid item xs={12}>

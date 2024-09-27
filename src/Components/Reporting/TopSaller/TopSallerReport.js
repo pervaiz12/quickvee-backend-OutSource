@@ -11,7 +11,7 @@ import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent"
 import PasswordShow from "../../../Common/passwordShow";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
-const TopSallerReport = () => {
+const TopSallerReport = ({ hide }) => {
   const [filteredData, setFilteredData] = useState({ category_id: "all" });
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -161,7 +161,7 @@ const TopSallerReport = () => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <CustomHeader>Top Sellers</CustomHeader>
+          { !hide && <CustomHeader>Top Sellers</CustomHeader> }
 
           <Grid container sx={{ px: 2.5, pt: 1 }}>
             <Grid xs={12} sm={6} md={4}>

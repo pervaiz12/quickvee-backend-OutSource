@@ -812,44 +812,44 @@ const menuItems = [
           },
         ],
       },
-      {
-        id: 1723011930198,
-        text: "Employee Reports",
-        dropDownItems: [
-          {
-            id: 102,
-            text: "Employee Sales Per Category",
-            link: "/store-reporting/employee-sales-per-category-report",
-          },
-        ],
-      },
+      // {
+      //   id: 1723011930198,
+      //   text: "Employee Reports",
+      //   dropDownItems: [
+      //     {
+      //       id: 102,
+      //       text: "Employee Sales Per Category",
+      //       link: "/store-reporting/employee-sales-per-category-report",
+      //     },
+      //   ],
+      // },
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
       {
         id: 80,
         text: "New Taxes Reports",
         link: "/store-reporting/new-taxes-report",
       },
-      {
-        id: 4,
-        text: "Refunds",
-        dropDownItems: [
-          {
-            id: 84,
-            text: "Item Refund Report",
-            link: "/store-settings/refund-report",
-          },
-          {
-            id: 82,
-            text: "Order Refund Report",
-            link: "/store-settings/order-refund-report",
-          },
-          // {
-          //   id: 85,
-          //   text: "Refunded Order ID's",
-          //   link: "/store-settings/#",
-          // },
-        ],
-      },
+      // {
+      //   id: 4,
+      //   text: "Refunds",
+      //   dropDownItems: [
+      //     {
+      //       id: 84,
+      //       text: "Item Refund Report",
+      //       link: "/store-settings/refund-report",
+      //     },
+      //     {
+      //       id: 82,
+      //       text: "Order Refund Report",
+      //       link: "/store-settings/order-refund-report",
+      //     },
+      //     // {
+      //     //   id: 85,
+      //     //   text: "Refunded Order ID's",
+      //     //   link: "/store-settings/#",
+      //     // },
+      //   ],
+      // },
       {
         id: 5,
         text: "Vendors",
@@ -894,8 +894,8 @@ const menuItems = [
       // },
 
       // { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
-      { id: 87, text: "Tip Report", link: "/store-reporting/tip-report" },
-      { id: 88, text: "Coupon Report", link: "/store-reporting/coupon-report" },
+      // { id: 87, text: "Tip Report", link: "/store-reporting/tip-report" },
+      // { id: 88, text: "Coupon Report", link: "/store-reporting/coupon-report" },
       // { id: 1726033807930, text: "Shift Summary", link: "/store-reporting/shift-summary" },
       {
         id: 1726123837135,

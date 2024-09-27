@@ -4,7 +4,7 @@ import OrderRefundFilter from "./OrderRefundFilter";
 import OrderRefundReportList from "./OrderRefundReportList";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 
-const OrderRefundReportMain = () => {
+const OrderRefundReportMain = ({hide}) => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
@@ -22,6 +22,7 @@ const OrderRefundReportMain = () => {
         title={"Order Refund Report"}
         onReasonChange={handleReasonChange}
         selectedReason={selectedReason}
+        hide={hide}
       />
 
       <DateRangeComponent onDateRangeChange={handleDateRangeChange} />

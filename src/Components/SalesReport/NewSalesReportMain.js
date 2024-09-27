@@ -25,6 +25,14 @@ const DailyTotalsMain = lazy(
   () => import("../Reporting/DailyReport/DailyTtlReport")
 );
 const OrderTypeMain = lazy(() => import("../Reporting/ItemType/MainItem"));
+const DetailedcategoryMain = lazy(() => import("../Reporting/CategoryDetails/MainCatedetails"));
+const DetailedsalespersonMain = lazy(() => import("../Reporting/SalesByPerson/MainSalesPerson"));
+const TopsellerMain = lazy(() => import("../Reporting/TopSaller/TopSallerReport"));
+const OrderefundreportMain = lazy(() => import("../Reporting/OrderRefundReport/OrderRefundReportMain"));
+const ItemrefundreportMain = lazy(() => import("../Reporting/RefundSummary/RefundSummary"));
+const TipreportMain = lazy(() => import("../Reporting/TipReport/TipReportMain"));
+const CouponreportMain = lazy(() => import("../Reporting/CouponReport/CouponReportMain"));
+const EmployeesalespercategoryreportMain = lazy(() => import("../Reporting/EmployeeSalesPerCategory/MainEmployeeSalesPerCategory"));
 const selectReportList = [
   {
     title: "Sales Summary",
@@ -98,6 +106,10 @@ const selectReportList = [
     title: "Coupon Report",
     url: "coupon-report",
   },
+  {
+    title: "Employee Sales Per Category Report",
+    url: "employee-sales-per-category-report",
+  },
 ];
 const NewSalesReportMain = () => {
   const navigate = useNavigate();
@@ -156,6 +168,26 @@ const NewSalesReportMain = () => {
         return <DailyTotalsMain hide={true} />;
       case "order-type":
         return <OrderTypeMain hide={true} />;
+
+      case "detailed-category-report":
+        return <DetailedcategoryMain hide={true} />;
+      case "detailed-sales-person-report":
+        return <DetailedsalespersonMain hide={true} />;
+      case "top-seller":
+        return <TopsellerMain hide={true} />;
+        case "order-refund-report":
+          return <OrderefundreportMain hide={true} />;   
+
+      
+      case "item-refund-report":
+        return <ItemrefundreportMain hide={true} />;
+
+      case "tip-report":
+        return <TipreportMain hide={true} />;
+      case "coupon-report":
+        return <CouponreportMain hide={true} />;
+      case "employee-sales-per-category-report":
+        return <EmployeesalespercategoryreportMain hide={true} />;
 
       default:
         break;

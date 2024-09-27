@@ -3,7 +3,7 @@ import EmployeeSalesPerCategoryReport from "./EmployeeSalesPerCategoryReport";
 import EmployeeSalesPerCategoryFilter from "./EmployeeSalesPerCategoryFilter";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 
-const MainEmployeeSalesPerCategory = () => {
+const MainEmployeeSalesPerCategory = ({hide}) => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [SelectEmpListData, setSelectEmpListData] = useState(null);
   const [SelectCatListData, setSelectCatListData] = useState(null);
@@ -19,7 +19,7 @@ const MainEmployeeSalesPerCategory = () => {
   return (
     <>
       <div className="q-order-main-page">
-        <EmployeeSalesPerCategoryFilter onFilterDataChange={handleFilterDataChange} />
+        <EmployeeSalesPerCategoryFilter onFilterDataChange={handleFilterDataChange}  hide={hide}/>
       </div>
 
       <div className="q-order-main-page">

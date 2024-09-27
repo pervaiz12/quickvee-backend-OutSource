@@ -7,7 +7,7 @@ import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
-const SalesPersonFilter = ({ onFilterDataChange }) => {
+const SalesPersonFilter = ({ onFilterDataChange,hide }) => {
   const {
     LoginGetDashBoardRecordJson,
     LoginAllStore,
@@ -136,7 +136,7 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <CustomHeader>Detailed Sales Person Report</CustomHeader>
+          {!hide && <CustomHeader>Detailed Sales Person Report</CustomHeader> }
 
           <Grid container sx={{ px: 2.5,pt:1 }}>
             <Grid item xs={12}>

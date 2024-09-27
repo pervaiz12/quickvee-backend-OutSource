@@ -12,6 +12,7 @@ const OrderRefundFilter = ({
   onCategoryChange,
   onReasonChange,
   selectedReason,
+  hide
 }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -46,7 +47,7 @@ const OrderRefundFilter = ({
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <CustomHeader>Order Refund Report</CustomHeader>
+          {!hide && <CustomHeader>Order Refund Report</CustomHeader> }
 
           <Grid container sx={{ px: 2.5,pt:1 }}>
             <Grid item xs={12}>
