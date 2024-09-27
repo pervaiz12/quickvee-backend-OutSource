@@ -105,6 +105,7 @@ const OrderRefundReportList = (props) => {
     if (!AllOrderRefundData.loading && AllOrderRefundData.OrderRefundData) {
       setOrderData(AllOrderRefundData.OrderRefundData);
       props.setCSVHeader(tableRow.map((row) => ({label: row.label,key: row.name})));
+      props.setCSVData(AllOrderRefundData.OrderRefundData.map((item )=>({...item})));
     } else {
       setOrderData("");
     }
