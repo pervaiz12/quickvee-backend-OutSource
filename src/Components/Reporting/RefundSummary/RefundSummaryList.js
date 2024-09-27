@@ -45,7 +45,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const RefundSummaryList = ({ data }) => {
+const RefundSummaryList = ({ data,debouncedValue }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
@@ -59,12 +59,13 @@ const RefundSummaryList = ({ data }) => {
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
     getRefundData();
-  }, [data]);
+  }, [data,debouncedValue]);
   const getRefundData = async () => {
     try {
       if (data) {
         let fetdata = {
           ...data,
+          find_item_name:Boolean(debouncedValue.trim()) ? debouncedValue : "",  
           ...userTypeData,
           merchant_id,
         };
@@ -137,7 +138,7 @@ const RefundSummaryList = ({ data }) => {
     setrefundData(sortedItems);
     setSortOrder(newOrder);
   };
-  console.log("RefundReportData.loading",RefundReportData.loading)
+
   return (
     <>
       <Grid container className="box_shadow_div">
