@@ -142,7 +142,7 @@ const DashboardMain = () => {
         </Grid>
 
         {/* Charts */}
-        <NetSales />
+        <NetSales activeType={activeType} />
 
         {/* Date range for table */}
         <div className="box">

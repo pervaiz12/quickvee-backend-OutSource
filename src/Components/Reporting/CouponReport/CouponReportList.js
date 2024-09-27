@@ -60,14 +60,14 @@ const CouponReportList = (props) => {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
-  const [CouponReportData, setCouponReportData] = useState([]);
-  const showNoData = useDelayedNodata(CouponReportData);
+
+  const showNoData = useDelayedNodata(props.CouponReportData);
   const [sortOrder, setSortOrder] = useState("asc");
   const CouponReportDataState = useSelector((state) => state.CouponReportList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
     getCouponReportData();
-  }, [props, dispatch]);
+  }, [props.selectedDateRange, dispatch]);
   const getCouponReportData = async () => {
     if (props && props.selectedDateRange) {
       try {
@@ -109,9 +109,9 @@ const CouponReportList = (props) => {
             };
           })
         : "";
-      setCouponReportData(uodatedList);
+      props.setCouponReportData(uodatedList);
     } else {
-      setCouponReportData([]);
+      props.setCouponReportData([]);
     }
   }, [CouponReportDataState.loading, CouponReportDataState.CouponReportData]);
 
@@ -123,21 +123,23 @@ const CouponReportList = (props) => {
   ];
   const sortByItemName = (type, name) => {
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
-      CouponReportData,
+      props.CouponReportData,
       type,
       name,
       sortOrder
     );
-    setCouponReportData(sortedItems);
+    props.setCouponReportData(sortedItems);
     setSortOrder(newOrder);
   };
 
+  console.log("props.CouponReportData.length", props.CouponReportData.length);
+  console.log("props.CouponReportData.status", props.CouponReportData.status);
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           {CouponReportDataState.loading ||
-          (CouponReportDataState.status && !CouponReportData.length) ? (
+          (CouponReportDataState.status && !props.CouponReportData.length) ? (
             <SkeletonTable columns={tableRow.map((item) => item.label)} />
           ) : (
             <TableContainer>
@@ -156,8 +158,8 @@ const CouponReportList = (props) => {
                   ))}
                 </TableHead>
                 <TableBody>
-                  {CouponReportData.length > 0 &&
-                    CouponReportData.map((couponData, index) => (
+                  {props.CouponReportData.length > 0 &&
+                    props.CouponReportData.map((couponData, index) => (
                       <StyledTableRow>
                         <StyledTableCell>
                           <p className="report-title">
@@ -174,14 +176,17 @@ const CouponReportList = (props) => {
                         </StyledTableCell>
                         <StyledTableCell>
                           <p className="report-title">
-                            ${priceFormate(parseFloat(couponData.total_discount).toFixed(2))}
+                            $
+                            {priceFormate(
+                              parseFloat(couponData.total_discount).toFixed(2)
+                            )}
                           </p>
                         </StyledTableCell>
                       </StyledTableRow>
                     ))}
                 </TableBody>
               </StyledTable>
-              {showNoData && !CouponReportData.length && <NoDataFound />}
+              {showNoData && !props.CouponReportData.length && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>

@@ -46,7 +46,13 @@ const formatYAxisTick = (tickItem) => {
   return tickItem; // Return the value as is if less than 1000
 };
 
-export default function SpikeCharts({ title, growth, mainOutlet, amount }) {
+export default function SpikeCharts({
+  title,
+  growth,
+  mainOutlet,
+  amount,
+  activeType,
+}) {
   return (
     <Grid container>
       <Grid item xs={12} className="flex justify-between">
@@ -57,8 +63,12 @@ export default function SpikeCharts({ title, growth, mainOutlet, amount }) {
         </div>
       </Grid>
       <Grid item xs={12} className="flex items-center ">
-        <p className="CircularSTDMedium-55px ">{amount}</p>
-        <Link to={"/dashboard-chart-view-reports"} className="CircularSTDMedium-18px ml-2 pt-5 text-blue-600 underline text-base">
+        <p className="CircularSTDMedium-55px ">{amount}</p> activeType
+        <Link
+          to={"/dashboard-chart-view-reports"}
+          state={{ activeType: activeType }}
+          className="CircularSTDMedium-18px ml-2 pt-5 text-blue-600 underline text-base"
+        >
           View Reports
         </Link>
       </Grid>

@@ -3,7 +3,7 @@ import BarCharts from "./BarCharts";
 import SpikeCharts from "./SpikeCharts";
 import { Grid } from "@mui/material";
 
-const NetSales = () => {
+const NetSales = (props) => {
   const spikeCharts = [
     {
       title: "Revenue",
@@ -78,6 +78,7 @@ const NetSales = () => {
                 growth={chart.growth}
                 mainOutlet={chart.mainOutlet}
                 amount={chart.amount}
+                activeType={props.activeType}
               />
             </Grid>
           );
