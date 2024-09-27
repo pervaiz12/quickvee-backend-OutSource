@@ -3,6 +3,7 @@ import MainMixAndMatch from "../MixAndMatch/MainMixAndMatch";
 import AddMixAndMatchDeal from "../MixAndMatch/AddMixAndMatchDeal";
 import UpdateMixAndMatchDeal from "../MixAndMatch/UpdateMixAndMatchDeal";
 import MainSalesReport from "../Reporting/SalesReport/MainSalesReport";
+import NewSalesReportMain from "../SalesReport/NewSalesReportMain";
 const DropCashMain = lazy(() => import("../Reporting/DropCash/DropCashMain"));
 const PayInMain = lazy(() => import("../Reporting/PayIn/PayInMain"));
 const MainEmployeeSalesPerCategory = lazy(
@@ -424,6 +425,8 @@ const LeftSide = ({ visible }) => {
         return <InventoryMerge />;
       case "new-customers-added-report":
         return <NewCustomersAddedReportMain />;
+      case "new-sale-report":
+        return <NewSalesReportMain />;
       default:
         return <DashboardMain />;
     }

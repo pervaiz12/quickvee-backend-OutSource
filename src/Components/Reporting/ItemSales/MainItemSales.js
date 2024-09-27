@@ -5,8 +5,9 @@ import NetSalesFilter from "./NetSalesFilter";
 import ItemSalesDetails from "./ItemSalesDetails";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import useDebounce from "../../../hooks/useDebouncs";
+import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 
-const MainItemSales = () => {
+const MainItemSales = ({ hide }) => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [OrderSourceData, setOrderSourceData] = useState(null);
   const [OrderTypeData, setOrderTypeData] = useState(null);
@@ -20,18 +21,37 @@ const MainItemSales = () => {
     setSelectedDateRange(dateRange);
   };
 
-  const handleFilterDataChange = (OrderSource, OrderType, SelectCat,searchItems) => {
+  const handleFilterDataChange = (
+    OrderSource,
+    OrderType,
+    SelectCat,
+    searchItems
+  ) => {
     setOrderSourceData(OrderSource);
     setOrderTypeData(OrderType);
     setSelectCatData(SelectCat);
-    setItems(searchItems)
+    setItems(searchItems);
   };
 
   return (
     <>
-      <ItemSalesFilter onFilterDataChange={handleFilterDataChange} setSearchRecord={setSearchRecord} debouncedValue={debouncedValue} />
-        { !debouncedValue ? ( <DateRangeComponent onDateRangeChange={handleDateRangeChange} />):("")}
-      
+      <ItemSalesFilter
+        onFilterDataChange={handleFilterDataChange}
+        setSearchRecord={setSearchRecord}
+        debouncedValue={debouncedValue}
+        hide={hide}
+      />
+      {!debouncedValue ? (
+        
+        hide ? (
+          <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
+        ) : (
+          <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
+        )
+      ) : (
+        ""
+      )}
+
       <NetSalesFilter />
 
       <ItemSalesDetails

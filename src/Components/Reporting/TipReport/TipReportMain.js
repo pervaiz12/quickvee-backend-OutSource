@@ -3,7 +3,7 @@ import TipReportList from "./TipReportList";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import { Grid } from "@mui/material";
 
-const TipReportMain = () => {
+const TipReportMain = ({ hide}) => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
@@ -13,22 +13,27 @@ const TipReportMain = () => {
     <>
       <Grid container sx={{}}>
         <Grid item xs={12}>
-          <Grid
-            container
-            sx={{ padding: 2.5, mt: 3.6 }}
-            className="box_shadow_div "
-          >
-            <Grid item xs={12}>
-              <Grid container>
-                <Grid item xs={12}>
-                  <h1 style={{ marginBottom: 0 }} className="heading ">
-                    Tip Report
-                  </h1>
+          { !hide  &&
+            <Grid
+              container
+              sx={{ padding: 2.5, mt: 3.6 }}
+              className="box_shadow_div "
+            >
+              <Grid item xs={12}>
+                <Grid container>
+                  <Grid item xs={12}>
+                    <h1 style={{ marginBottom: 0 }} className="heading ">
+                      Tip Report
+                    </h1>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
+           }
+          <Grid container sx={!hide ? { mt: 3.6 } : {}}>
+          <DateRangeComponent onDateRangeChange={handleDateRangeChange}  />
           </Grid>
-          <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
+
         </Grid>
       </Grid>
 

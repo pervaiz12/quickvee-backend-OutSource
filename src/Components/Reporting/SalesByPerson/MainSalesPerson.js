@@ -3,7 +3,7 @@ import SalesPersonFilter from "./SalesPersonFilter";
 import SalesPersonReport from "./SalesPersonReport";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 
-const MainSalesPerson = () => {
+const MainSalesPerson = ({hide}) => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [OrderSourceData, setOrderSourceData] = useState(null);
   const [OrderTypeData, setOrderTypeData] = useState(null);
@@ -21,7 +21,7 @@ const MainSalesPerson = () => {
   return (
     <>
       <div className="q-order-main-page">
-        <SalesPersonFilter onFilterDataChange={handleFilterDataChange} />
+        <SalesPersonFilter onFilterDataChange={handleFilterDataChange} hide={hide} />
       </div>
 
       <div className="q-order-main-page">

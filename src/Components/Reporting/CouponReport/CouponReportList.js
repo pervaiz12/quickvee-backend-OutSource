@@ -119,6 +119,7 @@ const CouponReportList = (props) => {
     { type: "date", name: "date", label: "Date" },
     { type: "str", name: "couponName", label: "Coupon Name" },
     { type: "num", name: "total_coupons_used", label: "Total Coupon Used" },
+    { type: "num", name: "total_discount", label: "Total Amount Discounted" },
   ];
   const sortByItemName = (type, name) => {
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
@@ -169,6 +170,11 @@ const CouponReportList = (props) => {
                         <StyledTableCell>
                           <p className="report-title">
                             {priceFormate(couponData.total_coupons_used)}
+                          </p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p className="report-title">
+                            ${priceFormate(parseFloat(couponData.total_discount).toFixed(2))}
                           </p>
                         </StyledTableCell>
                       </StyledTableRow>

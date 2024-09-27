@@ -11,7 +11,7 @@ import axios from "axios";
 import PasswordShow from "../../../Common/passwordShow";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
-const RefundSummary = () => {
+const RefundSummary = ({ hide}) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
@@ -152,7 +152,7 @@ const RefundSummary = () => {
     <>
       <Grid container sx={{ pb: 2.5 }} className="box_shadow_div ">
         <Grid item xs={12}>
-          <CustomHeader>Item Refund Report</CustomHeader>
+          {!hide && <CustomHeader>Item Refund Report</CustomHeader> }
 
           <Grid container sx={{ px: 2.5, pt: 1 }}>
             <Grid item xs={12}>
