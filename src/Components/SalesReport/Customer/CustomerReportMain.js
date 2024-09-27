@@ -145,7 +145,7 @@ import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
                   type="text"
                   value={searchRecord}
                   handleChange={handleSearchInputChange}
-                  placeholder="Search..."
+                  placeholder="Search customers by phone number, name, email"
                   autoComplete="off"
                 />
               </Grid>
