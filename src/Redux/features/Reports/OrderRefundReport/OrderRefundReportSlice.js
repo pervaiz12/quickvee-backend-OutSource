@@ -26,7 +26,6 @@ export const fetchOrderRefundData = createAsyncThunk(
           },
         }
       );
-      console.log(response)
       if (response.data.status === true) {
         // console.log(response.data)
         const arr = response.data.report_data;

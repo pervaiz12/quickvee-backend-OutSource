@@ -6,6 +6,7 @@ import downloadIcon from "../../Assests/Dashboard/download.svg";
 import DashDateRangeComponent from "../../reuseableComponents/DashDateRangeComponent";
 import VerticalBarChart from "../Dashboard/VerticalBarChart";
 import { useNavigate, useParams } from "react-router-dom";
+import { CSVLink } from "react-csv";
 const SalesReportMain = lazy(
   () => import("../Reporting/SalesReport/SalesReportMain")
 );
@@ -25,14 +26,31 @@ const DailyTotalsMain = lazy(
   () => import("../Reporting/DailyReport/DailyTtlReport")
 );
 const OrderTypeMain = lazy(() => import("../Reporting/ItemType/MainItem"));
-const DetailedcategoryMain = lazy(() => import("../Reporting/CategoryDetails/MainCatedetails"));
-const DetailedsalespersonMain = lazy(() => import("../Reporting/SalesByPerson/MainSalesPerson"));
-const TopsellerMain = lazy(() => import("../Reporting/TopSaller/TopSallerReport"));
-const OrderefundreportMain = lazy(() => import("../Reporting/OrderRefundReport/OrderRefundReportMain"));
-const ItemrefundreportMain = lazy(() => import("../Reporting/RefundSummary/RefundSummary"));
-const TipreportMain = lazy(() => import("../Reporting/TipReport/TipReportMain"));
-const CouponreportMain = lazy(() => import("../Reporting/CouponReport/CouponReportMain"));
-const EmployeesalespercategoryreportMain = lazy(() => import("../Reporting/EmployeeSalesPerCategory/MainEmployeeSalesPerCategory"));
+const DetailedcategoryMain = lazy(
+  () => import("../Reporting/CategoryDetails/MainCatedetails")
+);
+const DetailedsalespersonMain = lazy(
+  () => import("../Reporting/SalesByPerson/MainSalesPerson")
+);
+const TopsellerMain = lazy(
+  () => import("../Reporting/TopSaller/TopSallerReport")
+);
+const OrderefundreportMain = lazy(
+  () => import("../Reporting/OrderRefundReport/OrderRefundReportMain")
+);
+const ItemrefundreportMain = lazy(
+  () => import("../Reporting/RefundSummary/RefundSummary")
+);
+const TipreportMain = lazy(
+  () => import("../Reporting/TipReport/TipReportMain")
+);
+const CouponreportMain = lazy(
+  () => import("../Reporting/CouponReport/CouponReportMain")
+);
+const EmployeesalespercategoryreportMain = lazy(
+  () =>
+    import("../Reporting/EmployeeSalesPerCategory/MainEmployeeSalesPerCategory")
+);
 const selectReportList = [
   {
     title: "Sales Summary",
@@ -115,6 +133,8 @@ const NewSalesReportMain = () => {
   const navigate = useNavigate();
   const { selectedReport } = useParams();
   const [selectedDateRange, setSelectedDateRange] = useState(null);
+  const [CSVData, setCSVData] = useState([]);
+  const [CSVHeaders, setCSVHeader] = useState([]);
   const onDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
   };
@@ -175,10 +195,9 @@ const NewSalesReportMain = () => {
         return <DetailedsalespersonMain hide={true} />;
       case "top-seller":
         return <TopsellerMain hide={true} />;
-        case "order-refund-report":
-          return <OrderefundreportMain hide={true} />;   
+      case "order-refund-report":
+        return <OrderefundreportMain setCSVData={setCSVData} setCSVHeader={setCSVHeader} hide={true} />;
 
-      
       case "item-refund-report":
         return <ItemrefundreportMain hide={true} />;
 
@@ -230,12 +249,17 @@ const NewSalesReportMain = () => {
                 cursor: "pointer",
               }}
             >
-              <h1 className="text-[#0A64F9] text-[16px]">Export report</h1>
-              <img
-                style={{ height: "30px", width: "30px" }}
-                src={downloadIcon}
-                alt="downloadIcon"
-              />
+              <CSVLink data={CSVData} headers={CSVHeaders}>
+                <div className="flex justify-center items-center flex-nowrap">
+
+                <h1 className="text-[#0A64F9] text-[16px]">Export report</h1>
+                <img
+                  style={{ height: "30px", width: "30px" }}
+                  src={downloadIcon}
+                  alt="downloadIcon"
+                  />
+                  </div>
+              </CSVLink>
             </Grid>
           </Grid>
         </Grid>

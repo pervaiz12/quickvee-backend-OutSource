@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchBrandData } from "../../Redux/features/Brand/brandsSlice";
+import { fetchBrandData, fetchTagData } from "../../Redux/features/Brand/brandsSlice";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import PasswordShow from "../../Common/passwordShow";
 import axios from "axios";
@@ -63,11 +63,12 @@ export default function TagLogic() {
     setSkeltonLoader(getBrandListSlice?.loading);
     if (
       !getBrandListSlice?.loading &&
-      !!getBrandListSlice?.BrandsData &&
-      getBrandListSlice?.BrandsData.length > 0
+      !!getBrandListSlice?.tagData &&
+      getBrandListSlice?.tagData.length > 0
     ) {
-      setGetTagList(getBrandListSlice?.BrandsData);
-      setFilterSearch(getBrandListSlice?.BrandsData);
+      console.log("getBrandListSlice?.tagData",getBrandListSlice?.tagData);
+      setGetTagList(getBrandListSlice?.tagData);
+      setFilterSearch(getBrandListSlice?.tagData);
     } else {
       setGetTagList([]);
       setFilterSearch([]);
@@ -76,7 +77,7 @@ export default function TagLogic() {
 
   const getBrandData = async () => {
     try {
-      await dispatch(fetchBrandData(data)).unwrap();
+      await dispatch(fetchTagData(data)).unwrap();
     } catch (error) {
       if (error?.status == 401) {
         getUnAutherisedTokenMessage();
@@ -122,7 +123,7 @@ export default function TagLogic() {
   };
   // ===========onchange function ===============
   const handleGetEditData = (id) => {
-    let brandtest = getBrandListSlice?.BrandsData?.find(
+    let brandtest = getBrandListSlice?.tagData?.find(
       (item) => item.id === id
     );
     if (brandtest) {
@@ -139,7 +140,7 @@ export default function TagLogic() {
 
   const checkExistingBrand = (brand) => {
     let error = true;
-    let brandtest = getBrandListSlice?.BrandsData?.find(
+    let brandtest = getBrandListSlice?.tagData?.find(
       (item) => item.title.toLowerCase() === brand.toLowerCase()
     );
     if (brandtest) {
@@ -180,7 +181,7 @@ export default function TagLogic() {
   };
   const handleDeleteTag = async () => {
     setDeleteModalOpen(false);
-    let brandtest = getBrandListSlice?.BrandsData?.find(
+    let brandtest = getBrandListSlice?.tagData?.find(
       (item) => item.id === deleteId
     );
     const { token, ...newData } = data;
