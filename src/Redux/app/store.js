@@ -81,6 +81,15 @@ import NewCustomersAddedReportSlice from "../features/Reports/NewCustomersAddedR
 import MixAndMatchSliceReducer from "../features/MixAndMatch/mixAndMatchSlice";
 import RegisterClosuresSlice from "../features/Reports/RegisterClosures/RegisterClosuresSlice";
 import loyaltyprogramStoreSliceReducer from "../features/LoyaltyProgramStore/loyaltyProgramStoreSlice";
+import RevenueChartSlice from "../features/Dashboard/Charts/RevenueChartSlice";
+import customerCountSlice from "../features/Dashboard/Charts/customerCountSlice";
+import salesCountChartSlice from "../features/Dashboard/Charts/salesCountSlice";
+import grossProfitChartSlice from "../features/Dashboard/Charts/grossProfitChartSlice";
+import discountChartSlice from "../features/Dashboard/Charts/discountChartSlice";
+import percentageDiscountChartSlice from "../features/Dashboard/Charts/percentageDiscountChartSlice";
+import avgItemSaleChartSlice from "../features/Dashboard/Charts/avgItemSaleChartSlice";
+import avgSaleValueChartSlice from "../features/Dashboard/Charts/avgSaleValueChartSlice";
+
 const store = configureStore({
   reducer: {
     VendorList: VendorListReducer,
@@ -104,6 +113,16 @@ const store = configureStore({
     CheckIDVerifyList: CheckIDVerifyListReducer,
     dailyreport: DailyReportList,
     detailCategorySale: DetailCategorySaleSliceReducer,
+
+    // Dashboard Charts slices
+    revenueChart: RevenueChartSlice,
+    salesCountChart: salesCountChartSlice,
+    customerCountChart: customerCountSlice,
+    grossProfitChart: grossProfitChartSlice,
+    discountChart: discountChartSlice,
+    percentageDiscountChart: percentageDiscountChartSlice,
+    avgItemSaleChart: avgItemSaleChartSlice,
+    avgSaleValueChart: avgSaleValueChartSlice,
 
     //reducer for payment method  report
     paymentDetailReport: PaymentMethodDetailReducer,

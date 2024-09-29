@@ -202,7 +202,6 @@ const RegisterClosuresTransactions = lazy(
   () => import("../Reporting/RegisterClosures/RegisterClosureTransactions")
 );
 
-
 const MainLoyaltyProgramPage = lazy(
   () => import("../StoreSetting/LoyaltyProgram/MainLoyaltyProgram")
 );
@@ -305,7 +304,6 @@ const LeftSide = ({ visible }) => {
       case "system-access":
         return <MainSyastemAccess />;
       case "StoreSettingloyalty-program":
-
         return <MainLoyaltyProgramPage />;
       case "daily-total-report":
         return <DailyTtlReport />;

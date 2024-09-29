@@ -1,87 +1,52 @@
-import React, { useState } from "react";
-import BarCharts from "./BarCharts";
-import SpikeCharts from "./SpikeCharts";
+import React from "react";
 import { Grid } from "@mui/material";
+import { RevenueChart } from "./Charts/RevenueChart";
+import { SalesCountChart } from "./Charts/SalesCountChart";
+import { CustomerCountChart } from "./Charts/CustomerCountChart";
+import { GrossProfitChart } from "./Charts/GrossProfitChart";
+import { DiscountChart } from "./Charts/DiscountChart";
+import { PercentageDiscountChart } from "./Charts/PercentageDiscountChart";
+import { AvgItemSaleChart } from "./Charts/AvgItemSaleChart";
+import { AvgSaleValueChart } from "./Charts/AvgSaleValueChart";
 
-const NetSales = () => {
-  const spikeCharts = [
-    {
-      title: "Revenue",
-      growth: "20%",
-      mainOutlet: "$5.8k",
-      amount: "$5.8k",
-    },
-    {
-      title: "Sales Count",
-      growth: "10%",
-      mainOutlet: "13",
-      amount: "13",
-    },
-    {
-      title: "Customer Count",
-      growth: "20%",
-      mainOutlet: "5",
-      amount: "5",
-    },
-    {
-      title: "Gross Profit",
-      growth: "10%",
-      mainOutlet: "$2.9k",
-      amount: "$2.9k",
-    },
-    {
-      title: "Discounted",
-      growth: "20%",
-      mainOutlet: "$15k",
-      amount: "$15k",
-    },
-    {
-      title: "Discounted %",
-      growth: "10%",
-      mainOutlet: "0.257%",
-      amount: "0.257%",
-    },
-    {
-      title: "Avg. sale value",
-      growth: "20%",
-      mainOutlet: "$449k",
-      amount: "$449k",
-    },
-    {
-      title: "Avg. items per sale",
-      growth: "10%",
-      mainOutlet: "2.76923",
-      amount: "2.76923",
-    },
-  ];
+const NetSales = ({ activeType, merchantId }) => {
   return (
     <>
       <Grid
+        container
         sx={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
+          // display: "flex",
+          // flexWrap: "wrap",
           gap: 3,
           mb: 2.5,
         }}
       >
-        {spikeCharts.map((chart, index) => {
-          return (
-            <Grid
-              key={index}
-              item
-              xs={12}
-              sx={{ p: 2.5 }}
-              className="box_shadow_div"
-            >
-              <SpikeCharts
-                title={chart.title}
-                growth={chart.growth}
-                mainOutlet={chart.mainOutlet}
-                amount={chart.amount}
-              />
-            </Grid>
-          );
-        })}
+        {/* Revenue Chart */}
+        <RevenueChart activeType={activeType} merchantId={merchantId} />
+
+        {/* Sales Count Chart */}
+        <SalesCountChart activeType={activeType} merchantId={merchantId} />
+
+        {/* Customer Count Chart */}
+        <CustomerCountChart activeType={activeType} merchantId={merchantId} />
+
+        {/* Gross Profit Chart */}
+        <GrossProfitChart activeType={activeType} merchantId={merchantId} />
+
+        {/* Discounted Chart */}
+        <DiscountChart activeType={activeType} merchantId={merchantId} />
+
+        {/* Percentage Discounted Chart */}
+        <PercentageDiscountChart
+          activeType={activeType}
+          merchantId={merchantId}
+        />
+
+        {/* Avg Sale value chart */}
+        <AvgSaleValueChart activeType={activeType} merchantId={merchantId} />
+
+        {/* Avg items per sale chart */}
+        <AvgItemSaleChart activeType={activeType} merchantId={merchantId} />
       </Grid>
     </>
   );

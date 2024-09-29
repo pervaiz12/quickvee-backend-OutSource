@@ -2804,12 +2804,15 @@ padding: 15px 0px;
 }
 
 .q-attributes-bottom-header span.single-box-type {
-  padding: 8px 24px;
+  padding: 0px 24px;
   font-family: CircularSTDBook !important;
   font-size: 16px;
   border: 2px solid #e1e1e1;
   border-radius: 4px;
   cursor: pointer;
+  height: 40px;
+  display: flex;
+  align-items: center;
 }
 
 .q-attributes-bottom-header span.single-box-type.active {
