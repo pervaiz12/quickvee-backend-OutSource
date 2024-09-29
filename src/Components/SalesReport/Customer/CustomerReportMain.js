@@ -204,10 +204,10 @@ const StyledTable = styled(Table)(({ theme }) => ({
           sx={{ mt: 0 }}
         >
           <Grid item xs={12} md={6}>
-            <CustomerVerticalBarChart title="Top Vendors by Quantity Sold" color="#0A64F9" />
+            <CustomerVerticalBarChart title="Top Vendors by Quantity Sold" GrapTitle="Quantity Sold" color="#0A64F9" />
           </Grid>
           <Grid item xs={12} md={6}>
-            <VerticalBarChart title="Top Vendors by Sales Amount" color="#FF7700" />
+            <CustomerVerticalBarChart title="Top Vendors by Sales Amount" GrapTitle="Sales Amount" color="#FF7700" />
           </Grid>
         </Grid>
   
@@ -237,7 +237,7 @@ const StyledTable = styled(Table)(({ theme }) => ({
                     aria-label="customized table"
                   >
                     <TableHead>
-                      <StyledTableCell>
+                      <StyledTableCell className=" BORHeaderRight">
                         <button
                           className="flex items-center"
                           onClick={() =>
@@ -306,7 +306,7 @@ const StyledTable = styled(Table)(({ theme }) => ({
                     <TableBody>
                       {newCustomerreport.length > 0 ? (
                         <>
-                          <StyledTableCell  sx={ {fontWeight: "bold"} }>
+                          <StyledTableCell  sx={ {fontWeight: "bold"} } className="BORBodyRight">
                                 <p className="report-title">Total</p>
                           </StyledTableCell>
                           <StyledTableCell   sx={ {fontWeight: "bold"} }>
@@ -319,15 +319,17 @@ const StyledTable = styled(Table)(({ theme }) => ({
                                 <p >${priceFormate(totalSaleAmount.toFixed(2))}</p>
                           </StyledTableCell>
                           <StyledTableCell  sx={ {fontWeight: "bold"} }>
-                                <p >${priceFormate((totalSaleAmount/totalqtysold).toFixed(2))}</p>
+                            {/* Quantity Sold/Sales Count */}
+                                <p >{priceFormate((totalqtysold/totaloderCount).toFixed(2))}</p>
                           </StyledTableCell>
                           <StyledTableCell  sx={ {fontWeight: "bold"} }>
+                             {/* Sales Amount/Sales Count */}
                                 <p >${priceFormate((totalSaleAmount/totaloderCount).toFixed(2))}</p>
                           </StyledTableCell>
                           <StyledTableCell  sx={ {fontWeight: "bold"} }></StyledTableCell>
                           {newCustomerreport.map((data, index) => (
                             <StyledTableRow key={index}>
-                              <StyledTableCell>
+                              <StyledTableCell className="BORBodyRight">
                                 <p className="report-sort whitespace-nowrap">{data.name}</p>
                                 <p className="report-sort whitespace-nowrap">{data.email}</p>
                                 <p className="report-sort whitespace-nowrap">{data.phone}</p>
@@ -350,11 +352,13 @@ const StyledTable = styled(Table)(({ theme }) => ({
                               </StyledTableCell>
                               <StyledTableCell>
                                 <p className="report-title">
-                                  ${priceFormate((data.total_amount/data.total_quantity).toFixed(2))}
+                                {/* Quantity Sold/Sales Count */}
+                                  {priceFormate((data.total_quantity/data.total_orders).toFixed(2))}
                                 </p>
                               </StyledTableCell>
                               <StyledTableCell>
                                 <p className="report-sort">
+                                {/* Sales Amount/Sales Count */}
                                   ${priceFormate((data.total_amount/data.total_orders).toFixed(2))}
                                 </p>
                               </StyledTableCell>
@@ -380,10 +384,6 @@ const StyledTable = styled(Table)(({ theme }) => ({
 
           </Grid>
         </Grid>
-
- {/*================================================== for Fetch Start =======================================  */}
-
-
         
       </>
     );

@@ -66,11 +66,31 @@ const CustomYAxisTick = ({ x, y, payload }) => {
 };
 
 const data = [
-  { name: "Walkin", popularity: 20, color: "#FF7700" },
-
+  { name: "Walkin", popularity: 20 },
 ];
 
-export default function CustomerVerticalBarChart({title,color}) {
+
+const CustomTooltip = ({ data }) => {
+  if (data.length) {
+    return (
+      <div className="custom-tooltip" >
+        {/* <p className="intro">{getIntroOfPage(label)}</p> */}
+
+        {data.map((item, index) => (
+          <div className="flex justify-between" key={index}>
+            <p>{item.name}</p>
+            <p>{item.popularity}</p>
+          </div>
+        ))}
+
+      </div>
+    );
+  }
+  
+  return null;
+};
+
+export default function CustomerVerticalBarChart({title,GrapTitle,color}) {
   return (
     <Grid container sx={{ mt: 0 }} className="box_shadow_div">
       <Grid item xs={12}>
@@ -101,7 +121,7 @@ export default function CustomerVerticalBarChart({title,color}) {
               ticks={[0, 10, 20, 30, 40]} // Custom tick values for popularity
               domain={[0, 40]} // Set domain to cover the popularity range
             />
-            <Tooltip />
+            <Tooltip content={<CustomTooltip data={data} />}/>
             {/* Render bars with dynamic colors */}
             <Bar dataKey="popularity" name="Popularity">
               {data.map((entry) => (
@@ -110,6 +130,9 @@ export default function CustomerVerticalBarChart({title,color}) {
             </Bar>
           </BarChart>
         </ResponsiveContainer>
+          <div className="flex justify-center pb-4">
+            <p className="CircularSTDBook-15px text-[#707070]">{GrapTitle}</p>
+          </div>
       </Grid>
     </Grid>
   );
