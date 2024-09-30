@@ -15,7 +15,8 @@ import {
   ORDER_TYPE_ORDER_LIST_COUNT,
 } from "../../../Constants/Config";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
-const ItemsCategories = () => {
+import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
+const ItemsCategories = ({ hide }) => {
   const location = useLocation();
 
   const [totalCount, setTotalCount] = useState(0);
@@ -184,7 +185,7 @@ const ItemsCategories = () => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <CustomHeader>Order Type</CustomHeader>
+          {!hide && <CustomHeader>Order Type</CustomHeader>}
 
           <Grid container sx={{ px: 2.5, pt: 1 }}>
             <Grid item xs={12}>
@@ -212,10 +213,15 @@ const ItemsCategories = () => {
         </Grid>
       </Grid>
 
-      <DateRangeComponent
+      {hide ? (
+          <DashDateRangeComponent onDateRangeChange={handleDataFiltered}  future_date={future_date}/>
+        ) : (
+          <DateRangeComponent onDateRangeChange={handleDataFiltered}  future_date={future_date}/>
+        )}
+      {/* <DateRangeComponent
         onDateRangeChange={handleDataFiltered}
         future_date={future_date}
-      />
+      /> */}
 
       <Itemdatadetails
         data={filteredData}

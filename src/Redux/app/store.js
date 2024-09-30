@@ -16,6 +16,7 @@ import PurchaseOrderReducer from "../features/PurchaseOrder/purchaseOrderSlice";
 import PurchaseOrderByIdReducer from "../features/PurchaseOrder/purchaseOrderByIdSlice";
 import CheckIDVerifyListReducer from "../features/Reports/CheckIDVerify/CheckIDVerifySlice";
 import DailyReportList from "../features/DailyReport/dailyreportSlice";
+import NewCustomerReportList from "../features/NewCutomerReport/newCustomerReportSlice";
 import EmployeeListReducer from "../features/EmployeeList/EmployeeListSlice";
 
 import PaymentMethodDetailReducer from "../features/PaymentMethodReport/PaymentMethodSlice";
@@ -123,7 +124,7 @@ const store = configureStore({
     percentageDiscountChart: percentageDiscountChartSlice,
     avgItemSaleChart: avgItemSaleChartSlice,
     avgSaleValueChart: avgSaleValueChartSlice,
-
+    newCustomerreport: NewCustomerReportList,
     //reducer for payment method  report
     paymentDetailReport: PaymentMethodDetailReducer,
 

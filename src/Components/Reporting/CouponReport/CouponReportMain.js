@@ -4,7 +4,7 @@ import DateRange from "../../../reuseableComponents/DateRangeComponent";
 import CouponReportList from "./CouponReportList";
 import { Grid } from "@mui/material";
 
-const CouponReportMain = () => {
+const CouponReportMain = ({hide}) => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
@@ -12,6 +12,7 @@ const CouponReportMain = () => {
 
   return (
     <>
+      {!hide && 
       <Grid
         container
         sx={{ padding: 2.5, mt: 3.6 }}
@@ -27,6 +28,7 @@ const CouponReportMain = () => {
           </Grid>
         </Grid>
       </Grid>
+      }
       <Grid container sx={{ my: 3.7 }}>
         <DateRange onDateRangeChange={handleDateRangeChange} />
       </Grid>

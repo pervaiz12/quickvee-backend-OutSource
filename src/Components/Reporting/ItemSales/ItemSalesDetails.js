@@ -64,7 +64,7 @@ const ItemSalesDetails = (props) => {
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
     getFetchItemSalesData();
-  }, [props]);
+  }, [props.selectedDateRange,props.OrderSourceData,props.OrderTypeData,props.SelectCatData,props.items]);
 
   const getFetchItemSalesData = async () => {
     if (props && props.selectedDateRange) {
@@ -99,6 +99,8 @@ const ItemSalesDetails = (props) => {
     ) {
       setallItemSalesData(AllItemSalesDataState.ItemSalesData[0]);
       setapiStatus(AllItemSalesDataState.ItemSalesData[3]);
+      props.setCSVData(AllItemSalesDataState.ItemSalesData[0]);
+      props.setCSVHeader(tableRow.map((row) => ({label: row.label,key: row.name})));
     } else {
       setallItemSalesData([]);
       // setapiStatus(false);

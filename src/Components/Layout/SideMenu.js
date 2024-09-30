@@ -224,8 +224,9 @@ const SideMenu = () => {
 
   function getFirstTwoSegmentsPath(pathname) {
     // console.log("getFirstTwoSegmentsPath",pathname)
-    const segments = pathname.split("/").filter(Boolean);
-    return "/" + segments.slice(0, 2).join("/");
+    const segments = pathname?.split("/").filter(Boolean);
+   
+    return "/" + segments?.slice(0, 2).join("/");
   }
   function getFirstTwoSegmentsPathIsStoreAvtive(pathname) {
     // console.log("getFirstTwoSegmentsPath",pathname)
@@ -385,7 +386,7 @@ const DropdownMenuItem = ({
   const isTabletNav = useMediaQuery("(max-width:1024px)");
   useEffect(() => {
     const foundItem = item?.dropdownItems?.find(
-      (item) => item?.link === getFirstTwoSegmentsPath(activeItem)
+      (item) => getFirstTwoSegmentsPath(item?.link) === getFirstTwoSegmentsPath(activeItem)
     );
 
     if (foundItem) {
@@ -463,18 +464,18 @@ const DropdownMenuItem = ({
           {isMenuOpenRedux ? (
             <div
               className={`w-full flex items-center cursor-pointer ${
-                getFirstTwoSegmentsPath(activeItem) === dropDownItem
+                getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem)
                   ? "bg-[#414F54]"
                   : ""
               }`}
             >
-              {getFirstTwoSegmentsPath(activeItem) === dropDownItem ||
+              {getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem) ||
               hoveredItem === item.id
                 ? item.activeIcon
                 : item.icon}
               <p
                 className={`ml-2 menu-item DropDown-memu text-[14px] flex-auto Admin_std ${
-                  getFirstTwoSegmentsPath(activeItem) === dropDownItem
+                  getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem)
                     ? "activeTab"
                     : ""
                 }`}
@@ -484,7 +485,7 @@ const DropdownMenuItem = ({
               {currentDropDownItem === item.id ? (
                 <FaChevronUp
                   className={`quickarrow_icon ml-4 me-5 text-${
-                    (getFirstTwoSegmentsPath(activeItem) === dropDownItem ||
+                    (getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem) ||
                       hoveredItem === item.id) &&
                     "[#FFC400]"
                   }`}
@@ -492,7 +493,7 @@ const DropdownMenuItem = ({
               ) : (
                 <FaChevronDown
                   className={`quickarrow_icon ml-4 me-5 text-${
-                    (getFirstTwoSegmentsPath(activeItem) === dropDownItem ||
+                    (getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem) ||
                       hoveredItem === item.id) &&
                     "[#FFC400]"
                   }`}
@@ -508,7 +509,7 @@ const DropdownMenuItem = ({
                   HandleDropdownIconClick(item.id);
                 }}
               >
-                {getFirstTwoSegmentsPath(activeItem) === dropDownItem ||
+                {getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem) ||
                 hoveredItem === item.id
                   ? item.activeIcon
                   : item.icon}
@@ -628,105 +629,110 @@ const menuItems = [
     link: "/reporting",
     className: "flex items-center gap-2",
     dropdownItems: [
+      // {
+      //   id: 1,
+      //   text: "Sales Reports",
+      //   dropDownItems: [
+      //     {
+      //       id: 61,
+      //       text: "Sales Summary",
+      //       link: "/store-reporting/sales-report",
+      //     },
+      //     {
+      //       id: 108,
+      //       text: "Sales Report",
+      //       link: "/store-reporting/new-sales-report",
+      //     },
+      //     {
+      //       id: 77,
+      //       text: "Item Sales",
+      //       link: "/store-reporting/item-sales",
+      //     },
+      //     {
+      //       id: 98,
+      //       text: "Category Sales Summary Report",
+      //       link: "/store-reporting/category-sales-summery-report",
+      //     },
+      //     {
+      //       id: 62,
+      //       text: "Daily Total Report",
+      //       link: "/store-reporting/daily-total-report",
+      //     },
+      //     {
+      //       id: 63,
+      //       text: "Detailed Category Sale",
+      //       link: "/store-reporting/Details-category",
+      //     },
+      //     {
+      //       id: 64,
+      //       text: "Detailed Sales Person Report",
+      //       link: "/store-reporting/report-sales-person",
+      //     },
+      //     {
+      //       id: 100,
+      //       text: "Detailed Store Credit Report",
+      //       link: "/store-reporting/store-credit-report",
+      //     },
+      //     {
+      //       id: 96,
+      //       text: "Drop Cash Report",
+      //       link: "/store-reporting/drop-cash-report",
+      //     },
+      //     {
+      //       id: 102,
+      //       text: "Gift Card Report",
+      //       link: "/store-reporting/gift-card-report",
+      //     },
+
+      //     {
+      //       id: 79,
+      //       text: "Order Type",
+      //       link: "/store-reporting/order-type",
+      //     },
+      //     {
+      //       id: 97,
+      //       text: "Pay In Report",
+      //       link: "/store-reporting/pay-in-report",
+      //     },
+      //     {
+      //       id: 78,
+      //       text: "Payment Method Details",
+      //       link: "/store-reporting/payment-method-details",
+      //     },
+      //     {
+      //       id: 90,
+      //       text: "Product Profitability Report",
+      //       link: "/store-reporting/item-sale-profit-report",
+      //     },
+      //     // {
+      //     //   id: 99,
+      //     //   text: "Sales by Hour Report",
+      //     //   link: "/store-reporting/sales-by-hour-report",
+      //     // },
+
+      //     {
+      //       id: 69,
+      //       text: "Top Sellers",
+      //       link: "/store-reporting/overall-top",
+      //     },
+
+      //     // {
+      //     //   id: 78,
+      //     //   text: "Discount Per Sales Report",
+      //     //   link: "/store-reporting/discount-per-sales-report",
+      //     // },
+
+      //     // {
+      //     //   id: 105,
+      //     //   text: "New Item Sales Report",
+      //     //   link: "/store-reporting/new-item-sales-report",
+      //     // },
+      //   ],
+      // },
       {
-        id: 1,
-        text: "Sales Reports",
-        dropDownItems: [
-          {
-            id: 61,
-            text: "Sales Summary",
-            link: "/store-reporting/sales-report",
-          },
-          {
-            id: 108,
-            text: "Sales Report",
-            link: "/store-reporting/new-sales-report",
-          },
-          {
-            id: 77,
-            text: "Item Sales",
-            link: "/store-reporting/item-sales",
-          },
-          {
-            id: 98,
-            text: "Category Sales Summary Report",
-            link: "/store-reporting/category-sales-summery-report",
-          },
-          {
-            id: 62,
-            text: "Daily Total Report",
-            link: "/store-reporting/daily-total-report",
-          },
-          {
-            id: 63,
-            text: "Detailed Category Sale",
-            link: "/store-reporting/Details-category",
-          },
-          {
-            id: 64,
-            text: "Detailed Sales Person Report",
-            link: "/store-reporting/report-sales-person",
-          },
-          {
-            id: 100,
-            text: "Detailed Store Credit Report",
-            link: "/store-reporting/store-credit-report",
-          },
-          {
-            id: 96,
-            text: "Drop Cash Report",
-            link: "/store-reporting/drop-cash-report",
-          },
-          {
-            id: 102,
-            text: "Gift Card Report",
-            link: "/store-reporting/gift-card-report",
-          },
-
-          {
-            id: 79,
-            text: "Order Type",
-            link: "/store-reporting/order-type",
-          },
-          {
-            id: 97,
-            text: "Pay In Report",
-            link: "/store-reporting/pay-in-report",
-          },
-          {
-            id: 78,
-            text: "Payment Method Details",
-            link: "/store-reporting/payment-method-details",
-          },
-          {
-            id: 90,
-            text: "Product Profitability Report",
-            link: "/store-reporting/item-sale-profit-report",
-          },
-          // {
-          //   id: 99,
-          //   text: "Sales by Hour Report",
-          //   link: "/store-reporting/sales-by-hour-report",
-          // },
-
-          {
-            id: 69,
-            text: "Top Sellers",
-            link: "/store-reporting/overall-top",
-          },
-
-          // {
-          //   id: 78,
-          //   text: "Discount Per Sales Report",
-          //   link: "/store-reporting/discount-per-sales-report",
-          // },
-
-          // {
-          //   id: 105,
-          //   text: "New Item Sales Report",
-          //   link: "/store-reporting/new-item-sales-report",
-          // },
-        ],
+        id: 80,
+        text: "Sales Report",
+        link: "/store-reporting/new-sale-report/sales-summary",
       },
       {
         id: 2,
@@ -806,44 +812,44 @@ const menuItems = [
           },
         ],
       },
-      {
-        id: 1723011930198,
-        text: "Employee Reports",
-        dropDownItems: [
-          {
-            id: 102,
-            text: "Employee Sales Per Category",
-            link: "/store-reporting/employee-sales-per-category-report",
-          },
-        ],
-      },
+      // {
+      //   id: 1723011930198,
+      //   text: "Employee Reports",
+      //   dropDownItems: [
+      //     {
+      //       id: 102,
+      //       text: "Employee Sales Per Category",
+      //       link: "/store-reporting/employee-sales-per-category-report",
+      //     },
+      //   ],
+      // },
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
       {
         id: 80,
         text: "New Taxes Reports",
         link: "/store-reporting/new-taxes-report",
       },
-      {
-        id: 4,
-        text: "Refunds",
-        dropDownItems: [
-          {
-            id: 84,
-            text: "Item Refund Report",
-            link: "/store-settings/refund-report",
-          },
-          {
-            id: 82,
-            text: "Order Refund Report",
-            link: "/store-settings/order-refund-report",
-          },
-          // {
-          //   id: 85,
-          //   text: "Refunded Order ID's",
-          //   link: "/store-settings/#",
-          // },
-        ],
-      },
+      // {
+      //   id: 4,
+      //   text: "Refunds",
+      //   dropDownItems: [
+      //     {
+      //       id: 84,
+      //       text: "Item Refund Report",
+      //       link: "/store-settings/refund-report",
+      //     },
+      //     {
+      //       id: 82,
+      //       text: "Order Refund Report",
+      //       link: "/store-settings/order-refund-report",
+      //     },
+      //     // {
+      //     //   id: 85,
+      //     //   text: "Refunded Order ID's",
+      //     //   link: "/store-settings/#",
+      //     // },
+      //   ],
+      // },
       {
         id: 5,
         text: "Vendors",
@@ -888,8 +894,8 @@ const menuItems = [
       // },
 
       // { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
-      { id: 87, text: "Tip Report", link: "/store-reporting/tip-report" },
-      { id: 88, text: "Coupon Report", link: "/store-reporting/coupon-report" },
+      // { id: 87, text: "Tip Report", link: "/store-reporting/tip-report" },
+      // { id: 88, text: "Coupon Report", link: "/store-reporting/coupon-report" },
       // { id: 1726033807930, text: "Shift Summary", link: "/store-reporting/shift-summary" },
       {
         id: 1726123837135,

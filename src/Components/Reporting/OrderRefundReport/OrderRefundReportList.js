@@ -66,7 +66,7 @@ const OrderRefundReportList = (props) => {
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
     getOrderRefundData();
-  }, [props]);
+  }, [props.selectedDateRange, props.debouncedValue, props.selectedEmployeeID, props.reasonTitle]);
   const getOrderRefundData = async () => {
     try {
       if (props && props.selectedDateRange) {
@@ -79,11 +79,12 @@ const OrderRefundReportList = (props) => {
           merchant_id,
           start_date: StartDateData,
           end_date: EndDateData,
-          
+          find_order_id: Boolean(props.debouncedValue.trim()) ? props.debouncedValue : null,
+          find_emp_name:props.selectedEmployeeID ? props.selectedEmployeeID : "",
           reason_name: props.reasonTitle === "All" ? "all" : props.reasonTitle,
           ...userTypeData,
         };
-        console.log(data);
+      
         if (data) {
           await dispatch(fetchOrderRefundData(data)).unwrap();
         }
@@ -102,8 +103,15 @@ const OrderRefundReportList = (props) => {
 
   useEffect(() => {
     if (!AllOrderRefundData.loading && AllOrderRefundData.OrderRefundData) {
-      console.log(AllOrderRefundData.OrderRefundData);
       setOrderData(AllOrderRefundData.OrderRefundData);
+      props.setCSVHeader(tableRow.map((row) => ({label: row.label,key: row.name})));
+      props.setCSVData([...AllOrderRefundData?.OrderRefundData,{tip_amt:"Grand Total",
+        amount:parseFloat(
+        calculateGrandTotal(AllOrderRefundData?.OrderRefundData, "amount")
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}]);
     } else {
       setOrderData("");
     }
