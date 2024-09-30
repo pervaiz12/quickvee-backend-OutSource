@@ -18,7 +18,9 @@ const Main = ({ visible }) => {
 
       {/* signle user layout */}
       {visible === "dashboard" && <Layout visible={visible} />}
-      {visible === "dashboard-chart-view-reports" && <Layout visible={visible} />}
+      {visible === "dashboard-chart-view-reports" && (
+        <Layout visible={visible} />
+      )}
       {visible === "order" && <Layout visible={visible} />}
       {visible === "category" && <Layout visible={visible} />}
       {visible === "add-category" && <Layout visible={visible} />}
@@ -126,8 +128,7 @@ const Main = ({ visible }) => {
       {visible === "lottery" && <Layout visible={visible} />}
       {visible === "add-lottery" && <Layout visible={visible} />}
       {visible === "update-lottery" && <Layout visible={visible} />}
-     
-      
+
       {visible === "category-sales-summery-report" && (
         <Layout visible={visible} />
       )}
@@ -139,7 +140,7 @@ const Main = ({ visible }) => {
       )}
       {visible === "new-customers-added-report" && <Layout visible={visible} />}
       {visible === "lottery-payout-report" && <Layout visible={visible} />}
-
+      {visible === "payment-report" && <Layout visible={visible} />}
       {/* multip user layout */}
       {visible === "multimerchant" && <IndexAllUsers />}
       {visible === "label" && <IndexAllUsers visible={visible} />}

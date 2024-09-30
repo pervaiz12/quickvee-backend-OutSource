@@ -214,6 +214,9 @@ const AddLottery = lazy(() => import("../Lottery/AddLottery"));
 const DashboardChartViewReports = lazy(
   () => import("../Dashboard/DashboardChartViewReports")
 );
+const PaymentViewReports = lazy(
+  () => import("../Reporting/PaymentReport/PaymentReportMain")
+);
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -419,6 +422,8 @@ const LeftSide = ({ visible }) => {
         return <DetailedLoyaltyPointReportMain />;
       case "gift-card-report":
         return <MainGiftCard />;
+      case "payment-report":
+        return <PaymentViewReports />;
       case "employee-sales-per-category-report":
         return <MainEmployeeSalesPerCategory />;
       case "inventory-merge":

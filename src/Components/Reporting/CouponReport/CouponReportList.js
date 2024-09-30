@@ -67,7 +67,7 @@ const CouponReportList = (props) => {
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
     getCouponReportData();
-  }, [props.selectedDateRange, dispatch]);
+  }, [props.selectedDateRange, dispatch, props.selectedCoupon]);
   const getCouponReportData = async () => {
     if (props && props.selectedDateRange) {
       try {
@@ -77,6 +77,7 @@ const CouponReportList = (props) => {
           merchant_id,
           start_date: startDateData,
           end_date: endDateData,
+          coupon_code: props.selectedCoupon,
           ...userTypeData,
         };
 
@@ -109,6 +110,7 @@ const CouponReportList = (props) => {
             };
           })
         : "";
+      console.log("uodatedList", uodatedList);
       props.setCouponReportData(uodatedList);
     } else {
       props.setCouponReportData([]);

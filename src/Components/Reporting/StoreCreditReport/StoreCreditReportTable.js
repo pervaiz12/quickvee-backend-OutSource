@@ -59,9 +59,11 @@ export default function StoreCreditReportTable({
   const [sortOrder, setSortOrder] = useState("asc");
   // console.log(dataArr);
   const tableRow = [
-    { type: "str", name: "customer_name", label: "Customer Details" },
-    { type: "num", name: "total_credit_amount", label: "Total Issued" },
-    { type: "num", name: "total_debit_amount", label: "Total Redeemed" },
+    { type: "str", name: "customer_name", label: "Customer" },
+    { type: "str", name: "customer_email", label: "Email Address" },
+    { type: "num", name: "customer_phone", label: "Phone Number" },
+    { type: "num", name: "total_credit_amount", label: "Issued" },
+    { type: "num", name: "total_debit_amount", label: "Redeemed" },
     { type: "num", name: "available_balance", label: "Balance" },
   ];
 
@@ -76,7 +78,9 @@ export default function StoreCreditReportTable({
     ) {
       const filteredData =
         StoreCreditReportReduxState.StoreCreditReportArr.filter((item) =>
-          item?.customer_name?.toLowerCase()?.includes(searchRecord?.toLowerCase())
+          item?.customer_name
+            ?.toLowerCase()
+            ?.includes(searchRecord?.toLowerCase())
         );
       setTotalValueIssued(
         StoreCreditReportReduxState?.StoreCreditReportArr?.reduce(
@@ -95,6 +99,10 @@ export default function StoreCreditReportTable({
           (acc, curr) => acc + parseFloat(curr.available_balance),
           0
         )
+      );
+      console.log(
+        "StoreCreditReportReduxState?.StoreCreditReportArr",
+        StoreCreditReportReduxState?.StoreCreditReportArr
       );
       setDataArr(StoreCreditReportReduxState?.StoreCreditReportArr);
     }
@@ -119,7 +127,9 @@ export default function StoreCreditReportTable({
       {
         <Grid container className="box_shadow_div">
           {StoreCreditReportReduxState.loading ||
-          ((StoreCreditReportReduxState.status && !searchRecord.length) && !dataArr.length) ? (
+          (StoreCreditReportReduxState.status &&
+            !searchRecord.length &&
+            !dataArr.length) ? (
             <SkeletonTable columns={tableRow.map((item) => item.label)} />
           ) : (
             <Grid container>
@@ -147,13 +157,14 @@ export default function StoreCreditReportTable({
                         dataArr?.map((item, index) => (
                           <>
                             <StyledTableRow key={index}>
-                            <StyledTableCell>
+                              <StyledTableCell>
                                 <div className="text-[#000000] order_method ">
-                                    {item.customer_name?.length < 18
-                                      ? item?.customer_name
-                                      : item?.customer_name?.slice(0, 18) + `...` || ""}
+                                  {item.customer_name?.length < 18
+                                    ? item?.customer_name
+                                    : item?.customer_name?.slice(0, 18) +
+                                        `...` || ""}
                                 </div>
-                                <div className="text-[#818181]  flex">
+                                {/* <div className="text-[#818181]  flex">
                                 {item?.customer_email && (
                                   <img
                                     src={emailLogo}
@@ -162,8 +173,8 @@ export default function StoreCreditReportTable({
                                   />
                                 )}{" "}
                                 <p>{item.customer_email || ""}</p>
-                              </div>
-                              <div className="text-[#818181] flex">
+                              </div> */}
+                                {/* <div className="text-[#818181] flex">
                                 {item?.customer_phone && (
                                   <img
                                     src={phoneLogo}
@@ -172,7 +183,21 @@ export default function StoreCreditReportTable({
                                   />
                                 )}{" "}
                                 <p> {item?.customer_phone || ""}</p>
-                              </div>
+                              </div> */}
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div className="text-[#000000] order_method ">
+                                  {!!item?.customer_email
+                                    ? item?.customer_email
+                                    : ""}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div className="text-[#000000] order_method ">
+                                  {!!item?.customer_phone
+                                    ? item?.customer_phone
+                                    : ""}
+                                </div>
                               </StyledTableCell>
                               <StyledTableCell>
                                 <p>${priceFormate(item.total_credit_amount)}</p>
@@ -188,7 +213,7 @@ export default function StoreCreditReportTable({
                         ))}
                       {dataArr.length > 0 && (
                         <StyledTableRow>
-                          <StyledTableCell className="trBG_Color">
+                          <StyledTableCell className="trBG_Color" colSpan={3}>
                             <p className="report-sort totalReport">Total</p>
                           </StyledTableCell>
                           <StyledTableCell className="trBG_Color">

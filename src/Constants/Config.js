@@ -386,6 +386,7 @@ module.exports = Object.freeze({
   DELETE_LOYALTY_PROGRAM: "LoyaltyProgramReactAPI/delete_loyalty_program",
   GET_LOTTERY_DATA_REPORT: "ReportingReactapi/lottery_payout_report",
   GET_ALL_COUPON_RECORD: "ReportingReactapi/coupon_report",
+  GET_PAYMENT_REPORT_DATA: "Sale_summary_api/payment_report",
 });
 
 // All api calls are initialized in this component for this application ADD_LOYALITY_PROGRAM BASE_URL

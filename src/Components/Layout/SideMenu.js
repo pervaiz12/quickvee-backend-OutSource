@@ -225,7 +225,7 @@ const SideMenu = () => {
   function getFirstTwoSegmentsPath(pathname) {
     // console.log("getFirstTwoSegmentsPath",pathname)
     const segments = pathname?.split("/").filter(Boolean);
-   
+
     return "/" + segments?.slice(0, 2).join("/");
   }
   function getFirstTwoSegmentsPathIsStoreAvtive(pathname) {
@@ -386,7 +386,9 @@ const DropdownMenuItem = ({
   const isTabletNav = useMediaQuery("(max-width:1024px)");
   useEffect(() => {
     const foundItem = item?.dropdownItems?.find(
-      (item) => getFirstTwoSegmentsPath(item?.link) === getFirstTwoSegmentsPath(activeItem)
+      (item) =>
+        getFirstTwoSegmentsPath(item?.link) ===
+        getFirstTwoSegmentsPath(activeItem)
     );
 
     if (foundItem) {
@@ -464,18 +466,20 @@ const DropdownMenuItem = ({
           {isMenuOpenRedux ? (
             <div
               className={`w-full flex items-center cursor-pointer ${
-                getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem)
+                getFirstTwoSegmentsPath(activeItem) ===
+                getFirstTwoSegmentsPath(dropDownItem)
                   ? "bg-[#414F54]"
                   : ""
               }`}
             >
-              {getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem) ||
-              hoveredItem === item.id
+              {getFirstTwoSegmentsPath(activeItem) ===
+                getFirstTwoSegmentsPath(dropDownItem) || hoveredItem === item.id
                 ? item.activeIcon
                 : item.icon}
               <p
                 className={`ml-2 menu-item DropDown-memu text-[14px] flex-auto Admin_std ${
-                  getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem)
+                  getFirstTwoSegmentsPath(activeItem) ===
+                  getFirstTwoSegmentsPath(dropDownItem)
                     ? "activeTab"
                     : ""
                 }`}
@@ -485,7 +489,8 @@ const DropdownMenuItem = ({
               {currentDropDownItem === item.id ? (
                 <FaChevronUp
                   className={`quickarrow_icon ml-4 me-5 text-${
-                    (getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem) ||
+                    (getFirstTwoSegmentsPath(activeItem) ===
+                      getFirstTwoSegmentsPath(dropDownItem) ||
                       hoveredItem === item.id) &&
                     "[#FFC400]"
                   }`}
@@ -493,7 +498,8 @@ const DropdownMenuItem = ({
               ) : (
                 <FaChevronDown
                   className={`quickarrow_icon ml-4 me-5 text-${
-                    (getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem) ||
+                    (getFirstTwoSegmentsPath(activeItem) ===
+                      getFirstTwoSegmentsPath(dropDownItem) ||
                       hoveredItem === item.id) &&
                     "[#FFC400]"
                   }`}
@@ -509,7 +515,8 @@ const DropdownMenuItem = ({
                   HandleDropdownIconClick(item.id);
                 }}
               >
-                {getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(dropDownItem) ||
+                {getFirstTwoSegmentsPath(activeItem) ===
+                  getFirstTwoSegmentsPath(dropDownItem) ||
                 hoveredItem === item.id
                   ? item.activeIcon
                   : item.icon}
@@ -668,11 +675,11 @@ const menuItems = [
       //       text: "Detailed Sales Person Report",
       //       link: "/store-reporting/report-sales-person",
       //     },
-      //     {
-      //       id: 100,
-      //       text: "Detailed Store Credit Report",
-      //       link: "/store-reporting/store-credit-report",
-      //     },
+      {
+        id: 100,
+        text: "Detailed Store Credit Report",
+        link: "/store-reporting/store-credit-report",
+      },
       //     {
       //       id: 96,
       //       text: "Drop Cash Report",
@@ -774,6 +781,11 @@ const menuItems = [
             link: "/store-reporting/profit-margin-report",
           },
         ],
+      },
+      {
+        id: 116,
+        text: "Payment Report",
+        link: "/store-reporting/payment-report",
       },
       {
         id: 3,
@@ -1032,7 +1044,6 @@ const menuItems = [
         text: "Lottery",
         link: "/inventory/lottery",
       },
-      
     ],
   },
   {

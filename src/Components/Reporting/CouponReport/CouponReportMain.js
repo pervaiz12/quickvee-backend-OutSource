@@ -24,15 +24,12 @@ const CouponReportMain = ({ hide }) => {
   const [CouponReportData, setCouponReportData] = useState([]);
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [getCouponList, setGetCouponList] = useState([]);
-  console.log("getCouponList", getCouponList);
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
     getAllCouponList(dateRange);
   };
 
   const handleOptionClick = (option, dropdown) => {
-    console.log("option", option);
-    // console.log("dropdown", dropdown);
     if (dropdown.toLowerCase() == "coupon") {
       if (option == "All") {
         setSelectedCoupon("All");
@@ -49,8 +46,6 @@ const CouponReportMain = ({ hide }) => {
   }, [selectedCoupon]);
 
   const getAllCouponList = async (dateRange) => {
-    console.log("dateRange", dateRange);
-    console.log("selectedDateRange", selectedDateRange);
     let start_date = !!dateRange ? dateRange?.start_date : selectedDateRange;
     let end_date = dateRange?.end_date;
     let coupon_code = selectedCoupon;
@@ -62,11 +57,7 @@ const CouponReportMain = ({ hide }) => {
       coupon_code,
       ...userTypeData,
     };
-    console.log("data", data);
-    // return;
-
     const { token, ...newData } = data;
-    console.log("data", newData);
     const response = await axios.post(
       BASE_URL + GET_ALL_COUPON_RECORD,
       newData,
@@ -78,7 +69,6 @@ const CouponReportMain = ({ hide }) => {
       }
     );
     if (response?.data?.status == true) {
-      console.log("response", response?.data?.coupon_list);
       setGetCouponList(response?.data?.coupon_list);
     } else {
       setGetCouponList([]);
@@ -139,6 +129,7 @@ const CouponReportMain = ({ hide }) => {
         CouponReportData={CouponReportData}
         setCouponReportData={setCouponReportData}
         selectedDateRange={selectedDateRange}
+        selectedCoupon={selectedCoupon}
       />
     </>
   );
