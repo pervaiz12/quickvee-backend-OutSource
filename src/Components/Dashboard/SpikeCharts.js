@@ -44,7 +44,7 @@ export default function SpikeCharts({
   console.log("yAxisOptions: ", yAxisOptions);
 
   return (
-    <Grid container>
+    <Grid container className="box_shadow_div" sx={{ p: 2.5, m: 0 }}>
       <Grid item xs={12} className="flex justify-between">
         <p className="CircularSTDMedium-18px">{title}</p>
         {growth && (

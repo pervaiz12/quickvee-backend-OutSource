@@ -154,20 +154,20 @@ export const RevenueChart = ({ merchantId, activeType }) => {
     setPresentDate(() => new Date(newPresentDate));
   };
 
+  const totalValue = useMemo(() => {
+    const a = formatToThousands(
+      parseFloat(revenueChart.totalRevenue).toFixed(2)
+    );
+    return a;
+  }, [revenueChart.totalRevenue]);
+
   return (
-    <Grid
-      item
-      xs={12}
-      md={12}
-      lg={12}
-      sx={{ p: 2.5 }}
-      className="box_shadow_div"
-    >
+    <Grid item xs={12} md={6} lg={6}>
       <SpikeCharts
         title={"Revenue"}
         growth={revenueChartData.percent}
-        mainOutlet={formatToThousands(revenueChart.totalRevenue)}
-        amount={formatToThousands(revenueChart.totalRevenue)}
+        mainOutlet={totalValue}
+        amount={totalValue}
         activeType={activeType}
         xAxisData={revenueChartData.xAxisData}
         maxValue={revenueChartData.maxValue}

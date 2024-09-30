@@ -12,15 +12,7 @@ import { AvgSaleValueChart } from "./Charts/AvgSaleValueChart";
 const NetSales = ({ activeType, merchantId }) => {
   return (
     <>
-      <Grid
-        container
-        sx={{
-          // display: "flex",
-          // flexWrap: "wrap",
-          gap: 3,
-          mb: 2.5,
-        }}
-      >
+      <Grid container spacing={3}>
         {/* Revenue Chart */}
         <RevenueChart activeType={activeType} merchantId={merchantId} />
 

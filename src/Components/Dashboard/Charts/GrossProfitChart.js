@@ -155,20 +155,20 @@ export const GrossProfitChart = ({ merchantId, activeType }) => {
     setPresentDate(() => new Date(newPresentDate));
   };
 
+  const totalValue = useMemo(() => {
+    const a = formatToThousands(
+      parseFloat(grossProfitChart.totalGrossProfit).toFixed(2)
+    );
+    return a;
+  }, [grossProfitChart.totalGrossProfit]);
+
   return (
-    <Grid
-      item
-      xs={12}
-      md={12}
-      lg={12}
-      sx={{ p: 2.5 }}
-      className="box_shadow_div"
-    >
+    <Grid item xs={12} md={6} lg={6}>
       <SpikeCharts
         title={"Gross Profit"}
         growth={grossProfitChartData.percent}
-        mainOutlet={formatToThousands(grossProfitChart.totalGrossProfit)}
-        amount={formatToThousands(grossProfitChart.totalGrossProfit)}
+        mainOutlet={totalValue}
+        amount={totalValue}
         activeType={activeType}
         xAxisData={grossProfitChartData.xAxisData}
         maxValue={grossProfitChartData.maxValue}

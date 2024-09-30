@@ -160,14 +160,7 @@ export const SalesCountChart = ({ merchantId, activeType }) => {
   }, [salesCountChart.totalSalesCount]);
 
   return (
-    <Grid
-      item
-      xs={12}
-      md={12}
-      lg={12}
-      sx={{ p: 2.5 }}
-      className="box_shadow_div"
-    >
+    <Grid item xs={12} md={6} lg={6}>
       <SpikeCharts
         title={"Sales Count"}
         growth={salesCountChartData.percent}

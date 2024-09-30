@@ -166,14 +166,7 @@ export const PercentageDiscountChart = ({ merchantId, activeType }) => {
   }, [percentageDiscountChart.totalPercentageDiscount]);
 
   return (
-    <Grid
-      item
-      xs={12}
-      md={12}
-      lg={12}
-      sx={{ p: 2.5 }}
-      className="box_shadow_div"
-    >
+    <Grid item xs={12} md={6} lg={6}>
       <SpikeCharts
         title={"Discounted %"}
         growth={percentageDiscountChartData.percent}
