@@ -7,7 +7,7 @@ import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent"
 import useDebounce from "../../../hooks/useDebouncs";
 import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 
-const MainItemSales = ({ hide }) => {
+const MainItemSales = ({ hide,setCSVData,setCSVHeader }) => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [OrderSourceData, setOrderSourceData] = useState(null);
   const [OrderTypeData, setOrderTypeData] = useState(null);
@@ -60,6 +60,8 @@ const MainItemSales = ({ hide }) => {
         OrderTypeData={OrderTypeData}
         SelectCatData={SelectCatData}
         items={debouncedValue}
+        setCSVHeader={setCSVHeader}
+        setCSVData={setCSVData}
       />
     </>
   );

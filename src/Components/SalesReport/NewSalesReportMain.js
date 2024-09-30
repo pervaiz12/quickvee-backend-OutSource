@@ -150,6 +150,8 @@ const NewSalesReportMain = () => {
     setSelectedReportList(
       selectReportList.find((item) => item.url === selectedReport).title
     );
+    setCSVData([]);
+    setCSVHeader([]);
   }, [navigate]);
 
   const handleOptionClick = (option, dropdown) => {
@@ -183,7 +185,13 @@ const NewSalesReportMain = () => {
       case "sales-by-hour":
         return <SalesByHourMain hide={true} />;
       case "items":
-        return <ItemsMain hide={true} />;
+        return (
+          <ItemsMain
+            setCSVData={setCSVData}
+            setCSVHeader={setCSVHeader}
+            hide={true}
+          />
+        );
       case "daily-totals":
         return <DailyTotalsMain hide={true} />;
       case "order-type":
@@ -196,10 +204,22 @@ const NewSalesReportMain = () => {
       case "top-seller":
         return <TopsellerMain hide={true} />;
       case "order-refund-report":
-        return <OrderefundreportMain setCSVData={setCSVData} setCSVHeader={setCSVHeader} hide={true} />;
+        return (
+          <OrderefundreportMain
+            setCSVData={setCSVData}
+            setCSVHeader={setCSVHeader}
+            hide={true}
+          />
+        );
 
       case "item-refund-report":
-        return <ItemrefundreportMain hide={true} />;
+        return (
+          <ItemrefundreportMain
+            setCSVData={setCSVData}
+            setCSVHeader={setCSVHeader}
+            hide={true}
+          />
+        );
 
       case "tip-report":
         return <TipreportMain hide={true} />;
@@ -251,14 +271,13 @@ const NewSalesReportMain = () => {
             >
               <CSVLink data={CSVData} headers={CSVHeaders}>
                 <div className="flex justify-center items-center flex-nowrap">
-
-                <h1 className="text-[#0A64F9] text-[16px]">Export report</h1>
-                <img
-                  style={{ height: "30px", width: "30px" }}
-                  src={downloadIcon}
-                  alt="downloadIcon"
+                  <h1 className="text-[#0A64F9] text-[16px]">Export report</h1>
+                  <img
+                    style={{ height: "30px", width: "30px" }}
+                    src={downloadIcon}
+                    alt="downloadIcon"
                   />
-                  </div>
+                </div>
               </CSVLink>
             </Grid>
           </Grid>

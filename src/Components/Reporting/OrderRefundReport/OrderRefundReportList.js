@@ -105,7 +105,13 @@ const OrderRefundReportList = (props) => {
     if (!AllOrderRefundData.loading && AllOrderRefundData.OrderRefundData) {
       setOrderData(AllOrderRefundData.OrderRefundData);
       props.setCSVHeader(tableRow.map((row) => ({label: row.label,key: row.name})));
-      props.setCSVData(AllOrderRefundData.OrderRefundData.map((item )=>({...item})));
+      props.setCSVData([...AllOrderRefundData?.OrderRefundData,{tip_amt:"Grand Total",
+        amount:parseFloat(
+        calculateGrandTotal(AllOrderRefundData?.OrderRefundData, "amount")
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}]);
     } else {
       setOrderData("");
     }

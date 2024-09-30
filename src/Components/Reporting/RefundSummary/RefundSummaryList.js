@@ -45,7 +45,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const RefundSummaryList = ({ data,debouncedValue }) => {
+const RefundSummaryList = ({ data,debouncedValue,setCSVData, setCSVHeader }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
@@ -93,6 +93,8 @@ const RefundSummaryList = ({ data,debouncedValue }) => {
         ...item,
         total: (item.refund_qty * item.price).toFixed(2),
       }));
+      setCSVHeader(tableRow.map((row) => ({label: row.label,key: row.name})));
+      
       setrefundData(updatedItems);
       const totalAmt = updatedItems.reduce(
         (total, report) => total + parseFloat(report.refund_qty),
@@ -104,6 +106,7 @@ const RefundSummaryList = ({ data,debouncedValue }) => {
         0
       );
       setTotalRefundAmount(totalRefundAmount);
+      setCSVData([...updatedItems,{reason:"Total",refund_qty:totalAmt,total:totalRefundAmount}]);
     } else {
       setrefundData([]);
     }

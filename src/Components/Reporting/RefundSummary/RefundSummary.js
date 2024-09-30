@@ -18,7 +18,7 @@ import { fetchTagData } from "../../../Redux/features/Brand/brandsSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
-const RefundSummary = ({ hide }) => {
+const RefundSummary = ({ hide,setCSVData, setCSVHeader }) => {
   const getBrandListSlice = useSelector((state) => state?.brandData);
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -310,7 +310,7 @@ const RefundSummary = ({ hide }) => {
       </Grid>
 
       <div className="q-order-main-page">
-        <RefundSummaryList data={filteredData} debouncedValue={debouncedValue} />
+        <RefundSummaryList data={filteredData} debouncedValue={debouncedValue}setCSVData={setCSVData} setCSVHeader={setCSVHeader} />
       </div>
     </>
   );
