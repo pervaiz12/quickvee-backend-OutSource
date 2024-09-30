@@ -201,6 +201,12 @@ function App() {
           <Route element={<ProtectedRoute visible="manager" />}>
             {/* <Route exact path="/manager" element={<Main visible={"manager"} />} /> */}
             <Route index path="/" element={<Main visible={"dashboard"} />} />
+            <Route
+              index
+              path="/dashboard-chart-view-reports"
+              element={<Main visible={"dashboard-chart-view-reports"} />}
+            />
+
             <Route exact path="/order" element={<Main visible={"order"} />} />
             <Route
               exact
@@ -762,9 +768,26 @@ function App() {
             />
             <Route exact path="/brands" element={<Main visible={"brands"} />} />
             <Route exact path="/tags" element={<Main visible={"tags"} />} />
-            <Route exact path="/inventory/lottery" element={<Main visible={"lottery"} />} />
-            <Route exact path="/inventory/lottery/add-lottery" element={<Main visible={"add-lottery"} />} />
-            <Route exact path="/inventory/lottery/update-lottery/:id" element={<Main visible={"update-lottery"} />} />
+            <Route
+              exact
+              path="/inventory/lottery"
+              element={<Main visible={"lottery"} />}
+            />
+            <Route
+              exact
+              path="/inventory/lottery/add-lottery"
+              element={<Main visible={"add-lottery"} />}
+            />
+            <Route
+              exact
+              path="/inventory/lottery/update-lottery/:id"
+              element={<Main visible={"update-lottery"} />}
+            />
+            <Route
+              exact
+              path="/store-reporting/payment-report"
+              element={<Main visible={"payment-report"} />}
+            />
           </Route>
 
           {/* ------------------------Superadmin---------------- */}

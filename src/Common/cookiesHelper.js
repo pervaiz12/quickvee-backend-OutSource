@@ -1,9 +1,25 @@
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 //  let AuthFinalLogin=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
 //  let LoginGetDashBoard=Cookies.get('token_data') !==undefined ? Cookies.get('token_data') :[]
+
+export const getSelectedData = (date1, type1) => {
+  const selectedDate = dayjs(date1);
+  const lastSevenMonths = [];
+  const allMonth = [];
+
+  for (let i = 0; i < 7; i++) {
+    const currentDate = selectedDate.subtract(i, type1).format("YYYY-MM-DD");
+    allMonth.push(currentDate);
+    lastSevenMonths.push(`${currentDate}_${currentDate}`);
+  }
+
+  const getDate = lastSevenMonths.join(", ");
+  return { getDate, allMonth };
+};
 
 export const useAuthDetails = () => {
   let AuthFinalLogin =

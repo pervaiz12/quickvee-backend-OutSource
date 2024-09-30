@@ -395,9 +395,8 @@ module.exports = Object.freeze({
   ADD_LOYALITY_PROGRAM: "LoyaltyProgramReactAPI/add_bouns_point_promotions",
   DELETE_LOYALTY_PROGRAM: "LoyaltyProgramReactAPI/delete_loyalty_program",
   GET_LOTTERY_DATA_REPORT: "ReportingReactapi/lottery_payout_report",
-
-
-
+  GET_ALL_COUPON_RECORD: "ReportingReactapi/coupon_report",
+  GET_PAYMENT_REPORT_DATA: "Sale_summary_api/payment_report",
 
   NEW_CUSTOMER_REPORT: "NewSalesReportReactapi/customer_report",
 });

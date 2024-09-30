@@ -32,13 +32,13 @@ export default function StoreCreditReportMain() {
   );
   useEffect(() => {
     getStoreCreditReportTableData();
-  }, [merchant_id,searchRecord]);
+  }, [merchant_id, searchRecord]);
   const getStoreCreditReportTableData = async () => {
     if (merchant_id) {
       try {
         let data = {
           merchant_id,
-          search_by:searchRecord,
+          search_by: searchRecord,
           ...userTypeData,
         };
 
@@ -61,7 +61,7 @@ export default function StoreCreditReportMain() {
     <>
       <Grid container className="box_shadow_div ">
         <Grid item xs={12}>
-          <CustomHeader>Detailed Store Credit Report</CustomHeader>
+          <CustomHeader>Store Credit Report</CustomHeader>
 
           <Grid container sx={{ px: 2.5, pt: 1, pb: 2.5 }}>
             <Grid item xs={12}>
