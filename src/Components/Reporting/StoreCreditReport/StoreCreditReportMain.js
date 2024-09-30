@@ -61,7 +61,7 @@ export default function StoreCreditReportMain() {
     <>
       <Grid container className="box_shadow_div ">
         <Grid item xs={12}>
-          <CustomHeader>Store credit report</CustomHeader>
+          <CustomHeader>Store Credit Report</CustomHeader>
 
           <Grid container sx={{ px: 2.5, pt: 1, pb: 2.5 }}>
             <Grid item xs={12}>

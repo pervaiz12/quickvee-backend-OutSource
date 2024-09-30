@@ -675,11 +675,7 @@ const menuItems = [
       //       text: "Detailed Sales Person Report",
       //       link: "/store-reporting/report-sales-person",
       //     },
-      {
-        id: 100,
-        text: "Detailed Store Credit Report",
-        link: "/store-reporting/store-credit-report",
-      },
+    
       //     {
       //       id: 96,
       //       text: "Drop Cash Report",
@@ -915,6 +911,11 @@ const menuItems = [
         link: "/store-reporting/register-closures",
       },
 
+      {
+        id: 100,
+        text: "Store Credit Report",
+        link: "/store-reporting/store-credit-report",
+      },
       {
         id: 115,
         text: "Lottery Payout Report",
