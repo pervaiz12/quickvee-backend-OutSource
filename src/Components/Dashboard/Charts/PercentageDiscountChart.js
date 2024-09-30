@@ -132,13 +132,13 @@ export const PercentageDiscountChart = ({ merchantId, activeType }) => {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
         } else if (error?.status == "Network Error") {
-          getNetworkError();
+          // getNetworkError();
         }
       }
     };
 
     fetchPercentageDiscount();
-  }, [dateRange]);
+  }, [dateRange, merchantId]);
 
   // generate X Axis dates dataset
   useEffect(() => {

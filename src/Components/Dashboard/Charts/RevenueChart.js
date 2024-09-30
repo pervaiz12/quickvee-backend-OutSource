@@ -128,13 +128,14 @@ export const RevenueChart = ({ merchantId, activeType }) => {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
         } else if (error?.status == "Network Error") {
-          getNetworkError();
+          // getNetworkError();
         }
       }
     };
 
     fetchRevenue();
-  }, [dateRange]);
+    // console.log("fetching revenue..");
+  }, [dateRange, merchantId]);
 
   // generate X Axis dates dataset
   useEffect(() => {

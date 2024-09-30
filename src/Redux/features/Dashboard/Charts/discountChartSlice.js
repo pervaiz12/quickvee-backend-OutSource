@@ -27,7 +27,7 @@ export const getDiscount = createAsyncThunk(
         }
       );
 
-      console.log("discount api: ", response);
+      // console.log("discount api: ", response);
       return response.data;
     } catch (error) {
       // throw new Error(error.response.data.message);

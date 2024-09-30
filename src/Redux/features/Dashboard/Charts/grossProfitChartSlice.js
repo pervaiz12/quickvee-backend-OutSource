@@ -27,7 +27,7 @@ export const getGrossProfit = createAsyncThunk(
         }
       );
 
-      console.log("gross profit api: ", response);
+      // console.log("gross profit api: ", response);
       return response.data;
     } catch (error) {
       // throw new Error(error.response.data.message);

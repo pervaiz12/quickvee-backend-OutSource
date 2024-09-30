@@ -27,7 +27,7 @@ export const getSalesCount = createAsyncThunk(
         }
       );
 
-      console.log("sales count api: ", response);
+      // console.log("sales count api: ", response);
       return response.data;
     } catch (error) {
       // throw new Error(error.response.data.message);

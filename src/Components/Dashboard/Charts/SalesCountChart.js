@@ -128,13 +128,13 @@ export const SalesCountChart = ({ merchantId, activeType }) => {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
         } else if (error?.status == "Network Error") {
-          getNetworkError();
+          // getNetworkError();
         }
       }
     };
 
     fetchSalesCount();
-  }, [dateRange]);
+  }, [dateRange, merchantId]);
 
   // generate X Axis dates dataset
   useEffect(() => {
@@ -155,7 +155,9 @@ export const SalesCountChart = ({ merchantId, activeType }) => {
   };
 
   const totalValue = useMemo(() => {
-    const a = removeCurrencySign(salesCountChart.totalSalesCount);
+    const a = removeCurrencySign(
+      parseFloat(salesCountChart.totalSalesCount).toFixed(2)
+    );
     return a;
   }, [salesCountChart.totalSalesCount]);
 

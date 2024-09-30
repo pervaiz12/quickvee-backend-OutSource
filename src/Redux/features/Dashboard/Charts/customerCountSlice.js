@@ -27,7 +27,7 @@ export const getCustomerCount = createAsyncThunk(
         }
       );
 
-      console.log("customer count api: ", response);
+      // console.log("customer count api: ", response);
       return response.data;
     } catch (error) {
       // throw new Error(error.response.data.message);

@@ -27,7 +27,7 @@ export const getRevenue = createAsyncThunk(
         }
       );
 
-      console.log("revenue data: ", response);
+      // console.log("revenue data: ", response);
 
       return response.data;
     } catch (error) {

@@ -42,10 +42,10 @@ export default function SpikeCharts({
         : "month";
   }, [activeType]);
 
-  console.log("-----------------------------");
-  console.log("xAxisData: ", xAxisData);
-  console.log("yAxisOptions: ", yAxisOptions);
-  console.log("title type: ", title, type);
+  // console.log("-----------------------------");
+  // console.log("xAxisData: ", xAxisData);
+  // console.log("yAxisOptions: ", yAxisOptions);
+  // console.log("title type: ", title, type);
 
   return (
     <Grid container className="box_shadow_div" sx={{ p: 2.5, m: 0 }}>
@@ -75,7 +75,7 @@ export default function SpikeCharts({
       </Grid>
       <Grid item xs={12} className="flex items-center ">
         {loading ? (
-          <Skeleton width="150px" height="55px" />
+          <Skeleton width="150px" height="78.5px" />
         ) : (
           <>
             <p className="CircularSTDMedium-55px">{amount}</p>

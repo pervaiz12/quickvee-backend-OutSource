@@ -27,7 +27,7 @@ export const getAvgItemSale = createAsyncThunk(
         }
       );
 
-      console.log("avg item sale data: ", response);
+      // console.log("avg item sale data: ", response);
 
       return response.data;
     } catch (error) {

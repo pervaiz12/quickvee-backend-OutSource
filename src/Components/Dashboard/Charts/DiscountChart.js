@@ -128,13 +128,13 @@ export const DiscountChart = ({ merchantId, activeType }) => {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
         } else if (error?.status == "Network Error") {
-          getNetworkError();
+          // getNetworkError();
         }
       }
     };
 
     fetchDiscount();
-  }, [dateRange]);
+  }, [dateRange, merchantId]);
 
   // generate X Axis dates dataset
   useEffect(() => {

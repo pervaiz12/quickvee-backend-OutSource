@@ -130,13 +130,13 @@ export const AvgItemSaleChart = ({ merchantId, activeType }) => {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
         } else if (error?.status == "Network Error") {
-          getNetworkError();
+          // getNetworkError();
         }
       }
     };
 
     fetchRevenue();
-  }, [dateRange]);
+  }, [dateRange, merchantId]);
 
   // generate X Axis dates dataset
   useEffect(() => {
