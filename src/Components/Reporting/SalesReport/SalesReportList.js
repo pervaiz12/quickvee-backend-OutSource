@@ -212,7 +212,9 @@ const SalesReportList = (props) => {
 
     // for sales_by_tender_type
     const sales_by_tender_type= SalesReportData?.sales_by_tender_type || {};
-    const totalCollected = Object.values(sales_by_tender_type)?.reduce((acc, tender) => acc + (parseFloat(tender.collected  || 0) ) - (parseFloat(tender.refunds  || 0) ) , 0);
+    const totalCollected = Object.values(sales_by_tender_type)?.reduce((acc, tender) => acc + (parseFloat(tender.collected|| 0) ) , 0);
+    const totalRefund = Object.values(sales_by_tender_type)?.reduce((acc, tender) => acc + (parseFloat(tender.refunds|| 0) ) , 0);
+
     const totalTransactions = Object.values(sales_by_tender_type)?.reduce((acc, tender) => acc + (tender.transactions || 0), 0);
     const CashCollectedL = (sales_by_tender_type?.cash?.collected - sales_by_tender_type?.cash?.refunds) || 0;
 
@@ -238,7 +240,7 @@ const SalesReportList = (props) => {
       number: Payoutlottery?.transactions,
     },
     {
-      name: "Lottery - Non-Scratchers",
+      name: "Lottery Non Scratchers",
       amount: Payoutlottery_non_scrach?.pay_out,
       number: Payoutlottery_non_scrach?.transactions,
     },
@@ -850,33 +852,49 @@ const SalesReportList = (props) => {
                       </StyledTableCell>
                       <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
                       <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight"></StyledTableCell>
+                      <StyledTableCell sx={{ width: "16.66%" }} className=" BORHeaderRight">Refunds</StyledTableCell>
                       <StyledTableCell sx={{ width: "33.32%" }}># of Transactions</StyledTableCell>
-                      <StyledTableCell sx={{ width: "16.66%" }}></StyledTableCell>
                     </TableHead>
                     <TableBody>
                         {Object.entries(sales_by_tender_type)?.map(([key, value]) => (
                         <StyledTableRow key={key}>
-                          <StyledTableCell className={`  `}>
+                          <StyledTableCell  className="BORBodyRight" colSpan={2}>
                             <div className={`q_sales_trading_data p-0 capitalize`}>
                             {/* {key?.replace('_', ' ')} */}
-                            {key?.split('_')[0].concat(' ' ,key?.split('_')[1] &&  key?.split('_')[1]?.trim()?.toLowerCase() === "ebt"  ?  key?.split('_')[1].toUpperCase() : key?.split('_')[1] ?  key?.split('_')[1]?.charAt(0)?.toUpperCase() + key?.split('_')[1]?.slice(1):'')}
+                            {key?.split('_')[0].concat(
+                              ' ',
+                              key?.split('_')[1] 
+                                ? key?.split('_')[1]?.trim()?.toLowerCase() === 'ebt'
+                                  ? key?.split('_')[1].toUpperCase()
+                                  : key?.split('_')[1]?.charAt(0)?.toUpperCase() + key?.split('_')[1]?.slice(1)
+                                : '',
+                              key?.split('_')[2] 
+                                ? ' ' + (key?.split('_')[2]?.trim()?.toLowerCase() === 'ebt'
+                                  ? key?.split('_')[2].toUpperCase()
+                                  : key?.split('_')[2]?.charAt(0)?.toUpperCase() + key?.split('_')[2]?.slice(1))
+                                : ''
+                            )}
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell  className="BORBodyRight"></StyledTableCell>
+                          {/* <StyledTableCell  className="BORBodyRight"></StyledTableCell> */}
                           <StyledTableCell className={`  BORBodyRight`}>
-                          <div className={`q_sales_trading_data p-0 ${getClassName(value.collected-value.refunds)}`}>
-                              <p>{formatCurrency(value.collected-value.refunds)}</p>
+                          <div className={`q_sales_trading_data p-0 ${getClassName(value.collected)}`}>
+                              <p>{formatCurrency(value.collected)}</p>
                             </div>
                           </StyledTableCell>
                           
-                          <StyledTableCell className={`  `}>
+                          <StyledTableCell className={` BORBodyRight `}>
+                          <div className={`q_sales_trading_data p-0 ${getClassName(value.refunds)}`}>
+                              <p>{formatCurrency(value.refunds)}</p>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell  colSpan={3}>
                           <div className={`q_sales_trading_data p-0 `}>
                             <p>
                               {value.transactions}
                             </p>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell  colSpan={3}></StyledTableCell>
                         </StyledTableRow>
                       ))}
                       <StyledTableRow >
@@ -892,14 +910,18 @@ const SalesReportList = (props) => {
                             </div>
                           </StyledTableCell>
                           
-                          <StyledTableCell className="trBG_Color">
+                          <StyledTableCell className=" BORBodyRight trBG_Color">
+                          <div className={`q_sales_trading_data p-0 totalReport ${getClassName(totalRefund)}`}>
+                              <p>{formatCurrency(totalRefund)}</p>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell  colSpan={3} className="trBG_Color">
                           <div className={`q_sales_trading_data p-0 totalReport`}>
                             <p>
                               {priceFormate(totalTransactions)}
                             </p>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell  colSpan={3} className="trBG_Color"></StyledTableCell>
                         </StyledTableRow>
                     </TableBody>
                   </StyledTable>
@@ -928,12 +950,12 @@ const SalesReportList = (props) => {
                     <TableBody>
                       {PayoutsTypeList?.map((item, index) => (
                         <StyledTableRow key={index}>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} `}>
+                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} BORBodyRight `}  colSpan={2}>
                             <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""}`}>
                               <p>{item.name}</p>
                             </div>
                           </StyledTableCell>
-                          <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} BORBodyRight`}></StyledTableCell>
+                          {/* <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} BORBodyRight`}></StyledTableCell> */}
                           <StyledTableCell className={` ${item.name === "Total" ? "trBG_Color" : ""} BORBodyRight`}>
                           <div className={`q_sales_trading_data p-0 ${item.name === "Total" ? "totalReport" : ""} ${getClassName(item.amount)}`}>
                               <p>{formatCurrency(item.amount)}</p>

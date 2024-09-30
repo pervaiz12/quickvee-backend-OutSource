@@ -17,6 +17,16 @@ module.exports = Object.freeze({
   EDIT_CATOGRY_DATA: "CategoryReactapi/category_data",
   SORT_CATOGRY_DATA: "CategoryReactapi/SaveSizeSorting",
 
+  // DASHBOARD CHARTS
+  REVENUE_CHART: "ReportingReactapi/revenue_data_api",
+  SALES_COUNT_CHART: "NewDashboardReact/sales_count_api",
+  CUSTOMER_COUNT_CHART: "ReportingReactapi/customer_count_api",
+  DISCOUNT_CHART: "ReportingReactapi/discount_api",
+  GROSS_PROFIT_CHART: "NewDashboardReact/gross_profit_api",
+  PERCENTAGE_DISCOUNT_CHART: "NewDashboardReact/discount_in_per_api",
+  AVG_SALE_VALUE: "DashboardReactApi/avg_sale_value",
+  AVG_ITEM_SALE: "DashboardReactApi/avg_item_sale",
+
   // Defaults API Calls
   LIST_ALL_Defaults: "DefaultReactapi/Default_list",
   ADD_DEFAULTS: "DefaultReactapi/AddDefaultMenu",
@@ -387,6 +397,8 @@ module.exports = Object.freeze({
   GET_LOTTERY_DATA_REPORT: "ReportingReactapi/lottery_payout_report",
   GET_ALL_COUPON_RECORD: "ReportingReactapi/coupon_report",
   GET_PAYMENT_REPORT_DATA: "Sale_summary_api/payment_report",
+
+  NEW_CUSTOMER_REPORT: "NewSalesReportReactapi/customer_report",
 });
 
 // All api calls are initialized in this component for this application ADD_LOYALITY_PROGRAM BASE_URL

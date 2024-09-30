@@ -1,6 +1,12 @@
 import { Grid } from "@mui/material";
-import React from "react";
-import { FaCaretUp } from "react-icons/fa";
+import React, { useMemo } from "react";
+import {
+  FaCaretDown,
+  FaCaretUp,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
+import Skeleton from "react-loading-skeleton";
 import { Link } from "react-router-dom";
 import {
   LineChart,
@@ -9,42 +15,8 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
-
-const data = [
-  {
-    name: "Nov",
-    uv: 0,
-  },
-  {
-    name: "Oct",
-    uv: 0,
-  },
-  {
-    name: "Sep",
-    uv: 1000,
-  },
-  {
-    name: "June",
-    uv: 0,
-  },
-  {
-    name: "Jul",
-    uv: 0,
-  },
-  {
-    name: "Aug",
-    uv: 6000,
-  },
-];
-const formatYAxisTick = (tickItem) => {
-  if (tickItem >= 1000) {
-    return `${(tickItem / 1000).toFixed(0)}k`; // Format values in thousands
-  }
-  return tickItem; // Return the value as is if less than 1000
-};
 
 export default function SpikeCharts({
   title,
@@ -52,54 +24,109 @@ export default function SpikeCharts({
   mainOutlet,
   amount,
   activeType,
+  xAxisData,
+  maxValue,
+  minValue,
+  yAxisOptions,
+  type,
+  formatFunction,
+  prevDataFunction,
+  nextDataFunction,
+  loading = false,
 }) {
+  const filterBy = useMemo(() => {
+    return activeType === "Day"
+      ? "day"
+      : activeType === "Week"
+        ? "week"
+        : "month";
+  }, [activeType]);
+
+  console.log("-----------------------------");
+  console.log("xAxisData: ", xAxisData);
+  console.log("yAxisOptions: ", yAxisOptions);
+  console.log("title type: ", title, type);
+
   return (
-    <Grid container>
+    <Grid container className="box_shadow_div" sx={{ p: 2.5, m: 0 }}>
       <Grid item xs={12} className="flex justify-between">
         <p className="CircularSTDMedium-18px">{title}</p>
-        <div className="flex items-center gap-1">
-          <FaCaretUp className="text-[#1EC285]" />
-          <p className="CircularSTDBook-15px text-[#1EC285]">{`${growth} Up Previous month`}</p>
-        </div>
+        {loading ? (
+          <Skeleton width="200px" />
+        ) : (
+          growth && (
+            <div className="flex items-center gap-1">
+              {growth > 0 ? (
+                <>
+                  <FaCaretUp className="text-[#1EC285]" />
+                  <p className="CircularSTDBook-15px text-[#1EC285]">{`${growth}% Up Previous ${filterBy}`}</p>
+                </>
+              ) : (
+                <>
+                  <FaCaretDown className="text-[#ff3737]" />
+                  <p className="CircularSTDBook-15px text-[#ff3737]">{`${Math.abs(
+                    growth
+                  )}% down previous ${filterBy}`}</p>
+                </>
+              )}
+            </div>
+          )
+        )}
       </Grid>
       <Grid item xs={12} className="flex items-center ">
-        <p className="CircularSTDMedium-55px ">{amount}</p> activeType
-        <Link
-          to={"/dashboard-chart-view-reports"}
-          state={{ activeType: activeType }}
-          className="CircularSTDMedium-18px ml-2 pt-5 text-blue-600 underline text-base"
-        >
-          View Reports
-        </Link>
+        {loading ? (
+          <Skeleton width="150px" height="55px" />
+        ) : (
+          <>
+            <p className="CircularSTDMedium-55px">{amount}</p>
+            <Link className="CircularSTDMedium-18px ml-2 pt-5 text-blue-600 underline text-base">
+              View Reports
+            </Link>
+          </>
+        )}
       </Grid>
       <Grid item xs={12} className="flex justify-between bg-[#FBFBFB] p-2">
         <p className="CircularSTDMedium-15px">Main Outlet</p>
-
-        <p className="CircularSTDBook-15px text-[#0A64F9]">{mainOutlet}</p>
+        <p className="CircularSTDBook-15px text-[#0A64F9]">
+          {loading ? <Skeleton width="100px" /> : mainOutlet}
+        </p>
       </Grid>
       <Grid item xs={12}>
-        <ResponsiveContainer width="100%" height={250}>
+        <ResponsiveContainer width="100%" height={300}>
           <LineChart
-            data={data}
+            data={xAxisData}
             margin={{
-              top: 20,
-              right: 30,
-              left: -35,
-              bottom: 5,
+              right: 50,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="name" type="category" />
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
             <YAxis
-              type="number"
-              axisLine={false}
-              tickFormatter={formatYAxisTick}
+              type={type}
+              domain={[minValue, maxValue]}
+              ticks={yAxisOptions}
+              tickFormatter={(tickItem) => formatFunction(tickItem)}
             />
             <Tooltip />
 
             <Line dataKey="uv" stroke="#0A64F9" strokeWidth={2} />
           </LineChart>
         </ResponsiveContainer>
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <button onClick={prevDataFunction}>
+          <FaChevronLeft />
+        </button>
+        <button onClick={nextDataFunction}>
+          <FaChevronRight />
+        </button>
       </Grid>
     </Grid>
   );

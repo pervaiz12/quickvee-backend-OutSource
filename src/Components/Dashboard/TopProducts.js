@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -11,6 +11,8 @@ import NoDataFound from "../../reuseableComponents/NoDataFound";
 import { Grid } from "@mui/material";
 import Skeleton from "react-loading-skeleton";
 import { priceFormate } from "../../hooks/priceFormate";
+import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
+import sortIcon from "../../Assests/Category/SortingW.svg";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -44,38 +46,60 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const columns = ["Products", "Revenue", "Items sold", "Discounted"];
+const tableRow = [
+  { type: "str", name: "name", label: "Products" },
+  { type: "num", name: "total_price", label: "Revenue" },
+  { type: "num", name: "total_qty", label: "Items sold" },
+  { type: "num", name: "discount_amt", label: "Discounted" },
+];
 
-export const TopProducts = ({ itemSalesList }) => {
-  console.log("here itemSalesList: ", itemSalesList);
-  const itemsList = useMemo(() => {
-    if (itemSalesList.ItemSalesData && itemSalesList.ItemSalesData[0]) {
-      const items = itemSalesList.ItemSalesData[0];
-      //   console.log("items: ", items);
-      const temp = items.toSorted(
-        (a, b) => parseFloat(b.total_price) - parseFloat(a.total_price)
-      );
+export const ProductsSold = ({ itemSalesList }) => {
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [allProducts, setAllProducts] = useState([]);
 
-      return temp.slice(0, 5) || [];
-    }
+  useEffect(() => {
+    const items =
+      itemSalesList &&
+      itemSalesList.ItemSalesData &&
+      itemSalesList.ItemSalesData[0];
+
+    setAllProducts(items || []);
   }, [itemSalesList]);
-  console.log("itemsList: ", itemsList);
+
+  const sortProductsByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      allProducts,
+      type,
+      name,
+      sortOrder
+    );
+    setAllProducts(sortedItems);
+    setSortOrder(newOrder);
+  };
 
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           <div className="q-attributes-bottom-header bg-[#ffffff]">
-            <span>Top Products</span>
+            <span>Products sold</span>
           </div>
         </Grid>
         <TableContainer component={Paper} sx={{ borderRadius: "0px" }}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
               <TableRow>
-                {columns.map((col) => (
-                  <StyledTableCell className="whitespace-nowrap" key={col}>
-                    {col}
+                {tableRow.map((item) => (
+                  <StyledTableCell key={item.name}>
+                    <button
+                      className="flex items-center"
+                      onClick={() =>
+                        sortProductsByItemName(item.type, item.name)
+                      }
+                    >
+                      <p>{item.label}</p>
+                      <img src={sortIcon} alt="" className="pl-1" />
+                    </button>
                   </StyledTableCell>
                 ))}
               </TableRow>
@@ -85,8 +109,8 @@ export const TopProducts = ({ itemSalesList }) => {
               {itemSalesList.loading &&
                 [1, 2, 3, 4, 5].map((row) => (
                   <StyledTableRow key={row}>
-                    {columns.map((col) => (
-                      <StyledTableCell key={col} sx={{ padding: "16px" }}>
+                    {tableRow.map((item) => (
+                      <StyledTableCell key={item.name} sx={{ padding: "16px" }}>
                         <Skeleton />
                       </StyledTableCell>
                     ))}
@@ -95,9 +119,9 @@ export const TopProducts = ({ itemSalesList }) => {
 
               {/* Actual Table Body */}
               {!itemSalesList.loading &&
-                itemsList &&
-                itemsList?.length > 0 &&
-                itemsList.map((item) => (
+                allProducts &&
+                allProducts?.length > 0 &&
+                allProducts.map((item) => (
                   <StyledTableRow key={item}>
                     <StyledTableCell sx={{ padding: "16px" }}>
                       {item.name}
@@ -116,9 +140,10 @@ export const TopProducts = ({ itemSalesList }) => {
             </TableBody>
           </Table>
           {/* No Data found */}
-          {!itemSalesList.loading && (!itemsList || itemsList?.length <= 0) && (
-            <NoDataFound table={true} />
-          )}
+          {!itemSalesList.loading &&
+            (!allProducts || allProducts?.length <= 0) && (
+              <NoDataFound table={true} />
+            )}
         </TableContainer>
       </Grid>
     </>

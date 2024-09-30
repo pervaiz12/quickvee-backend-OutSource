@@ -45,7 +45,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const RefundSummaryList = ({ data }) => {
+const RefundSummaryList = ({ data,debouncedValue,setCSVData, setCSVHeader }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
@@ -59,12 +59,13 @@ const RefundSummaryList = ({ data }) => {
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
     getRefundData();
-  }, [data]);
+  }, [data,debouncedValue]);
   const getRefundData = async () => {
     try {
       if (data) {
         let fetdata = {
           ...data,
+          find_item_name:Boolean(debouncedValue.trim()) ? debouncedValue : "",  
           ...userTypeData,
           merchant_id,
         };
@@ -92,6 +93,8 @@ const RefundSummaryList = ({ data }) => {
         ...item,
         total: (item.refund_qty * item.price).toFixed(2),
       }));
+      setCSVHeader(tableRow.map((row) => ({label: row.label,key: row.name})));
+      
       setrefundData(updatedItems);
       const totalAmt = updatedItems.reduce(
         (total, report) => total + parseFloat(report.refund_qty),
@@ -103,6 +106,7 @@ const RefundSummaryList = ({ data }) => {
         0
       );
       setTotalRefundAmount(totalRefundAmount);
+      setCSVData([...updatedItems,{reason:"Total",refund_qty:totalAmt,total:totalRefundAmount}]);
     } else {
       setrefundData([]);
     }
@@ -137,7 +141,7 @@ const RefundSummaryList = ({ data }) => {
     setrefundData(sortedItems);
     setSortOrder(newOrder);
   };
-  console.log("RefundReportData.loading",RefundReportData.loading)
+
   return (
     <>
       <Grid container className="box_shadow_div">

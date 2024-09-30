@@ -10,8 +10,16 @@ import { BASE_URL, TAXE_CATEGORY_LIST } from "../../../Constants/Config";
 import axios from "axios";
 import PasswordShow from "../../../Common/passwordShow";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
+import useDebounce from "../../../hooks/useDebouncs";
+import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
+import BrandLogic from "../../Brands/brandLogic";
+import TagLogic from "../../Tags/TagLogic";
+import { fetchTagData } from "../../../Redux/features/Brand/brandsSlice";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
-const RefundSummary = ({ hide}) => {
+const RefundSummary = ({ hide,setCSVData, setCSVHeader }) => {
+  const getBrandListSlice = useSelector((state) => state?.brandData);
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
@@ -19,10 +27,52 @@ const RefundSummary = ({ hide}) => {
   const [filteredData, setFilteredData] = useState({
     category_id: "all",
     reason_name: "all",
+    find_brand: "",
+    find_tag: "",
   });
   const [seletedReason, setSelectedReason] = useState("All");
+  const [selectedBrand, setSelectedBrand] = useState("All");
+  const [selectedTag, setSelectedTag] = useState("All");
   const [selectedLCategoryType, setselectedLCategoryType] = useState("All");
+  const [searchRecord, setSearchRecord] = useState("");
+  const debouncedValue = useDebounce(searchRecord);
   const [isTablet, setIsTablet] = useState(false);
+  const [TagList, setGetTagList] = useState([]);
+  const { getBrandList } = BrandLogic();
+  const dispatch = useDispatch();
+ 
+  const getBrandData = async () => {
+    let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
+    let data = { merchant_id, type: 0, ...userTypeData };
+    try {
+      const response = await dispatch(fetchTagData(data)).unwrap();
+      
+      setGetTagList(response);
+    } catch (error) {
+      if (error?.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
+    }
+  };
+  useEffect(() => {
+    
+    if (
+      !getBrandListSlice?.loading &&
+      !!getBrandListSlice?.tagData &&
+      getBrandListSlice?.tagData.length > 0
+    ) {
+     
+      setGetTagList(getBrandListSlice?.tagData);
+
+    } else {
+      setGetTagList([]);
+
+    }
+  }, [getBrandListSlice?.loading]);
+  useEffect(() => {
+    getBrandData();
+  }, []);
 
   const handleDataFiltered = (data) => {
     if (typeof data === "object") {
@@ -67,6 +117,36 @@ const RefundSummary = ({ hide}) => {
           setFilteredData({
             ...filteredData,
             category_id,
+          });
+        }
+      case "brand":
+        if (option === "All") {
+          setSelectedBrand("All");
+          setFilteredData({
+            ...filteredData,
+            find_brand: "",
+          });
+        } else {
+          const brand = option.title;
+          setSelectedBrand(option.title);
+          setFilteredData({
+            ...filteredData,
+            find_brand:brand,
+          });
+        }
+        case "tags":
+        if (option === "All") {
+          setSelectedTag("All");
+          setFilteredData({
+            ...filteredData,
+            find_tag: "",
+          });
+        } else {
+          const tag = option.title;
+          setSelectedTag(option.title);
+          setFilteredData({
+            ...filteredData,
+            find_tag:tag,
           });
         }
         break;
@@ -148,12 +228,25 @@ const RefundSummary = ({ hide}) => {
 
     fetchData();
   }, []); // Fetch categories only once when the component mounts
+
+  const handleSearchInputChange = (value) => {
+    setSearchRecord(value);
+  };
   return (
     <>
       <Grid container sx={{ pb: 2.5 }} className="box_shadow_div ">
         <Grid item xs={12}>
-          {!hide && <CustomHeader>Item Refund Report</CustomHeader> }
-
+          {!hide && <CustomHeader>Item Refund Report</CustomHeader>}
+          <Grid item xs={12} sx={{ padding: 2.5 }}>
+            <InputTextSearch
+              className=""
+              type="text"
+              value={searchRecord}
+              handleChange={handleSearchInputChange}
+              placeholder="Search by Item Name..."
+              autoComplete="off"
+            />
+          </Grid>
           <Grid container sx={{ px: 2.5, pt: 1 }}>
             <Grid item xs={12}>
               <h1 className="heading">Filter By</h1>
@@ -173,7 +266,7 @@ const RefundSummary = ({ hide}) => {
                 onClickHandler={handleOptionClick}
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12} sm={6} md={4}>
               <label> Select Reason</label>
               <SelectDropDown
                 listItem={reasonList.map((seletedReason) => ({
@@ -183,6 +276,28 @@ const RefundSummary = ({ hide}) => {
                 onClickHandler={handleOptionClick}
                 dropdownFor="seletedReason"
                 selectedOption={seletedReason}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <label>Brands</label>
+              <SelectDropDown
+                heading={"All"}
+                listItem={getBrandList}
+                title="title"
+                onClickHandler={handleOptionClick}
+                dropdownFor="brand"
+                selectedOption={selectedBrand}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <label>Tags</label>
+              <SelectDropDown
+                listItem={TagList}
+                heading={"All"}
+                title="title"
+                onClickHandler={handleOptionClick}
+                dropdownFor="tags"
+                selectedOption={selectedTag}
               />
             </Grid>
           </Grid>
@@ -195,7 +310,7 @@ const RefundSummary = ({ hide}) => {
       </Grid>
 
       <div className="q-order-main-page">
-        <RefundSummaryList data={filteredData} />
+        <RefundSummaryList data={filteredData} debouncedValue={debouncedValue}setCSVData={setCSVData} setCSVHeader={setCSVHeader} />
       </div>
     </>
   );

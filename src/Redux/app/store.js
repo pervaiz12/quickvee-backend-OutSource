@@ -16,6 +16,7 @@ import PurchaseOrderReducer from "../features/PurchaseOrder/purchaseOrderSlice";
 import PurchaseOrderByIdReducer from "../features/PurchaseOrder/purchaseOrderByIdSlice";
 import CheckIDVerifyListReducer from "../features/Reports/CheckIDVerify/CheckIDVerifySlice";
 import DailyReportList from "../features/DailyReport/dailyreportSlice";
+import NewCustomerReportList from "../features/NewCutomerReport/newCustomerReportSlice";
 import EmployeeListReducer from "../features/EmployeeList/EmployeeListSlice";
 
 import PaymentMethodDetailReducer from "../features/PaymentMethodReport/PaymentMethodSlice";
@@ -81,6 +82,15 @@ import NewCustomersAddedReportSlice from "../features/Reports/NewCustomersAddedR
 import MixAndMatchSliceReducer from "../features/MixAndMatch/mixAndMatchSlice";
 import RegisterClosuresSlice from "../features/Reports/RegisterClosures/RegisterClosuresSlice";
 import loyaltyprogramStoreSliceReducer from "../features/LoyaltyProgramStore/loyaltyProgramStoreSlice";
+import RevenueChartSlice from "../features/Dashboard/Charts/RevenueChartSlice";
+import customerCountSlice from "../features/Dashboard/Charts/customerCountSlice";
+import salesCountChartSlice from "../features/Dashboard/Charts/salesCountSlice";
+import grossProfitChartSlice from "../features/Dashboard/Charts/grossProfitChartSlice";
+import discountChartSlice from "../features/Dashboard/Charts/discountChartSlice";
+import percentageDiscountChartSlice from "../features/Dashboard/Charts/percentageDiscountChartSlice";
+import avgItemSaleChartSlice from "../features/Dashboard/Charts/avgItemSaleChartSlice";
+import avgSaleValueChartSlice from "../features/Dashboard/Charts/avgSaleValueChartSlice";
+
 const store = configureStore({
   reducer: {
     VendorList: VendorListReducer,
@@ -105,6 +115,16 @@ const store = configureStore({
     dailyreport: DailyReportList,
     detailCategorySale: DetailCategorySaleSliceReducer,
 
+    // Dashboard Charts slices
+    revenueChart: RevenueChartSlice,
+    salesCountChart: salesCountChartSlice,
+    customerCountChart: customerCountSlice,
+    grossProfitChart: grossProfitChartSlice,
+    discountChart: discountChartSlice,
+    percentageDiscountChart: percentageDiscountChartSlice,
+    avgItemSaleChart: avgItemSaleChartSlice,
+    avgSaleValueChart: avgSaleValueChartSlice,
+    newCustomerreport: NewCustomerReportList,
     //reducer for payment method  report
     paymentDetailReport: PaymentMethodDetailReducer,
 
