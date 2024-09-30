@@ -84,7 +84,7 @@ export const SalesCountChart = ({ merchantId, activeType }) => {
         minValue: minAndMaxValue.minUv,
         maxValue: minAndMaxValue.maxUv,
         yAxisOptions,
-        type: "category",
+        type: "number",
       };
     } else {
       return {
@@ -171,10 +171,11 @@ export const SalesCountChart = ({ merchantId, activeType }) => {
         maxValue={salesCountChartData.maxValue}
         minValue={salesCountChartData.minValue}
         yAxisOptions={salesCountChartData.yAxisOptions}
-        type={salesCountChart.type}
+        type={salesCountChartData.type}
         formatFunction={removeCurrencySign}
         prevDataFunction={previousDateRange}
         nextDataFunction={nextDateRange}
+        loading={salesCountChart?.loading ?? false}
       />
     </Grid>
   );

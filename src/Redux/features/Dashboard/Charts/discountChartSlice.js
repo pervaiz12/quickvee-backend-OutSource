@@ -4,7 +4,7 @@ import { BASE_URL, DISCOUNT_CHART } from "../../../../Constants/Config";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 
 const initialState = {
-  loading: false,
+  loading: true,
   discountData: [],
   totalDiscount: 0,
   error: "",

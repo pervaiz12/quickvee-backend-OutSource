@@ -85,7 +85,7 @@ export const GrossProfitChart = ({ merchantId, activeType }) => {
         minValue: minAndMaxValue.minUv,
         maxValue: minAndMaxValue.maxUv,
         yAxisOptions,
-        type: "category",
+        type: "number",
       };
     } else {
       return {
@@ -174,10 +174,11 @@ export const GrossProfitChart = ({ merchantId, activeType }) => {
         maxValue={grossProfitChartData.maxValue}
         minValue={grossProfitChartData.minValue}
         yAxisOptions={grossProfitChartData.yAxisOptions}
-        type={grossProfitChart.type}
+        type={grossProfitChartData.type}
         formatFunction={removeCurrencySign}
         prevDataFunction={previousDateRange}
         nextDataFunction={nextDateRange}
+        loading={grossProfitChart?.loading ?? false}
       />
     </Grid>
   );

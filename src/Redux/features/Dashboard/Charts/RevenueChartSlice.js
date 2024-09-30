@@ -4,7 +4,7 @@ import { BASE_URL, REVENUE_CHART } from "../../../../Constants/Config";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 
 const initialState = {
-  loading: false,
+  loading: true,
   revenueData: [],
   totalRevenue: 0,
   error: "",

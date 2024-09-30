@@ -4,7 +4,7 @@ import { BASE_URL, SALES_COUNT_CHART } from "../../../../Constants/Config";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 
 const initialState = {
-  loading: false,
+  loading: true,
   salesCountData: [],
   totalSalesCount: 0,
   error: "",

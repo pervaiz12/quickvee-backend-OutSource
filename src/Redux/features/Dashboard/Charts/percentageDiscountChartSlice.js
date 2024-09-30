@@ -7,7 +7,7 @@ import {
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 
 const initialState = {
-  loading: false,
+  loading: true,
   percentageDiscountData: [],
   totalPercentageDiscount: 0,
   error: "",

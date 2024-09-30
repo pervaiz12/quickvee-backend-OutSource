@@ -4,7 +4,7 @@ import { AVG_SALE_VALUE, BASE_URL } from "../../../../Constants/Config";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 
 const initialState = {
-  loading: false,
+  loading: true,
   avgSaleValueData: [],
   totalAvgSaleValue: 0,
   error: "",

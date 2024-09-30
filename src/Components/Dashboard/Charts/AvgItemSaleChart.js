@@ -85,7 +85,7 @@ export const AvgItemSaleChart = ({ merchantId, activeType }) => {
         minValue: minAndMaxValue.minUv,
         maxValue: minAndMaxValue.maxUv,
         yAxisOptions,
-        type: "category",
+        type: "number",
       };
     } else {
       return {
@@ -175,10 +175,11 @@ export const AvgItemSaleChart = ({ merchantId, activeType }) => {
         maxValue={avgItemSaleChartData.maxValue}
         minValue={avgItemSaleChartData.minValue}
         yAxisOptions={avgItemSaleChartData.yAxisOptions}
-        type={avgItemSaleChart.type}
+        type={avgItemSaleChartData.type}
         formatFunction={removeCurrencySign}
         prevDataFunction={previousDateRange}
         nextDataFunction={nextDateRange}
+        loading={avgItemSaleChart?.loading ?? false}
       />
     </Grid>
   );

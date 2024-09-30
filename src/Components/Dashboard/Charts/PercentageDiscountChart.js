@@ -88,7 +88,7 @@ export const PercentageDiscountChart = ({ merchantId, activeType }) => {
         minValue: minAndMaxValue.minUv,
         maxValue: minAndMaxValue.maxUv,
         yAxisOptions,
-        type: "category",
+        type: "number",
       };
     } else {
       return {
@@ -177,10 +177,11 @@ export const PercentageDiscountChart = ({ merchantId, activeType }) => {
         maxValue={percentageDiscountChartData.maxValue}
         minValue={percentageDiscountChartData.minValue}
         yAxisOptions={percentageDiscountChartData.yAxisOptions}
-        type={percentageDiscountChart.type}
+        type={percentageDiscountChartData.type}
         formatFunction={removeCurrencySign}
         prevDataFunction={previousDateRange}
         nextDataFunction={nextDateRange}
+        loading={percentageDiscountChart?.loading ?? false}
       />
     </Grid>
   );

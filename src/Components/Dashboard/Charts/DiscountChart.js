@@ -84,7 +84,7 @@ export const DiscountChart = ({ merchantId, activeType }) => {
         minValue: minAndMaxValue.minUv,
         maxValue: minAndMaxValue.maxUv,
         yAxisOptions,
-        type: "category",
+        type: "number",
       };
     } else {
       return {
@@ -173,10 +173,11 @@ export const DiscountChart = ({ merchantId, activeType }) => {
         maxValue={discountChartData.maxValue}
         minValue={discountChartData.minValue}
         yAxisOptions={discountChartData.yAxisOptions}
-        type={discountChart.type}
+        type={discountChartData.type}
         formatFunction={removeCurrencySign}
         prevDataFunction={previousDateRange}
         nextDataFunction={nextDateRange}
+        loading={discountChart?.loading ?? false}
       />
     </Grid>
   );

@@ -4,7 +4,7 @@ import { BASE_URL, CUSTOMER_COUNT_CHART } from "../../../../Constants/Config";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 
 const initialState = {
-  loading: false,
+  loading: true,
   customerCountData: [],
   totalCustomerCount: 0,
   error: "",

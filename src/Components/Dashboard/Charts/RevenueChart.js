@@ -83,7 +83,7 @@ export const RevenueChart = ({ merchantId, activeType }) => {
         minValue: minAndMaxValue.minUv,
         maxValue: minAndMaxValue.maxUv,
         yAxisOptions,
-        type: "category",
+        type: "number",
       };
     } else {
       return {
@@ -173,10 +173,11 @@ export const RevenueChart = ({ merchantId, activeType }) => {
         maxValue={revenueChartData.maxValue}
         minValue={revenueChartData.minValue}
         yAxisOptions={revenueChartData.yAxisOptions}
-        type={revenueChart.type}
+        type={revenueChartData.type}
         formatFunction={removeCurrencySign}
         prevDataFunction={previousDateRange}
         nextDataFunction={nextDateRange}
+        loading={revenueChart?.loading ?? false}
       />
     </Grid>
   );
