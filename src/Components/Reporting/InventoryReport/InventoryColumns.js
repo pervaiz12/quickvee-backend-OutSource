@@ -66,7 +66,6 @@ const InventoryColumns = (props) => {
                     <p className="mb-3" style={{ backgroundColor: '#F8F8F8', }}>              <Checkbox
                         sx={{
                             "& .MuiSvgIcon-root": {
-                                // fontSize: 70,
                                 borderRadius: '50%',
                                 color: '#707070'
                             }
@@ -81,7 +80,6 @@ const InventoryColumns = (props) => {
                                     <Checkbox
                                         sx={{
                                             "& .MuiSvgIcon-root": {
-                                                // fontSize: 70,
                                                 borderRadius: '50%',
                                                 color: '#707070'
                                             }
