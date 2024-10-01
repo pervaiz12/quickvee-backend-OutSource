@@ -30,20 +30,7 @@ const MainItemSales = () => {
     setItems(searchItems)
   };
 
-  //-------------------------- New code here --- 
-
   
-  // return (
-  //   <>
-  //     <InventoryReportFilter onFilterDataChange={handleFilterDataChange} setSearchRecord={setSearchRecord} debouncedValue={debouncedValue} />
-  //       { !debouncedValue ? ( <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />):("")}
-      
-  //     {/* <NetSalesFilter /> */}
-
-  //     <InventoryTable />
-  //   </>
-  // );
-
   return (
     <>
     <div>

@@ -14,6 +14,7 @@ const emails = ['username@gmail.com', 'user02@gmail.com'];
 
 const InventoryTable = (props) => {
   const [leftStickyOffset, setLeftStickyOffset] = useState(0);
+  
 
   // For opening and closing InventoryTableColumns modal
   const [open, setOpen] = useState(false);
@@ -103,7 +104,7 @@ const InventoryTable = (props) => {
         last_received: "2023-04-02",
       },
     ];
-    const [columns, setColumns] = useState(initialColumns);
+  const [columns, setColumns] = useState(initialColumns);
   const [data, setData] = useState(initialData);
   const [selectedColumns, setSelectedColumns] = useState({
     supplierCode: false,
@@ -125,6 +126,7 @@ const InventoryTable = (props) => {
   const [showMeasurePopup, setShowMeasurePopup] = useState(false);
 
   // Apply column selections for the first popup
+  // Apply column selections for the first popup
   const applyColumns = () => {
     let updatedColumns = [...columns];
     const columnMappings = {
@@ -136,8 +138,9 @@ const InventoryTable = (props) => {
 
     Object.entries(columnMappings).forEach(([key, value]) => {
       if (selectedColumns[key] && !updatedColumns.some((col) => col.id === value)) {
+        // Insert the new columns BEFORE the "plus_after_sku" column
         const index = updatedColumns.findIndex(col => col.id === "plus_after_sku");
-        updatedColumns.splice(index + 1, 0, { id: value, name: value.replace(/_/g, ' ').toUpperCase() });
+        updatedColumns.splice(index, 0, { id: value, name: value.replace(/_/g, ' ').toUpperCase() });
       } else if (!selectedColumns[key]) {
         updatedColumns = updatedColumns.filter((col) => col.id !== value);
       }
@@ -163,8 +166,9 @@ const InventoryTable = (props) => {
 
     Object.entries(measureMappings).forEach(([key, value]) => {
       if (selectedColumns[key] && !updatedColumns.some((col) => col.id === value)) {
+        // Insert the new columns BEFORE the "plus_after_avg_cost" column
         const index = updatedColumns.findIndex(col => col.id === "plus_after_avg_cost");
-        updatedColumns.splice(index + 1, 0, { id: value, name: value.replace(/_/g, ' ').toUpperCase() });
+        updatedColumns.splice(index, 0, { id: value, name: value.replace(/_/g, ' ').toUpperCase() });
       } else if (!selectedColumns[key]) {
         updatedColumns = updatedColumns.filter((col) => col.id !== value);
       }
@@ -178,10 +182,10 @@ const InventoryTable = (props) => {
     <>
       {/* <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-        
+          
           <InventoryFilter />
           
-          
+         
           <div className="custom-table">
             <table ref={tableRef}>
               <thead>
@@ -195,6 +199,7 @@ const InventoryTable = (props) => {
                     className="left-sticky"
                     style={{ left: `${leftStickyOffset}px`, position: "sticky" }}
                   >
+                    
                     <InventoryColumns />
                     
                   </th>
@@ -282,101 +287,102 @@ const InventoryTable = (props) => {
         <Grid item xs={12}>
           {/* Inventory Filter */}
           <InventoryFilter />
+          
+          {/* Table */}
           <div className="custom-table">
-              <table ref={tableRef}>
-                <thead>
-                  <tr>
-                  {columns.map((col) => {
-                      // Check if the column id matches to render the appropriate button
-                      if (col.id === "plus_after_sku") {
-                        return (
-                          <th key={col.id} className="left-sticky">
-                            {/* <button onClick={() => { setShowColumnPopup(true); setPopupCheckboxes("columns"); }}>
-                              
-                            </button> */}
-                            <FirstButtonSelections
-                            selectedColumns={selectedColumns}
-                            setSelectedColumns={setSelectedColumns}
-                            applyColumns={applyColumns}
-                            setShowColumnPopup={setShowColumnPopup}
+          <table>
+            <thead>
+
+
+              
+              <tr>
+              {columns.map((col) => {
+                  // Check if the column id matches to render the appropriate button
+                  if (col.id === "plus_after_sku") {
+                    return (
+                      <th key={col.id} className="left-sticky">
+                        {/* <button onClick={() => { setShowColumnPopup(true); setPopupCheckboxes("columns"); }}>
+                          
+                        </button> */}
+                        <FirstButtonSelections
+                        selectedColumns={selectedColumns}
+                        setSelectedColumns={setSelectedColumns}
+                        applyColumns={applyColumns}
+                        setShowColumnPopup={setShowColumnPopup}
+                      />
+                      </th>
+                    );
+                  } else if (col.id === "plus_after_avg_cost") {
+                    return (
+                      <th key={col.id} className="right-sticky">
+                        {/* <button onClick={() => { setShowMeasurePopup(true); setPopupCheckboxes("measures"); }}>
+                          
+                        </button> */}
+
+                      <button onClick={handleClickOpen}>
+                          <img
+                            style={{ height: "40px", width: "40px" }}
+                            src={plusIcon}
+                            alt="plusIcon"
                           />
-                          </th>
-                        );
-                      } else if (col.id === "plus_after_avg_cost") {
-                        return (
-                          <th key={col.id} className="right-sticky">
-                            {/* <button onClick={() => { setShowMeasurePopup(true); setPopupCheckboxes("measures"); }}>
-                              
-                            </button> */}
-                            {/* <SecondButtonSelections
-                            selectedColumns={selectedColumns}
-                            setSelectedColumns={setSelectedColumns}
-                            applyMeasures={applyMeasures}
-                            setShowMeasurePopup={setShowMeasurePopup}
-                          /> */}
-
-                          <button onClick={handleClickOpen}>
-                              <img
-                                style={{ height: "40px", width: "40px" }}
-                                src={plusIcon}
-                                alt="plusIcon"
-                              />
-                            </button>
-                            <InventoryTableColumns open={open} handleClose={handleClose} 
-                              selectedColumns={selectedColumns}
-                              setSelectedColumns={setSelectedColumns}
-                              applyMeasures={applyMeasures}
-                              setShowMeasurePopup={setShowMeasurePopup}
-                            />
-                          </th>
-                        );
-                      } else {
-                        return (
-                          <th key={col.id}>
-                            {col.name}
-                          </th>
-                        );
-                      }
-                    })}
+                        </button>
+                        <InventoryTableColumns open={open} handleClose={handleClose} 
+                          selectedColumns={selectedColumns}
+                          setSelectedColumns={setSelectedColumns}
+                          applyMeasures={applyMeasures}
+                          setShowMeasurePopup={setShowMeasurePopup}
+                        />
+                      </th>
+                    );
+                  } else {
+                    return (
+                      <th key={col.id}>
+                        {col.name}
+                      </th>
+                    );
+                  }
+                })}
 
 
-                  
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((row, index) => (
-                    <tr key={index}>
-                      {columns.map((col) => (
-                        <td key={col.id}>
-                          {row[col.id] || ""}
-                        </td>
-                      ))}
-                    </tr>
+              
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((row, index) => (
+                <tr key={index}>
+                  {columns.map((col) => (
+                    <td key={col.id}>
+                      {row[col.id] || ""}
+                    </td>
                   ))}
-                </tbody>
-              </table>
-          {/* First popup (columns) */}
-          {showColumnPopup && popupCheckboxes === "columns" && (
-            <FirstButtonSelections
-              selectedColumns={selectedColumns}
-              setSelectedColumns={setSelectedColumns}
-              applyColumns={applyColumns}
-              setShowColumnPopup={setShowColumnPopup}
-            />
-          )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-          {/* Second popup (measures) */}
-          {showMeasurePopup && popupCheckboxes === "measures" && (
-            <SecondButtonSelections
-              selectedColumns={selectedColumns}
-              setSelectedColumns={setSelectedColumns}
-              applyMeasures={applyMeasures}
-              setShowMeasurePopup={setShowMeasurePopup}
-            />
-          )}
-              </div>
-          </Grid>
-        </Grid>
+      {/* First popup (columns) */}
+      {showColumnPopup && popupCheckboxes === "columns" && (
+        <FirstButtonSelections
+          selectedColumns={selectedColumns}
+          setSelectedColumns={setSelectedColumns}
+          applyColumns={applyColumns}
+          setShowColumnPopup={setShowColumnPopup}
+        />
+      )}
+
+      {/* Second popup (measures) */}
+      {showMeasurePopup && popupCheckboxes === "measures" && (
+        <SecondButtonSelections
+          selectedColumns={selectedColumns}
+          setSelectedColumns={setSelectedColumns}
+          applyMeasures={applyMeasures}
+          setShowMeasurePopup={setShowMeasurePopup}
+        />
+      )}
+        </div>
+      </Grid>
+      </Grid>
+        
     </>
   );
 };
