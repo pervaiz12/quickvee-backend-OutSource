@@ -19,41 +19,27 @@ import PasswordShow from "../../../Common/passwordShow";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
 import useDelayedNodata from "../../../hooks/useDelayedNoData";
 import plusIcon from "../../../Assests/Products/plusIcon.svg";
-
-const StyledTable = styled(Table)(({ theme }) => ({
-  padding: 2, // Adjust padding as needed
-}));
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#253338",
-    color: theme.palette.common.white,
-    fontFamily: "CircularSTDMedium !important",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-    fontFamily: "CircularSTDBook !important",
-  },
-  [`&.${tableCellClasses.table}`]: {
-    fontSize: 14,
-    fontFamily: "CircularSTDBook !important",
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  "&:last-child td, &:last-child th": {},
-  "& td, & th": {
-    border: "none",
-  },
-}));
+import Button from '@mui/material/Button';
+import InventoryTableColumns from "./InventoryTableColumns"; 
+const emails = ['username@gmail.com', 'user02@gmail.com'];
 
 const InventoryTable = (props) => {
   
   const [leftStickyOffset, setLeftStickyOffset] = useState(0);
-  const tableRef = useRef(null);
+  //start table columns
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
+    setSelectedValue(value);
+  };
+  //end table columns
+  const tableRef = useRef(null); 
   useEffect(() => {
     if (tableRef.current) {
       const tableHeaders = tableRef.current.querySelectorAll("th");
@@ -77,6 +63,23 @@ const InventoryTable = (props) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
+          {/* filter start here  */}
+          <div>
+            
+              Selected: {selectedValue}
+            
+            <br />
+            <Button variant="outlined" onClick={handleClickOpen}>
+              Open simple dialog
+            </Button>
+            <InventoryTableColumns
+            
+              selectedValue={selectedValue}
+              open={open}
+              onClose={handleClose}
+              
+            />
+          </div>
         <div className="custom-table">
           <table ref={tableRef}>
             <thead>
@@ -147,7 +150,26 @@ const InventoryTable = (props) => {
                   <td></td>
                 
               </tr>
-            </tbody>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td>Totals</td>
+                  <td>Footer 2</td>
+                  <td>Footer 3</td>
+                  <td>Footer 4</td>
+                  <td>Footer 5</td>
+                  <td></td>
+                  <td>Footer 7</td>
+                  <td>Footer 8</td>
+                  <td>Footer 9</td>
+                  <td>Footer 10</td>
+                  <td>Footer 11</td>
+                  <td>Footer 12</td>
+                  <td>Footer 13</td>
+                  <td></td>
+
+                </tr>
+              </tfoot>
           </table>
         </div>
         
