@@ -17,8 +17,8 @@ const InventoryTableColumns = ({ open, handleClose }) => {
 
   return (
     <Dialog
-      maxWidth={'lg'}
-      
+      // maxWidth={'lg'}
+    
       // TransitionComponent={TransitionComponent}
       onClose={handleClose}
       open={open}
@@ -27,6 +27,8 @@ const InventoryTableColumns = ({ open, handleClose }) => {
         style: {
           height: '652px', // Fixed height
           maxHeight: '80vh', // Maximum height for responsiveness
+          maxWidth: '64.3vw',
+          left: '21vw'
         },
         sx: {
           boxShadow: '0px 3px 6px #00000029',
@@ -49,12 +51,12 @@ const InventoryTableColumns = ({ open, handleClose }) => {
           </Grid>
         </Grid>
         <Box className="d-flex align-center pl-30 mb-10">
-          <h6 className="form-title pr-20">Sale</h6>
+          <h6 className="form-title-head pr-20">Sale</h6>
           <div className="line-through"></div>
         </Box>
-        <Grid container className="px-30 mb-20">
+        <Grid container className="px-30 mb-20" spacing={4}>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -65,7 +67,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -79,7 +81,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -92,7 +94,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
          <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -105,7 +107,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -118,7 +120,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -131,7 +133,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -144,7 +146,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -157,7 +159,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -170,7 +172,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -186,12 +188,12 @@ const InventoryTableColumns = ({ open, handleClose }) => {
           {/* Add more checkbox items like above */}
         </Grid>
         <Box className="d-flex align-center pl-30 mb-10">
-          <h6 className="form-title pr-20">Product prices & value</h6>
+          <h6 className="form-title-head pr-20">Product prices & value</h6>
           <div className="line-through"></div>
         </Box>
-        <Grid container className="px-30 mb-20">
+        <Grid container className="px-30 mb-20" spacing={4}>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -202,7 +204,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -215,7 +217,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -228,7 +230,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
          <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -244,13 +246,13 @@ const InventoryTableColumns = ({ open, handleClose }) => {
           {/* Add more checkbox items like above */}
         </Grid>
         <Box className="d-flex align-center pl-30 mb-10">
-          <h6 className="form-title pr-20">Inventory levels</h6>
+          <h6 className="form-title-head pr-20">Inventory levels</h6>
           <div className="line-through"></div>
         </Box>
     
-        <Grid container className="px-30 mb-20">
+        <Grid container className="px-30 mb-20" spacing={4}>
         <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -263,7 +265,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -275,7 +277,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
           </Grid>
       
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -288,7 +290,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
          <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -300,7 +302,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -316,13 +318,13 @@ const InventoryTableColumns = ({ open, handleClose }) => {
           {/* Add more checkbox items like above */}
         </Grid>
         <Box className="d-flex align-center pl-30 mb-10">
-          <h6 className="form-title pr-20">Inventory performance</h6>
+          <h6 className="form-title-head pr-20">Inventory performance</h6>
           <div className="line-through"></div>
         </Box>
     
         <Grid container className="px-30 mb-20">
         <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -335,7 +337,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -347,7 +349,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
           </Grid>
       
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -360,7 +362,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
          <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -376,13 +378,13 @@ const InventoryTableColumns = ({ open, handleClose }) => {
           {/* Add more checkbox items like above */}
         </Grid>
         <Box className="d-flex align-center pl-30 mb-10">
-          <h6 className="form-title pr-20">Dates</h6>
+          <h6 className="form-title-head pr-20">Dates</h6>
           <div className="line-through"></div>
         </Box>
     
         <Grid container className="px-30 mb-20">
         <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -395,7 +397,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -407,7 +409,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
           </Grid>
       
           <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>
@@ -420,7 +422,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
          <Grid item xs={12} sm={4} md={3}>
-            <Grid container sx={{ display: "flex", gap: 2 }}>
+            <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
                 <input type="checkbox" />
               </Grid>

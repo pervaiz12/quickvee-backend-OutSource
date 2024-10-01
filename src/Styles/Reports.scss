@@ -58,7 +58,6 @@
         th {
             text-align: left;
             color: #fff;
-            font-weight: 500;
             font-size: 0.875rem;
             line-height: 1.5rem;
             letter-spacing: 0.01071em;
@@ -157,7 +156,7 @@
     margin-bottom: 20px;
   }
   .measure-container{
-    max-width: 969px;
+    // max-width: 969px;
     max-height: 652px;
     overflow-y: auto;
     background-color: #FFFFFF;
@@ -188,14 +187,21 @@
     line-height: 26px;
     margin: 0;
     font-weight: 400;
+    font-family: CircularSTDMedium;
   }
   .form-title{
     color: #000000;
     font-size: 15px;
-    line-height: 21px;
+    line-height: 15px;
     margin: 0;
-    margin-bottom: 5px;
-    font-weight: 400;
+    margin-bottom: 6px;
+   
+    
+  }
+  .form-title-head {
+    font-family: CircularSTDMedium;
+    color: #000000;
+    font-size: 15px;
   }
   .line-through{
     display: block;
