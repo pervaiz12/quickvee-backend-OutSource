@@ -22,7 +22,7 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
 
   return (
     <>
-    {/*<Dialog
+    <Dialog
       // maxWidth={'lg'}
     
       // TransitionComponent={TransitionComponent}
@@ -445,7 +445,7 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
         </Grid>
      
       </div>
-    </Dialog> */}
+    </Dialog> 
     <Dialog
       // maxWidth={'lg'}
     
@@ -481,6 +481,25 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           onChange={handleCheckboxChange}
         />
         Revenue
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          name="gross_profit"
+          checked={selectedColumns?.gross_profit}
+          onChange={handleCheckboxChange}
+        />
+        Gross Profit
+      </label>
+
+      <label>
+        <input
+          type="checkbox"
+          name="gross_profit"
+          checked={selectedColumns?.gross_profit}
+          onChange={handleCheckboxChange}
+        />
+        Gross Profit
       </label>
       <label>
         <input

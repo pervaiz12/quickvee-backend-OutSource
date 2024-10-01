@@ -74,6 +74,7 @@ const InventoryTable = (props) => {
         category: "Category A",
         supplier_code: "SC001",
         revenue: 200,
+        gross_profit: 12,
         avg_cost_measure: 12,
         self_through_rate: 1.5,
         created: "2023-01-01",
@@ -93,6 +94,7 @@ const InventoryTable = (props) => {
         category: "Category B",
         supplier_code: "SC002",
         revenue: 400,
+        gross_profit: 12,
         avg_cost_measure: 14,
         self_through_rate: 2.0,
         created: "2023-01-02",
@@ -109,6 +111,7 @@ const InventoryTable = (props) => {
     supplier: false,
     category: false,
     revenue: false,
+    gross_profit: false,
     avgCostMeasure: false,
     selfThroughRate: false,
     created: false,
@@ -149,6 +152,7 @@ const InventoryTable = (props) => {
     let updatedColumns = [...columns];
     const measureMappings = {
       revenue: "revenue",
+      gross_profit: "gross_profit",
       avgCostMeasure: "avg_cost_measure",
       selfThroughRate: "self_through_rate",
       created: "created",
