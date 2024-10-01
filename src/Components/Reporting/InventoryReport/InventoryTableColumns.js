@@ -6,7 +6,7 @@ import Dialog from '@mui/material/Dialog';
 //   return <Grow  in={props.in} timeout={500} ref={ref} {...props} />;
 // });
 
-const InventoryTableColumns = ({ open, handleClose }) => {
+const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelectedColumns, applyMeasures, setShowMeasurePopup}) => {
   // const { onClose, selectedValue, open } = props;
 
  
@@ -14,9 +14,15 @@ const InventoryTableColumns = ({ open, handleClose }) => {
   // const handleListItemClick = (value: string) => {
   //   onClose(value);
   // };
+  // Handle checkbox changes for measure selections
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    setSelectedColumns((prev) => ({ ...prev, [name]: checked }));
+  };
 
   return (
-    <Dialog
+    <>
+    {/*<Dialog
       // maxWidth={'lg'}
     
       // TransitionComponent={TransitionComponent}
@@ -41,7 +47,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
       }}
     >
       <div className="measure-container">
-        <Grid container className="align-center px30-py15">
+         <Grid container className="align-center px30-py15">
           <Grid item xs={7}>
             <h5 className="dialog-heading">Choose other measure to show</h5>
           </Grid>
@@ -185,7 +191,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           
-          {/* Add more checkbox items like above */}
+          
         </Grid>
         <Box className="d-flex align-center pl-30 mb-10">
           <h6 className="form-title-head pr-20">Product prices & value</h6>
@@ -243,7 +249,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
           </Grid>
           
           
-          {/* Add more checkbox items like above */}
+          
         </Grid>
         <Box className="d-flex align-center pl-30 mb-10">
           <h6 className="form-title-head pr-20">Inventory levels</h6>
@@ -315,7 +321,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
             </Grid>
           </Grid>
           
-          {/* Add more checkbox items like above */}
+          
         </Grid>
         <Box className="d-flex align-center pl-30 mb-10">
           <h6 className="form-title-head pr-20">Inventory performance</h6>
@@ -375,7 +381,7 @@ const InventoryTableColumns = ({ open, handleClose }) => {
           </Grid>
          
           
-          {/* Add more checkbox items like above */}
+          
         </Grid>
         <Box className="d-flex align-center pl-30 mb-10">
           <h6 className="form-title-head pr-20">Dates</h6>
@@ -435,11 +441,106 @@ const InventoryTableColumns = ({ open, handleClose }) => {
           </Grid>
          
           
-          {/* Add more checkbox items like above */}
+          
         </Grid>
      
       </div>
-    </Dialog>
+    </Dialog> */}
+    <Dialog
+      // maxWidth={'lg'}
+    
+      // TransitionComponent={TransitionComponent}
+      onClose={handleClose}
+      open={open}
+      keepMounted
+      PaperProps={{
+        style: {
+          height: '652px', // Fixed height
+          maxHeight: '80vh', // Maximum height for responsiveness
+          maxWidth: '64.3vw',
+          left: '21vw'
+        },
+        sx: {
+          boxShadow: '0px 3px 6px #00000029',
+          position: 'absolute',
+          top: 0,
+        },
+      }}
+      BackdropProps={{
+        style: { backgroundColor: open ? 'transparent' : 'transparent' }, // Set backdrop color to transparent
+      }}
+    >
+      <div className="measure-container popup">
+ 
+      <h2>Select Measures</h2>
+      <label>
+        <input
+          type="checkbox"
+          name="revenue"
+          checked={selectedColumns?.revenue}
+          onChange={handleCheckboxChange}
+        />
+        Revenue
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          name="avgCostMeasure"
+          checked={selectedColumns?.avgCostMeasure}
+          onChange={handleCheckboxChange}
+        />
+        Avg Cost
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          name="selfThroughRate"
+          checked={selectedColumns?.selfThroughRate}
+          onChange={handleCheckboxChange}
+        />
+        Self Through Rate
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          name="created"
+          checked={selectedColumns?.created}
+          onChange={handleCheckboxChange}
+        />
+        Created
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          name="firstSale"
+          checked={selectedColumns?.firstSale}
+          onChange={handleCheckboxChange}
+        />
+        First Sale
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          name="lastSale"
+          checked={selectedColumns?.lastSale}
+          onChange={handleCheckboxChange}
+        />
+        Last Sale
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          name="lastReceived"
+          checked={selectedColumns?.lastReceived}
+          onChange={handleCheckboxChange}
+        />
+        Last Received
+      </label>
+      <button onClick={applyMeasures}>Apply</button>
+      <button onClick={() => setShowMeasurePopup(false)}>Close</button>
+    </div>
+    </Dialog> 
+    </>
   );
 }
 

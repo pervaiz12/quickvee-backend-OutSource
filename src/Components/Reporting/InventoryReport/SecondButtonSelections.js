@@ -8,6 +8,7 @@ const SecondButtonSelections = ({ selectedColumns, setSelectedColumns, applyMeas
   };
 
   return (
+    
     <div className="popup">
       <h2>Select Measures</h2>
       <label>

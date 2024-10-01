@@ -302,9 +302,28 @@ const InventoryTable = (props) => {
                 return (
                   <th key={col.id} style={{ border: "1px solid black", padding: "8px", position: "sticky", right: "0", backgroundColor: "white", zIndex: "1" }}>
                     <button onClick={() => { setShowMeasurePopup(true); setPopupCheckboxes("measures"); }}>
-                      +
+                      
                     </button>
-                    
+                    {/* <SecondButtonSelections
+                    selectedColumns={selectedColumns}
+                    setSelectedColumns={setSelectedColumns}
+                    applyMeasures={applyMeasures}
+                    setShowMeasurePopup={setShowMeasurePopup}
+                  /> */}
+
+                  <button onClick={handleClickOpen}>
+                      <img
+                        style={{ height: "40px", width: "40px" }}
+                        src={plusIcon}
+                        alt="plusIcon"
+                      />
+                    </button>
+                    <InventoryTableColumns open={open} handleClose={handleClose} 
+                      selectedColumns={selectedColumns}
+                      setSelectedColumns={setSelectedColumns}
+                      applyMeasures={applyMeasures}
+                      setShowMeasurePopup={setShowMeasurePopup}
+                    />
                   </th>
                 );
               } else {
