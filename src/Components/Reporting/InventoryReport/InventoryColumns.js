@@ -29,15 +29,15 @@ const InventoryColumns = (props) => {
 
     return (
         <>
-            <div className="q-category-bottom-header">
-                <p aria-describedby={id} onClick={handleClick}>
+            
+                <div aria-describedby={id} onClick={handleClick}>
                     <img
                         style={{ height: "40px", width: "40px" }}
                         src={plusIcon}
                         alt="plusIcon"
                     />
-                </p>
-            </div>
+                </div>
+            
 
             <Popover
                 id={id}
