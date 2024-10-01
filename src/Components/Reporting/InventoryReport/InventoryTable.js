@@ -19,11 +19,11 @@ import PasswordShow from "../../../Common/passwordShow";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
 import useDelayedNodata from "../../../hooks/useDelayedNoData";
 import plusIcon from "../../../Assests/Products/plusIcon.svg";
+
 import InventoryFilter from "./InventoryFilter";
 import InventoryMeasures from "./InventoryMeasures";
 import InventoryTableColumns from "./InventoryTableColumns";
 const emails = ['username@gmail.com', 'user02@gmail.com'];
-
 
 const InventoryTable = (props) => {
 
@@ -135,8 +135,9 @@ const InventoryTable = (props) => {
                   <td>$20.10458</td>
                   <td>$200.458</td>
                   <td></td>
-                
-              </tr>
+
+
+                </tr>
               </tbody>
               <tfoot>
                 <tr>
@@ -157,9 +158,9 @@ const InventoryTable = (props) => {
 
                 </tr>
               </tfoot>
-          </table>
-        </div>
-        
+
+            </table>
+          </div>
         </Grid >
       </Grid >
     </>
