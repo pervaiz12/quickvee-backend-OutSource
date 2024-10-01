@@ -30,13 +30,13 @@ const InventoryColumns = (props) => {
     return (
         <>
             
-                <div aria-describedby={id} onClick={handleClick}>
-                    <img
-                        style={{ height: "40px", width: "40px" }}
-                        src={plusIcon}
-                        alt="plusIcon"
-                    />
-                </div>
+            <div aria-describedby={id} onClick={handleClick}>
+                <img
+                    style={{ height: "40px", width: "40px" }}
+                    src={plusIcon}
+                    alt="plusIcon"
+                />
+            </div>
             
 
             <Popover
