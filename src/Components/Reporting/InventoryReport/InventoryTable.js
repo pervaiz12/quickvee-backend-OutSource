@@ -19,6 +19,7 @@ import PasswordShow from "../../../Common/passwordShow";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
 import useDelayedNodata from "../../../hooks/useDelayedNoData";
 import plusIcon from "../../../Assests/Products/plusIcon.svg";
+<<<<<<< HEAD
 import InventoryFilter from "./InventoryFilter";
 import InventoryMeasures from "./InventoryMeasures";
 
@@ -50,12 +51,29 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: "none",
   },
 }));
+=======
+import Button from '@mui/material/Button';
+import InventoryTableColumns from "./InventoryTableColumns";
+const emails = ['username@gmail.com', 'user02@gmail.com'];
+>>>>>>> 47cbef1dae20a325e23e5aca4d6731e1eaec131d
 
 const InventoryTable = (props) => {
 
   const [leftStickyOffset, setLeftStickyOffset] = useState(0);
-  const tableRef = useRef(null);
+  //start table columns
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
+    setSelectedValue(value);
+  };
+  //end table columns
+  const tableRef = useRef(null);
   useEffect(() => {
     if (tableRef.current) {
       const tableHeaders = tableRef.current.querySelectorAll("th");
@@ -149,15 +167,44 @@ const InventoryTable = (props) => {
                   <td>$20.10458</td>
                   <td>$200.458</td>
                   <td></td>
+<<<<<<< HEAD
+
+                </tr >
+              </tbody >
+            </table >
+          </div >
+
+
+=======
+                
+              </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td>Totals</td>
+                  <td>Footer 2</td>
+                  <td>Footer 3</td>
+                  <td>Footer 4</td>
+                  <td>Footer 5</td>
+                  <td></td>
+                  <td>Footer 7</td>
+                  <td>Footer 8</td>
+                  <td>Footer 9</td>
+                  <td>Footer 10</td>
+                  <td>Footer 11</td>
+                  <td>Footer 12</td>
+                  <td>Footer 13</td>
+                  <td></td>
 
                 </tr>
-              </tbody>
-            </table>
-          </div>
-
-
-        </Grid>
-      </Grid>
+              </tfoot>
+          </table>
+        </div>
+        
+            
+>>>>>>> 47cbef1dae20a325e23e5aca4d6731e1eaec131d
+        </Grid >
+      </Grid >
     </>
   );
 };
