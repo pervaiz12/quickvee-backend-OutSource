@@ -19,43 +19,11 @@ import PasswordShow from "../../../Common/passwordShow";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
 import useDelayedNodata from "../../../hooks/useDelayedNoData";
 import plusIcon from "../../../Assests/Products/plusIcon.svg";
-<<<<<<< HEAD
 import InventoryFilter from "./InventoryFilter";
 import InventoryMeasures from "./InventoryMeasures";
-
-const StyledTable = styled(Table)(({ theme }) => ({
-  padding: 2, // Adjust padding as needed
-}));
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#253338",
-    color: theme.palette.common.white,
-    fontFamily: "CircularSTDMedium !important",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-    fontFamily: "CircularSTDBook !important",
-  },
-  [`&.${tableCellClasses.table}`]: {
-    fontSize: 14,
-    fontFamily: "CircularSTDBook !important",
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  "&:last-child td, &:last-child th": {},
-  "& td, & th": {
-    border: "none",
-  },
-}));
-=======
-import Button from '@mui/material/Button';
 import InventoryTableColumns from "./InventoryTableColumns";
 const emails = ['username@gmail.com', 'user02@gmail.com'];
->>>>>>> 47cbef1dae20a325e23e5aca4d6731e1eaec131d
+
 
 const InventoryTable = (props) => {
 
@@ -167,15 +135,6 @@ const InventoryTable = (props) => {
                   <td>$20.10458</td>
                   <td>$200.458</td>
                   <td></td>
-<<<<<<< HEAD
-
-                </tr >
-              </tbody >
-            </table >
-          </div >
-
-
-=======
                 
               </tr>
               </tbody>
@@ -201,8 +160,6 @@ const InventoryTable = (props) => {
           </table>
         </div>
         
-            
->>>>>>> 47cbef1dae20a325e23e5aca4d6731e1eaec131d
         </Grid >
       </Grid >
     </>
