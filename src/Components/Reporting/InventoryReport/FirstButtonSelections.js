@@ -5,6 +5,7 @@ import { Checkbox, Grid } from "@mui/material";
 import plusIcon from "../../../Assests/Products/plusIcon.svg";
 import Grow from '@mui/material/Grow';
 import CheckBoxField from "../../../reuseableComponents/CheckBoxField";
+import { display } from "@mui/system";
 
 const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColumns, setShowColumnPopup }) => {
 
@@ -85,7 +86,7 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
         }}
     >
 
-        <div style={{ padding: 8, borderRadius: 8, fontSize: 14 }}>
+        <div style={{ paddingBlock: 8, paddingInline: 16, borderRadius: 8, fontSize: 14 }}>
             {/* <p className="mb-3" style={{ backgroundColor: '#F8F8F8', }}>              <Checkbox
                 sx={{
                     "& .MuiSvgIcon-root": {
@@ -115,15 +116,63 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
                 )}
                 
             </Grid> */}
-            <label>
-        <input
-          type="checkbox"
-          checked={selectAllColumns}
-          onChange={handleSelectAllChange}
-        />
-        Select All
-      </label>
-      <label>
+            <p className="mb-3 d-flex align-center mb-20 padding-2"  style={{ backgroundColor: '#F8F8F8',gap: 12, paddingBlock: 9 }}>
+              <input
+                type="checkbox"
+                checked={selectAllColumns}
+                onChange={handleSelectAllChange}
+              />
+              Select All
+          </p>
+          
+          <Grid container className="mb-3" spacing={3}>
+            <Grid item xs={6} sm={12} md={6} sx={{gap: 1.5, alignItems: 'center', display: 'flex'}}>
+              
+                <input
+                  type="checkbox"
+                  name="supplierCode"
+                  checked={selectedColumns.supplierCode}
+                  onChange={handleCheckboxChange}
+                />
+                Supplier Code
+             
+            </Grid>
+            <Grid item xs={6} sm={12} md={6} sx={{gap: 1.5, alignItems: 'center', display: 'flex'}}>
+              
+                <input
+                  type="checkbox"
+                  name="brand"
+                  checked={selectedColumns.brand}
+                  onChange={handleCheckboxChange}
+                />
+                Brand
+              
+            </Grid>
+            <Grid item xs={6} sm={12} md={6} sx={{gap: 1.5, alignItems: 'center', display: 'flex'}}>
+           
+              <input
+                type="checkbox"
+                name="supplier"
+                checked={selectedColumns.supplier}
+                onChange={handleCheckboxChange}
+              />
+              Supplier
+           
+            </Grid>
+            <Grid item xs={6} sm={12} md={6} sx={{gap: 1.5, alignItems: 'center', display: 'flex'}}>
+              
+                <input
+                  type="checkbox"
+                  name="category"
+                  checked={selectedColumns.category}
+                  onChange={handleCheckboxChange}
+                />
+                Category
+              
+            </Grid>
+          </Grid>
+          
+      {/* <label>
         <input
           type="checkbox"
           name="supplierCode"
@@ -158,8 +207,8 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
           onChange={handleCheckboxChange}
         />
         Category
-      </label>
-            <div style={{ width: '100%', marginTop: 10, paddingLeft: 12, paddingBottom: 8 }}>
+      </label> */}
+            <div style={{ width: '100%', marginTop: 10, paddingBottom: 8 }}>
                 <button className="btn_blue" style={{ fontSize: 14 }} onClick={applyColumns}>
                     Apply
                 </button>

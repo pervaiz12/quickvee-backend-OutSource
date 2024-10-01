@@ -47,7 +47,7 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
       }}
     >
       <div className="measure-container">
-         <Grid container className="align-center px30-py15">
+        <Grid container className="align-center px30-py15" sx={{position: 'sticky', background: '#fff', top: 0}}>
           <Grid item xs={7}>
             <h5 className="dialog-heading">Choose other measure to show</h5>
           </Grid>
@@ -328,7 +328,7 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <div className="line-through"></div>
         </Box>
     
-        <Grid container className="px-30 mb-20">
+        <Grid container className="px-30 mb-20" spacing={4}>
         <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
@@ -388,7 +388,7 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <div className="line-through"></div>
         </Box>
     
-        <Grid container className="px-30 mb-20">
+        <Grid container className="px-30 mb-20" spacing={4}>
         <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
