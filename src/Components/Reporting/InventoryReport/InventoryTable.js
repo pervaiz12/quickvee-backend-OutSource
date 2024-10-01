@@ -5,6 +5,7 @@ import plusIcon from "../../../Assests/Products/plusIcon.svg";
 import InventoryFilter from "./InventoryFilter";
 import InventoryMeasures from "./InventoryMeasures";
 import InventoryTableColumns from "./InventoryTableColumns";
+import InventoryColumns from "./InventoryColumns";
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 
 const InventoryTable = (props) => {
@@ -62,11 +63,7 @@ const InventoryTable = (props) => {
                     style={{ left: `${leftStickyOffset}px`, position: "sticky" }}
                   >
                     <InventoryColumns />
-                    {/* <img
-                      style={{ height: "40px", width: "40px" }}
-                      src={plusIcon}
-                      alt="plusIcon"
-                    /> */}
+                    
                   </th>
                   <th>Closing Inventory</th>
                   <th>Inventory sold<br />per day</th>
@@ -89,7 +86,7 @@ const InventoryTable = (props) => {
               </thead>
               
               <tbody>
-                {/* Data rows */}
+               
                 <tr>
                   <td>Product Name 1<span>10012</span></td>
                   <td>9023</td>

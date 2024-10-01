@@ -6,7 +6,7 @@ import Dialog from '@mui/material/Dialog';
 //   return <Grow  in={props.in} timeout={500} ref={ref} {...props} />;
 // });
 
-const InventoryTableColumns = ({open, handleClose}) => {
+const InventoryTableColumns = ({ open, handleClose }) => {
   // const { onClose, selectedValue, open } = props;
 
  
@@ -18,6 +18,7 @@ const InventoryTableColumns = ({open, handleClose}) => {
   return (
     <Dialog
       maxWidth={'lg'}
+      
       // TransitionComponent={TransitionComponent}
       onClose={handleClose}
       open={open}
@@ -29,6 +30,8 @@ const InventoryTableColumns = ({open, handleClose}) => {
         },
         sx: {
           boxShadow: '0px 3px 6px #00000029',
+          position: 'absolute',
+          top: 0,
         },
       }}
       BackdropProps={{
