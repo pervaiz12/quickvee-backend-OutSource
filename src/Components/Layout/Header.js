@@ -211,14 +211,14 @@ export default function Header() {
             disableTouchRipple={true}
             className="Searchmarchant"
           >
-            
-              <InputBase
-                placeholder="Search..."
-                onChange={handleSearchChange}
-                value={searchText}
-                inputRef={inputRef}
-              />
-        
+
+            <InputBase
+              placeholder="Search..."
+              onChange={handleSearchChange}
+              value={searchText}
+              inputRef={inputRef}
+            />
+
           </MenuItem>
           {displayOptions.map((item, index) => {
             return (
@@ -322,9 +322,8 @@ export default function Header() {
   return (
     <>
       <div
-        className={`q_header_section sticky bg-white  border-b-4 border-black ${
-          isSticky ? "sticky-header" : ""
-        }`}
+        className={`q_header_section sticky bg-white  border-b-4 border-black ${isSticky ? "sticky-header" : ""
+          }`}
       >
         <div className="flex items-center px-4 mx-2">
           {LoginGetDashBoardRecordJson?.final_login == 1 ? (
@@ -351,8 +350,8 @@ export default function Header() {
             //  console.log(localStorage.getItem("AllStore"))
             LoginGetDashBoardRecordJson?.final_login == 1 ? (
               LoginAllStore?.data?.stores !== undefined ||
-              (localStorage.getItem("AllStore") !== "" &&
-                localStorage.getItem("AllStore") !== null) ? (
+                (localStorage.getItem("AllStore") !== "" &&
+                  localStorage.getItem("AllStore") !== null) ? (
                 <div className="relative flex mx-4 cursor-pointer">
                   <div className="flex lg:text-[20px]">
                     <div className="flex items-center" onClick={handleMenuOpen}>
@@ -453,9 +452,8 @@ export default function Header() {
                   target="_blank"
                 >
                   <div
-                    className={`cursor-pointer ${
-                      isTablet ? "" : "ml-5"
-                    } flex items-center`}
+                    className={`cursor-pointer ${isTablet ? "" : "ml-5"
+                      } flex items-center`}
                   >
                     <img
                       src={OnlineData}
@@ -468,43 +466,38 @@ export default function Header() {
                   </div>
                 </Link>
                 {userTypeData?.login_type !== "superadmin" &&
-                inventory_approval === "1" ? (
+                  inventory_approval === "1" ? (
                   <button
-                    className={`cursor-pointer ${
-                      isTablet ? "mx-2" : "mx-5"
-                    } flex items-center syncConatiner`}
+                    className={`cursor-pointer ${isTablet ? "mx-2" : "mx-5"
+                      } flex items-center syncConatiner`}
                     onClick={handleSendForApproval}
                   >
                     <CircularProgress
                       color={"inherit"}
-                      className={` rotaicions ${
-                        loader ? "opacity-1" : "opacity-0"
-                      }`}
+                      className={` rotaicions ${loader ? "opacity-1" : "opacity-0"
+                        }`}
                       width={18}
                       size={18}
                     />
                     <img
                       src={SynkData}
                       alt="icon"
-                      className={` syncIcon ${
-                        loader ? "opacity-0" : "opacity-1"
-                      }`}
+                      className={` syncIcon ${loader ? "opacity-0" : "opacity-1"
+                        }`}
                     />
                     <p className="ml-2 admin_medium">Send For Approval</p>
                   </button>
                 ) : (
                   <button
-                    className={`cursor-pointer ${
-                      isTablet ? "mx-2" : "mx-5"
-                    } flex items-center syncConatiner`}
+                    className={`cursor-pointer ${isTablet ? "mx-2" : "mx-5"
+                      } flex items-center syncConatiner`}
                     onClick={SyncData}
                     disabled={loader}
                   >
                     <CircularProgress
                       color={"inherit"}
-                      className={` rotaicions ${
-                        loader ? "opacity-1" : "opacity-0"
-                      }`}
+                      className={` rotaicions ${loader ? "opacity-1" : "opacity-0"
+                        }`}
                       width={18}
                       size={18}
                     />
@@ -512,9 +505,8 @@ export default function Header() {
                     <img
                       src={SynkData}
                       alt="icon"
-                      className={` syncIcon ${
-                        loader ? "opacity-0" : "opacity-1"
-                      }`}
+                      className={` syncIcon ${loader ? "opacity-0" : "opacity-1"
+                        }`}
                     />
                     <p className="ml-2 admin_medium">Sync Data</p>
                   </button>

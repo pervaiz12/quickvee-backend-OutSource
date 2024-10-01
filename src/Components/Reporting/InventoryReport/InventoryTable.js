@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchItemSalesData } from "../../../Redux/features/Reports/ItemSales/ItemSalesSlice";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
@@ -19,6 +19,8 @@ import PasswordShow from "../../../Common/passwordShow";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
 import useDelayedNodata from "../../../hooks/useDelayedNoData";
 import plusIcon from "../../../Assests/Products/plusIcon.svg";
+import InventoryFilter from "./InventoryFilter";
+import InventoryMeasures from "./InventoryMeasures";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -50,7 +52,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const InventoryTable = (props) => {
-  
+
   const [leftStickyOffset, setLeftStickyOffset] = useState(0);
   const tableRef = useRef(null);
 
@@ -77,43 +79,45 @@ const InventoryTable = (props) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-        <div className="custom-table">
-          <table ref={tableRef}>
-            <thead>
-              <tr>
+          <InventoryFilter />
+          <div className="custom-table">
+            <table ref={tableRef}>
+              <thead>
+                <tr>
                   <th>Product</th>
                   <th>Supplier code</th>
                   <th>Brand</th>
                   <th>Supplier</th>
                   <th>Category</th>
-                <th
-                  className="left-sticky"
+                  <th
+                    className="left-sticky"
                   // style={{ left: `${leftStickyOffset}px`, position: "sticky" }}
-                >
-                  <img
-                  style={{ height: "40px", width: "40px" }}
-                  src={plusIcon}
-                  alt="plusIcon"
-                />
-                </th>
-                <th>Closing Inventory</th>
-                <th>Inventory sold<br />per day</th>
-                <th>Items sold</th>
-                <th>Days Cover</th>
-                <th>Sell-through<br />rate</th>
-                <th>Revenue</th>
-                <th>Gross Pro</th>
-                  <th className="right-sticky">
+                  >
                     <img
-                  style={{ height: "40px", width: "40px" }}
-                  src={plusIcon}
-                  alt="plusIcon"
+                      style={{ height: "40px", width: "40px" }}
+                      src={plusIcon}
+                      alt="plusIcon"
                     />
                   </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
+                  <th>Closing Inventory</th>
+                  <th>Inventory sold<br />per day</th>
+                  <th>Items sold</th>
+                  <th>Days Cover</th>
+                  <th>Sell-through<br />rate</th>
+                  <th>Revenue</th>
+                  <th>Gross Pro</th>
+                  <th className="right-sticky">
+                    <InventoryMeasures />
+                    {/* <img
+                      style={{ height: "40px", width: "40px" }}
+                      src={plusIcon}
+                      alt="plusIcon"
+                    /> */}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
                   <td>Product Name 1<span>10012</span></td>
                   <td>9023</td>
                   <td>zara</td>
@@ -128,7 +132,7 @@ const InventoryTable = (props) => {
                   <td>$20.10458</td>
                   <td>$200.458</td>
                   <td></td>
-                
+
                 </tr>
                 <tr>
                   <td>Product Name 1<span>10012</span></td>
@@ -145,13 +149,13 @@ const InventoryTable = (props) => {
                   <td>$20.10458</td>
                   <td>$200.458</td>
                   <td></td>
-                
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        
-            
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+
         </Grid>
       </Grid>
     </>
