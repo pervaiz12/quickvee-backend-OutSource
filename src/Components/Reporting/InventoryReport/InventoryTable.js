@@ -176,12 +176,12 @@ const InventoryTable = (props) => {
 
   return (
     <>
-      <Grid container className="box_shadow_div">
+      {/* <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          {/* Inventory Filter */}
+        
           <InventoryFilter />
           
-          {/* Table */}
+          
           <div className="custom-table">
             <table ref={tableRef}>
               <thead>
@@ -275,107 +275,108 @@ const InventoryTable = (props) => {
             </table>
           </div>
         </Grid>
-      </Grid>
+      </Grid> */}
 
 
-      <div>
-      <h1>Product Inventory Grid</h1>
-      <table style={{ borderCollapse: "collapse", width: "100%" }}>
-        <thead>
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          {/* Inventory Filter */}
+          <InventoryFilter />
+          <div className="custom-table">
+              <table ref={tableRef}>
+                <thead>
+                  <tr>
+                  {columns.map((col) => {
+                      // Check if the column id matches to render the appropriate button
+                      if (col.id === "plus_after_sku") {
+                        return (
+                          <th key={col.id} className="left-sticky">
+                            {/* <button onClick={() => { setShowColumnPopup(true); setPopupCheckboxes("columns"); }}>
+                              
+                            </button> */}
+                            <FirstButtonSelections
+                            selectedColumns={selectedColumns}
+                            setSelectedColumns={setSelectedColumns}
+                            applyColumns={applyColumns}
+                            setShowColumnPopup={setShowColumnPopup}
+                          />
+                          </th>
+                        );
+                      } else if (col.id === "plus_after_avg_cost") {
+                        return (
+                          <th key={col.id} className="right-sticky">
+                            {/* <button onClick={() => { setShowMeasurePopup(true); setPopupCheckboxes("measures"); }}>
+                              
+                            </button> */}
+                            {/* <SecondButtonSelections
+                            selectedColumns={selectedColumns}
+                            setSelectedColumns={setSelectedColumns}
+                            applyMeasures={applyMeasures}
+                            setShowMeasurePopup={setShowMeasurePopup}
+                          /> */}
+
+                          <button onClick={handleClickOpen}>
+                              <img
+                                style={{ height: "40px", width: "40px" }}
+                                src={plusIcon}
+                                alt="plusIcon"
+                              />
+                            </button>
+                            <InventoryTableColumns open={open} handleClose={handleClose} 
+                              selectedColumns={selectedColumns}
+                              setSelectedColumns={setSelectedColumns}
+                              applyMeasures={applyMeasures}
+                              setShowMeasurePopup={setShowMeasurePopup}
+                            />
+                          </th>
+                        );
+                      } else {
+                        return (
+                          <th key={col.id}>
+                            {col.name}
+                          </th>
+                        );
+                      }
+                    })}
 
 
-          
-          <tr>
-          {columns.map((col) => {
-              // Check if the column id matches to render the appropriate button
-              if (col.id === "plus_after_sku") {
-                return (
-                  <th key={col.id} style={{ border: "1px solid black", padding: "8px" }}>
-                    <button onClick={() => { setShowColumnPopup(true); setPopupCheckboxes("columns"); }}>
-                      
-                    </button>
-                    <FirstButtonSelections
-                    selectedColumns={selectedColumns}
-                    setSelectedColumns={setSelectedColumns}
-                    applyColumns={applyColumns}
-                    setShowColumnPopup={setShowColumnPopup}
-                  />
-                  </th>
-                );
-              } else if (col.id === "plus_after_avg_cost") {
-                return (
-                  <th key={col.id} style={{ border: "1px solid black", padding: "8px", position: "sticky", right: "0", backgroundColor: "white", zIndex: "1" }}>
-                    <button onClick={() => { setShowMeasurePopup(true); setPopupCheckboxes("measures"); }}>
-                      
-                    </button>
-                    {/* <SecondButtonSelections
-                    selectedColumns={selectedColumns}
-                    setSelectedColumns={setSelectedColumns}
-                    applyMeasures={applyMeasures}
-                    setShowMeasurePopup={setShowMeasurePopup}
-                  /> */}
+                  
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((row, index) => (
+                    <tr key={index}>
+                      {columns.map((col) => (
+                        <td key={col.id}>
+                          {row[col.id] || ""}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+          {/* First popup (columns) */}
+          {showColumnPopup && popupCheckboxes === "columns" && (
+            <FirstButtonSelections
+              selectedColumns={selectedColumns}
+              setSelectedColumns={setSelectedColumns}
+              applyColumns={applyColumns}
+              setShowColumnPopup={setShowColumnPopup}
+            />
+          )}
 
-                  <button onClick={handleClickOpen}>
-                      <img
-                        style={{ height: "40px", width: "40px" }}
-                        src={plusIcon}
-                        alt="plusIcon"
-                      />
-                    </button>
-                    <InventoryTableColumns open={open} handleClose={handleClose} 
-                      selectedColumns={selectedColumns}
-                      setSelectedColumns={setSelectedColumns}
-                      applyMeasures={applyMeasures}
-                      setShowMeasurePopup={setShowMeasurePopup}
-                    />
-                  </th>
-                );
-              } else {
-                return (
-                  <th key={col.id} style={{ border: "1px solid black", padding: "8px" }}>
-                    {col.name}
-                  </th>
-                );
-              }
-            })}
-
-
-           
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((row, index) => (
-            <tr key={index}>
-              {columns.map((col) => (
-                <td key={col.id} style={{ border: "1px solid black", padding: "8px" }}>
-                  {row[col.id] || ""}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* First popup (columns) */}
-      {showColumnPopup && popupCheckboxes === "columns" && (
-        <FirstButtonSelections
-          selectedColumns={selectedColumns}
-          setSelectedColumns={setSelectedColumns}
-          applyColumns={applyColumns}
-          setShowColumnPopup={setShowColumnPopup}
-        />
-      )}
-
-      {/* Second popup (measures) */}
-      {showMeasurePopup && popupCheckboxes === "measures" && (
-        <SecondButtonSelections
-          selectedColumns={selectedColumns}
-          setSelectedColumns={setSelectedColumns}
-          applyMeasures={applyMeasures}
-          setShowMeasurePopup={setShowMeasurePopup}
-        />
-      )}
-    </div>
+          {/* Second popup (measures) */}
+          {showMeasurePopup && popupCheckboxes === "measures" && (
+            <SecondButtonSelections
+              selectedColumns={selectedColumns}
+              setSelectedColumns={setSelectedColumns}
+              applyMeasures={applyMeasures}
+              setShowMeasurePopup={setShowMeasurePopup}
+            />
+          )}
+              </div>
+          </Grid>
+        </Grid>
     </>
   );
 };
