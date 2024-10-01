@@ -53,7 +53,7 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           </Grid>
           <Grid item xs={5} sx={{gap:2}} container className="d-flex flex-end">
             <button className="btn btn-gray" onClick={handleClose}>Cancel</button>
-            <button className="btn btn-blue">Apply</button>
+            <button className="btn btn-blue" onClick={applyMeasures}>Apply</button>
           </Grid>
         </Grid>
         <Box className="d-flex align-center pl-30 mb-10">
@@ -64,7 +64,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="revenue"
+                  checked={selectedColumns?.revenue}
+                  onChange={handleCheckboxChange}
+                />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Revenue</h6>
@@ -75,7 +80,13 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              
+                <input
+                  type="checkbox"
+                  name="gross_profit"
+                  checked={selectedColumns?.gross_profit}
+                  onChange={handleCheckboxChange}
+                />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Gross profit</h6>
@@ -201,7 +212,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="avgCostMeasure"
+                  checked={selectedColumns?.avgCostMeasure}
+                  onChange={handleCheckboxChange}
+                />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Avg. cost</h6>
@@ -332,7 +348,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
         <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="selfThroughRate"
+                  checked={selectedColumns?.selfThroughRate}
+                  onChange={handleCheckboxChange}
+                />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Sell-through rate</h6>
@@ -392,7 +413,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
         <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="created"
+                  checked={selectedColumns?.created}
+                  onChange={handleCheckboxChange}
+                />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Created</h6>
@@ -405,7 +431,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                    type="checkbox"
+                    name="firstSale"
+                    checked={selectedColumns?.firstSale}
+                    onChange={handleCheckboxChange}
+                  />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">First sale</h6>
@@ -417,7 +448,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="lastSale"
+                  checked={selectedColumns?.lastSale}
+                  onChange={handleCheckboxChange}
+                />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Last sale</h6>
@@ -430,7 +466,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
          <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                    type="checkbox"
+                    name="lastReceived"
+                    checked={selectedColumns?.lastReceived}
+                    onChange={handleCheckboxChange}
+                  />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Last received</h6>
@@ -446,119 +487,7 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
      
       </div>
     </Dialog> 
-    <Dialog
-      // maxWidth={'lg'}
     
-      // TransitionComponent={TransitionComponent}
-      onClose={handleClose}
-      open={open}
-      keepMounted
-      PaperProps={{
-        style: {
-          height: '652px', // Fixed height
-          maxHeight: '80vh', // Maximum height for responsiveness
-          maxWidth: '64.3vw',
-          left: '21vw'
-        },
-        sx: {
-          boxShadow: '0px 3px 6px #00000029',
-          position: 'absolute',
-          top: 0,
-        },
-      }}
-      BackdropProps={{
-        style: { backgroundColor: open ? 'transparent' : 'transparent' }, // Set backdrop color to transparent
-      }}
-    >
-      <div className="measure-container popup">
- 
-      <h2>Select Measures</h2>
-      <label>
-        <input
-          type="checkbox"
-          name="revenue"
-          checked={selectedColumns?.revenue}
-          onChange={handleCheckboxChange}
-        />
-        Revenue
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          name="gross_profit"
-          checked={selectedColumns?.gross_profit}
-          onChange={handleCheckboxChange}
-        />
-        Gross Profit
-      </label>
-
-      <label>
-        <input
-          type="checkbox"
-          name="gross_profit"
-          checked={selectedColumns?.gross_profit}
-          onChange={handleCheckboxChange}
-        />
-        Gross Profit
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          name="avgCostMeasure"
-          checked={selectedColumns?.avgCostMeasure}
-          onChange={handleCheckboxChange}
-        />
-        Avg Cost
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          name="selfThroughRate"
-          checked={selectedColumns?.selfThroughRate}
-          onChange={handleCheckboxChange}
-        />
-        Self Through Rate
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          name="created"
-          checked={selectedColumns?.created}
-          onChange={handleCheckboxChange}
-        />
-        Created
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          name="firstSale"
-          checked={selectedColumns?.firstSale}
-          onChange={handleCheckboxChange}
-        />
-        First Sale
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          name="lastSale"
-          checked={selectedColumns?.lastSale}
-          onChange={handleCheckboxChange}
-        />
-        Last Sale
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          name="lastReceived"
-          checked={selectedColumns?.lastReceived}
-          onChange={handleCheckboxChange}
-        />
-        Last Received
-      </label>
-      <button onClick={applyMeasures}>Apply</button>
-      <button onClick={() => setShowMeasurePopup(false)}>Close</button>
-    </div>
-    </Dialog> 
     </>
   );
 }
