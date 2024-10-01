@@ -217,6 +217,10 @@ const DashboardChartViewReports = lazy(
 const PaymentViewReports = lazy(
   () => import("../Reporting/PaymentReport/PaymentReportMain")
 );
+// add inventory report layout 
+const MainInventoryReport = lazy(
+  () => import("../Reporting/InventoryReport/MainInventoryReport")
+);
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -394,7 +398,10 @@ const LeftSide = ({ visible }) => {
         return <RegisterClosuresTransactions />;
       case "drop-cash-report":
         return <DropCashMain />;
-
+       // add case for inventory report url
+      case "inventory-report":
+        return <MainInventoryReport />;
+      
       case "pay-in-report":
         return <PayInMain />;
       case "sales-report":

@@ -722,6 +722,12 @@ function App() {
               element={<Main visible={"new-sale-report"} />}
             />
 
+            <Route
+                exact
+                path="/store-reporting/inventory-report"
+                element={<Main visible={"inventory-report"} />}
+            />
+
             {/* multiple users dashbaord */}
 
             <Route

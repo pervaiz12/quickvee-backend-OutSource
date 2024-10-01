@@ -3,8 +3,9 @@
 //remove unwanted and credentials of other app
 module.exports = Object.freeze({
   // BASE_URL: "https://sandbox.quickvee.net/",
-  BASE_URL: "https://production.quickvee.net/",
+  // BASE_URL: "https://production.quickvee.net/",
   // BASE_URL: "https://www.quickvee.net/",
+  BASE_URL: "https://www.quickvee.net/",
 
   // Categories API calls
   ADD_CATOGRY: "CategoryReactapi/addnewcolln",

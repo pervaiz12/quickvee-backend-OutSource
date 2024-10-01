@@ -23,10 +23,11 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import Modal from "@mui/material/Modal";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 import { FetchOrderSummeryDetails } from "../../../../Redux/features/orderSummeryHistory/orderSummerySlice";
 import OrderSummeryBanner1 from "../../../../Assests/NewImage/OrderSummeryBanner1.png";
 import OrderSummeryBanner2 from "../../../../Assests/NewImage/OrderSummeryBanner2.png";

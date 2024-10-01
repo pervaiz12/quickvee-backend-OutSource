@@ -211,8 +211,8 @@ const DashDateRangeComponent = ({
           )}
         </Grid>
 
-        <Grid container spacing={2} className="py-5">
-          <Grid item xs={12} sm={6} md={3}>
+        <Grid container spacing={2} className="py-5 date-range-custom-parent">
+          <Grid item xs={12} sm={6} md={3} className="date-range-custom">
             <div className="q_date_range_start date-picker-font">
               Start Date
             </div>
@@ -250,7 +250,7 @@ const DashDateRangeComponent = ({
               </span>
             </div>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={3} className="date-range-custom">
             <div className="q_date_range_start ">End Date</div>
             <div className="relative">
               <DatePicker
@@ -277,7 +277,7 @@ const DashDateRangeComponent = ({
 
      
           </Grid>
-          <Grid item xs={6} sm={12} md={3}>
+          <Grid item xs={6} sm={12} md={3} className="date-range-custom">
             <label className="q-details-page-label" htmlFor="storetoFilter">
                 Outlet
                 </label>
@@ -292,7 +292,7 @@ const DashDateRangeComponent = ({
                 />
             </Grid>
 
-          <Grid item alignSelf={"center"} xs={12} sm={6} md={3}>
+          <Grid item alignSelf={"center"} >
             <div className="pt-4" style={{float:"inline-end"}}>
               <button onClick={handleSearch} className="save_btn">
                 Search
