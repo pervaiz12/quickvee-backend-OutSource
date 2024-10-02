@@ -120,7 +120,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
          <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="customer_count"
+                  checked={selectedColumns?.customer_count}
+                  onChange={handleCheckboxChange}
+                />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Customer count</h6>
@@ -133,8 +138,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
-              </Grid>
+              <input
+                  type="checkbox"
+                  name="sale_count"
+                  checked={selectedColumns?.sale_count}
+                  onChange={handleCheckboxChange}
+                />              </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Sale count</h6>
                 <p className= "sub-title">
@@ -159,7 +168,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="items_sold_per_day"
+                  checked={selectedColumns?.items_sold_per_day}
+                  onChange={handleCheckboxChange}
+                /> 
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Items sold per day</h6>
@@ -172,7 +186,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="avg_items_per_sale"
+                  checked={selectedColumns?.avg_items_per_sale}
+                  onChange={handleCheckboxChange}
+                /> 
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Avg. items per sale</h6>
@@ -185,8 +204,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
-              </Grid>
+              <input
+                  type="checkbox"
+                  name="avg_sale_value"
+                  checked={selectedColumns?.avg_sale_value}
+                  onChange={handleCheckboxChange}
+                />               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Avg. sale value</h6>
                 <p className= "sub-title">
@@ -198,7 +221,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="sale_discounted"
+                  checked={selectedColumns?.sale_discounted}
+                  onChange={handleCheckboxChange}
+                />  
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Discounted (%)</h6>
@@ -235,8 +263,13 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
-              </Grid>
+              <input
+                  type="checkbox"
+                  name="inventory_cost"
+                  checked={selectedColumns?.inventory_cost}
+                  onChange={handleCheckboxChange}
+                />             
+                 </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Inventory cost</h6>
                 <p className="sub-title">
@@ -248,7 +281,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="cost_goods_sold"
+                  checked={selectedColumns?.cost_goods_sold}
+                  onChange={handleCheckboxChange}
+                />             
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Cost of goods sold</h6>
@@ -261,7 +299,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
          <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="retail_value"
+                  checked={selectedColumns?.retail_value}
+                  onChange={handleCheckboxChange}
+                />  
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Retail value (excl. tax)</h6>
@@ -283,7 +326,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
         <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="current_inventory"
+                  checked={selectedColumns?.current_inventory}
+                  onChange={handleCheckboxChange}
+                />  
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Current inventory</h6>
@@ -296,7 +344,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="start_date_inventory"
+                  checked={selectedColumns?.start_date_inventory}
+                  onChange={handleCheckboxChange}
+                />  
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Start date inventory</h6>
@@ -308,7 +361,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="reorder_point"
+                  checked={selectedColumns?.reorder_point}
+                  onChange={handleCheckboxChange}
+                />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Reorder point</h6>
@@ -321,7 +379,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
          <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="reorder_amount"
+                  checked={selectedColumns?.reorder_amount}
+                  onChange={handleCheckboxChange}
+                />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Reorder amount</h6>
@@ -333,7 +396,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="inbound_inventory"
+                  checked={selectedColumns?.inbound_inventory}
+                  onChange={handleCheckboxChange}
+                />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Inbound inventory</h6>
@@ -373,7 +441,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="return_count"
+                  checked={selectedColumns?.return_count}
+                  onChange={handleCheckboxChange}
+                />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Return count</h6>
@@ -385,7 +458,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="inventory_days_cover"
+                  checked={selectedColumns?.inventory_days_cover}
+                  onChange={handleCheckboxChange}
+                />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Days cover</h6>
@@ -398,7 +476,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
          <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="inventory_returns"
+                  checked={selectedColumns?.inventory_returns}
+                  onChange={handleCheckboxChange}
+                />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Returns (%)</h6>
