@@ -1,131 +1,124 @@
-import React, { useState, useEffect } from "react";
-
-import { BASE_URL, TAXE_CATEGORY_LIST } from "../../../Constants/Config";
-import axios from "axios";
-import { useAuthDetails } from "../../../Common/cookiesHelper";
-import { Grid, Grid2 } from "@mui/material";
+import React, { useState, useEffect, lazy, Suspense } from "react";
+import Grid from "@mui/system/Unstable_Grid/Grid";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
-import CustomHeader from "../../../reuseableComponents/CustomHeader";
-import PasswordShow from "../../../Common/passwordShow";
-import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
+import CurrentInventoryValue from "../../../Components/Reporting/CurrentInventoryValue/CurrentInventoryValue";
+import NewItemCreatedBetweenMain from "../../../Components/Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain";
+import ReorderInventory from "../../../Components/Reporting/ReorderInventory/ReorderInventoryMain";
+import InstantActvity from "../../../Components/Reporting/InstantPo/InstantActvity";
+import CheckIDVerify from "../../../Components/Reporting/CheckIDVerify/CheckIDVerifyMain";
+import InventoryList from "../../../Components/Reporting/inventoryList/inventoryList";
+import ProfitMarginReport from "../../../Components/Reporting/ProfitMarginReport/profitMarginReport";
+import InventoryPerformanceMain from "../../../Components/Reporting/InventoryPerformance/InventoryPerformanceMain";
 import downloadIcon from "../../../Assests/Dashboard/download.svg";
+import { useNavigate, useParams } from "react-router-dom";
 import { CSVLink } from "react-csv";
 
-const InventoryReportFilter = ({ onFilterDataChange,searchItems, setSearchRecord,debouncedValue }) => {
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
-    useAuthDetails();
-    const [CSVData, setCSVData] = useState([]);
-  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
-    PasswordShow();
-  const [selectedOrderSource, setSelectedOrderSource] = useState("All");
-  const [selectedOrderType, setSelectedOrderType] = useState("All");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+const selectReportList = [
+  {
+    id: 81,
+    title: "Current Inventory Value",
+    url: "current-inventory-value",
+  },
+  {
+    id: 73,
+    title: "New Item Created Between",
+    url: "item-create-between",
+  },
+  {
+    id: 74,
+    title: "Reorder Inventory",
+    url: "recorder-inventory",
+  },
+  {
+    id: 68,
+    title: "Instant PO Activity Report",
+    url: "instant-activity",
+  },
+  {
+    id: 65,
+    title: "Check ID verification",
+    url: "id-verification",
+  },
+  {
+    id: 93,
+    title: "Inventory List",
+    url: "inventory-list",
+  },
+  {
+    id: 94,
+    title: "Profit Margin Per Item Listing",
+    url: "profit-margin-report",
+  },
+  {
+    id: 95,
+    title: "Performance",
+    url: "inventory-performance",
+  },
+];
+const InventoryReportFilter = () => {
+  const navigate = useNavigate();
+  const { selectedReport } = useParams();
+  const [selectedDateRange, setSelectedDateRange] = useState(null);
+  const [CSVData, setCSVData] = useState([]);
+  const [CSVHeaders, setCSVHeader] = useState([]);
+  const onDateRangeChange = (dateRange) => {
+    setSelectedDateRange(dateRange);
+  };
+  const [selectedReportList, setSelectedReportList] = useState(
+    "Current Inventory Value"
+  );
+  useEffect(() => {
+    console.log("selectedReport: selectedReport", selectedReport);
 
-  const [filteredData, setFilteredData] = useState({ category_id: "all" });
-  const [items, setItems] = useState("");
+    // If the selectedReport is undefined, push the "sales-summary" to the URL
+    if (!selectedReport) {
+      navigate("/store-reporting/current-inventory-value", {
+        replace: true,
+      });
+    }
+    console.log("selectedReport: ", selectedReport);
+    setSelectedReportList(
+      selectReportList.find((item) => item.url === selectedReport).title
+    );
+    setCSVData([]);
+    setCSVHeader([]);
+  }, [navigate]);
 
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
-      case "odersource":
-        setSelectedOrderSource(option.title);
-
+      case "reportList":
+        setSelectedReportList(option.title);
+        navigate(`/store-reporting/inventory-report/${option.url}`);
         break;
-      case "ordertype":
-        setSelectedOrderType(option.title);
 
-        break;
-      case "category":
-        if (option === "All") {
-          setSelectedCategory("All");
-
-          setFilteredData({
-            ...filteredData,
-            category_id: "all",
-            merchant_id: "",
-            order_env: "",
-            limit: "",
-          });
-        } else {
-          const category_id = option.id;
-          setSelectedCategory(option.title);
-
-          setFilteredData({
-            ...filteredData,
-            category_id,
-            merchant_id: "",
-            order_env: "",
-            limit: "",
-          });
-        }
-        break;
       default:
         break;
     }
   };
 
-  const handleSearchInputChange = (value) => {
-    setSearchRecord(value);
+  const renderComponent = () => {
+    switch (selectedReport) {
+      case "current-inventory-value":
+        return <CurrentInventoryValue hide={true} />;
+      case "item-create-between":
+        return <NewItemCreatedBetweenMain hide={true} />;
+      case "recorder-inventory":
+        return <ReorderInventory hide={true} />;
+      case "instant-activity":
+        return <InstantActvity hide={true} />;
+      case "id-verification":
+        return <CheckIDVerify hide={true} />;
+      case "inventory-list":
+        return <InventoryList hide={true} />;
+      case "profit-margin-report":
+        return <ProfitMarginReport hide={true} />;
+      case "inventory-performance":
+        return <InventoryPerformanceMain hide={true} />;
+      default:
+        break;
+    }
   };
 
-  const [categoryOptions, setCategoryOptions] = useState([]);
-  const [loadingCategories, setLoadingCategories] = useState(true);
-  let data = {
-    merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-    ...userTypeData,
-  };
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { token, ...dataNew } = data;
-        const response = await axios.post(
-          BASE_URL + TAXE_CATEGORY_LIST,
-          dataNew,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        // Assuming the API response has a data property containing the category list
-        const categoryList = response.data.result;
-
-        // Extracting category IDs and view titles
-        const mappedOptions = categoryList.map((category) => ({
-          id: category.id,
-          title: category.title,
-        }));
-
-        setCategoryOptions(mappedOptions);
-        setLoadingCategories(false);
-      } catch (error) {
-        
-        if (error.response.status == 401) {
-          getUnAutherisedTokenMessage();
-          handleCoockieExpire();
-        }
-        setLoadingCategories(false);
-      }
-    };
-
-    fetchData();
-  }, []); // Fetch categories only once when the component mounts
-
-  useEffect(() => {
-    onFilterDataChange(
-      selectedOrderSource,
-      selectedOrderType,
-      selectedCategory,items
-    );
-  }, [selectedOrderSource, selectedOrderType, selectedCategory,items]);
-
-  const orderSourceList = ["All", "Online Order", "Store Order"];
-  // const inventoryReportList = ["Old Inventory", "Online Order", "Store Order"];
-  const orderTypeList = ["All", "Pickup", "Delivery"];
-
-  const handleSearch = () =>{
-  }
   return (
     <>
       <Grid container sx={{ padding: 2.5, mt: 3.6 }} className="box_shadow_div">
@@ -144,12 +137,12 @@ const InventoryReportFilter = ({ onFilterDataChange,searchItems, setSearchRecord
                 Inventory Report
               </h1>
               <SelectDropDown
-                  sx={{ pt: 0.5, width: "19.4rem" }}
-                  listItem={orderSourceList.map((item) => ({ title: item }))}
-                  title="title"
-                  dropdownFor="orderSourceList"
-                  selectedOption={selectedOrderSource}
-                  onClickHandler={handleOptionClick}
+                sx={{ pt: 0.5, width: "22.7rem" }}
+                listItem={selectReportList}
+                onClickHandler={handleOptionClick}
+                selectedOption={selectedReportList}
+                dropdownFor={"reportList"}
+                title={"title"}
               />
             </Grid>
 
@@ -162,86 +155,29 @@ const InventoryReportFilter = ({ onFilterDataChange,searchItems, setSearchRecord
                 cursor: "pointer",
               }}
             >
-              
-              <div className="flex justify-center items-center flex-nowrap">
-                <h1 className="text-[#0A64F9] text-[16px]">Export report</h1>
-                <img
-                  style={{ height: "30px", width: "30px" }}
-                  src={downloadIcon}
-                  alt="downloadIcon"
-                />
-              </div>
-              
+              <CSVLink data={CSVData} headers={CSVHeaders}>
+                <div className="flex justify-center items-center flex-nowrap">
+                  <h1 className="text-[#0A64F9] text-[16px]">Export report</h1>
+                  <img
+                    style={{ height: "30px", width: "30px" }}
+                    src={downloadIcon}
+                    alt="downloadIcon"
+                  />
+                </div>
+              </CSVLink>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
 
-
-      
-      
-      <Grid container className="box_shadow_div">
+      <Grid container>
         <Grid item xs={12}>
-          
-            
-
-            {
-              !debouncedValue ? (
-                <>
-                 <Grid container sx={{ px: 2.5, pt: 1 }}>
-                    <Grid item xs={12}>
-                      <div className="heading">Filter By</div>
-                    </Grid>
-                  </Grid>
-                  <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
-                    {/* <Grid item xs={12} sm={6} md={4}>
-                      <label
-                        className="q-details-page-label"
-                        htmlFor="orderSourceFilter"
-                      >
-                        Order Source
-                      </label>
-                      <SelectDropDown
-                        listItem={orderSourceList.map((item) => ({ title: item }))}
-                        title="title"
-                        dropdownFor="odersource"
-                        selectedOption={selectedOrderSource}
-                        onClickHandler={handleOptionClick}
-                      />
-                    </Grid> */}
-                    <Grid item xs={12} sm={6} md={4}>
-                      <label className="q-details-page-label" htmlFor="orderTypeFilter">
-                        Report Type
-                      </label>
-                      <SelectDropDown
-                        listItem={orderTypeList.map((item) => ({ title: item }))}
-                        title="title"
-                        dropdownFor="ordertype"
-                        selectedOption={selectedOrderType}
-                        onClickHandler={handleOptionClick}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
-                      <label className="q-details-page-label" htmlFor="orderTypeFilter">
-                        Measure
-                      </label>
-                      <SelectDropDown
-                        heading={"All"}
-                        listItem={categoryOptions}
-                        title="title"
-                        dropdownFor="category"
-                        selectedOption={selectedCategory}
-                        onClickHandler={handleOptionClick}
-                      />
-                    </Grid>
-                  </Grid>
-                </>
-              ):("")
-            }
+          <Suspense fallback={<div>loading... </div>}>
+            {renderComponent()}
+          </Suspense>
         </Grid>
       </Grid>
     </>
   );
 };
-
 export default InventoryReportFilter;

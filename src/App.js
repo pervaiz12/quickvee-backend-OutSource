@@ -715,7 +715,12 @@ function App() {
               path="/store-reporting/new-item-sales-report"
               element={<Main visible={"new-item-sales-report"} />}
             />
-
+            {/* inventory performance page add */}
+            <Route
+              exact
+              path="/store-reporting/inventory-performance"
+              element={<Main visible={"inventory-performance"} />}
+            />
             <Route
               exact
               path="/store-reporting/new-sale-report/:selectedReport"
@@ -723,9 +728,9 @@ function App() {
             />
 
             <Route
-                exact
-                path="/store-reporting/inventory-report"
-                element={<Main visible={"inventory-report"} />}
+              exact
+              path="/store-reporting/inventory-report/:selectedReport"
+              element={<Main visible={"inventory-report"} />}
             />
 
             {/* multiple users dashbaord */}

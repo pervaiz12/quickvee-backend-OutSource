@@ -675,7 +675,7 @@ const menuItems = [
       //       text: "Detailed Sales Person Report",
       //       link: "/store-reporting/report-sales-person",
       //     },
-    
+
       //     {
       //       id: 96,
       //       text: "Drop Cash Report",
@@ -736,6 +736,11 @@ const menuItems = [
         id: 80,
         text: "Sales Report",
         link: "/store-reporting/new-sale-report/sales-summary",
+      },
+      {
+        id: 2,
+        text: "Inventory Reports",
+        link: "/store-reporting/inventory-report/current-inventory-value",
       },
       {
         id: 2,

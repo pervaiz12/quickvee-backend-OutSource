@@ -3,7 +3,7 @@ import FilterCatDetails from "../CategoryDetails/FilterCatDetails";
 import CheckIDVerifyList from "./CheckIDVerifyList";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 
-const CheckIDVerifyMain = () => {
+const CheckIDVerifyMain = ({ hide = false }) => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);

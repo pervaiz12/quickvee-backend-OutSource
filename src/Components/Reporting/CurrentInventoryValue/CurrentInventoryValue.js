@@ -7,7 +7,9 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import Skeleton from "react-loading-skeleton";
 import PasswordShow from "../../../Common/passwordShow";
 
-const CurrentInventoryValue = () => {
+const CurrentInventoryValue = ({ hide = false }) => {
+  console.log("sadadasdassss");
+
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
@@ -29,11 +31,12 @@ const CurrentInventoryValue = () => {
           await dispatch(fetchcurrentInventoryreportData(data)).unwrap();
         }
       } catch (error) {
-        if (error.status == 401 
+        if (
+          error.status == 401
           // || error.response.status === 401
         ) {
           getUnAutherisedTokenMessage();
-          handleCoockieExpire();                                                    
+          handleCoockieExpire();
         } else if (error.status == "Network Error") {
           getNetworkError();
         }
@@ -67,15 +70,7 @@ const CurrentInventoryValue = () => {
 
   return (
     <>
-      <Grid container className="box_shadow_div">
-        <Grid item xs={12}>
-          <Grid container sx={{ padding: 2.5 }}>
-            <Grid item xs={12}>
-              <div className="q_details_header"> Current Inventory Report</div>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+      <Grid container className="box_shadow_div"></Grid>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={4}>
           <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
@@ -83,7 +78,6 @@ const CurrentInventoryValue = () => {
               Total Number of Items
             </div>
             <div className="text-[20px] font-bold mt-4 common-font-bold">
-              
               {currentInventory.final_quantity ? (
                 priceFormate(formatNumber(currentInventory.final_quantity))
               ) : (
@@ -98,7 +92,6 @@ const CurrentInventoryValue = () => {
               Total Retail Value
             </div>
             <div className="text-[20px] font-bold mt-4 common-font-bold">
-              
               {currentInventory.total_sale_price ? (
                 "$" +
                 priceFormate(formatNumber(currentInventory.total_sale_price))
@@ -114,7 +107,6 @@ const CurrentInventoryValue = () => {
               Total Inventory Cost
             </div>
             <div className="text-[20px] font-bold mt-4 common-font-bold">
-              
               {currentInventory.total_cpi_price ? (
                 "$" +
                 priceFormate(formatNumber(currentInventory.total_cpi_price))

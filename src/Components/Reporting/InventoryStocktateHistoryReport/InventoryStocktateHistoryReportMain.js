@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import NewItemCreatedBetweenList from "./NewItemCreatedBetweenList";
-import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
+import InventoryStocktateHistoryReportList from "./InventoryStocktateHistoryReportList";
+import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 import { Grid } from "@mui/material";
 
-const NewItemCreatedBetweenMain = ({ hide = false }) => {
+const NewItemCreatedBetweenMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
@@ -11,7 +11,7 @@ const NewItemCreatedBetweenMain = ({ hide = false }) => {
 
   return (
     <>
-      {/* <Grid
+      <Grid
         container
         sx={{ padding: 2.5, mt: 3.6 }}
         className="box_shadow_div "
@@ -20,17 +20,17 @@ const NewItemCreatedBetweenMain = ({ hide = false }) => {
           <Grid container>
             <Grid item xs={12}>
               <h1 style={{ marginBottom: 0 }} className="heading ">
-                New Item Created Between Report
+                Stocktake History Report
               </h1>
             </Grid>
           </Grid>
         </Grid>
-      </Grid> */}
-      <Grid container sx={{ padding: 2.5, mt: 3.6 }}>
-        <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
+      </Grid>
+      <Grid container sx={{}}>
+        <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
 
-      <NewItemCreatedBetweenList selectedDateRange={selectedDateRange} />
+      <InventoryStocktateHistoryReportList selectedDateRange={selectedDateRange} />
     </>
   );
 };
