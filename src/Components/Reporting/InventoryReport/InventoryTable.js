@@ -324,6 +324,7 @@ const InventoryTable = (props) => {
 
     setColumns(updatedColumns);
     setShowMeasurePopup(false);
+    setOpen(false);
   };
 
   return (
