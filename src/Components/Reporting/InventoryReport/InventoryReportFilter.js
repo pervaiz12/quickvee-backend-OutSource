@@ -163,12 +163,6 @@ const InventoryReportFilter = () => {
         </Grid>
       </Grid>
 
-      {/* <Grid container sx={{ paddingY: 3.7 }}>
-        <Grid item xs={12}>
-          <DashDateRangeComponent onDateRangeChange={onDateRangeChange} />
-        </Grid>
-      </Grid> */}
-
       <Grid container>
         <Grid item xs={12}>
           <Suspense fallback={<div>loading... </div>}>
