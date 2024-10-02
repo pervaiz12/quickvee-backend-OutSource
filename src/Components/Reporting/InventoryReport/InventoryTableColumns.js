@@ -100,7 +100,14 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+                
+
+                <input
+                  type="checkbox"
+                  name="sale_margin"
+                  checked={selectedColumns?.sale_margin}
+                  onChange={handleCheckboxChange}
+                />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Margin (%)</h6>
