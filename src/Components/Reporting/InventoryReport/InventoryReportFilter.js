@@ -8,6 +8,7 @@ import InstantActvity from "../../../Components/Reporting/InstantPo/InstantActvi
 import CheckIDVerify from "../../../Components/Reporting/CheckIDVerify/CheckIDVerifyMain";
 import InventoryList from "../../../Components/Reporting/inventoryList/inventoryList";
 import ProfitMarginReport from "../../../Components/Reporting/ProfitMarginReport/profitMarginReport";
+import InventoryPerformanceMain from "../../../Components/Reporting/InventoryPerformance/InventoryPerformanceMain";
 import downloadIcon from "../../../Assests/Dashboard/download.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import { CSVLink } from "react-csv";
@@ -47,6 +48,11 @@ const selectReportList = [
     id: 94,
     title: "Profit Margin Per Item Listing",
     url: "profit-margin-report",
+  },
+  {
+    id: 95,
+    title: "Performance",
+    url: "inventory-performance",
   },
 ];
 const InventoryReportFilter = () => {
@@ -106,7 +112,8 @@ const InventoryReportFilter = () => {
         return <InventoryList hide={true} />;
       case "profit-margin-report":
         return <ProfitMarginReport hide={true} />;
-
+      case "inventory-performance":
+        return <InventoryPerformanceMain hide={true} />;
       default:
         break;
     }

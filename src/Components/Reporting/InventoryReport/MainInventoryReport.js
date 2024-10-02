@@ -33,18 +33,19 @@ const MainItemSales = () => {
   
   return (
     <>
-    <div>
-       <InventoryReportFilter onFilterDataChange={handleFilterDataChange} setSearchRecord={setSearchRecord} debouncedValue={debouncedValue} />
-        { !debouncedValue ? ( <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />):("")}
-      
-      {/* <NetSalesFilter /> */}
+      <div>
+        <InventoryReportFilter
+          onFilterDataChange={handleFilterDataChange}
+          setSearchRecord={setSearchRecord}
+          debouncedValue={debouncedValue}
+        />
+        {/* { !debouncedValue ? ( <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />):("")}
+         */}
+        {/* <NetSalesFilter /> */}
 
-      <InventoryTable />
-     </div>
-
-
-     
-     </> 
+        <InventoryTable />
+      </div>
+    </>
   );
 };
 
