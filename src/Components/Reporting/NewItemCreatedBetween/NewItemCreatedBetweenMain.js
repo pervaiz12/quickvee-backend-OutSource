@@ -3,7 +3,7 @@ import NewItemCreatedBetweenList from "./NewItemCreatedBetweenList";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import { Grid } from "@mui/material";
 
-const NewItemCreatedBetweenMain = () => {
+const NewItemCreatedBetweenMain = ({ hide = false }) => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
@@ -11,7 +11,7 @@ const NewItemCreatedBetweenMain = () => {
 
   return (
     <>
-      <Grid
+      {/* <Grid
         container
         sx={{ padding: 2.5, mt: 3.6 }}
         className="box_shadow_div "
@@ -25,8 +25,8 @@ const NewItemCreatedBetweenMain = () => {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
-      <Grid container sx={{}}>
+      </Grid> */}
+      <Grid container sx={{ padding: 2.5, mt: 3.6 }}>
         <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
 

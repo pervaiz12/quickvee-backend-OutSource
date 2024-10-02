@@ -5,7 +5,7 @@ import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import InventoryLogic from "./InventoryLogic";
 import Pagination from "./pagination";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
-export default function InventoryList() {
+export default function InventoryList({ hide = false }) {
   const {
     handleChangeInventory,
     inventory,

@@ -6,7 +6,7 @@ import ProfitMarginReportLogic from "./profitMarginReportLogic";
 import Pagination from "./pagination";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
-export default function ProfitMarginReport() {
+export default function ProfitMarginReport({ hide = false }) {
   const {
     handleChangeInventory,
     inventory,
@@ -39,7 +39,7 @@ export default function ProfitMarginReport() {
   return (
     <>
       <Grid container className="box_shadow_div">
-        <CustomHeader>Profit Margin Per Item Listing</CustomHeader>
+        {/* <CustomHeader>Profit Margin Per Item Listing</CustomHeader> */}
         <Grid item xs={12}>
           <Grid container spacing={2} sx={{ px: 2.5, py: 2.5 }}>
             <Grid item xs={12} sm={6} md={4}>

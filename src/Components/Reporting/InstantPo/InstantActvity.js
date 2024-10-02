@@ -5,7 +5,7 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import { Grid } from "@mui/material";
 
-const InstantActvity = () => {
+const InstantActvity = ({ hide = false }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
 
@@ -21,16 +21,22 @@ const InstantActvity = () => {
   };
   return (
     <>
-    <Grid container sx={{ padding: 2.5,mt:3.6 }} className="box_shadow_div ">
+      {/* <Grid
+        container
+        sx={{ padding: 2.5, mt: 3.6 }}
+        className="box_shadow_div "
+      >
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
-              <h1 style={{marginBottom:0}} className="heading ">Instant PO Activity Report</h1>
+              <h1 style={{ marginBottom: 0 }} className="heading ">
+                Instant PO Activity Report
+              </h1>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
-      <Grid container sx={{}}>
+      </Grid> */}
+      <Grid container sx={{ padding: 2.5, mt: 3.6 }}>
         <Grid item xs={12}>
           <DateRangeComponent onDateRangeChange={handleDataFiltered} />
         </Grid>
